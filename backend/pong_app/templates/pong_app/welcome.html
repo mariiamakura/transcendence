@@ -1,0 +1,17 @@
+<!-- pong_app/templates/pong_app/welcome.html -->
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Pong</title>
+    <link rel="stylesheet" href="{% static 'pong_app/style.css' %}">
+</head>
+<body>
+    <h1>Welcome to Pong</h1>
+    <a href="{% url 'pong_app:game' %}"><button>Play Game</button></a>
+</body>
+</html>
+
