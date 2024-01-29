@@ -1,0 +1,10 @@
+Color palette https://flatuicolors.com/palette/cn
+
+TODO:
+Website:
+- arrange the falling balls to be consistently in the middle 
+
+Game - Pong:
+- increase velocity
+- add padding at the bottom of the page
+- add first start button and name fields

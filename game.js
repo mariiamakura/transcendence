@@ -1,18 +1,21 @@
-let boardWidth = 500;
-let boardHeight = 500;
+//set the board size according to the screen size and golden ratio
+let boardWidth;
+let boardHeight;
 let board;
 let context;
+
 let keysPressed = {};
 
+//player variables
 let playerWidth = 10;
-let playerHeight = 50;
+let playerHeight;
 let playerVelocityY = 0;
 
 let player1 = {
     x: 10,
     y: null,
     width: playerWidth,
-    height: playerHeight, 
+    height: null, 
     velocityY: playerVelocityY
 };
 
@@ -20,48 +23,68 @@ let player2 = {
     x: null,
     y: null,
     width: playerWidth,
-    height: playerHeight,
+    height: null,
     velocityY: playerVelocityY
 };
 
+let player1Score = 0;
+let player2Score = 0;
+
+boardWidth = window.innerWidth / 1.618;
+boardHeight = window.innerHeight / 1.618;
+//ball variables
 let ballWidth = 10;
 let ballHeight = 10;
-let ballRadius = 5;
+let ballRadiusFactor = 10;
 let ball = {
     x : null,
     y : null,
     width : ballWidth,
     height : ballHeight,
-    radius: ballRadius,
-    velocityX : 1,
-    velocityY : 2
+    radius: null,
+    velocityX : null,
+    velocityY : null
 }
 
-let player1Score = 0;
-let player2Score = 0;
-
 function showGame() {
-    // Update the content
-    document.body.style.overflow = 'hidden';    // Set the HTML content
+    // Create the board element in the HTML and update the CSS of main
     var mainElement = document.getElementById('content');
-    mainElement.innerHTML = '<div id="board-container" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; padding:5em; overflow:hidden"><canvas id="board" width="' + boardWidth + '" height="' + boardHeight + '"></canvas></div>';    // Set up the canvas
+    boardWidth = window.innerWidth / 1.618;
+    boardHeight = window.innerHeight / 1.618;
+    if (boardHeight >= boardWidth / 1.618)
+        boardHeight = boardWidth / 1.618;
+    playerHeight = boardHeight / 5;
+    ball.radius = playerHeight / ballRadiusFactor;
+    player1.height = playerHeight;
+    player2.height = playerHeight;
+    ball.velocityX = boardWidth / 200;
+    ball.velocityY = boardHeight / 100;
+    document.body.style.overflow = 'padding-bottom : 5em';
+
+    mainElement.innerHTML = '<div id="board-container" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden"><canvas id="board" width="' + boardWidth + '" height="' + boardHeight + '"></canvas></div>';    // Set up the canvas
+    mainElement.style.display = 'flex';
+    mainElement.style.flexDirection = 'column';
+    mainElement.style.justifyContent = 'center';
+    mainElement.style.alignItems = 'center';
     board = document.getElementById('board');
     context = board.getContext('2d'); // 2d rendering context
-    // Variables for players
+    
+    // set players
     player1.y = board.height / 2 - playerHeight / 2;
     player2.x = board.width - playerWidth - 10;
     player2.y = board.height / 2 - playerHeight / 2;
-
-    //variables for ball
+    
+    //set ball
     ball.x = board.width / 2;
     ball.y = board.height / 2;
-
+    
     // Draw players
     context.fillStyle = "skyblue";
     context.fillRect(player1.x, player1.y, player1.width, player1.height);
     context.fillRect(player2.x, player2.y, player2.width, player2.height);
-
+    
     requestAnimationFrame(update);
+    // Event listener if key is pressed or release
     document.addEventListener("keydown", function(event) {
         keysPressed[event.code] = true;
         movePlayer();
@@ -71,15 +94,43 @@ function showGame() {
         keysPressed[event.code] = false;
         movePlayer();
     });
-
-
+    
     // Update the URL without reloading the page
     // history.pushState({ page: 'game' }, 'Game', '/game');
 }
 
+// resize the board when the window is resized and adjust the player
+function handleResize() {
+    boardWidth = window.innerWidth / 1.618;
+    boardHeight = window.innerHeight / 1.618;
+    if (boardHeight >= boardWidth / 1.618)
+    {
+        boardHeight = boardWidth / 1.618;
+        document.body.style.paddingBottom = '10em';
+    }
+    board.width = boardWidth;
+    board.height = boardHeight;
+    playerHeight = boardHeight / 5;
+    player1.height = playerHeight;
+    player2.height = playerHeight;
+    player1.y = board.height / 2 - playerHeight / 2;
+    player2.x = board.width - playerWidth - 10;
+    player2.y = board.height / 2 - playerHeight / 2;
+    
+    //variables for ball
+    ball.radius = playerHeight / ballRadiusFactor;
+    ball.x = board.width / 2;
+    ball.y = board.height / 2;
+    ball.velocityX = boardWidth / 200;
+    ball.velocityY = boardHeight / 100;
+}
+
 function update() {
     // Update the game
+    window.addEventListener('resize', handleResize);
     requestAnimationFrame(update);
+
+
     context.clearRect(0, 0, board.width, board.height);
     context.fillStyle = "skyblue";
     let newYPosition = player1.y + player1.velocityY;
@@ -163,6 +214,6 @@ function resetGame(direction)
     ball.y = board.height / 2 - ballHeight / 2;
 
     // Reset ball velocity
-    ball.velocityX = direction;
-    ball.velocityY = 2;
+    ball.velocityX = boardWidth / 200 * direction;
+    ball.velocityY = boardHeight / 100;
 }
