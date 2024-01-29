@@ -46,14 +46,44 @@ let ball = {
     velocityY : null
 }
 
-function showGame() {
-    requestAnimationFrame(update);
-    
 
-    launchGame();
-    
-    // Update the URL without reloading the page
-    // history.pushState({ page: 'game' }, 'Game', '/game');
+function startButton() {
+    const startButton = document.createElement("button");
+    // Set the button text
+    startButton.textContent = "Start";
+    // Add event listener to the button
+    startButton.addEventListener("click", launchGame);
+    // Append the button to the body or any other parent element
+    document.getElementById('content').appendChild(startButton);
+}
+
+let gameType = 2;
+function typeOfGame() {
+    const tournamentButton = document.createElement("button");
+    tournamentButton.textContent = "Tournament";
+    tournamentButton.addEventListener("click", function() {   
+        gameType = 1;
+    });
+    const pairButton = document.createElement("button");
+    pairButton.textContent = "1 vs 1";
+    pairButton.addEventListener("click", function() {   
+        gameType = 0;
+    });
+    document.getElementById('content').appendChild(tournamentButton);
+    document.getElementById('content').appendChild(pairButton);
+}
+
+function showGame() {
+    // var mainElement = document.getElementById('content');
+    // requestAnimationFrame(update);
+    typeOfGame();
+    console.log(gameType);
+    if (gameType === 1)
+    {
+        startButton();
+    }
+    else (gameType === 0)
+        startButton();
 }
 
 function launchGame() {
@@ -138,8 +168,6 @@ function update() {
     // Update the game
     window.addEventListener('resize', handleResize);
     requestAnimationFrame(update);
-
-
     context.clearRect(0, 0, board.width, board.height);
     context.fillStyle = "skyblue";
     let newYPosition = player1.y + player1.velocityY;

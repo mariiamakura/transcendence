@@ -35,7 +35,6 @@ function showHome() {
         const balls = title.querySelectorAll(".ball");
         balls.forEach(function(ball) {
             ball.remove();
-            // title.removeChild(ball);
         });
     });
 
