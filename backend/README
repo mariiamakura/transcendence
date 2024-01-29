@@ -1,4 +1,0 @@
-How to run the program 
-
-1. Install Django - pip install Django
-2 Run "http://localhost:8000/pong/welcome/"

@@ -7,7 +7,7 @@ function showHome() {
     const title = document.getElementById("title");
     
     title.addEventListener("mouseenter", function() {
-        const numBalls = 42;
+        const numBalls = 5;
         const windowHeight = window.innerHeight;
         const windowWidth = window.innerWidth;
         const rangeTop = windowHeight * 0.02; 
@@ -35,6 +35,7 @@ function showHome() {
         const balls = title.querySelectorAll(".ball");
         balls.forEach(function(ball) {
             ball.remove();
+            // title.removeChild(ball);
         });
     });
 

@@ -27,8 +27,8 @@ let player2 = {
     velocityY: playerVelocityY
 };
 
-let player1Score = 0;
-let player2Score = 0;
+let player1Score;
+let player2Score;
 
 boardWidth = window.innerWidth / 1.618;
 boardHeight = window.innerHeight / 1.618;
@@ -47,6 +47,19 @@ let ball = {
 }
 
 function showGame() {
+    requestAnimationFrame(update);
+    
+
+    launchGame();
+    
+    // Update the URL without reloading the page
+    // history.pushState({ page: 'game' }, 'Game', '/game');
+}
+
+function launchGame() {
+    // resize the board when the window is resized and adjust the player
+    player1Score = 0;
+    player2Score = 0;
     // Create the board element in the HTML and update the CSS of main
     var mainElement = document.getElementById('content');
     boardWidth = window.innerWidth / 1.618;
@@ -60,7 +73,7 @@ function showGame() {
     ball.velocityX = boardWidth / 200;
     ball.velocityY = boardHeight / 100;
     document.body.style.overflow = 'padding-bottom : 5em';
-
+    
     mainElement.innerHTML = '<div id="board-container" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden"><canvas id="board" width="' + boardWidth + '" height="' + boardHeight + '"></canvas></div>';    // Set up the canvas
     mainElement.style.display = 'flex';
     mainElement.style.flexDirection = 'column';
@@ -94,12 +107,8 @@ function showGame() {
         keysPressed[event.code] = false;
         movePlayer();
     });
-    
-    // Update the URL without reloading the page
-    // history.pushState({ page: 'game' }, 'Game', '/game');
 }
 
-// resize the board when the window is resized and adjust the player
 function handleResize() {
     boardWidth = window.innerWidth / 1.618;
     boardHeight = window.innerHeight / 1.618;
