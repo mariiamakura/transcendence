@@ -1,0 +1,190 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensure the body takes up at least the full height of the viewport */
+    margin: 0; /* Remove default margin */
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8em;
+    flex: 0 0 auto;
+}
+
+.gif-logo {
+    width: 10%;
+    height: 10%;
+    border-radius: 10%;
+}
+.header img {
+    margin-right: 10px;
+}
+
+h1 {
+    font-family: 'Merriweather', serif;
+    flex-grow: 1; /* Title takes up remaining space */
+    text-align: center; /* Center align title */
+    font-size: calc(1.8em + 1vw); /* Responsive font size based on viewport width */
+    z-index: 1;
+    
+}
+
+h1:hover {
+    color: #747d8c; 
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 00;
+    display: flex;
+}
+
+nav li {
+    margin-right: 1em;
+
+}
+
+nav li:last-child {
+    margin-right: 0; /* Remove margin from last item */
+}
+
+nav a {
+    font-family: 'Merriweather', serif;
+    display: inline-block;
+    padding: 8px 12px; /* Adjust padding for spacing */
+    font-size: calc(0.8em + 0.5vw);
+    color: #2f3542;
+    text-decoration: none;
+    border-radius: 20px; /* Round shape */
+    background-color: transparent; /* Default background color */
+    transition: background-color 0.3s; /* Smooth transition for color change */
+}
+
+nav a:hover {
+    background-color: #dfe4ea; /* Gray background color on hover */
+}
+
+.ball {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #2f3542;
+    border-radius: 50%;
+    animation: moveX 2s ease-in-out infinite, moveY 2s ease-in-out infinite; /* Move horizontally and vertically */
+}
+
+@keyframes moveX {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(100px);
+    }
+}
+
+@keyframes moveY {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(50px);
+    }
+}
+
+main {
+    flex: 1;
+}
+
+.footer {
+    display: flex;
+    flex-direction: column;
+    background-color: #dfe4ea;
+}
+
+.footer-text {
+    display: flex;
+    align-items: center; /* Center align the content vertically */
+    padding-left: 1em;
+    padding-top: 0.5em;
+    font-family: 'Merriweather', serif;
+    font-size: large;
+    margin: 0;
+    height: 1.5em;
+}
+
+.names {
+    display: flex;
+    font-family: 'Merriweather', serif;
+}
+
+.name {
+    position: relative;
+    width: 50%;
+    justify-content: center;
+    border: 2px; /* Add a border around the name */
+    border-radius: 50%; /* Make the border circular */
+    padding: 0.5em;
+    margin-bottom: 0.3em;
+}
+
+.name:hover {
+    background-color: #a4b0be; /* Darken background color on hover */
+    color: white; /* Change text color on hover */
+}
+.name p {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0.2em;
+}
+
+.socials {
+    display: flex;
+    justify-content: center;
+}
+
+.pictures_team {
+    display: flex;
+    justify-content: center;
+}
+
+.pictures_team img {
+    width: 5vw;
+    height: auto;
+    border-radius: 20%;
+    margin: 10px; /* Add some margin around the image */
+}
+
+.social_logo {
+    margin: 0 2px; /* Adjust spacing between social icons */
+}
+
+.social_logo img {
+    width: 3vw; /* Adjust the width based on the viewport width */
+    height: auto; /* Automatically adjust the height to maintain aspect ratio */
+    border-radius: 50%; /* Make the social media icons circular */
+}
+
+#board {
+    background-color: #2f3542 ;
+    display : flex;
+    justify-content: center;
+    align-items: center;
+    border-top : 1em solid skyblue;
+    border-bottom: 1em solid skyblue;
+}
+
+#board-container {
+    padding-top: 2em;
+    padding-bottom: 2em;
+    
+}
+
+/* main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+} */
