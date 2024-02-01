@@ -47,6 +47,34 @@ let ball = {
 }
 
 
+let startGame = false;
+
+function showButton() {
+
+    var main = document.getElementById('content');
+    main.innerHTML = '<div id="choice" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden">';
+    var buttonTournament = document.createElement("button");
+    var buttonSingle = document.createElement("button");
+    buttonSingle.textContent = "1 vs 1";
+    buttonTournament.textContent = "Tournament";
+    buttonSingle.classList.add("styled-button")
+    buttonTournament.classList.add("styled-button");
+    document.getElementById('choice').appendChild(buttonTournament);
+    document.getElementById('choice').appendChild(buttonSingle);
+    return new Promise(function (resolve) {
+        buttonTournament.addEventListener("click", function() {
+            resolve(true);
+        });
+    });
+}
+
+async function showGame() {
+    if (await showButton())
+        launchGame();
+    
+    // Update the URL without reloading the page
+    // history.pushState({ page: 'game' }, 'Game', '/game');
+}
 function startButton() {
     const startButton = document.createElement("button");
     // Set the button text
