@@ -47,12 +47,16 @@ let ball = {
 }
 
 
-let startGame = false;
+let startGame;
+let tournament;
+let singleGame;
+let numberPlayers;
+let velocity = 2;
 
 function showButton() {
 
     var main = document.getElementById('content');
-    main.innerHTML = '<div id="choice" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden">';
+    main.innerHTML = '<div id="choice" style="display: flex; flex-direction:column;justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden"> <p style="padding-top:  5em;"> Which type of game do you wanna play ? </p>';
     var buttonTournament = document.createElement("button");
     var buttonSingle = document.createElement("button");
     buttonSingle.textContent = "1 vs 1";
@@ -64,54 +68,123 @@ function showButton() {
     return new Promise(function (resolve) {
         buttonTournament.addEventListener("click", function() {
             resolve(true);
+            document.getElementById('choice').remove();
+            tournament = true;
+        });
+        buttonSingle.addEventListener("click", function() {
+            resolve(false);
+            document.getElementById('choice').remove();
+            singleGame = true;
         });
     });
 }
 
+function numPlayers() {
+    var main = document.getElementById('content');
+    main.innerHTML = '<div id="choice" style="display: flex; flex-direction:column;justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden"><p style="padding-top: 5em; display: flex; " > How many players do you want to be ? </p>';
+    var buttonTwo = document.createElement("button");
+    var buttonFour = document.createElement("button");
+    buttonTwo.textContent = "2 players";
+    buttonFour.textContent = "4 players";
+    buttonTwo.classList.add("styled-button")
+    buttonFour.classList.add("styled-button");
+    document.getElementById('choice').appendChild(buttonTwo);
+    document.getElementById('choice').appendChild(buttonFour);
+    if (tournament) {
+        var buttonEight = document.createElement("button");
+        var buttonSixteen= document.createElement("button");
+        buttonEight.textContent = "8 players";
+        buttonSixteen.textContent = "16 players";
+        buttonEight.classList.add("styled-button");
+        buttonSixteen.classList.add("styled-button");
+        document.getElementById('choice').appendChild(buttonEight);
+        document.getElementById('choice').appendChild(buttonSixteen);
+    }
+    return new Promise(function (resolve) {
+        buttonTwo.addEventListener("click", function() {
+            resolve(true);
+            numberPlayers = 2;
+            document.getElementById('choice').remove();
+        });
+        buttonFour.addEventListener("click", function() {
+            resolve(true);
+            numberPlayers = 4;
+            document.getElementById('choice').remove();
+        });
+        if (tournament) {
+            buttonEight.addEventListener("click", function() {
+                resolve(true);
+                numberPlayers = 8;
+                document.getElementById('choice').remove();
+            });
+            buttonSixteen.addEventListener("click", function() {
+                resolve(true);
+                numberPlayers = 16;
+                document.getElementById('choice').remove();
+            });
+        }
+    });
+}
+let namePlayer = [];
+function getNamePlayer() {
+    var main = document.getElementById('content');
+    let i = 1;
+    while (i <= numberPlayers) {
+        main.innerHTML = '<div id="choice" style="display: flex; flex-direction:column;justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden"><p style="padding-top: 5em; display: flex; " > Name of player ' + i + ' : </p>';
+        var input = document.createElement("input");
+        input.type = "text";
+        input.id = "name" + i;
+        var Submit = document.createElement("button");
+        Submit.textContent = "Submit";
+        Submit.classList.add("styled-button");
+        document.getElementById('choice').appendChild(input);
+        document.getElementById('choice').appendChild(Submit);
+        Submit.addEventListener("click", function() {
+            namePlayer += input.value;
+            document.getElementById('choice').remove();
+        });
+        i++;
+    }
+    console.log(namePlayer);
+}
+
 async function showGame() {
+    startGame = false;
+    tournament = false;
+    singleGame = false;
+    numberPlayers = 0;
     if (await showButton())
+    {
+        console.log("Tournament");
+        if (await numPlayers())
+        {
+            console.log(numberPlayers);
+            getNamePlayer();
+        }
+    }
+    else
+    {
+        console.log("Single");
+        if (await numPlayers())
+        {
+            console.log(numberPlayers);
+            getNamePlayer();
+        }
+    }
+    if (namePlayer != 0)
         launchGame();
+
+
     
     // Update the URL without reloading the page
     // history.pushState({ page: 'game' }, 'Game', '/game');
 }
+
 function startButton() {
     const startButton = document.createElement("button");
-    // Set the button text
     startButton.textContent = "Start";
-    // Add event listener to the button
     startButton.addEventListener("click", launchGame);
-    // Append the button to the body or any other parent element
     document.getElementById('content').appendChild(startButton);
-}
-
-let gameType = 2;
-function typeOfGame() {
-    const tournamentButton = document.createElement("button");
-    tournamentButton.textContent = "Tournament";
-    tournamentButton.addEventListener("click", function() {   
-        gameType = 1;
-    });
-    const pairButton = document.createElement("button");
-    pairButton.textContent = "1 vs 1";
-    pairButton.addEventListener("click", function() {   
-        gameType = 0;
-    });
-    document.getElementById('content').appendChild(tournamentButton);
-    document.getElementById('content').appendChild(pairButton);
-}
-
-function showGame() {
-    // var mainElement = document.getElementById('content');
-    // requestAnimationFrame(update);
-    typeOfGame();
-    console.log(gameType);
-    if (gameType === 1)
-    {
-        startButton();
-    }
-    else (gameType === 0)
-        startButton();
 }
 
 function launchGame() {
@@ -128,8 +201,9 @@ function launchGame() {
     ball.radius = playerHeight / ballRadiusFactor;
     player1.height = playerHeight;
     player2.height = playerHeight;
-    ball.velocityX = boardWidth / 200;
-    ball.velocityY = boardHeight / 100;
+    ball.velocityX = Math.cos(generateRandomAngle()) * boardWidth / 200 * velocity;
+    ball.velocityY = Math.sin(generateRandomAngle()) * boardHeight / 100 * generateRandomNumber() * velocity;
+
     document.body.style.overflow = 'padding-bottom : 5em';
     
     mainElement.innerHTML = '<div id="board-container" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden"><canvas id="board" width="' + boardWidth + '" height="' + boardHeight + '"></canvas></div>';    // Set up the canvas
@@ -188,8 +262,8 @@ function handleResize() {
     ball.radius = playerHeight / ballRadiusFactor;
     ball.x = board.width / 2;
     ball.y = board.height / 2;
-    ball.velocityX = boardWidth / 200;
-    ball.velocityY = boardHeight / 100;
+    ball.velocityX = Math.cos(generateRandomAngle()) * boardWidth / 200  * velocity;
+    ball.velocityY = Math.sin(generateRandomAngle()) * boardHeight / 100 * generateRandomNumber() * velocity;
 }
 
 function update() {
@@ -206,17 +280,15 @@ function update() {
     let newYPosition2 = player2.y + player2.velocityY;
     if (!outOfBounds(newYPosition2)) {
         player2.y = newYPosition2;
-    }
+    }boardWidth
     context.fillRect(player2.x, player2.y, player2.width, player2.height);
 
     //ball
     ball.x += ball.velocityX;
     ball.y += ball.velocityY;
-    // context.fillStyle = "white";
-    // context.fillRect(ball.x, ball.y, ball.width, ball.height);
     context.beginPath();
     context.arc(ball.x + ball.radius, ball.y + ball.radius, ball.radius, 0, Math.PI * 2);
-    context.fillStyle = "white"; // Set ball color
+    context.fillStyle = "white";
     context.fill();
     
     if (ball.y <= 0 || ball.y + ball.height >= board.height) {
@@ -263,22 +335,38 @@ function movePlayer() {
     }
 
     // Player 2 controls
-    if (keysPressed["ArrowUp"]) {
+    if (keysPressed["ArrowUp"])
         player2.velocityY = -3;
-    } else if (keysPressed["ArrowDown"]) {
+    else if (keysPressed["ArrowDown"])
         player2.velocityY = 3;
-    } else {
+    else
         player2.velocityY = 0; // Stop movement if no key is pressed
-    }
+}
+
+function generateRandomAngle() {
+    var minAngle = 30 * Math.PI / 180; // Convert degrees to radians
+    var maxAngle = 150 * Math.PI / 180; // Convert degrees to radians
+    var randomAngle = Math.random() * (maxAngle - minAngle) + minAngle;
+    if (randomAngle > 1.2 && randomAngle < 1.8)
+        randomAngle += 1;
+    return randomAngle;
+}
+
+function generateRandomNumber() {
+    var random = Math.random();
+    if (random > 0.5)
+        random = 1;
+    else
+        random = -1;
+    return random;
 }
 
 function resetGame(direction)
 {
-
     ball.x = board.width / 2 - ballWidth / 2;
-    ball.y = board.height / 2 - ballHeight / 2;
-
+    ball.y = Math.random() * (board.height -10);
     // Reset ball velocity
-    ball.velocityX = boardWidth / 200 * direction;
-    ball.velocityY = boardHeight / 100;
+
+    ball.velocityX = Math.cos(generateRandomAngle()) * boardWidth / 200 * direction * velocity;
+    ball.velocityY = Math.sin(generateRandomAngle()) * boardHeight / 100 * generateRandomNumber() * velocity;
 }
