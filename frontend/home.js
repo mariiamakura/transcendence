@@ -4,10 +4,10 @@ function showHome() {
     
     // Set the HTML content
     mainElement.innerHTML = '<p>ksdjfksdjfksjdfksd f</p>';
-    const title = document.getElementById("title");
+    const title = document.getElementById('title');
     
     title.addEventListener("mouseenter", function() {
-        const numBalls = 5;
+        const numBalls = 10;
         const windowHeight = window.innerHeight;
         const windowWidth = window.innerWidth;
         const rangeTop = windowHeight * 0.02; 
@@ -15,6 +15,7 @@ function showHome() {
         const leftMin = windowWidth * 0.2; // Minimum left position (40% of window width)
         const leftMax = windowWidth * 0.60; // Maximum left position (60% of window width)
 
+        console.log("ecrit");
         for (let i = 1; i <= numBalls; i++) {
             const ball = document.createElement("div");
             ball.className = "ball"; // Add 'ball' class to each ball element
@@ -30,7 +31,7 @@ function showHome() {
             title.appendChild(ball);
         }
     });
-    
+    console.log("here");
     title.addEventListener("mouseleave", function() {
         const balls = title.querySelectorAll(".ball");
         balls.forEach(function(ball) {
