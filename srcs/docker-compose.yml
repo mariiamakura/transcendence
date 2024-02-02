@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:latest
+    build:
+      context: .
+      dockerfile: ./requirements/nginx/Dockerfile
+    ports:
+      - "443:443"
+    volumes:
+      - ./requirements/nginx/config:/etc/nginx/conf.d/
+      - ./requirements/nginx/pong:/var/www/pong
+    
+    depends_on:
+      - postgresql
+    restart: always
+    networks:
+      - my_network
+    init: true
+
+  postgresql:
+    image: postgres:latest
+    build:
+      context: .
+      dockerfile: ./requirements/postgresql/Dockerfile
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: your_username
+      POSTGRES_PASSWORD: your_password
+      POSTGRES_DB: your_database
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
+    restart: always
+    networks:
+      - my_network
+    init: true
+
+networks:
+  my_network: {}
+    # driver: bridge
+
+volumes:
+  postgresql_data:
