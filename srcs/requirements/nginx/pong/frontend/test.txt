@@ -1,0 +1,61 @@
+displaying all the values:                                                                                  :94:13
+boardWidth: 646.4771322620519                                                                                  :96:13
+boardHeight: 399.5532337837156                                                                                  :97:13
+board.width: 646                                                                                  :98:13
+board.height: 399                                                                                  :99:13
+context: [object CanvasRenderingContext2D]                                                                                  :100:13
+velocity: 2                                                                                  :101:13
+playerWidth: 10                                                                                  :102:13
+playerHeight: 79.91064675674312                                                                                  :103:13
+playerVelocityY: 0                                                                                  :104:13
+player1.x: 10                                                                                  :105:13
+player1.y: 159.54467662162844                                                                                  :106:13
+player2.x: 626                                                                                  :107:13
+player2.y: 159.54467662162844                                                                                  :108:13
+player1.width: 10                                                                                  :109:13
+player1.height: 79.91064675674312                                                                                  :110:13
+player2.width: 10                                                                                  :111:13
+player2.height: 79.91064675674312                                                                                  :112:13
+player1.velocityY: 0                                                                                  :113:13
+player2.velocityY: 0                                                                                  :114:13
+ball.x: 323                                                                                  :115:13
+ball.y: 199.5                                                                                  :116:13
+ball.width: 10                                                                                  :117:13
+ball.height: 10                                                                                  :118:13
+ball.radius: 7.991064675674312                                                                                  :119:13
+ball.velocityX: 2.9151077058091897                                                                                  :120:13
+ball.velocityY: -5.882145178482831                                                                                  :121:13
+
+
+
+
+
+
+
+displaying all the values:                                                                                  :94:13
+boardWidth: 646.4771322620519                                                                                  :96:13
+boardHeight: 399.5532337837156                                                                                   :97:13
+board.width: 646                                                                                  :98:13
+board.height: 399                                                                                  :99:13
+context: [object CanvasRenderingContext2D]                                                                                  :100:13
+velocity: 2                                                                                  :101:13
+playerWidth: 10                                                                                  :102:13
+playerHeight: 79.91064675674312                                                                                  :103:13
+playerVelocityY: 0                                                                                  :104:13
+player1.x: 10                                                                                  :105:13
+player1.y: 159.54467662162844                                                                                  :106:13
+player2.x: 626                                                                                  :107:13
+player2.y: 159.54467662162844                                                                                  :108:13
+player1.width: 10                                                                                  :109:13
+player1.height: 79.91064675674312                                                                                  :110:13
+player2.width: 10                                                                                  :111:13
+player2.height: 79.91064675674312                                                                                  :112:13
+player1.velocityY: 0                                                                                  :113:13
+player2.velocityY: 0                                                                                  :114:13
+ball.x: 323                                                                                  :115:13
+ball.y: 199.5                                                                                  :116:13
+ball.width: 10                                                                                  :117:13
+ball.height: 10                                                                                  :118:13
+ball.radius: 7.991064675674312                                                                                  :119:13
+ball.velocityX: 2.9151077058091897                                                                                  :120:13
+ball.velocityY: -5.882145178482831
