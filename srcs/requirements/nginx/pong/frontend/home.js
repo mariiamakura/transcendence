@@ -3,7 +3,7 @@ function showHome() {
     var mainElement = document.getElementById('content');
     
     // Set the HTML content
-    mainElement.innerHTML = '<p>ksdjfksdjfksjdfksd f</p>';
+    mainElement.innerHTML = '<p>BONJOUR f</p>';
     const title = document.getElementById('title');
     
     title.addEventListener("mouseenter", function() {

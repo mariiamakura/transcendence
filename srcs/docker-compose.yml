@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: ./requirements/nginx/Dockerfile
     ports:
-      - "443:443"
+      - "9999:9999"
     volumes:
       - ./requirements/nginx/config:/etc/nginx/conf.d/
       - ./requirements/nginx/pong:/var/www/pong

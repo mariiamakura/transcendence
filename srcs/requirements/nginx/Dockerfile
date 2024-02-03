@@ -11,7 +11,7 @@ COPY ./config/default.conf /etc/nginx/conf.d/default.conf
 # COPY sites/* /etc/nginx/conf.d/
 
 # Expose port 80
-EXPOSE 443
+EXPOSE 9999
 
 # Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
