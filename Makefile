@@ -21,6 +21,10 @@ all:
 clean:
 	docker compose -f ./srcs/docker-compose.yml down --rmi all -v
 
+restart:
+	docker compose -f ./srcs/docker-compose.yml down
+	docker compose -f ./srcs/docker-compose.yml up -d
+
 fclean: clean
 	@docker system prune -a
 
@@ -43,4 +47,4 @@ delete:
 	fi;
 
 
-.PHONY: all, clean, fclean, re, ls, delete
+.PHONY: all, clean, fclean, re, ls, delete, restart
