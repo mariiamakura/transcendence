@@ -27,14 +27,20 @@ Docker:
 				ctrl-c
 
 	postgres container:
+	!!!! changed username to pong  and password to ping and database name is pong_database, check docker-compose!!!!
 		to connect to the database: 
 			- run in terminal 
-					pgcli postgresql://your_username:1234@localhost:5432/postgres (for MAC)
+					pgcli postgresql://pong:ping@localhost:5432/postgres (for MAC)
 				or
-					psql postgresql://your_username:1234@localhost:5432/postgres (for ubuntu) (need check if psql is installed on campus)
+					psql postgresql://pong:ping@localhost:5432/postgres (for ubuntu) (need check if psql is installed on campus)
 
 			- from there u can run SQL-QUERIES
 				(will update the queries here soon if needed !)
+				use 
+					\c pong_database 
+				to connect to our database
+					\d
+				displays the tables   (check postgresql/database/pong.sql for table structure)
 
 			- exit with 
 					\q
