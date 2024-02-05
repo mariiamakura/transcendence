@@ -1,11 +1,12 @@
 //set the board size according to the screen size and golden ratio
-let boardWidth = window.innerWidth / 1.618;
-let boardHeight = window.innerHeight / 1.618;
+let boardWidth;
+let boardHeight;
 let board;
 let context;
 let velocity = 2;
 let keysPressed = {};
-let spaceKeyListenerAdded = false;
+let spaceKeyListenerAdded;
+let gameEnded;
 
 //player variables
 let playerWidth = 10;
@@ -45,111 +46,68 @@ let ball = {
     velocityY : null
 }
 
-
-function launchGame() {
-    
-    // resize the board when the window is resized and adjust the player
+function initVariables() {
+    spaceKeyListenerAdded = false;
+    gameEnded = false;
     player1Score = 0;
     player2Score = 0;
     velocity = 2;
     playerVelocityY = 0;
-    // Create the board element in the HTML and update the CSS of main
-    var mainElement = document.getElementById('content');
     boardWidth = window.innerWidth / 1.618;
     boardHeight = window.innerHeight / 1.618;
+    ball.velocityX = Math.cos(generateRandomAngle()) * boardWidth / 200 * velocity;
+    ball.velocityY = Math.sin(generateRandomAngle()) * boardHeight / 100 * generateRandomNumber() * velocity;
     if (boardHeight >= boardWidth / 1.618)
-    boardHeight = boardWidth / 1.618;
-    playerHeight = boardHeight / 5;
-    ball.radius = playerHeight / ballRadiusFactor;
-    player1.height = playerHeight;
-    player2.height = playerHeight;
-    ball.velocityX = 2.9151077058091897;
-    ball.velocityY = -5.882145178482831;
-    // ball.velocityX = Math.cos(generateRandomAngle()) * boardWidth / 200 * velocity;
-    // ball.velocityY = Math.sin(generateRandomAngle()) * boardHeight / 100 * generateRandomNumber() * velocity;
+    {
+        boardHeight = boardWidth / 1.618;
+        playerHeight = boardHeight / 5;
+        ball.radius = playerHeight / ballRadiusFactor;
+        player1.height = playerHeight;
+        player2.height = playerHeight;
+    }
+    // set players
+    
+}
 
+function launchGame() {
+    initVariables();
+    console.log("namePlayer1: " + namePlayer[0]);
+    console.log("namePlayer2: " + namePlayer[1]);
+    var mainElement = document.getElementById('content');
     document.body.style.overflow = 'padding-bottom : 5em';
-    let endGameElement = document.getElementById('endGame');
-    console.log("endGameElement: " + endGameElement);
-    if (endGameElement !== null)
-        endGameElement.remove();
-
-    let boardContainerElement = document.getElementById('board-container');
-    console.log("boardContainerElement: " + boardContainerElement);
-    if (boardContainerElement !== null)
-        boardContainerElement.remove();
-    mainElement.innerHTML = '<div id="board-container" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden"><canvas id="board" width="' + boardWidth + '" height="' + boardHeight + '"></canvas></div>';    // Set up the canvas
-    mainElement.style.display = 'flex';
-    mainElement.style.flexDirection = 'column';
-    mainElement.style.justifyContent = 'center';
-    mainElement.style.alignItems = 'center';
+    mainElement.innerHTML = '<div id="board-container" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden"><p style="display: flex; padding-right:2em; font-size: 3em;">' + namePlayer[0] + '</p><canvas id="board" width="' + boardWidth + '" height="' + boardHeight + '"></canvas><p style="display: flex; padding-left:2em; font-size: 3em;">' + namePlayer[1] + '</p></div>';
     board = document.getElementById('board');
     context = board.getContext('2d'); // 2d rendering context
-
-    // set players
+    
+    // Draw players
     player1.y = board.height / 2 - playerHeight / 2;
     player2.x = board.width - playerWidth - 10;
     player2.y = board.height / 2 - playerHeight / 2;
-
+    
     //set ball
     ball.x = board.width / 2;
     ball.y = board.height / 2;
-
-        // Draw players
     context.fillStyle = "skyblue";
     context.fillRect(player1.x, player1.y, player1.width, player1.height);
     context.fillRect(player2.x, player2.y, player2.width, player2.height);
-    // console.log("displaying all the values:");
-
-    // console.log("boardWidth: " + boardWidth);
-    // console.log("boardHeight: " + boardHeight);
-    // console.log("board.width: " + board.width);
-    // console.log("board.height: " + board.height);
-    // console.log("context: " + context);
-    // console.log("velocity: " + velocity);
-    // console.log("playerWidth: " + playerWidth);
-    // console.log("playerHeight: " + playerHeight);
-    // console.log("playerVelocityY: " + playerVelocityY);
-    // console.log("player1.x: " + player1.x);
-    // console.log("player1.y: " + player1.y);
-    // console.log("player2.x: " + player2.x);
-    // console.log("player2.y: " + player2.y);
-    // console.log("player1.width: " + player1.width);
-    // console.log("player1.height: " + player1.height);
-    // console.log("player2.width: " + player2.width);
-    // console.log("player2.height: " + player2.height);
-    // console.log("player1.velocityY: " + player1.velocityY);
-    // console.log("player2.velocityY: " + player2.velocityY);
-    // console.log("ball.x: " + ball.x);
-    // console.log("ball.y: " + ball.y);
-    // console.log("ball.width: " + ball.width);
-    // console.log("ball.height: " + ball.height);
-    // console.log("ball.radius: " + ball.radius);
-    // console.log("ball.velocityX: " + ball.velocityX);
-    // console.log("ball.velocityY: " + ball.velocityY);
-
     requestAnimationFrame(update);
     // Event listener if key is pressed or release
     document.addEventListener("keydown", function(event) {
         keysPressed[event.code] = true;
         movePlayer();
     });
-
+    
     document.addEventListener("keyup", function(event) {
         keysPressed[event.code] = false;
         movePlayer();
     });
-
 }
 
 function handleResize() {
     boardWidth = window.innerWidth / 1.618;
     boardHeight = window.innerHeight / 1.618;
     if (boardHeight >= boardWidth / 1.618)
-    {
         boardHeight = boardWidth / 1.618;
-        document.body.style.paddingBottom = '10em';
-    }
     board.width = boardWidth;
     board.height = boardHeight;
     playerHeight = boardHeight / 5;
@@ -169,16 +127,19 @@ function handleResize() {
 
 function update() {
     // Update the game
+    if (gameEnded === true)
+        return;
     window.addEventListener('resize', handleResize);
     requestAnimationFrame(update);
     context.clearRect(0, 0, board.width, board.height);
     context.fillStyle = "skyblue";
+
     let newYPosition = player1.y + player1.velocityY;
     if (!outOfBounds(newYPosition))
         player1.y = newYPosition;
     context.fillRect(player1.x, player1.y, player1.width, player1.height);
+    
     let newYPosition2 = player2.y + player2.velocityY;
-
     if (!outOfBounds(newYPosition2))
         player2.y = newYPosition2;
     context.fillRect(player2.x, player2.y, player2.width, player2.height);
@@ -186,6 +147,7 @@ function update() {
     //ball
     ball.x += ball.velocityX;
     ball.y += ball.velocityY;
+
     context.beginPath();
     context.arc(ball.x + ball.radius, ball.y + ball.radius, ball.radius, 0, Math.PI * 2);
     context.fillStyle = "white";
@@ -201,14 +163,14 @@ function update() {
     if (ball.x < 0) {
         player2Score++;
         if (player2Score >= scoreToDo)
-            endGame();
+            endGame(2);
         else
             resetGame(1);
     } 
     else if (ball.x + ball.width > board.width) {
         player1Score++;
         if (player1Score >= scoreToDo)
-            endGame();
+            endGame(1);
         else
             resetGame(-1);
     }
@@ -220,33 +182,11 @@ function update() {
     }
 }
 
-function endGame() {
-    // if (spaceKeyListenerAdded === true)
-    // {
-    //     document.removeEventListener("keydown", spaceKeyListener);
-    //     spaceKeyListenerAdded = false;
-    // }
-    var mainElement = document.getElementById('content');
-    mainElement.innerHTML = ''; // Remove all inner HTML content
-    var boardElement = document.getElementById('board-container');
-    if (boardElement) {
-        boardElement.remove(); // Remove the board
-    }   
-    mainElement.innerHTML = '<div id = "endGame" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden"><p style="text-align:center;">Game Over ! <br><br>Player 1 won ! <br><br> If you want to play again with the same settings, press space.</p></div>';
-    // document.addEventListener("keydown", function(event) {
-    //     if (event.code === "Space") {
-    //         // player1Score = 0;
-    //         // player2Score = 0;
-    //         spaceKeyListenerAdded = true;
-    //         launchGame();
-    //     }
-    // });
-}
 
 
 function outOfBounds(yPosition) {
     return (yPosition < 0 || yPosition > boardHeight - playerHeight);
-
+    
 }
 
 function detectCollision(a, b) {
@@ -262,7 +202,7 @@ function movePlayer() {
     } else {
         player1.velocityY = 0; // Stop movement if no key is pressed
     }
-
+    
     // Player 2 controls
     if (keysPressed["ArrowUp"])
         player2.velocityY = -3;
@@ -295,7 +235,29 @@ function resetGame(direction)
     ball.x = board.width / 2 - ballWidth / 2;
     ball.y = Math.random() * (board.height -10);
     // Reset ball velocity
-
+    
     ball.velocityX = Math.cos(generateRandomAngle()) * board.width / 200 * direction * velocity;
     ball.velocityY = Math.sin(generateRandomAngle()) * board.height / 100 * generateRandomNumber() * velocity;
+}
+
+function endGame(winner) {
+    gameEnded = true;   
+    var mainElement = document.getElementById('content');
+    mainElement.innerHTML = ''; // Remove all inner HTML content  
+    mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
+    '<p style="text-align: center; font-size:4em;">Game Over ! </p>' +
+    '<iframe src="https://giphy.com/embed/OScDfyJIQaXe" width="480" height="480" frameborder="0" class="giphy-embed" allowfullscreen></iframe>' +
+    '<p><a href="https://giphy.com/gifs/rabbids-dance-cute-OScDfyJIQaXe"></a></p>' +
+    '<p style="text-align: center;">Player ' + winner + ' won ! <br><br> If you want to play again with the same settings, press the button below.</p>' +
+    '</div>';
+    var startAgain = document.createElement("button");
+    startAgain.textContent = "Start again";
+    startAgain.classList.add("styled-button")
+    document.getElementById('endGame').appendChild(startAgain);
+    startAgain.addEventListener("click", function() {
+        player1Score = 0;
+        player2Score = 0;
+        launchGame();
+    });
+    
 }

@@ -39,7 +39,7 @@ function showHome() {
 
 }
 
-// Call the showHome() function when the page loads
-document.addEventListener('DOMContentLoaded', function() {
-    showHome();
-});
+// // Call the showHome() function when the page loads
+// document.addEventListener('DOMContentLoaded', function() {
+//     showHome();
+// });

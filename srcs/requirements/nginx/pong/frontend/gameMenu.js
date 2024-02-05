@@ -110,6 +110,7 @@ async function getNamePlayer() {
 }
 
 let scoreToDo = 0;
+let debug = 3; // not debug. 1 is directly the game, 2 is the menu and the score todo will be 1 instead of 12
 
 function scoreChoice() {
     var main = document.getElementById('content');
@@ -138,7 +139,10 @@ function scoreChoice() {
         });
         scoreTwelve.addEventListener("click", function() {
             resolve(true);
-            scoreToDo = 12;
+            if (debug === 3)
+                scoreToDo = 1;
+            else
+                scoreToDo = 12;
             document.getElementById('choice').remove();
         });
         scoreEighteen.addEventListener("click", function() {
@@ -170,9 +174,8 @@ function startButton() {
     });
 }
 
-let debug = true;
 async function showGame() {
-    if (debug === true)
+    if (debug === 2)
     {
         scoreToDo = 1;
         launchGame();
