@@ -196,3 +196,10 @@ main {
     cursor: pointer;
     border-radius: 8px;
 }
+
+.name_player {
+    text-orientation: upright;
+    font-size: 1em;
+    writing-mode: vertical-rl; 
+    line-height: 3;
+}

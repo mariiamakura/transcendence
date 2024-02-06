@@ -18,7 +18,8 @@ let player1 = {
     y: null,
     width: playerWidth,
     height: null, 
-    velocityY: playerVelocityY
+    velocityY: playerVelocityY,
+    name: null
 };
 
 let player2 = {
@@ -26,7 +27,8 @@ let player2 = {
     y: null,
     width: playerWidth,
     height: null,
-    velocityY: playerVelocityY
+    velocityY: playerVelocityY,
+    name: null
 };
 
 let player1Score;
@@ -58,24 +60,30 @@ function initVariables() {
     ball.velocityX = Math.cos(generateRandomAngle()) * boardWidth / 200 * velocity;
     ball.velocityY = Math.sin(generateRandomAngle()) * boardHeight / 100 * generateRandomNumber() * velocity;
     if (boardHeight >= boardWidth / 1.618)
-    {
         boardHeight = boardWidth / 1.618;
-        playerHeight = boardHeight / 5;
-        ball.radius = playerHeight / ballRadiusFactor;
-        player1.height = playerHeight;
-        player2.height = playerHeight;
-    }
-    // set players
-    
+    playerHeight = boardHeight / 5;
+    ball.radius = playerHeight / ballRadiusFactor;
+    player1.height = playerHeight;
+    player2.height = playerHeight;    
 }
 
 function launchGame() {
     initVariables();
-    console.log("namePlayer1: " + namePlayer[0]);
-    console.log("namePlayer2: " + namePlayer[1]);
     var mainElement = document.getElementById('content');
+    if (!namePlayer[0] || !namePlayer[1])
+    {
+        namePlayer[0] = "Player1";
+        namePlayer[1] = "Player2";
+    }
+  
+    let htmlContent = '<div id="board-container" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden">' +
+    '<p class="name_player">' + namePlayer[0] + '</p>' +
+    '<canvas id="board" width="' + boardWidth + '" height="' + boardHeight + '"></canvas>' +
+    '<p class="name_player">' + namePlayer[1] + '</p>' +
+    '</div>';
+
+    mainElement.innerHTML = htmlContent;
     document.body.style.overflow = 'padding-bottom : 5em';
-    mainElement.innerHTML = '<div id="board-container" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden"><p style="display: flex; padding-right:2em; font-size: 3em;">' + namePlayer[0] + '</p><canvas id="board" width="' + boardWidth + '" height="' + boardHeight + '"></canvas><p style="display: flex; padding-left:2em; font-size: 3em;">' + namePlayer[1] + '</p></div>';
     board = document.getElementById('board');
     context = board.getContext('2d'); // 2d rendering context
     
@@ -83,7 +91,8 @@ function launchGame() {
     player1.y = board.height / 2 - playerHeight / 2;
     player2.x = board.width - playerWidth - 10;
     player2.y = board.height / 2 - playerHeight / 2;
-    
+    player1.name = namePlayer[0];
+    player2.name = namePlayer[1];
     //set ball
     ball.x = board.width / 2;
     ball.y = board.height / 2;
@@ -94,11 +103,13 @@ function launchGame() {
     // Event listener if key is pressed or release
     document.addEventListener("keydown", function(event) {
         keysPressed[event.code] = true;
+        event.preventDefault();
         movePlayer();
     });
     
     document.addEventListener("keyup", function(event) {
         keysPressed[event.code] = false;
+        event.preventDefault();
         movePlayer();
     });
 }
@@ -129,6 +140,7 @@ function update() {
     // Update the game
     if (gameEnded === true)
         return;
+    console.log("update");
     window.addEventListener('resize', handleResize);
     requestAnimationFrame(update);
     context.clearRect(0, 0, board.width, board.height);
@@ -145,32 +157,28 @@ function update() {
     context.fillRect(player2.x, player2.y, player2.width, player2.height);
 
     //ball
-    ball.x += ball.velocityX;
-    ball.y += ball.velocityY;
-
     context.beginPath();
     context.arc(ball.x + ball.radius, ball.y + ball.radius, ball.radius, 0, Math.PI * 2);
     context.fillStyle = "white";
     context.fill();
+    ball.x += ball.velocityX;
+    ball.y += ball.velocityY;
     
     if (ball.y <= 0 || ball.y + ball.height >= board.height) {
         ball.velocityY *= -1;
     }
-    if (detectCollision(ball, player1) || detectCollision(ball, player2)) {
-        if (ball.x <= player1.x + player1.width || ball.x + ball.width >= player2.x)
-            ball.velocityX *= -1;
-    }
+    checkCollision(ball.y, ball.x);
     if (ball.x < 0) {
         player2Score++;
         if (player2Score >= scoreToDo)
-            endGame(2);
+            endGame(player2.name);
         else
             resetGame(1);
     } 
     else if (ball.x + ball.width > board.width) {
         player1Score++;
         if (player1Score >= scoreToDo)
-            endGame(1);
+            endGame(player1.name);
         else
             resetGame(-1);
     }
@@ -182,11 +190,26 @@ function update() {
     }
 }
 
-
+function checkCollision(ballY, ballX) {
+    ballX -= 5;
+    let LoclPad1XPos = player1.x + player1.width / 2;
+    let distance1 = Math.abs(ballX - LoclPad1XPos);
+    
+    if (distance1 < 5 && ballY > (player1.y - playerWidth) && player1.y + player1.height + playerWidth > ballY) {
+        ball.velocityX *= -1; // Reverse the x velocity
+    }
+    
+    ballX += 10;
+    let LoclPad2XPos = player2.x;
+    let distance2 = Math.abs(ballX - LoclPad2XPos);
+    
+    if (distance2 < 5 && ballY > (player2.y - playerWidth) && player2.y + player2.height + playerWidth > ballY) {
+        ball.velocityX *= -1; // Reverse the x velocity
+    }
+}
 
 function outOfBounds(yPosition) {
     return (yPosition < 0 || yPosition > boardHeight - playerHeight);
-    
 }
 
 function detectCollision(a, b) {
@@ -248,7 +271,7 @@ function endGame(winner) {
     '<p style="text-align: center; font-size:4em;">Game Over ! </p>' +
     '<iframe src="https://giphy.com/embed/OScDfyJIQaXe" width="480" height="480" frameborder="0" class="giphy-embed" allowfullscreen></iframe>' +
     '<p><a href="https://giphy.com/gifs/rabbids-dance-cute-OScDfyJIQaXe"></a></p>' +
-    '<p style="text-align: center;">Player ' + winner + ' won ! <br><br> If you want to play again with the same settings, press the button below.</p>' +
+    '<p style="text-align: center;">' + winner + ' won ! <br><br> If you want to play again with the same settings, press the button below.</p>' +
     '</div>';
     var startAgain = document.createElement("button");
     startAgain.textContent = "Start again";
