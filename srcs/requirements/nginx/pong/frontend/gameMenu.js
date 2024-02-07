@@ -7,7 +7,7 @@ let numberPlayers;
 function showButton() {
 
     var main = document.getElementById('content');
-    main.innerHTML = '<div id="choice" style="display: flex; flex-direction:column;justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden"> <p style="padding-top:  5em;"> Which type of game do you wanna play ? </p></div>';
+    main.innerHTML += '<div id="choice" style="display: flex; flex-direction:column;justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden"> <p style="padding-top: 2em;"> Which type of game do you wanna play ? </p></div>';
     var buttonTournament = document.createElement("button");
     var buttonSingle = document.createElement("button");
     buttonSingle.textContent = "1 vs 1";
@@ -32,7 +32,7 @@ function showButton() {
 
 function numPlayers() {
     var main = document.getElementById('content');
-    main.innerHTML = '<div id="choice" style="display: flex; flex-direction:column;justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden"><p style="padding-top: 5em; display: flex; " > How many players do you want to be ? </p></div>';
+    main.innerHTML += '<div id="choice" style="display: flex; flex-direction:column;justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden"><p style="padding-top: 2em; display: flex; " > How many players do you want to be ? </p></div>';
     var buttonTwo = document.createElement("button");
     var buttonFour = document.createElement("button");
     buttonTwo.textContent = "2 players";
@@ -90,7 +90,7 @@ async function getNamePlayer() {
     var main = document.getElementById('content');
     let i = 1;
     while (i <= numberPlayers) {
-        main.innerHTML = '<div id="choice" style="display: flex; flex-direction:column;justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden"><p style="padding-top: 5em; display: flex; " > Name of player ' + i + ' : </p></div>';
+        main.innerHTML += '<div id="choice" style="display: flex; flex-direction:column;justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden"><p style="padding-top: 2em; display: flex; " > Name of player ' + i + ' : </p></div>';
         var input = document.createElement("input");
         input.type = "text";
         input.id = "name" + i;
@@ -114,7 +114,7 @@ let debug = 1; // 1 not debug. 2 is directly the game, 3 is the menu and the sco
 
 function scoreChoice() {
     var main = document.getElementById('content');
-    main.innerHTML = `<div id="choice" style="display: flex; flex-direction:column;justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden"><p style="padding-top: 5em; display: flex; " > Chose how many points wins: </p></div>`;
+    main.innerHTML += `<div id="choice" style="display: flex; flex-direction:column;justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden"><p style="padding-top: 2em; display: flex; " > Chose how many points wins: </p></div>`;
     var unlimited = document.createElement("button");
     unlimited.textContent = "Unlimited";
     unlimited.classList.add("styled-button");
@@ -160,7 +160,7 @@ function scoreChoice() {
 
 function startButton() {
     var main = document.getElementById('content');
-    main.innerHTML = '<div id="choice" style="display: flex; flex-direction:column;justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden"><p style="text-align: center; padding-top:5em;"> Ready to start ? <br> <br> Let\'s go !</p></div>';
+    main.innerHTML += '<div id="choice" style="display: flex; flex-direction:column;justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden"><p style="text-align: center; padding-top:5em;"> Ready to start ? <br> <br> Let\'s go !</p></div>';
     var startButton = document.createElement("button");
     startButton.textContent = "Start !";
     startButton.classList.add("styled-button");
@@ -174,12 +174,14 @@ function startButton() {
     });
 }
 
-async function showGame() {
+async function showGamePong() {
+    var mainElement = document.getElementById('content');
+    mainElement.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em;">Pong</p>';
     gameEnded = true;
     if (debug === 2)
     {
-        scoreToDo = 5;
-        launchGame();
+        scoreToDo = 1;
+        launchGamePong();
     }
     else
     {
@@ -209,7 +211,7 @@ async function showGame() {
         {
             await startButton();
             if (startGame === true)
-                launchGame();
+                launchGamePong();
         }
     }
     // Update the URL without reloading the page

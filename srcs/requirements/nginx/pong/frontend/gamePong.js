@@ -67,7 +67,7 @@ function initVariables() {
     player2.height = playerHeight;    
 }
 
-function launchGame() {
+function launchGamePong() {
     initVariables();
     var mainElement = document.getElementById('content');
     if (!namePlayer[0] || !namePlayer[1])
@@ -75,7 +75,6 @@ function launchGame() {
         namePlayer[0] = "Player1";
         namePlayer[1] = "Player2";
     }
-  
     let htmlContent = '<div id="board-container" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden">' +
     '<p class="name_player">' + namePlayer[0] + '</p>' +
     '<canvas id="board" width="' + boardWidth + '" height="' + boardHeight + '"></canvas>' +
@@ -85,6 +84,8 @@ function launchGame() {
     mainElement.innerHTML = htmlContent;
     document.body.style.overflow = 'padding-bottom : 5em';
     board = document.getElementById('board');
+    board.width = boardWidth;
+    board.height = boardHeight;
     context = board.getContext('2d'); // 2d rendering context
     
     // Draw players
@@ -161,9 +162,9 @@ function update() {
     context.arc(ball.x + ball.radius, ball.y + ball.radius, ball.radius, 0, Math.PI * 2);
     context.fillStyle = "white";
     context.fill();
+    
     ball.x += ball.velocityX;
     ball.y += ball.velocityY;
-    
     if (ball.y <= 0 || ball.y + ball.height >= board.height) {
         ball.velocityY *= -1;
     }
@@ -280,7 +281,7 @@ function endGame(winner) {
     startAgain.addEventListener("click", function() {
         player1Score = 0;
         player2Score = 0;
-        launchGame();
+        launchGamePong();
     });
     
 }

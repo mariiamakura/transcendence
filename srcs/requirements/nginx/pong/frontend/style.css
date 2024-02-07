@@ -172,6 +172,10 @@ main {
     display : flex;
     justify-content: center;
     align-items: center;
+    color: white;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
     border-top : 1em solid skyblue;
     border-bottom: 1em solid skyblue;
 }
@@ -202,4 +206,77 @@ main {
     font-size: 1em;
     writing-mode: vertical-rl; 
     line-height: 3;
+}
+
+.dropbtn {
+    font-family: 'Merriweather', serif;
+    display: inline-block;
+    padding: 8px 12px; 
+    font-size: calc(0.8em + 0.5vw);
+    color: #2f3542;
+    text-decoration: none;
+    border: none;
+    border-radius: 20px; 
+    background-color: transparent; 
+    transition: background-color 0.3s;
+  }
+  
+  /* Style the dropdown content (hidden by default) */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+  }
+  
+  /* Style the links inside the dropdown */
+  .dropdown-content a {
+    color: #2f3542;
+    text-decoration: none;
+    display: block;
+  }
+  
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {
+    background-color: #dfe4ea;
+    }
+  
+  /* Show the dropdown menu on hover */
+  .dropdown:hover .dropdown-content {
+    display: block;
+    padding-top:5px;
+    padding-bottom: 1em;
+}
+  
+  /* Change the background color of the dropdown button when the dropdown content is shown */
+  .dropdown:hover .dropbtn {
+    background-color: #dfe4ea;
+}
+  
+#memory-game {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    margin: auto;
+    z-index: 1;
+}
+
+.card {
+    width: 100px;
+    height: 100px;
+    background-color: blue;
+    border: 2px;
+    border-radius: 7px;    
+    border-style: solid;
+    border-color: black;
+    margin: 10px;
+    flex-direction: column;
+}
+
+.card.show-background {
+    background-color: blueviolet; /* Set your background color here */
+}
+.card.show-image {
+    background-image: var(--bg-image); /* Set your background image here */
 }
