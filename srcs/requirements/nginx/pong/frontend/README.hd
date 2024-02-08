@@ -5,6 +5,18 @@ Website:
 - arrange the falling balls to be consistently in the middle 
 
 Game - Pong:
-- increase velocity
-- add padding at the bottom of the page
-- add first start button and name fields
+- Left paddle is not perfect
+- velocity at beginning is different from velocity after update
+- introduce tournament
+- link to database
+
+Game - Memory:
+- tournament
+- link to database
+
+
+
+- Multiplayers ? -> if not, disable the respective buttons
+
+
+
