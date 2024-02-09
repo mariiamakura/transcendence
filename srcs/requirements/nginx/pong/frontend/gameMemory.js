@@ -1,4 +1,29 @@
 let numberCards;
+let set;
+function choiceSet() {
+    var main = document.getElementById('content');
+    main.innerHTML += `<div id="choice" style="display: flex; flex-direction:column;justify-content: center; align-items: center; width: 100%; height: 100%;"><p style="padding-top: 1em; display: flex; " > Which set do you want to play with ? </p></div>`;
+    var Nature = document.createElement("button");
+    Nature.textContent = "Nature (easy)";
+    Nature.classList.add("styled-button");
+    document.getElementById('choice').appendChild(Nature);
+    var Robot = document.createElement("button");
+    Robot.textContent = "Robot (hard)";
+    Robot.classList.add("styled-button");
+    document.getElementById('choice').appendChild(Robot);
+    return new Promise(function (resolve) {
+        Nature.addEventListener("click", function() {
+            resolve(true);
+            set = 1;
+            document.getElementById('choice').remove();
+        });
+        Robot.addEventListener("click", function() {
+            resolve(true);
+            set = 2;
+            document.getElementById('choice').remove();
+        });
+    });
+}
 
 function choiceCards() {
     var main = document.getElementById('content');
@@ -45,11 +70,12 @@ function choiceCards() {
 
 async function showGameMemory() {
     var mainElement = document.getElementById('content');
-    mainElement.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em;">Memory game</p>';    
+    mainElement.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em; ">Memory game</p>';    
     gameEnded = true;
-    debug = 1;
+    debug = 0;
     if (debug === 2)
     {
+        set = 2;
         numberCards = 12;
         launchGameMemory();
     }
@@ -65,6 +91,7 @@ async function showGameMemory() {
             if (await numPlayers())
             {
                 await getNamePlayer();
+                await choiceSet();
                 numberCards = 12;
             }
         }
@@ -73,6 +100,7 @@ async function showGameMemory() {
             if (await numPlayers())
             {
                 await getNamePlayer();
+                await choiceSet();
                 await choiceCards();
             }
         }
@@ -95,114 +123,6 @@ let cards = {
     ref: null,
     index: null
 }
-
-let natureFirstSet12 = [
-    'url("img/Nature/bird1.png")',
-    'url("img/Nature/bee1.png")',
-    'url("img/Nature/flower1.png")',
-    'url("img/Nature/leaf1.png")',
-    'url("img/Nature/mushroom1.png")',
-    'url("img/Nature/road1.png")',
-];
-
-let natureSecondSet12 = [
-    'url("img/Nature/bird2.png")',
-    'url("img/Nature/bee2.png")',
-    'url("img/Nature/flower2.png")',
-    'url("img/Nature/leaf2.png")',
-    'url("img/Nature/mushroom2.png")',
-    'url("img/Nature/road2.png")',
-];
-
-let natureFirstSet16 = [
-    'url("img/Nature/bird1.png")',
-    'url("img/Nature/bee1.png")',
-    'url("img/Nature/flower1.png")',
-    'url("img/Nature/leaf1.png")',
-    'url("img/Nature/mushroom1.png")',
-    'url("img/Nature/road1.png")',
-    'url("img/Nature/butterfly_color1.png")',
-    'url("img/Nature/kids1.png")',
-];
-
-let natureSecondSet16 = [
-    'url("img/Nature/bird2.png")',
-    'url("img/Nature/bee2.png")',
-    'url("img/Nature/flower2.png")',
-    'url("img/Nature/leaf2.png")',
-    'url("img/Nature/mushroom2.png")',
-    'url("img/Nature/road2.png")',
-    'url("img/Nature/butterfly_color2.png")',
-    'url("img/Nature/kids2.png")',
-];
-
-let natureFirstSet24 = [
-    'url("img/Nature/bird1.png")',
-    'url("img/Nature/bee1.png")',
-    'url("img/Nature/flower1.png")',
-    'url("img/Nature/leaf1.png")',
-    'url("img/Nature/mushroom1.png")',
-    'url("img/Nature/road1.png")',
-    'url("img/Nature/butterfly_color1.png")',
-    'url("img/Nature/kids1.png")',
-    'url("img/Nature/snail1.png")',
-    'url("img/Nature/rock1.png")',
-    'url("img/Nature/rainbow1.png")',
-    'url("img/Nature/frog1.png")',
-];
-
-let natureSecondSet24 = [
-    'url("img/Nature/bird2.png")',
-    'url("img/Nature/bee2.png")',
-    'url("img/Nature/flower2.png")',
-    'url("img/Nature/leaf2.png")',
-    'url("img/Nature/mushroom2.png")',
-    'url("img/Nature/road2.png")',
-    'url("img/Nature/butterfly_color2.png")',
-    'url("img/Nature/kids2.png")',
-    'url("img/Nature/snail2.png")',
-    'url("img/Nature/rock2.png")',
-    'url("img/Nature/rainbow2.png")',
-    'url("img/Nature/frog2.png")',
-];
-
-let natureFirstSet32 = [
-    'url("img/Nature/bird1.png")',
-    'url("img/Nature/bee1.png")',
-    'url("img/Nature/flower1.png")',
-    'url("img/Nature/leaf1.png")',
-    'url("img/Nature/mushroom1.png")',
-    'url("img/Nature/road1.png")',
-    'url("img/Nature/butterfly_color1.png")',
-    'url("img/Nature/kids1.png")',
-    'url("img/Nature/snail1.png")',
-    'url("img/Nature/rock1.png")',
-    'url("img/Nature/rainbow1.png")',
-    'url("img/Nature/frog1.png")',
-    'url("img/Nature/caterpillar1.png")',
-    'url("img/Nature/earth1.png")',
-    'url("img/Nature/trees1.png")',
-    'url("img/Nature/butterfly_black1.png")',
-];
-
-let natureSecondSet32 = [
-    'url("img/Nature/bird2.png")',
-    'url("img/Nature/bee2.png")',
-    'url("img/Nature/flower2.png")',
-    'url("img/Nature/leaf2.png")',
-    'url("img/Nature/mushroom2.png")',
-    'url("img/Nature/road2.png")',
-    'url("img/Nature/butterfly_color2.png")',
-    'url("img/Nature/kids2.png")',
-    'url("img/Nature/snail2.png")',
-    'url("img/Nature/rock2.png")',
-    'url("img/Nature/rainbow2.png")',
-    'url("img/Nature/frog2.png")',
-    'url("img/Nature/caterpillar2.png")',
-    'url("img/Nature/earth2.png")',
-    'url("img/Nature/trees2.png")',
-    'url("img/Nature/butterfly_black2.png")',
-];
 
 let setAlreadyUsed = [];
 
@@ -233,30 +153,32 @@ function launchGameMemory() {
         namePlayer[1] = "Player2";
     }
     PlayerToPlay = namePlayer[0];
-    if (numberCards === 12)
-    {
-        firstSet = natureFirstSet12
-        secondSet = natureSecondSet12;
+    let sets = [natureFirstSet12, natureSecondSet12, natureFirstSet16, natureSecondSet16, natureFirstSet24, natureSecondSet24, natureFirstSet32, natureSecondSet32, 
+                        robotFirstSet12, robotSecondSet12, robotFirstSet16, robotSecondSet16, robotFirstSet24, robotSecondSet24, robotFirstSet32, robotSecondSet32]
+    if (set === 1)
+        sets = sets.slice(0, 8);
+    else if (set === 2)
+        sets = sets.slice(8, 16);
+    switch (numberCards) {
+        case 12:
+            firstSet = sets[0];
+            secondSet = sets[1];
+            break;
+        case 16:
+            firstSet = sets[2];
+            secondSet = sets[3];
+            break;
+        case 24:
+            firstSet = sets[4];
+            secondSet = sets[5];
+            break;
+        case 32:
+            firstSet = sets[6];
+            secondSet = sets[7];
+            break;
     }
-    else if (numberCards === 16)
-    { 
-        firstSet = natureFirstSet16;
-        secondSet = natureSecondSet16;
-    }
-    else if (numberCards === 24)
-    {
-        firstSet = natureFirstSet24;
-        secondSet = natureSecondSet24;
-    }
-    else if (numberCards === 32)
-    {
-        firstSet = natureFirstSet32;
-        secondSet = natureSecondSet32;
-    }
-    console.log(numberCards);
-    // let widthBoard = (cards.width + cards.margin * 2 + cards.border * 2) * (Math.ceil(Math.sqrt(numberCards)));
+
     let widthBoard = (cards.width + cards.margin * 2 + cards.border * 2) * (Math.ceil(numberCards / 4));
-    console.log(widthBoard);
     mainElement.innerHTML = '<div id="turn"></div><div id="memory-game" style = "width:' + widthBoard + 'px;"></div>';
     for (let i = 1; i <= numberCards; i++) {
         var card = document.createElement("div");

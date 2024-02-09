@@ -7,6 +7,7 @@ body {
 
 .header {
     display: flex;
+    height: 10vh;
     justify-content: space-between;
     align-items: center;
     padding: 0.8em;
@@ -14,10 +15,11 @@ body {
 }
 
 .gif-logo {
-    width: 10%;
-    height: 10%;
+    height: 10vh;
+    width: auto;
     border-radius: 10%;
 }
+
 .header img {
     margin-right: 10px;
 }
@@ -167,46 +169,6 @@ main {
     border-radius: 50%; /* Make the social media icons circular */
 }
 
-#board {
-    background-color: #2f3542 ;
-    display : flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-    border-top : 1em solid skyblue;
-    border-bottom: 1em solid skyblue;
-}
-
-#board-container {
-    padding-top: 2em;
-    padding-bottom: 2em;
-    
-}
-
-.styled-button {
-    background-color: #dfe4ea;
-    border : none;
-    color : #2f3542;
-    padding : 1em;
-    text-align: center;
-    text-decoration: none;
-    display: block;
-    font-size: medium;
-    font-family: 'Merriweather', serif ;
-    margin: 1em;
-    cursor: pointer;
-    border-radius: 8px;
-}
-
-.name_player {
-    text-orientation: upright;
-    font-size: 1em;
-    writing-mode: vertical-rl; 
-    line-height: 3;
-}
 
 .dropbtn {
     font-family: 'Merriweather', serif;
@@ -249,34 +211,4 @@ main {
   /* Change the background color of the dropdown button when the dropdown content is shown */
   .dropdown:hover .dropbtn {
     background-color: #dfe4ea;
-}
-  
-#memory-game {
-    position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    height: auto;
-    margin: auto;
-    z-index: 1;
-}
-
-.card {
-    width: 100px;
-    height: 100px;
-    background-color: blue;
-    border: 2px;
-    border-radius: 7px;    
-    border-style: solid;
-    border-color: black;
-    margin: 10px;
-    flex-direction: column;
-}
-
-.card.show-background {
-    background-color: blueviolet; /* Set your background color here */
-}
-.card.show-image {
-    background-image: var(--bg-image); /* Set your background image here */
 }

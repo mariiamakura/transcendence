@@ -1,0 +1,40 @@
+#board {
+    background-color: #2f3542 ;
+    display : flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-top : 1em solid skyblue;
+    border-bottom: 1em solid skyblue;
+}
+
+#board-container {
+    padding-top: 2em;
+    padding-bottom: 2em;
+    
+}
+
+.styled-button {
+    background-color: #dfe4ea;
+    border : none;
+    color : #2f3542;
+    padding : 1em;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    font-size: medium;
+    font-family: 'Merriweather', serif ;
+    margin: 1em;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.name_player {
+    text-orientation: upright;
+    font-size: 1em;
+    writing-mode: vertical-rl; 
+    line-height: 3;
+}

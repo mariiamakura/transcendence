@@ -13,7 +13,8 @@ Game - Pong:
 Game - Memory:
 - tournament
 - link to database
-
+- put a score indicator on each side of the board going up score++
+- change the color of the background indication whose turns it is
 
 
 - Multiplayers ? -> if not, disable the respective buttons

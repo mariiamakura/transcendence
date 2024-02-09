@@ -17,7 +17,7 @@ function showHome() {
 
         for (let i = 1; i <= numBalls; i++) {
             const ball = document.createElement("div");
-            ball.className = "ball"; // Add 'ball' class to each ball element
+            ball.className = "ball";
             
             // Generate random positions within specified ranges
             const randomTop = rangeTop + Math.random() * (rangeBottom - rangeTop);
