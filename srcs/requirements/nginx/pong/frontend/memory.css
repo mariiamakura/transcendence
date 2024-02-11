@@ -5,7 +5,6 @@
     justify-content: center;
     align-items: center;
     height: auto;
-    margin: auto;
     z-index: 1;
 }
 
@@ -27,3 +26,38 @@
 .card.show-image {
     background-image: var(--bg-image); 
 }
+#whole {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Merryweather', serif;
+    text-align: center;
+    font-size: 20px;
+    height: 100vh;
+    background-color: white;
+}
+
+#Player1, #Player2 {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 1em;
+    padding: 1em;
+    /* background-color: skyblue; */
+
+}
+
+.progress-bar-container {
+    width: 300px; /* Ajustez la largeur de la jauge selon vos besoins */
+    height: 20px; /* Ajustez la hauteur de la jauge selon vos besoins */
+    background-color: #ccc; /* Couleur de fond de la jauge */
+  }
+  
+  .progress-bar {
+    height: 100%;
+    background-color: green; /* Couleur par défaut de la jauge */
+  }
+  

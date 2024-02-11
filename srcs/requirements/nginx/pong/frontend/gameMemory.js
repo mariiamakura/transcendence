@@ -72,11 +72,11 @@ async function showGameMemory() {
     var mainElement = document.getElementById('content');
     mainElement.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em; ">Memory game</p>';    
     gameEnded = true;
-    debug = 0;
+    debug = 2;
     if (debug === 2)
     {
         set = 2;
-        numberCards = 12;
+        numberCards = 32;
         launchGameMemory();
     }
     else
@@ -179,12 +179,15 @@ function launchGameMemory() {
     }
 
     let widthBoard = (cards.width + cards.margin * 2 + cards.border * 2) * (Math.ceil(numberCards / 4));
-    mainElement.innerHTML = '<div id="turn"></div><div id="memory-game" style = "width:' + widthBoard + 'px;"></div>';
+    mainElement.innerHTML = '<div id="whole">' + 
+                                '<div id="Player1"><p id = "turn1"></p><div id = "progress-bar-container1"></div></div>' +
+                                '<div id="memory-game" style = "width:' + widthBoard + 'px;"></div>' + 
+                                '<div id="Player2"><p id = "turn2"></p><div id = "progress-bar-container2"></div></div>' +
+                            '</div>';
     for (let i = 1; i <= numberCards; i++) {
         var card = document.createElement("div");
         card.classList.add("card");
         card.id = "card" + i;
-        
         // Set the background image based on the condition
         if (i % 2 === 0)
         {
@@ -207,13 +210,61 @@ let cardTurned = 0;
 let cardTurnedArrayIndex = [];
 let cardTurnedArrayId = [];
 
+function updatePlayerTurns() {
+    if (PlayerToPlay === namePlayer[0])
+    {
+        document.getElementById('Player1').style.backgroundColor = 'skyblue';
+        document.getElementById('Player2').style.backgroundColor =  'white';
+    }
+    else
+    {
+        document.getElementById('Player1').style.backgroundColor =  'white';
+        document.getElementById('Player2').style.backgroundColor = 'skyblue';
+    }
+}
+
+function updatePlayerScore(playerNumber) {
+    var score_max = numberCards / 2;
+    var progressBar = document.createElement('div');
+    progressBar.classList.add('progress-bar');
+    progressBar.style.backgroundColor = (playerNumber === 1 ? document.getElementById('Player1').style.backgroundColor : document.getElementById('Player2').style.backgroundColor);
+    let height = 20 * numberCards / 2;
+    progressBar.style.width = '20px';
+    progressBar.style.height = height + 'px';
+    var progressBarContainerId = 'progress-bar-container' + playerNumber;
+    document.getElementById(progressBarContainerId).innerHTML = '';
+    document.getElementById(progressBarContainerId).appendChild(progressBar);
+    var pourcentageScored = (playerNumber === 1 ? scorePlayer1 : scorePlayer2) / score_max * 100;
+    progressBar.style.position = 'relative';
+    progressBar.innerHTML = `<div class="scored"></div><div class="back"></div><span class="score-text"></span>`; // Include a span for the score text
+    progressBar.querySelector('.scored').style.width = '100%';
+    progressBar.querySelector('.back').style.width = '100%'; 
+    progressBar.querySelector('.scored').style.height = pourcentageScored +'%';
+    progressBar.querySelector('.back').style.height = (100 - pourcentageScored )+'%'; 
+    progressBar.querySelector('.scored').style.backgroundColor = '#1e90ff'; // blue
+    progressBar.querySelector('.back').style.backgroundColor = (playerNumber === 1 ? document.getElementById('Player1').style.backgroundColor : document.getElementById('Player2').style.backgroundColor);
+    progressBar.querySelector('.scored').style.position = 'absolute';
+    progressBar.querySelector('.scored').style.bottom = '0';
+    progressBar.querySelector('.back').style.position = 'absolute';
+    progressBar.querySelector('.back').style.bottom = pourcentageScored + '%';
+    var scoreTextElement = progressBar.querySelector('.score-text');
+    scoreTextElement.innerText = (playerNumber === 1 ? scorePlayer1 : scorePlayer2);
+    scoreTextElement.style.position = 'absolute';
+    scoreTextElement.style.bottom = '100%';
+    scoreTextElement.style.left = '50%';
+    scoreTextElement.style.transform = 'translateX(-50%)';
+}
+
 function playTime()
 {
     PlayerToPlay = namePlayer[0];
-    var turn = document.getElementById('turn');
-    turn.innerHTML = '<p style= "display:flex;text-align :left; "> Score ' + namePlayer[0] + ': ' + scorePlayer1 +
-    ' <p style="display:flex; text-align:right;">Score ' + namePlayer[1] + ': ' + scorePlayer2 + '</p>' +
-    '</p> <p style= "font-size:2em; text-align:center;"> Playing: ' + PlayerToPlay + '</p>';
+    var turn1 = document.getElementById('turn1');
+    var turn2 = document.getElementById('turn2');
+    turn1.innerHTML = '<p> ' + namePlayer[0] + ' </p>';
+    turn2.innerHTML = '<p> ' + namePlayer[1] + ' </p>';
+    updatePlayerTurns();
+    updatePlayerScore(1);
+    updatePlayerScore(2);
     document.getElementById('memory-game').addEventListener("click", function(event) {
         if (event.target.classList.contains("card")) {
             if (cardTurned < 2 && !event.target.classList.contains("show-image"))
@@ -223,17 +274,15 @@ function playTime()
                 cardTurnedArrayIndex.push(event.target.index);
                 cardTurnedArrayId.push(event.target.id);
                 if (cardTurned === 2)
-                    checkCards();
-            }
+                checkCards();
         }
-    });
+    }
+});
 }
 
 function checkCards() {
     if (cardTurnedArrayIndex[0] === cardTurnedArrayIndex[1])
-    {
-        console.log("eqalite des cartes");
-        
+    {        
         if (PlayerToPlay === namePlayer[0])
             scorePlayer1++;
         else if (PlayerToPlay === namePlayer[1])
@@ -242,19 +291,10 @@ function checkCards() {
     }
     else
     {
-        console.log(cardTurnedArrayId[0]);
-        console.log(cardTurnedArrayId[1]);
-        console.log("retournement des cartes");
-        console.log(cardTurnedArrayIndex[0]);
-        console.log(cardTurnedArrayIndex[1]);
         setTimeout(function() {
         var card1 = document.getElementById(cardTurnedArrayId[0]);
         var card2 = document.getElementById(cardTurnedArrayId[1]);
-        console.log(card1);
-        console.log(card2);
-
         if (card1 && card2) {
-            console.log("worked");
             card1.classList.toggle("show-image");
             card2.classList.toggle("show-image");
             turnUpdate(2); // mode 2, players switch
@@ -269,15 +309,14 @@ function turnUpdate(mode)
     if (mode === 2)
     {
         if (PlayerToPlay === namePlayer[0])
-        PlayerToPlay = namePlayer[1];
-    else
-    PlayerToPlay = namePlayer[0];
-}
+            PlayerToPlay = namePlayer[1];
+        else
+            PlayerToPlay = namePlayer[0];
+    }
     cardTurnedArrayId.length = 0;
     cardTurnedArrayIndex.length = 0;
     cardTurned -= 2;
-    var turn = document.getElementById('turn');
-    turn.innerHTML = '<p style= "display:flex;text-align :left; "> Score ' + namePlayer[0] + ': ' + scorePlayer1 +
-    ' <p style="display:flex; text-align:right;">Score ' + namePlayer[1] + ': ' + scorePlayer2 + '</p>' +
-    '</p> <p style= "font-size:2em; text-align:center;"> Playing: ' + PlayerToPlay + '</p>';
+    updatePlayerTurns();
+    updatePlayerScore(1);
+    updatePlayerScore(2);
 }
