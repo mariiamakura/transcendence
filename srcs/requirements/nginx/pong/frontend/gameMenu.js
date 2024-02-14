@@ -1,4 +1,3 @@
-
 let startGame;
 let tournament;
 let singleGame;
@@ -7,7 +6,7 @@ let numberPlayers;
 function showButton() {
 
     var main = document.getElementById('content');
-    main.innerHTML += '<div id="choice" style="display: flex; flex-direction:column;justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden"> <p style="padding-top: 2em;"> Which type of game do you wanna play ? </p></div>';
+    main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> Which type of game do you wanna play ? </p></div>';
     var buttonTournament = document.createElement("button");
     var buttonSingle = document.createElement("button");
     buttonSingle.textContent = "1 vs 1";
@@ -32,7 +31,7 @@ function showButton() {
 
 function numPlayers() {
     var main = document.getElementById('content');
-    main.innerHTML += '<div id="choice" style="display: flex; flex-direction:column;justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden"><p style="padding-top: 2em; display: flex; " > How many players do you want to be ? </p></div>';
+    main.innerHTML += '<div id="choice"><p style="padding-top: 2em; display: flex; " > How many players do you want to be ? </p></div>';
     var buttonTwo = document.createElement("button");
     var buttonFour = document.createElement("button");
     buttonTwo.textContent = "2 players";
@@ -86,35 +85,35 @@ function submitButton(submit) {
     });
 }
 
+
 async function getNamePlayer() {
     var main = document.getElementById('content');
     let i = 1;
     while (i <= numberPlayers) {
-        main.innerHTML += '<div id="choice" style="display: flex; flex-direction:column;justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden"><p style="padding-top: 2em; display: flex; " > Name of player ' + i + ' : </p></div>';
-        var input = document.createElement("input");
-        input.type = "text";
-        input.id = "name" + i;
-        var Submit = document.createElement("button");
-        Submit.textContent = "Submit";
-        Submit.classList.add("styled-button");
-        document.getElementById('choice').appendChild(input);
-        document.getElementById('choice').appendChild(Submit);
+        main.innerHTML += '<div id="choice">' + 
+            '<form style="display: flex; flex-direction: column; align-items: center;">' +
+                '<p style="padding-top: 2em; display: flex; align-items:center; justify-content:center;" > Name of player ' + i + ' : </p>' +
+                '<input type="text" id="name' + i + '">' +
+                '<button type="submit" class="styled-button" style="margin-top: 1em;">Submit</button>' +
+            '</form>' +
+        '</div>';
+        const Submit = main.querySelector('#choice:last-child button');
+        const input = main.querySelector('#choice:last-child input');
         const isSubmitted = await submitButton(Submit);
-        if (isSubmitted === true && input.value !== "")
-        {
+        if (isSubmitted === true && input.value !== "") {
             namePlayer.push(input.value);
-            document.getElementById('choice').remove();
+            main.querySelector('#choice:last-child').remove();
             i++;
         }
     }
 }
-
+   
 let scoreToDo = 0;
 let debug = 1; // 1 not debug. 2 is directly the game, 3 is the menu and the score todo will be 1 instead of 12
 
 function scoreChoice() {
     var main = document.getElementById('content');
-    main.innerHTML += `<div id="choice" style="display: flex; flex-direction:column;justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden"><p style="padding-top: 2em; display: flex; " > Chose how many points wins: </p></div>`;
+    main.innerHTML += `<div id="choice"><p style="padding-top: 2em; display: flex; " > Chose how many points wins: </p></div>`;
     var unlimited = document.createElement("button");
     unlimited.textContent = "Unlimited";
     unlimited.classList.add("styled-button");
@@ -160,7 +159,7 @@ function scoreChoice() {
 
 function startButton() {
     var main = document.getElementById('content');
-    main.innerHTML += '<div id="choice" style="display: flex; flex-direction:column;justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden"><p style="text-align: center; padding-top:5em;"> Ready to start ? <br> <br> Let\'s go !</p></div>';
+    main.innerHTML += '<div id="choice"><p style="text-align: center; padding-top:5em;"> Ready to start ? <br> <br> Let\'s go !</p></div>';
     var startButton = document.createElement("button");
     startButton.textContent = "Start !";
     startButton.classList.add("styled-button");

@@ -19,12 +19,14 @@
 
 .styled-button {
     background-color: #dfe4ea;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border : none;
     color : #2f3542;
     padding : 1em;
     text-align: center;
     text-decoration: none;
-    display: block;
     font-size: medium;
     font-family: 'Merriweather', serif ;
     margin: 1em;

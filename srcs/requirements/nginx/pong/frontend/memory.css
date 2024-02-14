@@ -36,6 +36,7 @@
     font-size: 20px;
     height: 100vh;
     background-color: white;
+    overflow: auto;
 }
 
 #Player1, #Player2 {

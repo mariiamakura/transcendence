@@ -184,31 +184,44 @@ main {
   }
   
   /* Style the dropdown content (hidden by default) */
-  .dropdown-content {
+.dropdown-content {
     display: none;
     position: absolute;
-  }
-  
-  /* Style the links inside the dropdown */
-  .dropdown-content a {
+}
+
+/* Style the links inside the dropdown */
+.dropdown-content a {
     color: #2f3542;
     text-decoration: none;
     display: block;
-  }
-  
-  /* Change color of dropdown links on hover */
-  .dropdown-content a:hover {
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
     background-color: #dfe4ea;
-    }
-  
-  /* Show the dropdown menu on hover */
-  .dropdown:hover .dropdown-content {
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
     display: block;
     padding-top:5px;
     padding-bottom: 1em;
 }
-  
-  /* Change the background color of the dropdown button when the dropdown content is shown */
-  .dropdown:hover .dropbtn {
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
     background-color: #dfe4ea;
+}
+
+#choice {
+    overflow: visible;
+    background-color: red;
+    display: flex; 
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    height: auto;
+    overflow:hidden;
+
 }

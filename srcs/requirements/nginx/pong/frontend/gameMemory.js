@@ -1,8 +1,9 @@
 let numberCards;
 let set;
+
 function choiceSet() {
     var main = document.getElementById('content');
-    main.innerHTML += `<div id="choice" style="display: flex; flex-direction:column;justify-content: center; align-items: center; width: 100%; height: 100%;"><p style="padding-top: 1em; display: flex; " > Which set do you want to play with ? </p></div>`;
+    main.innerHTML += `<div id="choice"><p style="padding-top: 1em; display: flex; " > Which set do you want to play with ? </p></div>`;
     var Nature = document.createElement("button");
     Nature.textContent = "Nature (easy)";
     Nature.classList.add("styled-button");
@@ -27,7 +28,7 @@ function choiceSet() {
 
 function choiceCards() {
     var main = document.getElementById('content');
-    main.innerHTML += `<div id="choice" style="display: flex; flex-direction:column;justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden"><p style="padding-top: 2em; display: flex; " > How many cards do you want to play with: </p></div>`;
+    main.innerHTML += `<div id="choice"><p style="padding-top: 2em; display: flex; " > How many cards do you want to play with: </p></div>`;
     var TwelveCards = document.createElement("button");
     TwelveCards.textContent = "12";
     TwelveCards.classList.add("styled-button");
@@ -72,11 +73,11 @@ async function showGameMemory() {
     var mainElement = document.getElementById('content');
     mainElement.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em; ">Memory game</p>';    
     gameEnded = true;
-    debug = 2;
+    debug = 0;
     if (debug === 2)
     {
         set = 2;
-        numberCards = 32;
+        numberCards = 12;
         launchGameMemory();
     }
     else
@@ -274,11 +275,38 @@ function playTime()
                 cardTurnedArrayIndex.push(event.target.index);
                 cardTurnedArrayId.push(event.target.id);
                 if (cardTurned === 2)
-                checkCards();
+                    checkCards();
+                if (scorePlayer1 + scorePlayer2 === numberCards / 2)
+                    endGame(scorePlayer1 > scorePlayer2 ? namePlayer[0] : namePlayer[1]);
         }
     }
 });
 }
+
+function endGame(winner)
+{
+    var mainElement = document.getElementById('content');
+    mainElement.innerHTML = ''; // Remove all inner HTML content  
+    mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
+    '<p style="text-align: center; font-size:4em;">' + winner + ' won ! </p>' +
+    '<p><img src="img/gif_robot.gif" alt="Victory logo" style = "width: 50vh; height: 50vh;"></p>' +
+    '<p style="text-align: center;"> If you want to play again with the same settings, press the button below.</p>' +
+    '</div>';
+    var startAgain = document.createElement("button");
+    startAgain.textContent = "Start again";
+    startAgain.classList.add("styled-button")
+    document.getElementById('endGame').appendChild(startAgain);
+    startAgain.addEventListener("click", function() {
+        cardTurned = 0;
+        cardTurnedArrayIndex.length = 0;
+        cardTurnedArrayId.length = 0;
+        scorePlayer1 = 0;
+        scorePlayer2 = 0;
+        setAlreadyUsed.length = 0;
+        launchGameMemory();
+    });
+}
+
 
 function checkCards() {
     if (cardTurnedArrayIndex[0] === cardTurnedArrayIndex[1])
