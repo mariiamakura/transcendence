@@ -7,6 +7,7 @@ body {
 
 .header {
     display: flex;
+    height: 10vh;
     justify-content: space-between;
     align-items: center;
     padding: 0.8em;
@@ -14,10 +15,11 @@ body {
 }
 
 .gif-logo {
-    width: 10%;
-    height: 10%;
+    height: 10vh;
+    width: auto;
     border-radius: 10%;
 }
+
 .header img {
     margin-right: 10px;
 }
@@ -167,32 +169,59 @@ main {
     border-radius: 50%; /* Make the social media icons circular */
 }
 
-#board {
-    background-color: #2f3542 ;
-    display : flex;
-    justify-content: center;
-    align-items: center;
-    border-top : 1em solid skyblue;
-    border-bottom: 1em solid skyblue;
+
+.dropbtn {
+    font-family: 'Merriweather', serif;
+    display: inline-block;
+    padding: 8px 12px; 
+    font-size: calc(0.8em + 0.5vw);
+    color: #2f3542;
+    text-decoration: none;
+    border: none;
+    border-radius: 20px; 
+    background-color: transparent; 
+    transition: background-color 0.3s;
+  }
+  
+  /* Style the dropdown content (hidden by default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
 }
 
-#board-container {
-    padding-top: 2em;
-    padding-bottom: 2em;
-    
-}
-
-.styled-button {
-    background-color: #dfe4ea;
-    border : none;
-    color : #2f3542;
-    padding : 1em;
-    text-align: center;
+/* Style the links inside the dropdown */
+.dropdown-content a {
+    color: #2f3542;
     text-decoration: none;
     display: block;
-    font-size: medium;
-    font-family: 'Merriweather', serif ;
-    margin: 1em;
-    cursor: pointer;
-    border-radius: 8px;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+    background-color: #dfe4ea;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+    padding-top:5px;
+    padding-bottom: 1em;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+    background-color: #dfe4ea;
+}
+
+#choice {
+    overflow: visible;
+    background-color: red;
+    display: flex; 
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    height: auto;
+    overflow:hidden;
+
 }

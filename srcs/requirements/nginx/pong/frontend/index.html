@@ -1,13 +1,16 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pong - The ultimate tournament</title>
     <link rel="stylesheet" href="style.css">
-    <script src="ballAnimation.js" defer></script>
+    <link rel="stylesheet" href="pong.css">
+    <link rel="stylesheet" href="memory.css">
     <script src="home.js" defer></script>
-    <script src="game.js" defer></script>
+    <script src="gamePong.js" defer></script>
+    <script src="gameMenu.js" defer></script>
+    <script src="gameMemory.js" defer></script>
+    <script src="setMemoryGames.js" defer></script>
     <script src="score.js" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,7 +23,14 @@
     <nav>
         <ul>
             <li><a href="#" onclick="showHome()">Home</a></li>
-            <li><a href="#" onclick="showGame()">Game</a></li>
+            <li>
+                <div class="dropdown">
+                <button class="dropbtn">Games</button>
+                <div class="dropdown-content">
+                    <a href="#" onclick="showGamePong()">Pong</a>
+                    <a href="#" onclick="showGameMemory()">Memory</a>
+                </div>                
+                </div>  
             <li><a href="#" onclick="showScoreboard()">Scoreboard</a></li>
             <li><a href="#" onclick="showProfile()">Profile</a></li>
         </ul>
@@ -30,7 +40,7 @@
     </main>
     <div class="footer">
         <div class="footer-text">
-            <p>This project has been created for the last project of 42 by:</p>
+            <p>This website has been created for the last project of 42 by:</p>
         </div>
         <div class="names">
             <div class="name">

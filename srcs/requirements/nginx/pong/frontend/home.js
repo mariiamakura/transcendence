@@ -7,7 +7,7 @@ function showHome() {
     const title = document.getElementById('title');
     
     title.addEventListener("mouseenter", function() {
-        const numBalls = 10;
+        var numBalls = 42;
         const windowHeight = window.innerHeight;
         const windowWidth = window.innerWidth;
         const rangeTop = windowHeight * 0.02; 
@@ -15,10 +15,9 @@ function showHome() {
         const leftMin = windowWidth * 0.2; // Minimum left position (40% of window width)
         const leftMax = windowWidth * 0.60; // Maximum left position (60% of window width)
 
-        console.log("ecrit");
         for (let i = 1; i <= numBalls; i++) {
             const ball = document.createElement("div");
-            ball.className = "ball"; // Add 'ball' class to each ball element
+            ball.className = "ball";
             
             // Generate random positions within specified ranges
             const randomTop = rangeTop + Math.random() * (rangeBottom - rangeTop);
@@ -31,17 +30,17 @@ function showHome() {
             title.appendChild(ball);
         }
     });
-    console.log("here");
     title.addEventListener("mouseleave", function() {
         const balls = title.querySelectorAll(".ball");
         balls.forEach(function(ball) {
+            numballs = 0;
             ball.remove();
         });
     });
 
 }
 
-// Call the showHome() function when the page loads
-document.addEventListener('DOMContentLoaded', function() {
-    showHome();
-});
+// // Call the showHome() function when the page loads
+// document.addEventListener('DOMContentLoaded', function() {
+//     showHome();
+// });
