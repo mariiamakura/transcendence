@@ -2,10 +2,9 @@ version: '3'
 
 services:
   nginx:
-    image: nginx:latest
-    build:
-      context: .
-      dockerfile: ./requirements/nginx/Dockerfile
+    # image: nginx:latest
+    container_name: nginx
+    build: ./requirements/nginx
     ports:
       - "9999:9999"
     volumes:
@@ -31,7 +30,7 @@ services:
       POSTGRES_DB: pong_database
     volumes:
       - postgresql_data:/var/lib/postgresql/data
-      - ./requirements/postgresql/database/pong.sql:/docker-entrypoint-initdb.d/pong.sql
+      # - ./requirements/postgresql/database/pong.sql:/docker-entrypoint-initdb.d/pong.sql
     restart: always
     networks:
       - my_network

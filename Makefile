@@ -16,26 +16,32 @@ all:
 	# 	mkdir /Users/fhassoun/dev_area/core/container/data/mariadb; \
 	# 	echo "mariadb directory created successfully"; \
 	# fi
-	docker compose -f ./srcs/docker-compose.yml up -d
+	sudo docker compose -f ./srcs/docker-compose.yml up -d
 
 clean:
-	docker compose -f ./srcs/docker-compose.yml down --rmi all -v
+	sudo docker compose -f ./srcs/docker-compose.yml down --rmi all -v
 
+down:
+	sudo docker compose -f ./srcs/docker-compose.yml down
+
+up:
+	sudo docker compose -f ./srcs/docker-compose.yml up -d
+	
 restart:
-	docker compose -f ./srcs/docker-compose.yml down
-	docker compose -f ./srcs/docker-compose.yml up -d
+	sudo docker compose -f ./srcs/docker-compose.yml down
+	sudo docker compose -f ./srcs/docker-compose.yml up -d
 
 fclean: clean
-	@docker system prune -a
+	@sudo docker system prune -a
 
 re: fclean all
 
 ls:
-	docker image ls
-	docker ps
+	sudo docker image ls
+	sudo docker ps
 
 delete:
-	docker compose -f ./srcs/docker-compose.yml down --rmi all -v
+	sudo docker compose -f ./srcs/docker-compose.yml down --rmi all -v
 	@if [ -d "/home/fhassoun/data/wordpress" ]; then \
 	rm -rf /home/fhassoun/data/wordpress/* && \
 	echo "successfully removed all contents from /home/fhassoun/data/wordpress/"; \
