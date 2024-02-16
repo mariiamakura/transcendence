@@ -2,9 +2,9 @@
 FROM postgres:latest
 
 # Set environment variables
-ENV POSTGRES_USER your_username
-ENV POSTGRES_PASSWORD your_password
-ENV POSTGRES_DB your_database
+ENV POSTGRES_USER pong
+ENV POSTGRES_PASSWORD ping
+ENV POSTGRES_DB pong_database
 
 # Expose the PostgreSQL port
 EXPOSE 5432

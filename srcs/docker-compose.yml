@@ -2,16 +2,14 @@ version: '3'
 
 services:
   nginx:
-    image: nginx:latest
-    build:
-      context: .
-      dockerfile: ./requirements/nginx/Dockerfile
+    # image: nginx:latest
+    container_name: nginx
+    build: ./requirements/nginx
     ports:
       - "9999:9999"
     volumes:
       - ./requirements/nginx/config:/etc/nginx/conf.d/
       - ./requirements/nginx/pong:/var/www/pong
-    
     depends_on:
       - postgresql
     restart: always
@@ -27,11 +25,12 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: your_username
-      POSTGRES_PASSWORD: your_password
-      POSTGRES_DB: your_database
+      POSTGRES_USER: pong
+      POSTGRES_PASSWORD: ping
+      POSTGRES_DB: pong_database
     volumes:
       - postgresql_data:/var/lib/postgresql/data
+      # - ./requirements/postgresql/database/pong.sql:/docker-entrypoint-initdb.d/pong.sql
     restart: always
     networks:
       - my_network
