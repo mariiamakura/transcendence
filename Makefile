@@ -34,7 +34,16 @@ ls:
 	sudo docker image ls
 	sudo docker ps
 
+logs:
+# shows the logs of the containers
+	sudo docker compose -f docker-compose.yml logs -f
 
+migrate:
+# runs the migrations (creates the tables in the database)
+	sudo docker compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
 
+connect_db:
+# connects to the database
+	sudo docker compose -f docker-compose.prod.yml exec db psql --username=ping --dbname=pong_db_prod
 
-.PHONY: all, clean, fclean, re, ls, restart
+.PHONY: all, clean, fclean, re, ls, restart, logs, down, up, migrate, connect_db
