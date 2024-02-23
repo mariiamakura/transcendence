@@ -3,6 +3,7 @@ all:
 # builds and runs the containers
 	sudo docker compose -f docker-compose.prod.yml up --build -d
 	sudo docker compose -f docker-compose.prod.yml exec web python manage.py collectstatic --no-input --clear
+	sudo docker compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
 
 clean:
 # stops and removes the containers
@@ -42,6 +43,9 @@ migrate:
 # runs the migrations (creates the tables in the database)
 	sudo docker compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
 
+makemigrations:
+# creates the migrations
+	sudo docker compose -f docker-compose.prod.yml exec web python manage.py makemigrations
 connect_db:
 # connects to the database
 	sudo docker compose -f docker-compose.prod.yml exec db psql --username=ping --dbname=pong_db_prod
