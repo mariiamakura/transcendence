@@ -24,6 +24,7 @@ class User(models.Model):
     normal_games_won = models.IntegerField(default=0)
     normal_win_streak = models.IntegerField(default=0)
     tournaments_won = models.IntegerField(default=0)
+    wallet_id = models.CharField(max_length=42, unique=True)
     date_of_creation = models.DateTimeField(auto_now_add=True)
 
 
