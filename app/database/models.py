@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
@@ -13,12 +14,13 @@ from django.db import models
 #         return f"{self.name}'s score in {self.game} on {self.date}"
 
 
-class User(models.Model):
+# class User(models.Model):
+class User(AbstractUser):
     user_id = models.AutoField(primary_key=True)
     intra_name = models.CharField(max_length=50, unique=True)
     name = models.CharField(max_length=50)
     surname = models.CharField(max_length=50)
-    email = models.EmailField(max_length=100)
+    email = models.EmailField(max_length=100, unique=True)
     password_hash = models.CharField(max_length=255)
     normal_games_played = models.IntegerField(default=0)
     normal_games_won = models.IntegerField(default=0)
@@ -26,6 +28,9 @@ class User(models.Model):
     tournaments_won = models.IntegerField(default=0)
     wallet_id = models.CharField(max_length=42, unique=True)
     date_of_creation = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.intra_name
 
 
 class Tournament(models.Model):

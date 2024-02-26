@@ -219,19 +219,20 @@ function detectCollision(a, b) {
 
 function movePlayer() {
     // Player 1 controls
+    let newVelocity = 10;
     if (keysPressed["KeyW"]) {
-        player1.velocityY = -3;
+        player1.velocityY = -newVelocity;
     } else if (keysPressed["KeyS"]) {
-        player1.velocityY = 3;
+        player1.velocityY = newVelocity;
     } else {
         player1.velocityY = 0; // Stop movement if no key is pressed
     }
     
     // Player 2 controls
     if (keysPressed["ArrowUp"])
-        player2.velocityY = -3;
+        player2.velocityY = -newVelocity;
     else if (keysPressed["ArrowDown"])
-        player2.velocityY = 3;
+        player2.velocityY = newVelocity;
     else
         player2.velocityY = 0; // Stop movement if no key is pressed
 }

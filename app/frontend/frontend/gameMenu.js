@@ -109,7 +109,7 @@ async function getNamePlayer() {
 }
    
 let scoreToDo = 0;
-let debug = 1; // 1 not debug. 2 is directly the game, 3 is the menu and the score todo will be 1 instead of 12
+let debugPong = 2; // 1 not debug. 2 is directly the game, 3 is the menu and the score todo will be 1 instead of 12
 
 function scoreChoice() {
     var main = document.getElementById('content');
@@ -138,8 +138,8 @@ function scoreChoice() {
         });
         scoreTwelve.addEventListener("click", function() {
             resolve(true);
-            if (debug === 3)
-                scoreToDo = 1;
+            if (debugPong === 3)
+                scoreToDo = 12;
             else
                 scoreToDo = 12;
             document.getElementById('choice').remove();
@@ -177,9 +177,9 @@ async function showGamePong() {
     var mainElement = document.getElementById('content');
     mainElement.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em;">Pong</p>';
     gameEnded = true;
-    if (debug === 2)
+    if (debugPong === 2)
     {
-        scoreToDo = 1;
+        scoreToDo = 12;
         launchGamePong();
     }
     else

@@ -4,22 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pong - The ultimate tournament</title>
-     <link rel="stylesheet" href="style.css"> 
-    <link rel="stylesheet" href="pong.css">
-    <link rel="stylesheet" href="memory.css">
-    <script src="home.js" defer></script>
-    <script src="gamePong.js" defer></script>
-    <script src="gameMenu.js" defer></script>
-    <script src="gameMemory.js" defer></script>
-    <script src="setMemoryGames.js" defer></script>
-    <script src="score.js" defer></script>
+    {% comment %} <link rel="stylesheet" href="style.css"> {% endcomment %}
+	<link href="{% static "style.css" %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static "pong.css" %}">
+    <link rel="stylesheet" href="{% static "memory.css" %}">
+    {% comment %} <script src="{% static "home.js" %}" defer></script> {% endcomment %}
+    <script src="{% static "gamePong.js" %}" defer></script>
+    <script src="{% static "gameMenu.js" %}" defer></script>
+    <script src="{% static "gameMemory.js" %}" defer></script>
+    <script src="{% static "setMemoryGames.js" %}" defer></script>
+    <script src="{% static "score.js" %}" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="header">
-            <img class="gif-logo" src="img/gamer.gif" alt="Our pong logo">
+            <img class="gif-logo" src="{% static "img/gamer.gif" %}" alt="Our pong logo">
             <h1 id="title">42 Pong</h1>
     <nav>
         <ul>
@@ -62,7 +63,7 @@
             <div class="name">
                 <p>Mariia Paraskun</p>
                 <div class="pictures_team">
-                    <img src="img/pictures_team/mariia.png" alt="Mariia">
+                    <img src="{% static "img/pictures_team/mariia.png" %}" alt="Mariia">
                 </div>
                 <div class="socials">
                     <a class="social_logo" href="https://www.linkedin.com/" target="_blank"><img class="linkedin" src="img/linkedin.png" alt="linkedin"></a>

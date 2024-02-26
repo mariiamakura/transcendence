@@ -32,9 +32,11 @@ def get_all_games_played_by_user(user_id: int):
 
 
 # set new user
-def set_new_user(intra_name: str, name: str, surname: str, email: str, password_hash: str, wallet_id: str):
+# def set_new_user(intra_name: str, name: str, surname: str, email: str, password_hash: str, wallet_id: str):
+def set_new_user(intra_name: str, name: str, surname: str, email: str, password_hash: str):
     try:
-        user = User.objects.create(intra_name=intra_name, name=name, surname=surname, email=email, password_hash=password_hash, wallet_id=wallet_id)
+        # user = User.objects.create(intra_name=intra_name, name=name, surname=surname, email=email, password_hash=password_hash, wallet_id=wallet_id)
+        user = User.objects.create(intra_name=intra_name, name=name, surname=surname, email=email, password_hash=password_hash)
         return user
     except Exception:
         return None

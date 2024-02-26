@@ -277,13 +277,13 @@ function playTime()
                 if (cardTurned === 2)
                     checkCards();
                 if (scorePlayer1 + scorePlayer2 === numberCards / 2)
-                    endGame(scorePlayer1 > scorePlayer2 ? namePlayer[0] : namePlayer[1]);
+                    endGameMemory(scorePlayer1 > scorePlayer2 ? namePlayer[0] : namePlayer[1]);
         }
     }
 });
 }
 
-function endGame(winner)
+function endGameMemory(winner)
 {
     var mainElement = document.getElementById('content');
     mainElement.innerHTML = ''; // Remove all inner HTML content  
