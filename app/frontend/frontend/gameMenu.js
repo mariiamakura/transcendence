@@ -109,7 +109,7 @@ async function getNamePlayer() {
 }
    
 let scoreToDo = 0;
-let debugPong = 2; // 1 not debug. 2 is directly the game, 3 is the menu and the score todo will be 1 instead of 12
+let debugPong = 1; // 1 not debug. 2 is directly the game, 3 is the menu and the score todo will be 1 instead of 12
 
 function scoreChoice() {
     var main = document.getElementById('content');

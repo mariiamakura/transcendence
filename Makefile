@@ -59,4 +59,8 @@ connect_db:
 # connects to the database
 	docker compose -f docker-compose.prod.yml exec db psql --username=ping --dbname=pong_db_prod
 
-.PHONY: all, clean, fclean, re, ls, restart, logs, reload_static, down, up, migrate, connect_db, makemigrations, show_migrations
+create_superuser:
+# creates a superuser
+	docker compose -f docker-compose.prod.yml exec web python manage.py createsuperuser
+
+.PHONY: all, clean, fclean, re, ls, restart, logs, reload_static, down, up, migrate, connect_db, makemigrations, show_migrations, create_superuser
