@@ -18,9 +18,11 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     user_id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=50, unique=True)
+    # intra_name = models.CharField(max_length=50, unique=True)
     name = models.CharField(max_length=50)
     surname = models.CharField(max_length=50)
     email = models.EmailField(max_length=100, unique=True)
+    # password_hash = models.CharField(max_length=255)
     normal_games_played = models.IntegerField(default=0)
     normal_games_won = models.IntegerField(default=0)
     normal_win_streak = models.IntegerField(default=0)
