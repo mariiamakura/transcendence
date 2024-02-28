@@ -20,10 +20,6 @@ from django.urls import path, include
 # from frontend import views
 
 urlpatterns = [
-    # path('frontend/', include('frontend.urls')),
     path('', include('frontend.urls')),
     path('admin/', admin.site.urls),
-    # path('signup/', views.signup_view, name='signup'),  # Endpoint for sign-up form
-    # path('signup_endpoint/', views.signup_view, name='signup'),
-    # path('staticfiles/signup_endpoint/', views.signup_view, name='signup')
 ]

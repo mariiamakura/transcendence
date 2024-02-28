@@ -1,25 +1,38 @@
 version: '3.8'
 
 services:
+
   web:
-    build: ./app
-    command: python manage.py runserver 0.0.0.0:8000
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    command: gunicorn pong.wsgi:application --bind 0.0.0.0:8000
     volumes:
-      - ./app/:/usr/src/app/
-    ports:
-      - 8000:8000
+      - static_volume:/home/app/web/staticfiles
+    expose:
+      - 8000
     env_file:
-      - ./.env.dev
+      - ./.env
     depends_on:
       - db
+
+
   db:
     image: postgres:15
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_USER=ping
-      - POSTGRES_PASSWORD=pong
-      - POSTGRES_DB=pong_db
+    env_file:
+      - ./.env.db
+
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/home/app/web/staticfiles
+    ports:
+      - 9999:80
+    depends_on:
+      - web
 
 volumes:
   postgres_data:
+  static_volume:

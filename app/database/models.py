@@ -3,16 +3,6 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
-# class Score(models.Model):
-#     name = models.CharField(max_length=255)
-#     game = models.CharField(max_length=255)
-#     date = models.DateField()
-#     score = models.BooleanField()
-#     ranking = models.IntegerField()
-
-#     def __str__(self):
-#         return f"{self.name}'s score in {self.game} on {self.date}"
-
 
 # class User(models.Model):
 class User(AbstractUser):

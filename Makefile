@@ -1,27 +1,27 @@
 
 all:
 # builds and runs the containers
-	docker compose -f docker-compose.prod.yml up --build -d
-	docker compose -f docker-compose.prod.yml exec web python manage.py collectstatic --no-input --clear
-	docker compose -f docker-compose.prod.yml exec web python manage.py makemigrations
-	docker compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
+	docker compose -f docker-compose.yml up --build -d
+	docker compose -f docker-compose.yml exec web python manage.py collectstatic --no-input --clear
+	docker compose -f docker-compose.yml exec web python manage.py makemigrations
+	docker compose -f docker-compose.yml exec web python manage.py migrate --noinput
 
 clean:
 # stops and removes the containers
-	docker compose -f docker-compose.prod.yml down --rmi all -v
+	docker compose -f docker-compose.yml down --rmi all -v
 
 down:
 # stops the containers
-	docker compose -f docker-compose.prod.yml down
+	docker compose -f docker-compose.yml down
 
 up:
 # starts the containers
-	docker compose -f docker-compose.prod.yml up -d
+	docker compose -f docker-compose.yml up -d
 	
 restart:
 # stops and starts the containers
-	docker compose -f docker-compose.prod.yml down
-	docker compose -f docker-compose.prod.yml up -d
+	docker compose -f docker-compose.yml down
+	docker compose -f docker-compose.yml up -d
 
 fclean: clean
 # removes all the images
@@ -37,7 +37,7 @@ ls:
 	docker ps
 
 reload_static:
-	docker compose -f docker-compose.prod.yml exec web python manage.py collectstatic --no-input --clear
+	docker compose -f docker-compose.yml exec web python manage.py collectstatic --no-input --clear
 
 logs:
 # shows the logs of the containers
@@ -45,22 +45,22 @@ logs:
 
 migrate:
 # runs the migrations (creates the tables in the database)
-	docker compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
+	docker compose -f docker-compose.yml exec web python manage.py migrate --noinput
 
 makemigrations:
 # creates the migrations
-	docker compose -f docker-compose.prod.yml exec web python manage.py makemigrations
+	docker compose -f docker-compose.yml exec web python manage.py makemigrations
 
 show_migrations:
 # shows the migrations
-	docker compose -f docker-compose.prod.yml exec web python manage.py showmigrations
+	docker compose -f docker-compose.yml exec web python manage.py showmigrations
 
 connect_db:
 # connects to the database
-	docker compose -f docker-compose.prod.yml exec db psql --username=ping --dbname=pong_db_prod
+	docker compose -f docker-compose.yml exec db psql --username=ping --dbname=pong_db_prod
 
 create_superuser:
 # creates a superuser
-	docker compose -f docker-compose.prod.yml exec web python manage.py createsuperuser
+	docker compose -f docker-compose.yml exec web python manage.py createsuperuser
 
 .PHONY: all, clean, fclean, re, ls, restart, logs, reload_static, down, up, migrate, connect_db, makemigrations, show_migrations, create_superuser
