@@ -29,7 +29,15 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = bool(os.environ.get("DEBUG", default=0))
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+# ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+ALLOWED_HOSTS = [
+    '*'
+    # 'localhost',
+    # '127.0.0.1',
+    # '10.15.201.5',  # Add the IP range using CIDR notation
+    # '[::1]',
+    # Add any other specific hosts or IP addresses as needed
+]
 
 
 # Application definition

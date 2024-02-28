@@ -8,6 +8,9 @@ urlpatterns = [
     path('signUp', views.signUp, name='signUp'),
     path('signIn', views.signIn, name='signIn'),
     path('signOut', views.signOut, name='signOut'),
+    path('showProfile', views.showProfile, name='ShowProfile'),
+    path('editProfile', views.editProfile, name='editProfile'),
+    path('showHome', views.showHome, name='ShowHome'),
 
 ]
 # urlpatterns = [

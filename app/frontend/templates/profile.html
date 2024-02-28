@@ -1,0 +1,46 @@
+{% extends "index.html" %}
+{% block content %}
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h1 class="page-header">Profile</h1>
+			{% comment %} <h1>Profile</h1> {% endcomment %}
+			<hr>
+			<div class="row">
+				<div class="col-md-6">
+					<h3>Account Information</h3>
+					<hr>
+					<p><strong>Intraname:</strong> {{ user.username }}</p>
+					<p><strong>Email:</strong> {{ user.email }}</p>
+					<p><strong>Date of Creation:</strong> {{ user.date_of_creation }}</p>
+				</div>
+				<div class="col-md-6">
+					<h3>Personal Information</h3>
+					<hr>
+					<p><strong>Name:</strong> {{ user.name }}</p>
+					<p><strong>SureName:</strong> {{ user.surname }}</p>
+					<p><strong>Birthdate:</strong> {{ user.birthdate }}</p>
+					{% comment %} <p><strong>Games Played:</strong> {{ user.normal_games_played }}</p>
+					<p><strong>Win Streak:</strong> {{ user.normal_win_streak }}</p>
+					<p><strong>Tournaments Won:</strong> {{ user.tournaments_won }}</p> {% endcomment %}
+				</div>
+			</div>
+		</div>
+	</div>
+	{% comment %} add a button to edit the profile {% endcomment %}
+	<div class="row">
+		<div class="col-md-12" align="center">
+			<hr>
+			{% comment %} need to edit link below to edit page {% endcomment %}
+			<a class="nav-link" href="editProfile">Edit Profile</a>
+		</div>
+	</div>		
+</div>
+
+
+
+
+
+{% endblock  %}

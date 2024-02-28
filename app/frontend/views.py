@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model, login, logout, authenticate
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+
 # from django.contrib.auth import get_user_model
 # from django.http import JsonResponse
 # from django.contrib.auth.models import User
@@ -69,6 +70,42 @@ def signOut(request):
     else:
         return HttpResponse("<strong>invalid request</strong>")
 
+
+@csrf_exempt
+def editProfile(request):
+    User = get_user_model()
+    if request.user.is_authenticated:
+        user = User.objects.get(username=request.user)
+        if request.method == 'POST':
+            if request.POST.get('name') != "":
+                user.name = request.POST.get('name')
+            if request.POST.get('surname') != "":
+                user.surname = request.POST.get('surname')
+            if request.POST.get('email') != "":
+                user.email = request.POST.get('email')
+            # if request.POST.get('birthdate') != "":
+            #     user.birthdate = request.POST.get('birthdate')
+            user.save()
+            # return HttpResponse("Profile updated successfully")
+            return render(request=request, template_name="profile.html", context={"user": user})
+        return render(request=request, template_name="editProfile.html", context={"user": user})
+    else:
+        return HttpResponse("You are not logged in")
+
+
+@csrf_exempt
+def showProfile(request):
+    User = get_user_model()
+    if request.user.is_authenticated:
+        # user = User.objects.get(username=request.user.username)
+        user = User.objects.get(username=request.user)
+
+        return render(request=request, template_name="profile.html", context={"user": user})
+
+
+@csrf_exempt
+def showHome(request):
+    return render(request=request, template_name="home.html", context={})
 # User = get_user_model()
 
 
