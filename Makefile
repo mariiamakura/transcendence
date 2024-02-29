@@ -6,6 +6,7 @@ all:
 	docker compose -f docker-compose.yml exec web python manage.py makemigrations
 	docker compose -f docker-compose.yml exec web python manage.py migrate --noinput
 
+#start the watchdog - wuff!
 watch:
 	docker compose watch --no-up
 

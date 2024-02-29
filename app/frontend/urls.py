@@ -15,7 +15,4 @@ urlpatterns = [
 
 ]
 
-# urlpatterns = [
-#     path('signup/', views.signup_view, name='signup'),  # Endpoint for sign-up form
-#     path('signup_endpoint/', views.signup_view, name='signup'),
-# ]
+
