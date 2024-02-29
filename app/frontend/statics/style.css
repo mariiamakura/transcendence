@@ -103,7 +103,8 @@ main {
 .footer {
     display: flex;
     flex-direction: column;
-    background-color: #dfe4ea;
+    background-color: #ff0101;
+    /* background-color: #dfe4ea; */
 }
 
 .footer-text {

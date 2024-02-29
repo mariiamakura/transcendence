@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model, login, logout, authenticate
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib import messages
 
 
 @csrf_exempt
@@ -47,8 +48,8 @@ def signIn(request):
             login(request, user)
             return redirect("/")
         else:
-            return HttpResponse("fail")
-
+            messages.error(request, 'Sign in failed. Please check your Intraname and password.')
+            return render(request=request, template_name="signIn.html", context={})
     return render(request=request, template_name="signIn.html", context={})
 
 
@@ -61,7 +62,9 @@ def home(request):
 def signOut(request):
     if request.user.is_authenticated:
         logout(request)
-        return HttpResponse("<strong>logout successful.<a href='signIn'> Go to Login page</a></strong>")
+        messages.error(request, 'Logout successful')
+        return render(request=request, template_name="signIn.html", context={})
+        # return HttpResponse("<strong>logout successful.<a href='signIn'> Go to Login page</a></strong>")
     else:
         return HttpResponse("<strong>invalid request</strong>")
 

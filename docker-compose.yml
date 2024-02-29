@@ -15,7 +15,18 @@ services:
       - ./.env
     depends_on:
       - db
-
+    # develop:
+    #   watch:
+    #     - action: sync
+    #       source: ./app/**/*
+    #       target: /home/app/web
+    #       sync_opts: --exclude '*.pyc' --exclude '__pycache__' --exclude 'media'
+    #       delay: 5
+    develop:
+      watch:
+        - path: ./app/
+          target: /home/app/web/
+          action: sync+restart
 
   db:
     image: postgres:15

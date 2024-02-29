@@ -31,7 +31,6 @@
     <nav>
         <ul>
 			{% if request.user.is_authenticated %}
-            {% comment %} <li><a href="#" onclick="showHome()">Home</a></li> {% endcomment %}
             <li class="nav-item ">
 				<a class="nav-link" href="showHome">Home</a>
 			</li>
@@ -44,7 +43,6 @@
                 </div>                
 			</div>  
             <li><a href="#" onclick="showScoreboard()">Scoreboard</a></li>
-            {% comment %} <li><a href="#" onclick="showProfile()">Profile</a></li> {% endcomment %}
 			<li class="nav-item ">
 				<a class="nav-link" href="showProfile">Profile</a>
 			</li>
@@ -128,6 +126,7 @@
             showHome();
         });
     </script> {% endcomment %}
+
 </body>
 <!-- JS, Popper.js, and jQuery -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

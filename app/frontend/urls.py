@@ -3,6 +3,7 @@ from . import views
 
 app_name = 'frontend'
 
+
 urlpatterns = [
     path('', views.home, name='home'),
     path('signUp', views.signUp, name='signUp'),
@@ -13,6 +14,7 @@ urlpatterns = [
     path('showHome', views.showHome, name='ShowHome'),
 
 ]
+
 # urlpatterns = [
 #     path('signup/', views.signup_view, name='signup'),  # Endpoint for sign-up form
 #     path('signup_endpoint/', views.signup_view, name='signup'),
