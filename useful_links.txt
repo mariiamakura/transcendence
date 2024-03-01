@@ -1,0 +1,5 @@
+https://ngangasn.com/do-i-have-to-install-django-for-every-project/
+
+https://realpython.com/django-setup/
+
+https://www.geeksforgeeks.org/college-management-system-using-django-python-project/?ref=lbp

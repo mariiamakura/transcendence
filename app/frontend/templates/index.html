@@ -1,0 +1,127 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pong - The ultimate tournament</title>
+	<link href="{% static "style.css" %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static "pong.css" %}">
+    <link rel="stylesheet" href="{% static "memory.css" %}">
+    <script src="{% static "home.js" %}" defer></script>
+    <script src="{% static "gamePong.js" %}" defer></script>
+    <script src="{% static "gameMenu.js" %}" defer></script>
+    <script src="{% static "gameMemory.js" %}" defer></script>
+    <script src="{% static "setMemoryGames.js" %}" defer></script>
+	<script src="{% static "profile.js" %}" defer></script>
+    <script src="{% static "score.js" %}" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+	<!-- CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+
+
+</head>
+<body>
+    <div class="header">
+            <img class="gif-logo" src="{% static "img/gamer.gif" %}" alt="Our pong logo">
+            <h1 id="title">42 Pong</h1>
+    <nav>
+        <ul>
+			{% if request.user.is_authenticated %}
+            <li class="nav-item ">
+				<a class="nav-link" href="showHome">Home</a>
+			</li>
+			<li>
+                <div class="dropdown">
+                <button class="dropbtn">Games</button>
+                <div class="dropdown-content">
+					<a href="#" onclick="showGamePong()">Pong</a>
+                    <a href="#" onclick="showGameMemory()">Memory</a>
+                </div>                
+			</div>  
+            <li><a href="#" onclick="showScoreboard()">Scoreboard</a></li>
+			<li class="nav-item ">
+				<a class="nav-link" href="showProfile">Profile</a>
+			</li>
+			<li class="nav-item ">
+				<a class="nav-link" href="signOut">Sign Out</a>
+			</li>
+			{% else %}
+			<li class="nav-item">
+				<a class="nav-link" href="signIn">Sign In</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="signUp">Sign Up</a>
+			</li>
+			{% endif %}
+
+		</ul>
+    </nav>
+</div>
+{% block content%}
+
+{% endblock %}
+    <main id="content">
+    </main>
+    <div class="footer">
+        <div class="footer-text">
+            <p>This website has been created for the last project of 42 by:</p>
+        </div>
+        <div class="names">
+            <div class="name">
+                <p>Mariia Paraskun</p>
+                <div class="pictures_team">
+                    <img src="{% static "img/pictures_team/mariia.png" %}" alt="Mariia">
+                </div>
+                <div class="socials">
+                    <a class="social_logo" href="https://www.linkedin.com/" target="_blank"><img class="linkedin" src="{% static "img/linkedin.png" %}" alt="linkedin"></a>
+                    <a class="social_logo" href="https://www.github.com/" target="_blank"><img class="github" src="{% static "img/github.png" %}"  alt="github"></a>
+                </div>
+                <div class="circle"></div>
+            </div>
+            <div class="name">
+                <p>Sung Hyan Lee</p>
+                <div class="pictures_team">
+                    <img src="{% static "img/pictures_team/sunny.jpeg" %}" alt="Sunny">
+                </div>                <div class="socials">
+                    <a class="social_logo" href="https://www.linkedin.com/" target="_blank"><img class="linkedin" src="{% static "img/linkedin.png" %}" alt="linkedin"></a>
+                    <a class="social_logo" href="https://www.github.com/" target="_blank"><img class="github" src="{% static "img/github.png" %}" alt="github"></a>
+                </div>
+            </div>
+            <div class="name">
+                <p>Max Schaub</p>
+                <div class="pictures_team">
+                    <img src="{% static "img/pictures_team/max.png" %}" alt="Max">
+                </div>                <div class="socials">
+                    <a class="social_logo" href="https://www.linkedin.com/" target="_blank"><img class="linkedin" src="{% static "img/linkedin.png" %}" alt="linkedin"></a>
+                    <a class="social_logo" href="https://www.github.com/" target="_blank"><img class="github" src="{% static "img/github.png" %}" alt="github"></a>
+                </div>
+            </div>
+            <div class="name">
+                <p>Feras Hassouneh</p>
+                <div class="pictures_team">
+                    <img src="{% static "img/pictures_team/feras.png" %}" alt="Feras">
+                </div>                <div class="socials">
+                    <a class="social_logo" href="https://www.linkedin.com/" target="_blank"><img class="linkedin" src="{% static "img/linkedin.png" %}" alt="linkedin"></a>
+                    <a class="social_logo" href="https://www.github.com/" target="_blank"><img class="github" src="{% static "img/github.png" %}" alt="github"></a>
+                </div>
+            </div>
+            <div class="name">
+                <p>Emilie Drouot</p>
+                 <div class="pictures_team">
+                    <img src="{% static "img/pictures_team/emilie.png" %}" alt="Emilie">
+                </div>                <div class="socials">
+                    <a class="social_logo" href="https://www.linkedin.com/" target="_blank"><img class="linkedin" src="{% static "img/linkedin.png" %}" alt="linkedin"></a>
+                    <a class="social_logo" href="https://www.github.com/" target="_blank"><img class="github" src="{% static "img/github.png" %}" alt="github"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="home.js" defer></script>
+</body>
+<!-- JS, Popper.js, and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</html>
