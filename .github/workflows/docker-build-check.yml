@@ -16,10 +16,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install Docker
+      - name: Install Docker dependencies
         run: |
           sudo apt-get update
+          sudo apt-get remove containerd.io -y
+          sudo apt-get update
+
+      - name: Install Docker
+        run: |
           sudo apt-get install -y docker.io
+
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get install -y docker-compose
 
       - name: Build and Run Containers
         run: make all
