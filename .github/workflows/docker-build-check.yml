@@ -1,4 +1,4 @@
-name: Docker Build
+name: Docker Build Test
 
 on:
   push:
@@ -13,8 +13,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Build Docker Image
-      run: docker build -t trancendence .
+      - name: Install Docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker.io
+
+      - name: Build and Run Containers
+        run: make all
+
+      - name: Check Docker Containers Status
+        run: |
+          docker ps -a
+          exit $(docker ps -aq -f status=exited | wc -l)
