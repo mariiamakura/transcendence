@@ -1,0 +1,20 @@
+name: Docker Build
+
+on:
+  push:
+    branches:
+      - mariia
+  pull_request:
+    branches:
+      - mariia
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Build Docker Image
+      run: docker build -t trancendence
