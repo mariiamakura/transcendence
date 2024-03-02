@@ -6,7 +6,7 @@ services:
     build:
       context: ./app
       dockerfile: Dockerfile
-    command: gunicorn pong.wsgi:application --bind 0.0.0.0:8000
+    command:   gunicorn pong.wsgi:application --bind 0.0.0.0:8000 
     volumes:
       - static_volume:/home/app/web/staticfiles
     expose:
@@ -15,11 +15,28 @@ services:
       - ./.env
     depends_on:
       - db
+      # - daphne
     develop:
       watch:
         - path: ./app/
           target: /home/app/web/
           action: sync+restart
+          delay: 30
+
+  daphne:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    command: daphne pong.asgi:application -b 0.0.0.0 -p 8001
+    volumes:
+      - static_volume:/home/app/web/staticfiles
+    expose:
+      - 8001
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+
 
   db:
     image: postgres:15

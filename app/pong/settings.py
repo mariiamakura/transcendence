@@ -43,6 +43,8 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
+    'daphne',
     'database.apps.DatabaseConfig',
     'frontend',
     'django.contrib.admin',
@@ -52,6 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -81,8 +84,15 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'pong.wsgi.application'
 
+WSGI_APPLICATION = 'pong.wsgi.application'
+ASGI_APPLICATION = 'pong.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases

@@ -104,3 +104,9 @@ def showProfile(request):
 @csrf_exempt
 def showHome(request):
     return render(request=request, template_name="home.html", context={})
+
+
+@csrf_exempt
+def showChat(request):
+    return render(request, 'chat.html')
+    # return render(request=request, template_name="chat.html", context={})
