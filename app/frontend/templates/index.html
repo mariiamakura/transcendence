@@ -34,7 +34,7 @@
             <li class="nav-item ">
 				<a class="nav-link" href="showHome">Home</a>
 			</li>
-			<li>
+			{% comment %} <li>
                 <div class="dropdown">
                 <button class="dropbtn">Games</button>
                 <div class="dropdown-content">
@@ -42,9 +42,13 @@
                     <a href="#" onclick="showGameMemory()">Memory</a>
                 </div>                
 			</div> 
-            <li class="nav-item ">
+			</li> {% endcomment %}
+			 <li class="nav-item ">
+				<a class="nav-link" href="gamePong">Games</a>
+			</li>   
+            {% comment %} <li class="nav-item ">
 				<a class="nav-link" href="showChat">Chat</a>
-			</li>  
+			</li>   {% endcomment %}
             <li><a href="#" onclick="showScoreboard()">Scoreboard</a></li>
 			<li class="nav-item ">
 				<a class="nav-link" href="showProfile">Profile</a>

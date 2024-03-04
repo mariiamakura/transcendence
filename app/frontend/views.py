@@ -112,3 +112,9 @@ def showHome(request):
 def showChat(request):
     return render(request, 'chat.html')
     # return render(request=request, template_name="chat.html", context={})
+
+
+@csrf_exempt
+def gamePong(request):
+    return render(request, 'gamePong.html')
+    # return render(request=request, template_name="pong.html", context={})

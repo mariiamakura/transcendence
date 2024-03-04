@@ -1,0 +1,37 @@
+{% extends 'index.html' %}
+{% block content %}
+{% if request.user.is_authenticated %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h1 class="page-header">Games like back in the 80's</h1>
+			<hr>
+		</div>
+	</div>
+</div>
+
+<div class="button d-flex justify-content-center align-items-center">
+	<a href="#" onclick="showGamePong()" class="btn btn-primary">Pong</a> 
+
+	<a href="#" onclick="showGameMemory()" class="btn btn-primary" style="margin-left: 1em;">Memory</a>
+</div> 
+
+<script>
+	showGamePong = function() {
+		window.location.href = "showGamePong()";
+	}
+
+	showGameMemory = function() {
+		window.location.href = "showGameMemory()";
+	}
+</script>
+
+{% else %}
+<li class="nav-item">
+	<a class="nav-link" href="signIn">Sign In</a>
+</li>
+<li class="nav-item">
+	<a class="nav-link" href="signUp">Sign Up</a>
+</li>
+{% endif %}
+{% endblock %}

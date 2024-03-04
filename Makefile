@@ -1,6 +1,7 @@
 
 all:
 # builds and runs the containers
+
 	docker compose -f docker-compose.yml up --build -d 
 	docker compose -f docker-compose.yml exec web python manage.py collectstatic --no-input --clear
 	docker compose -f docker-compose.yml exec web python manage.py makemigrations

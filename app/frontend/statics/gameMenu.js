@@ -9,7 +9,9 @@ function showButton() {
     main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> Which type of game do you wanna play ? </p></div>';
     var buttonTournament = document.createElement("button");
     var buttonSingle = document.createElement("button");
-    buttonSingle.textContent = "1 vs 1";
+    // buttonSingle.textContent = "Find existing game";
+    // buttonTournament.textContent = "Create New Game";
+	buttonSingle.textContent = "1 vs 1";
     buttonTournament.textContent = "Tournament";
     buttonSingle.classList.add("styled-button")
     buttonTournament.classList.add("styled-button");
@@ -175,7 +177,7 @@ function startButton() {
 
 async function showGamePong() {
     var mainElement = document.getElementById('content');
-    mainElement.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em;">Pong</p>';
+	mainElement.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em;">Pong</p>';
     gameEnded = true;
     if (debugPong === 2)
     {
