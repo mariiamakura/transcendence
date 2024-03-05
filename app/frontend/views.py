@@ -116,5 +116,9 @@ def showChat(request):
 
 @csrf_exempt
 def gamePong(request):
-    return render(request, 'gamePong.html')
+    User = get_user_model()
+    if request.user.is_authenticated:
+        # user = User.objects.get(username=request.user.username)
+        user = User.objects.get(username=request.user)
+    return render(request, 'gamePong.html', context={"user": user})
     # return render(request=request, template_name="pong.html", context={})

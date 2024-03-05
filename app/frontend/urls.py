@@ -16,3 +16,5 @@ urlpatterns = [
     path('gamePong', views.gamePong, name='gamePong'),
 
 ]
+
+
