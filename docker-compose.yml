@@ -20,6 +20,8 @@ services:
         - path: ./app/
           target: /home/app/web/
           action: sync+restart
+    networks:
+      - localhost
 
   db:
     image: postgres:15
@@ -27,8 +29,11 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - ./.env.db
+    networks:
+      - localhost
 
   nginx:
+    container_name: nginx
     build: ./nginx
     volumes:
       - static_volume:/home/app/web/staticfiles
@@ -36,40 +41,68 @@ services:
       - 9999:80
     depends_on:
       - web
+    networks:
+      - localhost
 
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
     ports:
-      - 9090:9090  #should be not accessible for users
+      - 9090:9090
     command:
       - --config.file=/etc/prometheus/prometheus.yml
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-    depends_on:
-      - cadvisor
+    networks:
+      - localhost
 
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:latest
-    container_name: cadvisor
-    ports:
-      - 8080:8080  #should be not accessible for users
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:rw
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
+  nginx-prometheus-exporter:
+    image: nginx/nginx-prometheus-exporter:1.0
+    container_name: prometheus-nginx-exporter
+    env_file:
+      .env
+    command:
+      --nginx.scrape-uri=http://nginx:80/metrics
+      --web.telemetry-path=/metrics
+    expose: 
+      - 9113
     depends_on:
-      - nginx
+      - prometheus
+    networks:
+      - localhost
+
+  prometheus-node-exporter:
+    image: prom/node-exporter:latest
+    container_name: prometheus-node-exporter
+    restart: always
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command: 
+      - '--path.procfs=/host/proc' 
+      - '--path.sysfs=/host/sys'
+      - --collector.filesystem.ignored-mount-points
+      - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+    networks:
+      - localhost
+    privileged: true
+    depends_on:
+      - prometheus
+    expose:
+      - 9100
 
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
     ports:
-      - 3000:3000 #should be not accessible for users
+      - 3000:3000
     volumes:
       - grafana-data:/var/lib/grafana
-
+    env_file:
+      .env
+    networks:
+      - localhost
 
 volumes:
   postgres_data:
@@ -77,4 +110,7 @@ volumes:
   prometheus-data:
   grafana-data:
 
-
+networks:
+    localhost:
+        name: localhost
+        external: false
