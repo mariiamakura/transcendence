@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile
     command: gunicorn pong.wsgi:application --bind 0.0.0.0:8000
     volumes:
-      - ${STATIC_VOLUME:-static_volume}:/home/app/web/staticfiles  # Mount volume conditionally
+      - static_volume:/home/app/web/staticfiles
     expose:
       - 8000
     env_file:
@@ -26,7 +26,7 @@ services:
   db:
     image: postgres:15
     volumes:
-      - ${POSTGRES_DATA:-postgres_data}:/var/lib/postgresql/data/  # Mount volume conditionally
+      - postgres_data:/var/lib/postgresql/data/
     env_file:
       - ./.env.db
     networks:
@@ -36,7 +36,7 @@ services:
     container_name: nginx
     build: ./nginx
     volumes:
-      - ${STATIC_VOLUME:-static_volume}:/home/app/web/staticfiles  # Mount volume conditionally
+      - static_volume:/home/app/web/staticfiles
     ports:
       - 9999:80
     depends_on:
@@ -56,7 +56,7 @@ services:
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - ./prometheus/rules.yml:/etc/prometheus/rules.yml:ro
-      - ${PROMETHEUS_DATA:-prometheus-data}:/prometheus  # Mount volume conditionally
+      - prometheus-data:/prometheus
     networks:
       - localhost
 
@@ -102,7 +102,7 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ${GRAFANA_DATA:-grafana-data}:/var/lib/grafana  # Mount volume conditionally
+      - grafana-data:/var/lib/grafana
     env_file:
       .env
     networks:
@@ -115,7 +115,7 @@ services:
       - 9093:9093
     volumes: 
       - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
-      - ${ALERTMANAGER_DATA:-alertmanager-data}:/data  # Mount volume conditionally
+      - alertmanager-data:/data
     networks:
       - localhost
 
@@ -126,17 +126,17 @@ volumes:
     driver_opts:
       o: bind
       type: none
-      device: ${PROMETHEUS_DATA_DIR:-/Users/mishamakura/Documents/Programming/42Berin/transcendence/devops_data/prometheus}  # Mount volume conditionally
+      device: /Users/mishamakura/Documents/Programming/42Berin/transcendence/devops_data/prometheus #change to local env
   grafana-data:
     driver_opts:
       o: bind
       type: none
-      device: ${GRAFANA_DATA_DIR:-/Users/mishamakura/Documents/Programming/42Berin/transcendence/devops_data/grafana}  # Mount volume conditionally
+      device: /Users/mishamakura/Documents/Programming/42Berin/transcendence/devops_data/grafana #change to local env
   alertmanager-data:
     driver_opts:
       o: bind
       type: none
-      device: ${ALERTMANAGER_DATA_DIR:-/Users/mishamakura/Documents/Programming/42Berin/transcendence/devops_data/alertmanager}  # Mount volume conditionally
+      device: /Users/mishamakura/Documents/Programming/42Berin/transcendence/devops_data/alertmanager #change to local env
 
 
 networks:
