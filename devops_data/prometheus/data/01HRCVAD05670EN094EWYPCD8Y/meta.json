@@ -1,0 +1,17 @@
+{
+	"ulid": "01HRCVAD05670EN094EWYPCD8Y",
+	"minTime": 1709740827568,
+	"maxTime": 1709748000000,
+	"stats": {
+		"numSamples": 112053,
+		"numSeries": 2452,
+		"numChunks": 2452
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01HRCVAD05670EN094EWYPCD8Y"
+		]
+	},
+	"version": 1
+}
