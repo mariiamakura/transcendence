@@ -1,35 +1,48 @@
 import json
-from channels.generic.websocket import WebsocketConsumer
+from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync
 
+
 class GameConsumer(AsyncWebsocketConsumer):
-    active_games = set()
+    active_games = {}
+    game_counter = 0
 
     async def connect(self):
-        # ...
+        self.game_id = self.generate_unique_id()
+        self.room_group_name = f'game_{self.game_id}'
 
-        # Add this game to the list of active games
-        self.active_games.add(self.room_group_name)
-
+        # Join room group
+        await self.channel_layer.group_add(
+            self.room_group_name,
+            self.channel_name
+        )
         await self.accept()
+        await self.send(text_data=json.dumps({
+            'type': 'activeGames',
+            'games': list(self.active_games.keys()),
+        }))
 
     async def disconnect(self, close_code):
-        # ...
+        # Leave room group
+        await self.channel_layer.group_discard(
+            self.room_group_name,
+            self.channel_name
+        )
 
         # Remove this game from the list of active games
-        self.active_games.remove(self.room_group_name)
+        del self.active_games[self.game_id]
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message = text_data_json['message']
+        message = text_data_json['type']
 
         if message == 'getActiveGames':
             # Send the list of active games to the client
             await self.send(text_data=json.dumps({
                 'type': 'activeGames',
-                'games': list(self.active_games),
+                'games': list(self.active_games.keys()),
             }))
-        
+
         if message == 'createGame':
             # Create a new game and send the game ID to the client
             game_id = self.create_game()
@@ -37,29 +50,25 @@ class GameConsumer(AsyncWebsocketConsumer):
                 'type': 'gameCreated',
                 'gameId': game_id,
             }))
-    
-    async def send_game_update(self, event):
-        # Send game updates to the client
-        await self.send(text_data=json.dumps({
-            'type': 'gameUpdate',
-            'state': event['state'],
-        }))
-        
-    async def send_game_over(self, event):
-        # Send game over message to the client
-        await self.send(text_data=json.dumps({
-            'type': 'gameOver',
-            'winner': event['winner'],
-        }))
-        
-    async def send_game_created(self, event):
-        # Send game created message to the client
-        await self.send(text_data=json.dumps({
-            'type': 'gameCreated',
-            'gameId': event['gameId'],
-        }))
-        
-        
+
+        if message == 'clientConnected':
+            # Handle the new client connection
+            print('Client connected')
+            await self.send(text_data=json.dumps({
+                'type': 'gameCreated',
+                'gameId': game_id,
+            }))
+
+    def generate_unique_id(self):
+        self.__class__.game_counter += 1
+        return self.__class__.game_counter
+
+    def create_game(self):
+        game_id = self.generate_unique_id()
+        channel_name = f"game_{game_id}"
+        # Add the game to the list of active games
+        self.active_games[game_id] = channel_name
+        return game_id
 
 
 class PongConsumer(WebsocketConsumer):

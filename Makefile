@@ -1,7 +1,6 @@
 
 all:
 # builds and runs the containers
-
 	docker compose -f docker-compose.yml up --build -d 
 	docker compose -f docker-compose.yml exec web python manage.py collectstatic --no-input --clear
 	docker compose -f docker-compose.yml exec web python manage.py makemigrations
@@ -23,10 +22,10 @@ up:
 # starts the containers
 	docker compose -f docker-compose.yml up -d 
 	
-restart:
+restart: down up
 # stops and starts the containers
-	docker compose -f docker-compose.yml down
-	docker compose -f docker-compose.yml up -d
+# docker compose -f docker-compose.yml down
+# docker compose -f docker-compose.yml up -d
 
 fclean: clean
 # removes all the images

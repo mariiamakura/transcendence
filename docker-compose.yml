@@ -6,36 +6,24 @@ services:
     build:
       context: ./app
       dockerfile: Dockerfile
-    command:   gunicorn pong.wsgi:application --bind 0.0.0.0:8000 
+    command: 
+      - "gunicorn pong.wsgi:application --bind 0.0.0.0:8000 &"
+      - "daphne pong.asgi:application -b 0.0.0.0 -p 8001 &"
     volumes:
       - static_volume:/home/app/web/staticfiles
     expose:
       - 8000
+      - 8001
     env_file:
       - ./.env
     depends_on:
       - db
-      # - daphne
     develop:
       watch:
         - path: ./app/
           target: /home/app/web/
           action: sync+restart
           delay: 30
-
-  daphne:
-    build:
-      context: ./app
-      dockerfile: Dockerfile
-    command: daphne pong.asgi:application -b 0.0.0.0 -p 8001
-    volumes:
-      - static_volume:/home/app/web/staticfiles
-    expose:
-      - 8001
-    env_file:
-      - ./.env
-    depends_on:
-      - db
 
 
   db:
@@ -45,14 +33,6 @@ services:
     env_file:
       - ./.env.db
 
-  # nginx:
-  #   build: ./nginx
-  #   volumes:
-  #     - static_volume:/home/app/web/staticfiles
-  #   ports:
-  #     - 9999:80
-  #   depends_on:
-  #     - web
 
   nginx:
     container_name: nginx

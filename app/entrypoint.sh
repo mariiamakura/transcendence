@@ -11,4 +11,5 @@ then
     echo "PostgreSQL started"
 fi
 
+gunicorn pong.wsgi:application --bind 0.0.0.0:8000 & daphne pong.asgi:application -b 0.0.0.0 -p 8001
 exec "$@"

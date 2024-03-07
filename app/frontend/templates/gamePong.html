@@ -282,24 +282,57 @@ async function remoteClient() {
 
 	// Event listener for the 'open' event
 	socket.onopen = function(event) {
-		console.log('WebSocket connection established.');
+		console.log('WebSocket connection established for Client.');
 		// Request the list of active games
 		socket.send(JSON.stringify({ type: 'getActiveGames' }));
 	};
 
-	// Event listener for the 'message' event
-	socket.onmessage = function(event) {
-		// Handle incoming messages
-		const data = JSON.parse(event.data);
-		console.log('Message from server:', data);
-		if (data.type === 'activeGames') {
-			// Display the list of active games
-			displayActiveGames(data.games);
-			console.log('Active games:', data.games);
-			// Add your logic to display the games here
-		}
-	};
-}
+
+    socket.onmessage = function(e) {
+    var data = JSON.parse(e.data);
+    var message = data['type'];
+
+        if (message === 'activeGames') {
+            var games = data['games'];
+            //create an unordered list with id game-list
+            if (games.length > 0)
+            {
+                
+                var gameList = document.getElementById('content');
+                gameList.innerHTML = '';
+            
+                // Add each game to the list
+                for (var i = 0; i < games.length; i++) {
+                    var button = document.createElement('button');
+                    button.textContent = games[i];
+                    button.onclick = function() {
+                        // Connect to the game room
+                        var gameRoomSocket = new WebSocket(`wss://${window.location.host}/wss/socket-server/` + games[i] + '/');
+            
+                        gameRoomSocket.onopen = function(e) {
+                            // Send a message that the client has connected
+                            gameRoomSocket.send(JSON.stringify({
+                                'type': 'clientConnected',
+                                'message': 'A new client has connected'
+                            }));
+                        };
+                    };
+                    gameList.appendChild(button);
+                }
+            }
+            }
+            else
+            {
+                var gameList = document.getElementById('content');
+                gameList.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em;">No active games</p>';
+            }
+            
+
+           
+        }
+
+    }
+
 
 
 async function remoteHost()
@@ -309,15 +342,30 @@ async function remoteHost()
 
 	// Event listener for the 'open' event
 	socket.onopen = function(event) {
-		console.log('WebSocket connection established.');
+		console.log('WebSocket connection established for Host.');
 		// Create a new game
 		socket.send(JSON.stringify({ type: 'createGame' }));
+        
 	};
+
+    socket.onmessage = function(event) {
+        // Handle incoming messages
+        const data = JSON.parse(event.data);
+        console.log('Message from server:', event.data);
+        if (data.type === 'gameCreated') {
+            console.log('Game ID:', data.gameId);
+        }
+        if (data.type === 'clientConnected') {
+            console.log("Client connected");
+        }
+    }
+
+
 }
 
 function displayActiveGames(games) {
     // Get the element where you want to display the list of active games
-    const gameList = document.getElementById('gameList');
+    const gameList = document.getElementById('games');
 
     // Clear the current list
     gameList.innerHTML = '';
