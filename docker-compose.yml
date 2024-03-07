@@ -124,19 +124,19 @@ volumes:
   static_volume:
   prometheus-data:
     driver_opts:
-      o: bind
-      type: none
-      device: /Users/mishamakura/Documents/Programming/42Berin/transcendence/devops_data/prometheus #change to local env
+      # o: bind
+      # type: none
+      # device: /Users/mishamakura/Documents/Programming/42Berin/transcendence/devops_data/prometheus #change to local env
   grafana-data:
     driver_opts:
-      o: bind
-      type: none
-      device: /Users/mishamakura/Documents/Programming/42Berin/transcendence/devops_data/grafana #change to local env
+      # o: bind
+      # type: none
+      # device: /Users/mishamakura/Documents/Programming/42Berin/transcendence/devops_data/grafana #change to local env
   alertmanager-data:
-    driver_opts:
-      o: bind
-      type: none
-      device: /Users/mishamakura/Documents/Programming/42Berin/transcendence/devops_data/alertmanager #change to local env
+    # driver_opts:
+    #   o: bind
+    #   type: none
+    #   device: /Users/mishamakura/Documents/Programming/42Berin/transcendence/devops_data/alertmanager #change to local env
 
 
 networks:

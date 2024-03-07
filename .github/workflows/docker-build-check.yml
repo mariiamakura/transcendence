@@ -10,32 +10,32 @@ on:
       - mariia
       - main
 
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v2
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-#       - name: Install Docker dependencies
-#         run: |
-#           sudo apt-get update
-#           sudo apt-get remove containerd.io -y
-#           sudo apt-get update
+      - name: Install Docker dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get remove containerd.io -y
+          sudo apt-get update
 
-#       - name: Install Docker
-#         run: |
-#           sudo apt-get install -y docker.io
+      - name: Install Docker
+        run: |
+          sudo apt-get install -y docker.io
 
-#       - name: Install Docker Compose
-#         run: |
-#           sudo apt-get install -y docker-compose
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get install -y docker-compose
 
-#       - name: Build and Run Containers
-#         run: make all
+      - name: Build and Run Containers
+        run: make all
 
-#       - name: Check Docker Containers Status
-#         run: |
-#           docker ps -a
-#           exit $(docker ps -aq -f status=exited | wc -l)
+      - name: Check Docker Containers Status
+        run: |
+          docker ps -a
+          exit $(docker ps -aq -f status=exited | wc -l)
