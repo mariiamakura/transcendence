@@ -279,7 +279,7 @@ let socket = null;
 
 async function remoteHost()
 {
-	let room_name = "testroom";
+	let room_name = "lobby";
 	// Create a new WebSocket connection
 	socket = new WebSocket(`wss://${window.location.host}/wss/socket-server/${room_name}/`); 
 
@@ -296,8 +296,9 @@ async function remoteHost()
         // Handle incoming messages
         const data = JSON.parse(event.data);
         console.log('Message from server:', event.data);
+		var game_room = "game_" + data.gameId;
         if (data.type === 'gameCreated') {
-			var gameRoomSocket = new WebSocket(`wss://${window.location.host}/wss/socket-server/` + games[i] + '/');
+			var gameRoomSocket = new WebSocket(`wss://${window.location.host}/wss/socket-server/${room_name}/`);
             console.log('Game ID:', data.gameId);
         }
         if (data.type === 'clientConnected') {

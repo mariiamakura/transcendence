@@ -2,6 +2,13 @@ import json
 import logging
 from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync
+# import asyncio
+# import aioredis
+import asyncio
+import asyncio_redis
+
+# from aioredis.exceptions import RedisError
+
 
 logger = logging.getLogger(__name__)
 
@@ -36,16 +43,52 @@ class GameConsumer(AsyncWebsocketConsumer):
         if message == 'createGame':
             # Create a new game and send the game ID to the client
             game_id = self.create_game()
+
+            # Create a Redis connection
+            connection = await asyncio_redis.Connection.create(
+                host='redis', port=6379
+            )
+
+            try:
+                # Store the new game ID in Redis
+                await connection.set(game_id, 'game data')
+            finally:
+                # Don't forget to close the connection
+                connection.close()
+
             await self.send_game_created(game_id)
 
     async def send_active_games(self):
-        # Get the list of active games from Redis
-        active_games = await self.channel_layer.redis.hgetall("active_games")
-        game_ids = [int(game_id) for game_id in active_games.keys()]
-        await self.send(text_data=json.dumps({
-            'type': 'activeGames',
-            'games': game_ids,
-        }))
+        # Create a Redis connection
+        connection = await asyncio_redis.Connection.create(
+            host='redis', port=6379
+        )
+
+        try:
+            # Get the list of active games from Redis
+            active_games = await connection.hgetall("active_games")
+            game_ids = [int(game_id) for game_id in active_games.keys()]
+            await self.send(text_data=json.dumps({
+                'type': 'activeGames',
+                'games': game_ids,
+            }))
+        finally:
+            # Don't forget to close the connection
+            connection.close()
+    # async def send_active_games(self):
+    #     # Create a Redis client
+    #     # redis = await aioredis.create_redis_pool('redis://localhost')
+
+    #     # Get the list of active games from Redis
+    #     # active_games = await redis.hgetall("active_games")
+    #     # game_ids = [int(game_id) for game_id in active_games.keys()]
+    #     await self.send(text_data=json.dumps({
+    #         'type': 'activeGames',
+    #         # 'games': game_ids,
+    #     }))
+
+    #     # redis.close()
+    #     # await redis.wait_closed()
 
     async def send_game_created(self, game_id):
         await self.send(text_data=json.dumps({
