@@ -1,10 +1,14 @@
 import json
+import logging
 from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync
+
+logger = logging.getLogger(__name__)
 
 
 class GameConsumer(AsyncWebsocketConsumer):
     async def connect(self):
+        logger.info(self.scope)
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = f"game_{self.room_name}"
 

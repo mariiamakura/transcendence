@@ -281,7 +281,8 @@ async function remoteHost()
 {
 	let room_name = "testroom";
 	// Create a new WebSocket connection
-	socket = new WebSocket(`wss://${window.location.host}/wss/socket-server/${room_name}/`);
+	socket = new WebSocket(`wss://${window.location.host}/wss/socket-server/${room_name}/`); 
+
 
 	// Event listener for the 'open' event
 	socket.onopen = function(event) {
