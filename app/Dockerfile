@@ -47,6 +47,9 @@ RUN mkdir $APP_HOME
 RUN mkdir $APP_HOME/staticfiles
 WORKDIR $APP_HOME
 
+
+# Install Redis
+RUN apt-get update && apt-get install -y --no-install-recommends redis-server
 # install dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends netcat
 COPY --from=builder /usr/src/app/wheels /wheels

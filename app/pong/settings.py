@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
 from pathlib import Path
+from channels.layers import get_channel_layer
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -88,10 +89,19 @@ TEMPLATES = [
 WSGI_APPLICATION = 'pong.wsgi.application'
 ASGI_APPLICATION = 'pong.asgi.application'
 
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels.layers.InMemoryChannelLayer"
+#     }
+# }
+
 CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('redis', 6378)],
+        },
+    },
 }
 
 # Database
