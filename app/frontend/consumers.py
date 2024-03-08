@@ -8,10 +8,8 @@ logger = logging.getLogger(__name__)
 
 class GameConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        logger.info(self.scope)
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = f"game_{self.room_name}"
-
         # Join room group
         await self.channel_layer.group_add(
             self.room_group_name,
@@ -32,20 +30,19 @@ class GameConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['type']
-
         if message == 'createGame':
             # Create a new game and send the game ID to the client
-            game_id = self.create_game()
+            game_id = await self.create_game()
             await self.send_game_created(game_id)
 
     async def send_active_games(self):
-        # Get the list of active games from Redis
-        active_games = await self.channel_layer.redis.hgetall("active_games")
-        game_ids = [int(game_id) for game_id in active_games.keys()]
-        await self.send(text_data=json.dumps({
-            'type': 'activeGames',
-            'games': game_ids,
-        }))
+        # Send a message to the group requesting active games
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'get_active_games',
+            }
+        )
 
     async def send_game_created(self, game_id):
         await self.send(text_data=json.dumps({
@@ -57,14 +54,40 @@ class GameConsumer(AsyncWebsocketConsumer):
         # Generate a unique game ID
         game_id = await self.generate_unique_id()
 
-        # Add the game to the list of active games in Redis
+        # Add the game to the list of active games in Redis (Not implemented here)
         await self.channel_layer.redis.hset("active_games", game_id, self.room_group_name)
 
         return game_id
 
     async def generate_unique_id(self):
-        # Increment the game counter using Redis atomic increments
-        return await self.channel_layer.redis.incr("game_counter")
+        # Increment the game counter using Redis atomic increments (Not implemented here)
+        return "PlaceholderGameID"
+
+
+class ActiveGamesConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        # Add consumer to the group
+        await self.channel_layer.group_add('active_games_group', self.channel_name)
+        await self.accept()
+
+    async def disconnect(self, close_code):
+        # Remove consumer from the group
+        await self.channel_layer.group_discard('active_games_group', self.channel_name)
+
+    async def group_send_active_games(self, event):
+        # Execute the HGETALL command and send back the result
+        active_games = await self.get_active_games_from_redis()
+        await self.send(text_data=json.dumps({
+            'type': 'activeGames',
+            'games': active_games,
+        }))
+
+    async def get_active_games_from_redis(self):
+        # Perform HGETALL command and return the result
+        # Example:
+        active_games = await self.channel_layer.redis.hgetall("active_games")
+        return [int(game_id) for game_id in active_games.keys()]
+        # return ["PlaceholderGameID"]
 
 # class GameConsumer(AsyncWebsocketConsumer):
 #     active_games = {}

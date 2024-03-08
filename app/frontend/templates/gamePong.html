@@ -289,26 +289,22 @@ async function remoteHost()
 		console.log('WebSocket connection established for Host.');
 		// Create a new game
 		socket.send(JSON.stringify({ type: 'createGame' }));
-        
 	};
 
     socket.onmessage = function(event) {
         // Handle incoming messages
         const data = JSON.parse(event.data);
         console.log('Message from server:', event.data);
+        let game_room = "game1";
         if (data.type === 'gameCreated') {
-			var gameRoomSocket = new WebSocket(`wss://${window.location.host}/wss/socket-server/` + games[i] + '/');
+			var gameRoomSocket = new WebSocket(`wss://${window.location.host}/wss/socket-server/${game_room}/`);
             console.log('Game ID:', data.gameId);
         }
         if (data.type === 'clientConnected') {
             console.log("Client connected");
         }
     }
-
-
 }
-
-
 
 async function connectToWebSocket(roomName) {
     // Connect to the WebSocket server
@@ -353,30 +349,7 @@ function connectToGameRoom(gameId) {
     };
 }
 
-function displayActiveGames(games) {
-    const gameList = document.getElementById('games');
-
-    // Clear the current list
-    gameList.innerHTML = '';
-
-    // Add each game to the list
-    games.forEach(game => {
-        const listItem = document.createElement('li');
-        listItem.textContent = game;
-        listItem.onclick = function() {
-            // Connect to the selected game room
-            connectToGameRoom(game);
-        };
-        gameList.appendChild(listItem);
-    });
-}
-
 // Call connectToWebSocket() function with the desired room name
-
-
-
-{% comment %} let socket = null;
-
 
 async function remoteClient() {
 	// Connect to the WebSocket server
@@ -422,48 +395,13 @@ async function remoteClient() {
                     gameList.appendChild(button);
                 }
             }
-            }
-            else
-            {
-                var gameList = document.getElementById('content');
-                gameList.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em;">No active games</p>';
-            }
-            
-
-           
         }
-
-    }
-
-
-
-async function remoteHost()
-{
-	// Create a new WebSocket connection
-	socket = new WebSocket(`wss://${window.location.host}/wss/socket-server/`);
-
-	// Event listener for the 'open' event
-	socket.onopen = function(event) {
-		console.log('WebSocket connection established for Host.');
-		// Create a new game
-		socket.send(JSON.stringify({ type: 'createGame' }));
-        
-	};
-
-    socket.onmessage = function(event) {
-        // Handle incoming messages
-        const data = JSON.parse(event.data);
-        console.log('Message from server:', event.data);
-        if (data.type === 'gameCreated') {
-			var gameRoomSocket = new WebSocket(`wss://${window.location.host}/wss/socket-server/` + games[i] + '/');
-            console.log('Game ID:', data.gameId);
-        }
-        if (data.type === 'clientConnected') {
-            console.log("Client connected");
+        else
+        {
+            var gameList = document.getElementById('content');
+            gameList.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em;">No active games</p>';
         }
     }
-
-
 }
 
 function displayActiveGames(games) {
@@ -479,7 +417,7 @@ function displayActiveGames(games) {
         listItem.textContent = game;
         gameList.appendChild(listItem);
     });
-} {% endcomment %}
+}
 
 
 
