@@ -243,7 +243,7 @@ async function showGamePong() {
 	
 	if (await showButton())
 	{
-        scoreToDo = 1000;
+        scoreToDo = 12;
 		//remote Game
 		if (await decideHost())
 		{
@@ -281,12 +281,11 @@ let isHost = false;
 let gameRoomSocket = null;
 
 async function remoteHost() {
-    let hostName = "{{ user.username }}"; // This should be sanitized to ensure URL-friendliness
+    let hostName = "{{ user.username }}"; 
     let sanitizedRoomName = encodeURIComponent(`${hostName}_Game`).replace(/'/g, ""); // Sanitize and remove special characters
-    let socket = new WebSocket(`wss://${window.location.host}/wss/socket-server/lobby/`); // Connect to the lobby
+    let socket = new WebSocket(`wss://${window.location.host}/wss/socket-server/lobby/`); 
 
     socket.onopen = function(event) {
-        // Notify the server to create a new room with a unique and sanitized room name
         socket.send(JSON.stringify({ action: 'create_room', host_name: hostName, room_name: sanitizedRoomName }));
     };
     
@@ -294,15 +293,11 @@ async function remoteHost() {
         const data = JSON.parse(event.data);
         if (data.action === 'room_created') {
             console.log('Room created:', data.room_id);
-            // Close the lobby connection after creating the room
             socket.close();
-
-            // Now, establish a new WebSocket connection to the newly created game room
             gameRoomSocket = new WebSocket(`wss://${window.location.host}/wss/socket-server/${sanitizedRoomName}/`);
             isHost = true;
             gameRoomSocket.onopen = function() {
                 console.log("Game room connection established for host.");
-                // The host is now waiting for a second player to join the room
             };
 
             gameRoomSocket.onmessage = function(event) {
@@ -310,13 +305,11 @@ async function remoteHost() {
                 const data = JSON.parse(event.data);
                 if (data.action === 'player_joined') {
                     console.log(`${data.guest_name} has joined the game.`);
-                    // Game can now start or wait for more players based on your game logic
                 }
                 // Handle countdown message
                 if (data.action === 'countdown') {
                     updateCountdownDisplay(data.message);
                 } else if (data.action === 'start_game') {
-                    // Clear the countdown and start the game
                     let countdownElement = document.getElementById('countdown');
                     if (countdownElement) {
                         countdownElement.remove(); // Remove the countdown display
@@ -329,19 +322,20 @@ async function remoteHost() {
                         player2.y = data.position_y;
                     }
                 }
-                if(data.action === 'key_event') {
-                    handleKeyEvent(data);
-                }
+                if(data.action === 'client_key_event') {
+                    if (data.key === 'up') {
+                        player2.velocityY = -5;
+                    } else if (data.key === 'down') {
+                        player2.velocityY = 5;
+                    } else if (data.key === 'stop') {
+                        player2.velocityY = 0;
+                    }
+                 }
             }
-                
-          
-
             gameRoomSocket.onclose = function() {
                 console.log("Game room connection closed.");
             };
         }
-
- 
         socket.onerror = function(error) {
             console.error('WebSocket error:', error);
         };
@@ -354,7 +348,7 @@ async function remoteHost() {
 let roomSocket = null;
 
 async function remoteClient() {
-    let socket = new WebSocket(`wss://${window.location.host}/wss/socket-server/lobby/`); // Connect to a 'lobby' room first
+    let socket = new WebSocket(`wss://${window.location.host}/wss/socket-server/lobby/`);
 
     socket.onopen = function(event) {
         // Request the list of active game rooms once the WebSocket connection is open
@@ -363,9 +357,8 @@ async function remoteClient() {
 
     socket.onmessage = function(event) {
         const data = JSON.parse(event.data);
-        // Assuming 'list_rooms' action returns an array of room IDs in 'rooms'
         if (data.action === 'list_rooms') {
-            const games = data.rooms; // This replaces 'games' from 'activeGames' message
+            const games = data.rooms; // Array of active game rooms
             var gameList = document.getElementById('content');
             gameList.innerHTML = ''; // Clear previous content
 
@@ -374,9 +367,9 @@ async function remoteClient() {
                 games.forEach((game) => {
                     var button = document.createElement('button');
                     button.textContent = game;
-                    button.classList.add("styled-button"); // Assuming you have styling for buttons
+                    button.classList.add("styled-button"); 
                     button.addEventListener("click", function() {
-                        joinGameRoom(game); // Function to join a game room
+                        joinGameRoom(game); 
                     });
                     gameList.appendChild(button);
                 });
@@ -386,15 +379,12 @@ async function remoteClient() {
             }
         } else if (data.action === 'joined_room') {
             console.log('Joined room:', data.room_id);
-            // Handle additional logic for when the client successfully joins a room
         }
         
     };
 
     function joinGameRoom(roomId) {
-        // Close the current lobby connection
-        socket.close();
-        
+        socket.close(); // Close the WebSocket connection to the lobby
         // Open a new WebSocket connection for the selected room
         roomSocket = new WebSocket(`wss://${window.location.host}/wss/socket-server/${roomId}/`);
         
@@ -404,34 +394,27 @@ async function remoteClient() {
         };
 
         roomSocket.onmessage = function(event) {
-            // Handle messages for game state updates
             const data = JSON.parse(event.data);
-            //console.log(data);
-            // Implement game state update logic here based on the messages received
             if (data.action === 'countdown') {
                 updateCountdownDisplay(data.message);
             } else if (data.action === 'start_game') {
-                // Clear the countdown and start the game
                 let countdownElement = document.getElementById('countdown');
                 if (countdownElement) {
-                    countdownElement.remove(); // Remove the countdown display
+                    countdownElement.remove();
                 }
-                startTheGame(); // Function to initialize or start the game
+                startTheGame(); 
             }
             if (data.action === 'update_ball_position') {
-                // Implement game state update logic here based on the messages received
                 newBall.x = data.ball_x;
                 newBall.y = data.ball_y;
                 console.log("ball position received");
             }
             if (data.action === 'update_player_scores') {
-                // Implement game state update logic here based on the messages received
                 newPlayer1Score = data.player1;
                 newPlayer2Score = data.player2;
                 console.log("player scores received");
             }
             if (data.action === 'game_ended') {
-                // Implement game state update logic here based on the messages received
                 endGame(data.winner);
                 console.log("game ended");
             }
@@ -440,8 +423,14 @@ async function remoteClient() {
                     player1.y = data.position_y;
                 } 
             }
-            if(data.action === 'key_event') {
-                handleKeyEvent(data);
+            if(data.action === 'host_key_event') {
+               if (data.key === 'up') {
+                   player1.velocityY = -5;
+               } else if (data.key === 'down') {
+                   player1.velocityY = 5;
+               } else if (data.key === 'stop') {
+                   player1.velocityY = 0;
+               }
             }
         };
     }
@@ -449,9 +438,8 @@ async function remoteClient() {
 
 
 function startTheGame() {
-    // Function to initialize or start the game
     console.log('Game is starting...');
-    launchGamePong(); // Or any function you use to start the game
+    launchGamePong(); 
 }
 
 // Function to update or create the countdown display
@@ -462,8 +450,6 @@ function updateCountdownDisplay(message) {
         countdownElement.innerHTML = '';
         countdownElement = document.createElement('div');
         countdownElement.id = 'countdown';
-        // Append the countdown element somewhere appropriate
-        // For example, appending to the content div or another specific location
         document.getElementById('content').appendChild(countdownElement);
     }
     countdownElement.textContent = `Game starts in: ${message}`;
@@ -636,28 +622,20 @@ function handleResize() {
 }
 
 function update() {
-    // Update the game
     if (gameEnded === true)
         return;
-    console.log("update");
-    //window.addEventListener('resize', handleResize);
-
-  
-
+    //console.log("update");
     requestAnimationFrame(update);
     context.clearRect(0, 0, board.width, board.height);
     context.fillStyle = "skyblue";
-
     let newYPosition = player1.y + player1.velocityY;
     if (!outOfBounds(newYPosition))
         player1.y = newYPosition;
     context.fillRect(player1.x, player1.y, player1.width, player1.height);
-    
     let newYPosition2 = player2.y + player2.velocityY;
     if (!outOfBounds(newYPosition2))
         player2.y = newYPosition2;
     context.fillRect(player2.x, player2.y, player2.width, player2.height);
-
     //ball
     context.beginPath();
     context.arc(ball.x + ball.radius, ball.y + ball.radius, ball.radius, 0, Math.PI * 2);
@@ -748,56 +726,50 @@ function movePlayer() {
     let positionUpdated = false;
 
     // Player 1 controls
-    if (isHost) { // Assuming isHost variable is defined globally to identify if the current player is the host
+    if (isHost) {
         if (keysPressed["KeyW"] || keysPressed["ArrowUp"]) {
             player1.velocityY = -newVelocity;
-            positionUpdated = true;
+            gameRoomSocket.send(JSON.stringify({
+                action: 'host_key_event',
+                key: 'up'
+            }));
         } else if (keysPressed["KeyS"] || keysPressed["ArrowDown"]) {
             player1.velocityY = newVelocity;
-            positionUpdated = true;
+            gameRoomSocket.send(JSON.stringify({
+                action: 'host_key_event',
+                key: 'down'
+            }));
         } else if (player1.velocityY !== 0) {
-            player1.velocityY = 0; // Stop movement if no key is pressed
-            positionUpdated = true;
+            player1.velocityY = 0; 
+            gameRoomSocket.send(JSON.stringify({
+                action: 'host_key_event',
+                key: 'stop'
+            }));
         }
 
-        if (positionUpdated) {
-            let newYPosition = player1.y + player1.velocityY;
-            if (!outOfBounds(newYPosition)) {
-                player1.y = newYPosition;
-                // Send the updated position to the client
-                gameRoomSocket.send(JSON.stringify({
-                    action: 'update_player_position',
-                    player: 'player1',
-                    position_y: player1.y
-                }));
-            }
-        }
+       
     }
 
     // Player 2 controls (for client)
     if (!isHost) {
         if (keysPressed["KeyW"] || keysPressed["ArrowUp"]) {
             player2.velocityY = -newVelocity;
-            positionUpdated = true;
+            roomSocket.send(JSON.stringify({
+                action: 'client_key_event',
+                key: 'up'
+            }));
         } else if (keysPressed["KeyS"] || keysPressed["ArrowDown"]) {
             player2.velocityY = newVelocity;
-            positionUpdated = true;
+            roomSocket.send(JSON.stringify({
+                action: 'client_key_event',
+                key: 'down'
+            }));
         } else if (player2.velocityY !== 0) {
-            player2.velocityY = 0; // Stop movement if no key is pressed
-            positionUpdated = true;
-        }
-
-        if (positionUpdated) {
-            let newYPosition = player2.y + player2.velocityY;
-            if (!outOfBounds(newYPosition)) {
-                player2.y = newYPosition;
-                // Send the updated position to the host
-                roomSocket.send(JSON.stringify({
-                    action: 'update_player_position',
-                    player: 'player2',
-                    position_y: player2.y
-                }));
-            }
+            player2.velocityY = 0;
+            roomSocket.send(JSON.stringify({
+                action: 'client_key_event',
+                key: 'stop'
+            }));
         }
     }
 } 
@@ -858,9 +830,9 @@ function endGame(winner) {
     '<p style="text-align: center; font-size:4em;">Game Over ! </p>' +
     '<iframe src="https://giphy.com/embed/OScDfyJIQaXe" width="480" height="480" frameborder="0" class="giphy-embed" allowfullscreen></iframe>' +
     '<p><a href="https://giphy.com/gifs/rabbids-dance-cute-OScDfyJIQaXe"></a></p>' +
-    '<p style="text-align: center;">' + winner + ' won ! <br><br> If you want to play again with the same settings, press the button below.</p>' +
+    '<p style="text-align: center;">' + winner + ' won ! <br>' + //<br> If you want to play again with the same settings, press the button below.</p>' +
     '</div>';
-    var startAgain = document.createElement("button");
+    {% comment %} var startAgain = document.createElement("button");
     startAgain.textContent = "Start again";
     startAgain.classList.add("styled-button")
     document.getElementById('endGame').appendChild(startAgain);
@@ -868,7 +840,7 @@ function endGame(winner) {
         player1Score = 0;
         player2Score = 0;
         launchGamePong();
-    });
+    }); {% endcomment %}
     
 }
 
