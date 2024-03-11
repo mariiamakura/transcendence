@@ -122,3 +122,8 @@ def gamePong(request):
     #     user = User.objects.get(username=request.user)
     return render(request, 'gamePong.html', context={})
     # return render(request=request, template_name="pong.html", context={})
+
+
+@csrf_exempt
+def gameMemory(request):
+    return render(request, 'gameMemory.html', context={})

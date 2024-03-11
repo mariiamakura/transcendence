@@ -213,6 +213,11 @@ main {
     background-color: #dfe4ea;
 }
 
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
 #choice {
     overflow: visible;
     background-color: white;

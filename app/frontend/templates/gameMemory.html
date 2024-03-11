@@ -1,0 +1,16 @@
+{% extends 'index.html' %}
+{% block content %}
+{% if request.user.is_authenticated %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h1 class="page-header">Memoryyyyyyyy</h1>
+			<hr>
+		</div>
+	</div>
+</div>
+<script>
+
+<div class="button d-flex justify-content-center align-items-center">
+    <a href="#" onclick="showGameMemory()" class="btn btn-primary" style="margin-left: 1em;">Memory</a>
+</div>
