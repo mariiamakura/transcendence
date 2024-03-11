@@ -1,24 +1,41 @@
 import json
-import logging
 from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer
-from asgiref.sync import async_to_sync
+import asyncio
 
-logger = logging.getLogger(__name__)
+
+class GameRoomManager:
+    rooms = {}  # Stores room_name: host_name
+
+    @classmethod
+    def create_room(cls, host_name):
+        room_id = f"{host_name}_Game"
+        cls.rooms[room_id] = {"host": host_name, "guest": None}
+        return room_id
+
+    @classmethod
+    def list_rooms(cls):
+        return [room_id for room_id, details in cls.rooms.items() if details["guest"] is None]
+
+    @classmethod
+    def join_room(cls, room_id, guest_name):
+        if room_id in cls.rooms and cls.rooms[room_id]["guest"] is None:
+            cls.rooms[room_id]["guest"] = guest_name
+            return True
+        return False
 
 
 class GameConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
-        self.room_group_name = f"game_{self.room_name}"
+        self.room_name = self.scope['url_route']['kwargs']['room_name']
+        self.room_group_name = f'game_{self.room_name}'
+
         # Join room group
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
         )
-        await self.accept()
 
-        # Send the list of active games to the client
-        await self.send_active_games()
+        await self.accept()
 
     async def disconnect(self, close_code):
         # Leave room group
@@ -28,175 +45,146 @@ class GameConsumer(AsyncWebsocketConsumer):
         )
 
     async def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json['type']
-        if message == 'createGame':
-            # Create a new game and send the game ID to the client
-            game_id = await self.create_game()
-            await self.send_game_created(game_id)
+        data = json.loads(text_data)
+        action = data.get('action')
 
-    async def send_active_games(self):
-        # Send a message to the group requesting active games
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'get_active_games',
-            }
-        )
+        if action == 'create_room':
+            host_name = data.get('host_name')
+            room_id = GameRoomManager.create_room(host_name)
+            await self.send(text_data=json.dumps({'action': 'room_created', 'room_id': room_id}))
 
-    async def send_game_created(self, game_id):
+        elif action == 'list_rooms':
+            rooms = GameRoomManager.list_rooms()
+            await self.send(text_data=json.dumps({'action': 'list_rooms', 'rooms': rooms}))
+
+        elif action == 'join_room':
+            room_id = data.get('room_id')
+            guest_name = data.get('guest_name')
+            joined = GameRoomManager.join_room(room_id, guest_name)
+            if joined:
+                # Notify all subscribers of the room, including the host, that a new player has joined.
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                    {
+                        'type': 'player_joined',
+                        'room_id': room_id,
+                        'guest_name': guest_name,
+                    }
+                )
+                await self.send(text_data=json.dumps({'action': 'joined_room', 'room_id': room_id}))
+            else:
+                await self.send(text_data=json.dumps({'action': 'error', 'message': 'Room not found or full'}))
+        elif action == 'update_ball_position':
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'ball_position',
+                    'ball_x': data['ball_x'],
+                    'ball_y': data['ball_y']
+                }
+            )
+        elif action == 'update_player_scores':
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'player_scores',
+                    'player1': data['player1'],
+                    'player2': data['player2']
+                }
+            )
+
+    async def player_scores(self, event):
         await self.send(text_data=json.dumps({
-            'type': 'gameCreated',
-            'gameId': game_id,
+            'action': 'update_player_scores',
+            'player1': event['player1'],
+            'player2': event['player2']
         }))
 
-    async def create_game(self):
-        # Generate a unique game ID
-        game_id = await self.generate_unique_id()
-
-        # Add the game to the list of active games in Redis (Not implemented here)
-        await self.channel_layer.redis.hset("active_games", game_id, self.room_group_name)
-
-        return game_id
-
-    async def generate_unique_id(self):
-        # Increment the game counter using Redis atomic increments (Not implemented here)
-        return "PlaceholderGameID"
-
-
-class ActiveGamesConsumer(AsyncWebsocketConsumer):
-    async def connect(self):
-        # Add consumer to the group
-        await self.channel_layer.group_add('active_games_group', self.channel_name)
-        await self.accept()
-
-    async def disconnect(self, close_code):
-        # Remove consumer from the group
-        await self.channel_layer.group_discard('active_games_group', self.channel_name)
-
-    async def group_send_active_games(self, event):
-        # Execute the HGETALL command and send back the result
-        active_games = await self.get_active_games_from_redis()
+    async def ball_position(self, event):
         await self.send(text_data=json.dumps({
-            'type': 'activeGames',
-            'games': active_games,
+            'action': 'update_ball_position',
+            'ball_x': event['ball_x'],
+            'ball_y': event['ball_y']
         }))
 
-    async def get_active_games_from_redis(self):
-        # Perform HGETALL command and return the result
-        # Example:
-        active_games = await self.channel_layer.redis.hgetall("active_games")
-        return [int(game_id) for game_id in active_games.keys()]
-        # return ["PlaceholderGameID"]
+    async def player_joined(self, event):
+        # Broadcast the join message to all users in the room
+        await self.send(text_data=json.dumps({
+            'action': 'player_joined',
+            'room_id': event['room_id'],
+            'guest_name': event['guest_name'],
+            'message': f"{event['guest_name']} has joined the game."
+        }))
 
-# class GameConsumer(AsyncWebsocketConsumer):
-#     active_games = {}
-#     game_counter = 0
+        # Check if both players are present, then start countdown
+        if GameRoomManager.rooms[event['room_id']]['guest'] is not None:
+            # Start a 5-second countdown
+            for i in range(5, 0, -1):
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                    {
+                        'type': 'game_countdown',
+                        'message': str(i)
+                    }
+                )
+                await asyncio.sleep(1)
 
-#     async def connect(self):
-#         # self.game_id = self.generate_unique_id()
-#         # self.room_group_name = f'game_{self.game_id}'
-#         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
-#         self.room_group_name = f"game_{self.room_name}"
+            # Notify players to start the game
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'start_game',
+                    'message': 'start'
+                }
+            )
 
-#         # Join room group
-#         await self.channel_layer.group_add(
-#             self.room_group_name,
+    async def game_countdown(self, event):
+        await self.send(text_data=json.dumps({
+            'action': 'countdown',
+            'message': event['message']
+        }))
+
+    async def start_game(self, event):
+        await self.send(text_data=json.dumps({
+            'action': 'start_game',
+            'message': 'Game Starting!'
+        }))
+
+# class PongConsumer(WebsocketConsumer):
+#     def connect(self):
+#         self.room_name = 'pong_room'
+
+#         async_to_sync(self.channel_layer.group_add)(
+#             self.room_name,
 #             self.channel_name
 #         )
-#         await self.accept()
-#         await self.send(text_data=json.dumps({
-#             'type': 'activeGames',
-#             'games': list(self.active_games.keys()),
-#         }))
 
-#     async def disconnect(self, close_code):
-#         # Leave room group
-#         await self.channel_layer.group_discard(
-#             self.room_group_name,
-#             self.channel_name
-#         )
+#         self.accept()
 
-#         # Remove this game from the list of active games
-#         del self.active_gamcomment %} let socket = null;
+#         # self.send(text_data=json.dumps({
+#         #     'type': 'connection established',
+#         #     'message': 'You are now connected to the server'
+#         # }))
 
+#     # def disconnect(self, close_code):
+#     #     pass
 
-# es[self.game_id]
-
-#     async def receive(self, text_data):
+#     def receive(self, text_data):
 #         text_data_json = json.loads(text_data)
-#         message = text_data_json['type']
+#         message = text_data_json['message']
 
-#         if message == 'getActiveGames':
-#             # Send the list of active games to the client
-#             await self.send(text_data=json.dumps({
-#                 'type': 'activeGames',
-#                 'games': list(self.active_games.keys()),
-#             }))
+#         async_to_sync(self.channel_layer.group_send)(
+#             self.room_name,
+#             {
+#                 'type': 'pong_message',
+#                 'message': message
+#             }
+#         )
 
-#         if message == 'createGame':
-#             # Create a new game and send the game ID to the client
-#             game_id = self.create_game()
-#             await self.send(text_data=json.dumps({
-#                 'type': 'gameCreated',
-#                 'gameId': game_id,
-#             }))
+#     def pong_message(self, event):
+#         message = event['message']
 
-#         if message == 'clientConnected':
-#             # Handle the new client connection
-#             print('Client connected')
-#             await self.send(text_data=json.dumps({
-#                 'type': 'gameCreated',
-#                 'gameId': game_id,
-#             }))
-
-#     def generate_unique_id(self):
-#         self.__class__.game_counter += 1
-#         return self.__class__.game_counter
-
-#     def create_game(self):
-#         game_id = self.generate_unique_id()
-#         channel_name = f"game_{game_id}"
-#         # Add the game to the list of active games
-#         self.active_games[game_id] = channel_name
-
-#         return game_id
-
-class PongConsumer(WebsocketConsumer):
-    def connect(self):
-        self.room_name = 'pong_room'
-
-        async_to_sync(self.channel_layer.group_add)(
-            self.room_name,
-            self.channel_name
-        )
-
-        self.accept()
-
-        # self.send(text_data=json.dumps({
-        #     'type': 'connection established',
-        #     'message': 'You are now connected to the server'
-        # }))
-
-    # def disconnect(self, close_code):
-    #     pass
-
-    def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-
-        async_to_sync(self.channel_layer.group_send)(
-            self.room_name,
-            {
-                'type': 'pong_message',
-                'message': message
-            }
-        )
-
-    def pong_message(self, event):
-        message = event['message']
-
-        self.send(text_data=json.dumps({
-            'type': 'pong_message',
-            'message': message
-        }))
+#         self.send(text_data=json.dumps({
+#             'type': 'pong_message',
+#             'message': message
+#         }))

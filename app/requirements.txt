@@ -2,7 +2,9 @@ Django==5.0.2
 gunicorn==21.2.0
 psycopg2-binary==2.9.6
 channels==4.0.0
-daphne==4.0.0
+daphne==4.1.0
 channels-redis==4.2.0
-
+# aioredis==2.0.1
+# async-timeout>=4.0.2
+asyncio_redis==0.16.0
 

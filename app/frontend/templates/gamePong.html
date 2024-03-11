@@ -243,10 +243,11 @@ async function showGamePong() {
 	
 	if (await showButton())
 	{
+        scoreToDo = 100;
 		//remote Game
-		namePlayer[0] = "{{  user.username  }}";
 		if (await decideHost())
 		{
+            namePlayer[0] = "{{  user.username  }}";
 			//host
 			remoteHost();
 		}
@@ -254,7 +255,7 @@ async function showGamePong() {
 		else
 		{
 			//client
-
+            namePlayer[1] = "{{  user.username  }}";
 			remoteClient();
 		}
 	}
@@ -275,150 +276,176 @@ async function showGamePong() {
 
 }
 
-let socket = null;
+let isHost = false; 
+// hostsocket
+let gameRoomSocket = null;
 
-async function remoteHost()
-{
-	let room_name = "testroom";
-	// Create a new WebSocket connection
-	socket = new WebSocket(`wss://${window.location.host}/wss/socket-server/${room_name}/`); 
+async function remoteHost() {
+    let hostName = "{{ user.username }}"; // This should be sanitized to ensure URL-friendliness
+    let sanitizedRoomName = encodeURIComponent(`${hostName}_Game`).replace(/'/g, ""); // Sanitize and remove special characters
+    let socket = new WebSocket(`wss://${window.location.host}/wss/socket-server/lobby/`); // Connect to the lobby
 
-
-	// Event listener for the 'open' event
-	socket.onopen = function(event) {
-		console.log('WebSocket connection established for Host.');
-		// Create a new game
-		socket.send(JSON.stringify({ type: 'createGame' }));
-	};
-
-    socket.onmessage = function(event) {
-        // Handle incoming messages
-        const data = JSON.parse(event.data);
-        console.log('Message from server:', event.data);
-        let game_room = "game1";
-        if (data.type === 'gameCreated') {
-			var gameRoomSocket = new WebSocket(`wss://${window.location.host}/wss/socket-server/${game_room}/`);
-            console.log('Game ID:', data.gameId);
-        }
-        if (data.type === 'clientConnected') {
-            console.log("Client connected");
-        }
-    }
-}
-
-async function connectToWebSocket(roomName) {
-    // Connect to the WebSocket server
-    socket = new WebSocket(`wss://${window.location.host}/ws/${roomName}/`);
-
-    // Event listener for the 'open' event
     socket.onopen = function(event) {
-        console.log('WebSocket connection established.');
-        // Request the list of active games
-        socket.send(JSON.stringify({ type: 'getActiveGames' }));
+        // Notify the server to create a new room with a unique and sanitized room name
+        socket.send(JSON.stringify({ action: 'create_room', host_name: hostName, room_name: sanitizedRoomName }));
     };
-
-    // Event listener for the 'message' event
+    
     socket.onmessage = function(event) {
         const data = JSON.parse(event.data);
-        const message = data.type;
+        if (data.action === 'room_created') {
+            console.log('Room created:', data.room_id);
+            // Close the lobby connection after creating the room
+            socket.close();
 
-        if (message === 'activeGames') {
-            displayActiveGames(data.games);
-        } else if (message === 'gameCreated') {
-            console.log('Game ID:', data.gameId);
-            // Connect to the game room
-            connectToGameRoom(data.gameId);
-        } else if (message === 'clientConnected') {
-            console.log('Client connected');
-        }
-    };
-}
+            // Now, establish a new WebSocket connection to the newly created game room
+            gameRoomSocket = new WebSocket(`wss://${window.location.host}/wss/socket-server/${sanitizedRoomName}/`);
+            isHost = true;
+            gameRoomSocket.onopen = function() {
+                console.log("Game room connection established for host.");
+                // The host is now waiting for a second player to join the room
+            };
 
-function connectToGameRoom(gameId) {
-    // Connect to the game room WebSocket
-    const gameRoomSocket = new WebSocket(`wss://${window.location.host}/ws/game_${gameId}/`);
-
-    // Event listener for the 'open' event
-    gameRoomSocket.onopen = function(event) {
-        console.log('Connected to game room.');
-        // Send a message that the client has connected
-        gameRoomSocket.send(JSON.stringify({
-            type: 'clientConnected',
-            message: 'A new client has connected'
-        }));
-    };
-}
-
-// Call connectToWebSocket() function with the desired room name
-
-async function remoteClient() {
-	// Connect to the WebSocket server
-	socket = new WebSocket(`wss://${window.location.host}/wss/socket-server/`);
-
-	// Event listener for the 'open' event
-	socket.onopen = function(event) {
-		console.log('WebSocket connection established for Client.');
-		// Request the list of active games
-		socket.send(JSON.stringify({ type: 'getActiveGames' }));
-	};
-
-
-    socket.onmessage = function(e) {
-    var data = JSON.parse(e.data);
-    var message = data['type'];
-
-        if (message === 'activeGames') {
-            var games = data['games'];
-            //create an unordered list with id game-list
-            if (games.length > 0)
-            {
-                
-                var gameList = document.getElementById('content');
-                gameList.innerHTML = '';
-            
-                // Add each game to the list
-                for (var i = 0; i < games.length; i++) {
-                    var button = document.createElement('button');
-                    button.textContent = games[i];
-                    button.onclick = function() {
-                        // Connect to the game room
-                        var gameRoomSocket = new WebSocket(`wss://${window.location.host}/wss/socket-server/` + games[i] + '/');
-            
-                        gameRoomSocket.onopen = function(e) {
-                            // Send a message that the client has connected
-                            gameRoomSocket.send(JSON.stringify({
-                                'type': 'clientConnected',
-                                'message': 'A new client has connected'
-                            }));
-                        };
-                    };
-                    gameList.appendChild(button);
+            gameRoomSocket.onmessage = function(event) {
+                // Handle messages from the server, such as a player joining the room
+                const data = JSON.parse(event.data);
+                if (data.action === 'player_joined') {
+                    console.log(`${data.guest_name} has joined the game.`);
+                    // Game can now start or wait for more players based on your game logic
+                }
+                // Handle countdown message
+                if (data.action === 'countdown') {
+                    updateCountdownDisplay(data.message);
+                } else if (data.action === 'start_game') {
+                    // Clear the countdown and start the game
+                    let countdownElement = document.getElementById('countdown');
+                    if (countdownElement) {
+                        countdownElement.remove(); // Remove the countdown display
+                    }
+                    startTheGame(); // Function to initialize or start the game
                 }
             }
+                
+          
+
+            gameRoomSocket.onclose = function() {
+                console.log("Game room connection closed.");
+            };
         }
-        else
-        {
-            var gameList = document.getElementById('content');
-            gameList.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em;">No active games</p>';
-        }
+
+ 
+        socket.onerror = function(error) {
+            console.error('WebSocket error:', error);
+        };
     }
 }
 
-function displayActiveGames(games) {
-    // Get the element where you want to display the list of active games
-    const gameList = document.getElementById('games');
 
-    // Clear the current list
-    gameList.innerHTML = '';
 
-    // Add each game to the list
-    games.forEach(game => {
-        const listItem = document.createElement('li');
-        listItem.textContent = game;
-        gameList.appendChild(listItem);
-    });
+// clientsocket
+let roomSocket = null;
+
+async function remoteClient() {
+    let socket = new WebSocket(`wss://${window.location.host}/wss/socket-server/lobby/`); // Connect to a 'lobby' room first
+
+    socket.onopen = function(event) {
+        // Request the list of active game rooms once the WebSocket connection is open
+        socket.send(JSON.stringify({ action: 'list_rooms' }));
+    };
+
+    socket.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+        // Assuming 'list_rooms' action returns an array of room IDs in 'rooms'
+        if (data.action === 'list_rooms') {
+            const games = data.rooms; // This replaces 'games' from 'activeGames' message
+            var gameList = document.getElementById('content');
+            gameList.innerHTML = ''; // Clear previous content
+
+            if (games.length > 0) {
+                // Dynamically create buttons for each active game
+                games.forEach((game) => {
+                    var button = document.createElement('button');
+                    button.textContent = game;
+                    button.classList.add("styled-button"); // Assuming you have styling for buttons
+                    button.addEventListener("click", function() {
+                        joinGameRoom(game); // Function to join a game room
+                    });
+                    gameList.appendChild(button);
+                });
+            } else {
+                // Display message if no active games are available
+                gameList.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em;">No active games</p>';
+            }
+        } else if (data.action === 'joined_room') {
+            console.log('Joined room:', data.room_id);
+            // Handle additional logic for when the client successfully joins a room
+        }
+        
+    };
+
+    function joinGameRoom(roomId) {
+        // Close the current lobby connection
+        socket.close();
+        
+        // Open a new WebSocket connection for the selected room
+        roomSocket = new WebSocket(`wss://${window.location.host}/wss/socket-server/${roomId}/`);
+        
+        roomSocket.onopen = function() {
+            // Notify the server that the client has joined the room
+            roomSocket.send(JSON.stringify({ action: 'join_room', room_id: roomId , guest_name: "{{ user.username }}"}));
+        };
+
+        roomSocket.onmessage = function(event) {
+            // Handle messages for game state updates
+            const data = JSON.parse(event.data);
+            console.log(data);
+            // Implement game state update logic here based on the messages received
+            if (data.action === 'countdown') {
+                updateCountdownDisplay(data.message);
+            } else if (data.action === 'start_game') {
+                // Clear the countdown and start the game
+                let countdownElement = document.getElementById('countdown');
+                if (countdownElement) {
+                    countdownElement.remove(); // Remove the countdown display
+                }
+                startTheGame(); // Function to initialize or start the game
+            }
+            if (data.action === 'update_ball_position') {
+                // Implement game state update logic here based on the messages received
+                newBall.x = data.ball_x;
+                newBall.y = data.ball_y;
+                console.log("ball position received");
+            }
+            if (data.action === 'update_player_scores') {
+                // Implement game state update logic here based on the messages received
+                newPlayer1Score = data.player1;
+                newPlayer2Score = data.player2;
+                console.log("player scores received");
+            }
+        };
+    }
 }
 
+
+function startTheGame() {
+    // Function to initialize or start the game
+    console.log('Game is starting...');
+    launchGamePong(); // Or any function you use to start the game
+}
+
+// Function to update or create the countdown display
+function updateCountdownDisplay(message) {
+    let countdownElement = document.getElementById('countdown');
+    if (!countdownElement) {
+        countdownElement = document.getElementById('content');
+        countdownElement.innerHTML = '';
+        countdownElement = document.createElement('div');
+        countdownElement.id = 'countdown';
+        // Append the countdown element somewhere appropriate
+        // For example, appending to the content div or another specific location
+        document.getElementById('content').appendChild(countdownElement);
+    }
+    countdownElement.textContent = `Game starts in: ${message}`;
+}
 
 
 
@@ -464,6 +491,8 @@ let player2 = {
 
 let player1Score;
 let player2Score;
+let newPlayer1Score;
+let newPlayer2Score;
 
 //ball variables
 let ballWidth = 10;
@@ -479,12 +508,22 @@ let ball = {
     velocityY : null
 }
 
+let newBall = {
+    x : null,
+    y : null,
+    width : ballWidth,
+    height : ballHeight,
+    radius: null,
+    velocityX : null,
+    velocityY : null
+}
+
 function initVariables() {
     spaceKeyListenerAdded = false;
     gameEnded = false;
     player1Score = 0;
     player2Score = 0;
-    velocity = 2;
+    velocity = 1; // was 2
     playerVelocityY = 0;
     boardWidth = window.innerWidth / 1.618;
     boardHeight = window.innerHeight / 1.618;
@@ -593,26 +632,44 @@ function update() {
     context.arc(ball.x + ball.radius, ball.y + ball.radius, ball.radius, 0, Math.PI * 2);
     context.fillStyle = "white";
     context.fill();
-    
-    ball.x += ball.velocityX;
-    ball.y += ball.velocityY;
+    if (isHost){
+        ball.x += ball.velocityX;
+        ball.y += ball.velocityY;
+        let socket = gameRoomSocket;
+        socket.send(JSON.stringify({ action: 'update_ball_position', ball_x: ball.x, ball_y: ball.y }));
+        console.log("ball position sent");
+    }
+    else {
+        ball.x = newBall.x;
+        ball.y = newBall.y;
+    }
     if (ball.y <= 0 || ball.y + ball.height >= board.height) {
         ball.velocityY *= -1;
     }
     checkCollision(ball.y, ball.x);
-    if (ball.x < 0) {
-        player2Score++;
-        if (player2Score >= scoreToDo)
-            endGame(player2.name);
-        else
-            resetGame(1);
-    } 
-    else if (ball.x + ball.width > board.width) {
-        player1Score++;
-        if (player1Score >= scoreToDo)
-            endGame(player1.name);
-        else
-            resetGame(-1);
+    if (isHost)
+    {
+        if (ball.x < 0) {
+            player2Score++;
+            if (player2Score >= scoreToDo)
+                endGame(player2.name);
+            else
+                resetGame(1);
+        } 
+        else if (ball.x + ball.width > board.width) {
+            player1Score++;
+            if (player1Score >= scoreToDo)
+                endGame(player1.name);
+            else
+                resetGame(-1);
+        }
+        let socket = gameRoomSocket;
+        socket.send(JSON.stringify({ action: 'update_player_scores', player1: player1Score, player2: player2Score }));
+        console.log("player scores sent");
+    }
+    else {
+        player1Score = newPlayer1Score;
+        player2Score = newPlayer2Score;
     }
     context.font = "45px sans-serif";
     context.fillText(player1Score, boardWidth / 5, 45);
