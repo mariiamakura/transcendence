@@ -92,6 +92,37 @@ class GameConsumer(AsyncWebsocketConsumer):
                     'player2': data['player2']
                 }
             )
+        elif action == 'game_ended':
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'game_ended',
+                    'winner': data['winner']
+                }
+            )
+
+        elif action == 'update_player_position':
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'player_position',
+                    'player': data['player'],  # 'player1' or 'player2'
+                    'position_y': data['position_y'],
+                }
+            )
+
+    async def player_position(self, event):
+        await self.send(text_data=json.dumps({
+            'action': 'update_player_position',
+            'player': event['player'],
+            'position_y': event['position_y'],
+        }))
+
+    async def game_ended(self, event):
+        await self.send(text_data=json.dumps({
+            'action': 'game_ended',
+            'winner': event['winner']
+        }))
 
     async def player_scores(self, event):
         await self.send(text_data=json.dumps({
