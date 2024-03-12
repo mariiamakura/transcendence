@@ -66,7 +66,7 @@ class GameConsumer(AsyncWebsocketConsumer):
                 await self.channel_layer.group_send(
                     self.room_group_name,
                     {
-                        'type': 'player_joined',
+                        'type': 'player_joined_pong',
                         'room_id': room_id,
                         'guest_name': guest_name,
                     }

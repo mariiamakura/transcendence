@@ -392,6 +392,7 @@ async function remoteClient() {
             namePlayer[0] =  roomId.replace('_Game', '');
         };
         console.log("next step");
+		
         roomSocket.onmessage = function(event) {
             const data = JSON.parse(event.data);
             if (data.action === 'countdown') {
