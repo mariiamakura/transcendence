@@ -392,10 +392,10 @@ async function remoteClient() {
             namePlayer[0] =  roomId.replace('_Game', '');
         };
         console.log("next step");
-		
         roomSocket.onmessage = function(event) {
+            console.log("received message");    
             const data = JSON.parse(event.data);
-            if (data.action === 'countdown') {
+            if (data.action === 'countdown_pong') {
                 console.log('Countdown:');
                 updateCountdownDisplay(data.message);
             } else if (data.action === 'start_game_pong') {
@@ -416,11 +416,11 @@ async function remoteClient() {
                 newPlayer2Score = data.player2;
                 console.log("player scores received");
             }
-            if (data.action === 'game_ended_pong') {
+            if (data.action === 'game_ended_pong_pong') {
                 endGame(data.winner);
                 console.log("game ended");
             }
-            if (data.action === 'update_player_position_pong') {
+            if (data.action === 'update_player_position') {
                 if (data.player === 'player1') {
                     player1.y = data.position_y;
                 } 
@@ -464,8 +464,7 @@ function updateCountdownDisplay(message) {
 
 
 
-
-
+// BELOW IS THE GAME'S DYNAMICS
 
 
 {% comment %} gamePong.js {% endcomment %}
@@ -561,12 +560,6 @@ function launchGamePong() {
         namePlayer[0] = "{{ user.username }}";
     else
         namePlayer[1] = "{{ user.username }}";
-
-    if (!namePlayer[0]  )
-        namePlayer[0] = "Player1";
-    if (!namePlayer[1]) 
-        namePlayer[1] = "Player2";
-
     let htmlContent = '<div id="board-container" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden">' +
     '<p class="name_player">' + namePlayer[0] + '</p>' +
     '<canvas id="board" width="' + boardWidth + '" height="' + boardHeight + '"></canvas>' +
@@ -657,7 +650,7 @@ function update() {
         ball.x += ball.velocityX;
         ball.y += ball.velocityY;
         let socket = gameRoomSocket;
-        socket.send(JSON.stringify({ action: 'update_ball_position', ball_x: ball.x, ball_y: ball.y }));
+        socket.send(JSON.stringify({ action: 'update_ball_position_pong', ball_x: ball.x, ball_y: ball.y }));
         console.log("ball position sent");
     }
     else {
@@ -675,7 +668,7 @@ function update() {
             player2Score++;
             if (player2Score >= scoreToDo){
                 endGame(player2.name);
-                socket.send(JSON.stringify({ action: 'game_ended', winner: player2.name}));
+                socket.send(JSON.stringify({ action: 'game_ended_pong', winner: player2.name}));
             }
             else
                 resetGame(1);
@@ -684,12 +677,12 @@ function update() {
             player1Score++;
             if (player1Score >= scoreToDo){
                 endGame(player1.name);
-                socket.send(JSON.stringify({ action: 'game_ended', winner: player1.name}));
+                socket.send(JSON.stringify({ action: 'game_ended_pong', winner: player1.name}));
             }
             else
                 resetGame(-1);
         }
-        socket.send(JSON.stringify({ action: 'update_player_scores', player1: player1Score, player2: player2Score }));
+        socket.send(JSON.stringify({ action: 'update_player_scores_pong', player1: player1Score, player2: player2Score }));
         console.log("player scores sent");
     }
     else {

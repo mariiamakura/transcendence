@@ -78,7 +78,7 @@ class GameConsumer(AsyncWebsocketConsumer):
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
-                    'type': 'ball_position_pong',
+                    'type': 'ball_position',
                     'ball_x': data['ball_x'],
                     'ball_y': data['ball_y']
                 }
@@ -87,16 +87,16 @@ class GameConsumer(AsyncWebsocketConsumer):
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
-                    'type': 'player_scores_pong',
+                    'type': 'player_scores',
                     'player1': data['player1'],
                     'player2': data['player2']
                 }
             )
-        elif action == 'game_ended_pong':
+        elif action == 'game_ended_pong_pong':
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
-                    'type': 'game_ended_pong',
+                    'type': 'game_ended_pong_pong',
                     'winner': data['winner']
                 }
             )
@@ -146,20 +146,20 @@ class GameConsumer(AsyncWebsocketConsumer):
             'key': event['key']
         }))
 
-    async def game_ended_pong(self, event):
+    async def game_ended_pong_pong(self, event):
         await self.send(text_data=json.dumps({
-            'action': 'game_ended_pong',
+            'action': 'game_ended_pong_pong',
             'winner': event['winner']
         }))
 
-    async def player_scores_pong(self, event):
+    async def player_scores(self, event):
         await self.send(text_data=json.dumps({
             'action': 'update_player_scores_pong',
             'player1': event['player1'],
             'player2': event['player2']
         }))
 
-    async def ball_position_pong(self, event):
+    async def ball_position(self, event):
         await self.send(text_data=json.dumps({
             'action': 'update_ball_position_pong',
             'ball_x': event['ball_x'],
