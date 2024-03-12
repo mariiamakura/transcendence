@@ -178,7 +178,8 @@ function numPlayers() {
 			numberPlayers = 4;
 			document.getElementById('choice').remove();
 		});
-		if (tournament) {
+		if (tournament) 
+        {
 			buttonEight.addEventListener("click", function() {
 				resolve(true);
 				numberPlayers = 8;
@@ -283,26 +284,23 @@ async function showGameMemory() {
 	{
 		//remote Game
 		numberPlayers = 2;
-		// await scoreChoice();
 		if (await decideHost())
 		{
-			namePlayer[0] = "{{  user.username  }}";
+			namePlayer[0] = "{{user.username}}";
 			await choiceSet();
 			await choiceCards();
-			//host
 			remoteHost();
 		}
 		else
 		{
-			//client
-            namePlayer[1] = "{{  user.username  }}";
+            namePlayer[1] = "{{user.username}}";
 			remoteClient();
 		}
 	}
 	else
 	{
 		//local Game
-		namePlayer[0] = "{{  user.username  }}";
+		namePlayer[0] = "{{user.username}}";
 		namePlayer[1] = "Guest Player";
 		if (namePlayer.length === numberPlayers && scoreToDo !== 0)
 		{
