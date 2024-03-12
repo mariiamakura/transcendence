@@ -305,6 +305,9 @@ async function remoteHost() {
                 const data = JSON.parse(event.data);
                 if (data.action === 'player_joined') {
                     console.log(`${data.guest_name} has joined the game.`);
+                    if (data.guest_name) {
+                        namePlayer[1] = data.guest_name;
+                    }
                 }
                 // Handle countdown message
                 if (data.action === 'countdown') {
@@ -379,6 +382,7 @@ async function remoteClient() {
             }
         } else if (data.action === 'joined_room') {
             console.log('Joined room:', data.room_id);
+            
         }
         
     };
@@ -391,6 +395,7 @@ async function remoteClient() {
         roomSocket.onopen = function() {
             // Notify the server that the client has joined the room
             roomSocket.send(JSON.stringify({ action: 'join_room', room_id: roomId , guest_name: "{{ user.username }}"}));
+            namePlayer[0] =  roomId.replace('_Game', '');
         };
 
         roomSocket.onmessage = function(event) {
@@ -431,6 +436,9 @@ async function remoteClient() {
                } else if (data.key === 'stop') {
                    player1.velocityY = 0;
                }
+            }
+            if (data.action === 'get_host_player') {
+                namePlayer[0] = data.name;
             }
         };
     }
@@ -552,11 +560,16 @@ function initVariables() {
 function launchGamePong() {
     initVariables();
     var mainElement = document.getElementById('content');
-    if (!namePlayer[0] || !namePlayer[1])
-    {
+    if (isHost) 
+        namePlayer[0] = "{{ user.username }}";
+    else
+        namePlayer[1] = "{{ user.username }}";
+
+    if (!namePlayer[0]  )
         namePlayer[0] = "Player1";
+    if (!namePlayer[1]) 
         namePlayer[1] = "Player2";
-    }
+
     let htmlContent = '<div id="board-container" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden">' +
     '<p class="name_player">' + namePlayer[0] + '</p>' +
     '<canvas id="board" width="' + boardWidth + '" height="' + boardHeight + '"></canvas>' +
@@ -574,8 +587,10 @@ function launchGamePong() {
     player1.y = board.height / 2 - playerHeight / 2;
     player2.x = board.width - playerWidth - 10;
     player2.y = board.height / 2 - playerHeight / 2;
-    player1.name = namePlayer[0];
-    player2.name = namePlayer[1];
+    if (!player1.name)
+        player1.name = namePlayer[0];
+    if (!player2.name)
+        player2.name = namePlayer[1];
     //set ball
     ball.x = board.width / 2;
     ball.y = board.height / 2;

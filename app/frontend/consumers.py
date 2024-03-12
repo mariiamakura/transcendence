@@ -118,6 +118,21 @@ class GameConsumer(AsyncWebsocketConsumer):
                 }
             )
 
+        elif action == 'get_host_player':
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'get_host_player',
+                    'key': data['name']
+                }
+            )
+
+    async def get_host_player(self, event):
+        await self.send(text_data=json.dumps({
+            'action': 'get_host_player',
+            'key': event['key']
+        }))
+
     async def client_key_event(self, event):
         await self.send(text_data=json.dumps({
             'action': 'client_key_event',
