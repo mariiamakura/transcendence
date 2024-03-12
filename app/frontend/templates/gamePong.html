@@ -304,13 +304,19 @@ async function remoteHost() {
                 // Handle messages from the server, such as a player joining the room
                 const data = JSON.parse(event.data);
                 if (data.action === 'player_joined') {
-                    console.log(`${data.guest_name} has joined the game.`);
+                        console.log(`${data.guest_name} has joined the game.`);
+                        // for (let i = 5; i > 0; i--) {
+						// setTimeout(() => {
+						// 	gameRoomSocket.send(JSON.stringify({ action: 'countdown', message: i }));
+						// }, 1000);
+					// }
                     if (data.guest_name) {
                         namePlayer[1] = data.guest_name;
                     }
                 }
                 // Handle countdown message
-                if (data.action === 'countdown') {
+                if (data.action === 'game_countdown') {
+					console.log("game_countdown " + data.message);
                     updateCountdownDisplay(data.message);
                 } else if (data.action === 'start_game') {
                     let countdownElement = document.getElementById('countdown');
@@ -400,7 +406,8 @@ async function remoteClient() {
 
         roomSocket.onmessage = function(event) {
             const data = JSON.parse(event.data);
-            if (data.action === 'countdown') {
+            if (data.action === 'game_countdown') {
+                console.log("game_countdown " + data.message);
                 updateCountdownDisplay(data.message);
             } else if (data.action === 'start_game') {
                 let countdownElement = document.getElementById('countdown');
@@ -440,6 +447,10 @@ async function remoteClient() {
             if (data.action === 'get_host_player') {
                 namePlayer[0] = data.name;
             }
+			if (data.type === 'player_left') {
+				console.log('Player left the game');
+			}
+ 
         };
     }
 }

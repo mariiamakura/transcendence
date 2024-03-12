@@ -1,6 +1,8 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 import asyncio
+import time
+from asgiref.sync import async_to_sync
 
 
 class GameRoomManager:
@@ -39,6 +41,13 @@ class GameConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         # Leave room group
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'player_left',
+                'channel_name': self.channel_name
+            }
+        )
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
@@ -73,6 +82,25 @@ class GameConsumer(AsyncWebsocketConsumer):
                 await self.send(text_data=json.dumps({'action': 'joined_room', 'room_id': room_id}))
             else:
                 await self.send(text_data=json.dumps({'action': 'error', 'message': 'Room not found or full'}))
+            # for i in range(5, 0, -1):
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'game_countdown',
+                    'message': 'message'
+                }
+            )
+            # await asyncio.sleep(1)
+            # time.sleep(1)
+
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'start_game',
+                    'message': 'start'
+                }
+            )
+
         elif action == 'update_ball_position':
             await self.channel_layer.group_send(
                 self.room_group_name,
@@ -126,6 +154,20 @@ class GameConsumer(AsyncWebsocketConsumer):
                     'key': data['name']
                 }
             )
+    #     elif action == 'countdown':
+    #         await self.channel_layer.group_send(
+    #             self.room_group_name,
+    #             {
+    #                 'type': 'countdown',
+    #                 'message': data['message']
+    #             }
+    #         )
+
+    # async def countdown(self, event):
+    #     await self.send(text_data=json.dumps({
+    #         'action': 'countdown',
+    #         'message': event['message']
+    #     }))
 
     async def get_host_player(self, event):
         await self.send(text_data=json.dumps({
@@ -173,30 +215,33 @@ class GameConsumer(AsyncWebsocketConsumer):
             'message': f"{event['guest_name']} has joined the game."
         }))
 
-        if GameRoomManager.rooms[event['room_id']]['guest'] is not None:
-            for i in range(5, 0, -1):
-                await self.channel_layer.group_send(
-                    self.room_group_name,
-                    {
-                        'type': 'game_countdown',
-                        'message': str(i)
-                    }
-                )
-                await asyncio.sleep(1)
+        # if GameRoomManager.rooms[event['room_id']]['guest'] is not None:
+        #     for i in range(5, 0, -1):
+        #         await self.channel_layer.group_send(
+        #             self.room_group_name,
+        #             {
+        #                 'type': 'game_countdown',
+        #                 'message': str(i)
+        #             }
+        #         )
+        #         # await asyncio.sleep(1)
+        #         time.sleep(1)
 
-            await self.channel_layer.group_send(
-                self.room_group_name,
-                {
-                    'type': 'start_game',
-                    'message': 'start'
-                }
-            )
+        #     await self.channel_layer.group_send(
+        #         self.room_group_name,
+        #         {
+        #             'type': 'start_game',
+        #             'message': 'start'
+        #         }
+        #     )
 
     async def game_countdown(self, event):
-        await self.send(text_data=json.dumps({
-            'action': 'countdown',
-            'message': event['message']
-        }))
+        for i in range(5, 0, -1):
+            await self.send(text_data=json.dumps({
+                'action': 'game_countdown',
+                'message': str(i)
+            }))
+            await asyncio.sleep(1)
 
     async def start_game(self, event):
         await self.send(text_data=json.dumps({

@@ -7,4 +7,5 @@ channels-redis==4.2.0
 # aioredis==2.0.1
 # async-timeout>=4.0.2
 asyncio_redis==0.16.0
+asgiref==3.7.0
 
