@@ -1,5 +1,5 @@
 import json
-from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer
+from channels.generic.websocket import AsyncWebsocketConsumer
 import asyncio
 
 
@@ -62,7 +62,6 @@ class GameConsumer(AsyncWebsocketConsumer):
             guest_name = data.get('guest_name')
             joined = GameRoomManager.join_room(room_id, guest_name)
             if joined:
-                # Notify all subscribers of the room, including the host, that a new player has joined.
                 await self.channel_layer.group_send(
                     self.room_group_name,
                     {
@@ -92,6 +91,65 @@ class GameConsumer(AsyncWebsocketConsumer):
                     'player2': data['player2']
                 }
             )
+        elif action == 'game_ended':
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'game_ended',
+                    'winner': data['winner']
+                }
+            )
+
+        elif action == 'host_key_event':
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'host_key_event',
+                    'key': data['key']
+                }
+            )
+
+        elif action == 'client_key_event':
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'client_key_event',
+                    'key': data['key']
+                }
+            )
+
+        elif action == 'get_host_player':
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'get_host_player',
+                    'key': data['name']
+                }
+            )
+
+    async def get_host_player(self, event):
+        await self.send(text_data=json.dumps({
+            'action': 'get_host_player',
+            'key': event['key']
+        }))
+
+    async def client_key_event(self, event):
+        await self.send(text_data=json.dumps({
+            'action': 'client_key_event',
+            'key': event['key']
+        }))
+
+    async def host_key_event(self, event):
+        await self.send(text_data=json.dumps({
+            'action': 'host_key_event',
+            'key': event['key']
+        }))
+
+    async def game_ended(self, event):
+        await self.send(text_data=json.dumps({
+            'action': 'game_ended',
+            'winner': event['winner']
+        }))
 
     async def player_scores(self, event):
         await self.send(text_data=json.dumps({
@@ -108,7 +166,6 @@ class GameConsumer(AsyncWebsocketConsumer):
         }))
 
     async def player_joined(self, event):
-        # Broadcast the join message to all users in the room
         await self.send(text_data=json.dumps({
             'action': 'player_joined',
             'room_id': event['room_id'],
@@ -116,9 +173,7 @@ class GameConsumer(AsyncWebsocketConsumer):
             'message': f"{event['guest_name']} has joined the game."
         }))
 
-        # Check if both players are present, then start countdown
         if GameRoomManager.rooms[event['room_id']]['guest'] is not None:
-            # Start a 5-second countdown
             for i in range(5, 0, -1):
                 await self.channel_layer.group_send(
                     self.room_group_name,
@@ -129,7 +184,6 @@ class GameConsumer(AsyncWebsocketConsumer):
                 )
                 await asyncio.sleep(1)
 
-            # Notify players to start the game
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
