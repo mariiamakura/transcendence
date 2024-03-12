@@ -3,21 +3,22 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 import asyncio
 
 
-class GameRoomManager:
+class GameRoomManagerPong:
+
     rooms = {}  # Stores room_name: host_name
 
     @classmethod
-    def create_room(cls, host_name):
+    def create_room_pong(cls, host_name):
         room_id = f"{host_name}_Game"
         cls.rooms[room_id] = {"host": host_name, "guest": None}
         return room_id
 
     @classmethod
-    def list_rooms(cls):
+    def list_rooms_pong(cls):
         return [room_id for room_id, details in cls.rooms.items() if details["guest"] is None]
 
     @classmethod
-    def join_room(cls, room_id, guest_name):
+    def join_room_pong(cls, room_id, guest_name):
         if room_id in cls.rooms and cls.rooms[room_id]["guest"] is None:
             cls.rooms[room_id]["guest"] = guest_name
             return True
@@ -48,19 +49,19 @@ class GameConsumer(AsyncWebsocketConsumer):
         data = json.loads(text_data)
         action = data.get('action')
 
-        if action == 'create_room':
+        if action == 'create_room_pong':
             host_name = data.get('host_name')
-            room_id = GameRoomManager.create_room(host_name)
-            await self.send(text_data=json.dumps({'action': 'room_created', 'room_id': room_id}))
+            room_id = GameRoomManagerPong.create_room_pong(host_name)
+            await self.send(text_data=json.dumps({'action': 'room_created_pong', 'room_id': room_id}))
 
-        elif action == 'list_rooms':
-            rooms = GameRoomManager.list_rooms()
-            await self.send(text_data=json.dumps({'action': 'list_rooms', 'rooms': rooms}))
+        elif action == 'list_rooms_pong':
+            rooms = GameRoomManagerPong.list_rooms_pong()
+            await self.send(text_data=json.dumps({'action': 'list_rooms_pong', 'rooms': rooms}))
 
-        elif action == 'join_room':
+        elif action == 'join_room_pong':
             room_id = data.get('room_id')
             guest_name = data.get('guest_name')
-            joined = GameRoomManager.join_room(room_id, guest_name)
+            joined = GameRoomManagerPong.join_room_pong(room_id, guest_name)
             if joined:
                 await self.channel_layer.group_send(
                     self.room_group_name,
@@ -70,32 +71,32 @@ class GameConsumer(AsyncWebsocketConsumer):
                         'guest_name': guest_name,
                     }
                 )
-                await self.send(text_data=json.dumps({'action': 'joined_room', 'room_id': room_id}))
+                await self.send(text_data=json.dumps({'action': 'joined_room_pong', 'room_id': room_id}))
             else:
                 await self.send(text_data=json.dumps({'action': 'error', 'message': 'Room not found or full'}))
-        elif action == 'update_ball_position':
+        elif action == 'update_ball_position_pong':
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
-                    'type': 'ball_position',
+                    'type': 'ball_position_pong',
                     'ball_x': data['ball_x'],
                     'ball_y': data['ball_y']
                 }
             )
-        elif action == 'update_player_scores':
+        elif action == 'update_player_scores_pong':
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
-                    'type': 'player_scores',
+                    'type': 'player_scores_pong',
                     'player1': data['player1'],
                     'player2': data['player2']
                 }
             )
-        elif action == 'game_ended':
+        elif action == 'game_ended_pong':
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
-                    'type': 'game_ended',
+                    'type': 'game_ended_pong',
                     'winner': data['winner']
                 }
             )
@@ -145,40 +146,40 @@ class GameConsumer(AsyncWebsocketConsumer):
             'key': event['key']
         }))
 
-    async def game_ended(self, event):
+    async def game_ended_pong(self, event):
         await self.send(text_data=json.dumps({
-            'action': 'game_ended',
+            'action': 'game_ended_pong',
             'winner': event['winner']
         }))
 
-    async def player_scores(self, event):
+    async def player_scores_pong(self, event):
         await self.send(text_data=json.dumps({
-            'action': 'update_player_scores',
+            'action': 'update_player_scores_pong',
             'player1': event['player1'],
             'player2': event['player2']
         }))
 
-    async def ball_position(self, event):
+    async def ball_position_pong(self, event):
         await self.send(text_data=json.dumps({
-            'action': 'update_ball_position',
+            'action': 'update_ball_position_pong',
             'ball_x': event['ball_x'],
             'ball_y': event['ball_y']
         }))
 
-    async def player_joined(self, event):
+    async def player_joined_pong(self, event):
         await self.send(text_data=json.dumps({
-            'action': 'player_joined',
+            'action': 'player_joined_pong',
             'room_id': event['room_id'],
             'guest_name': event['guest_name'],
             'message': f"{event['guest_name']} has joined the game."
         }))
 
-        if GameRoomManager.rooms[event['room_id']]['guest'] is not None:
+        if GameRoomManagerPong.rooms[event['room_id']]['guest'] is not None:
             for i in range(5, 0, -1):
                 await self.channel_layer.group_send(
                     self.room_group_name,
                     {
-                        'type': 'game_countdown',
+                        'type': 'game_countdown_pong',
                         'message': str(i)
                     }
                 )
@@ -187,19 +188,19 @@ class GameConsumer(AsyncWebsocketConsumer):
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
-                    'type': 'start_game',
+                    'type': 'start_game_pong',
                     'message': 'start'
                 }
             )
 
-    async def game_countdown(self, event):
+    async def game_countdown_pong(self, event):
         await self.send(text_data=json.dumps({
-            'action': 'countdown',
+            'action': 'countdown_pong',
             'message': event['message']
         }))
 
-    async def start_game(self, event):
+    async def start_game_pong(self, event):
         await self.send(text_data=json.dumps({
-            'action': 'start_game',
+            'action': 'start_game_pong',
             'message': 'Game Starting!'
         }))

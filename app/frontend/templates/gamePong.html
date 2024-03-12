@@ -281,12 +281,12 @@ async function remoteHost() {
     let socket = new WebSocket(`wss://${window.location.host}/wss/socket-server/lobby/`); 
 
     socket.onopen = function(event) {
-        socket.send(JSON.stringify({ action: 'create_room', host_name: hostName, room_name: sanitizedRoomName }));
+        socket.send(JSON.stringify({ action: 'create_room_pong', host_name: hostName, room_name: sanitizedRoomName }));
     };
     
     socket.onmessage = function(event) {
         const data = JSON.parse(event.data);
-        if (data.action === 'room_created') {
+        if (data.action === 'room_created_pong') {
             console.log('Room created:', data.room_id);
             socket.close();
             gameRoomSocket = new WebSocket(`wss://${window.location.host}/wss/socket-server/${sanitizedRoomName}/`);
@@ -298,23 +298,23 @@ async function remoteHost() {
             gameRoomSocket.onmessage = function(event) {
                 // Handle messages from the server, such as a player joining the room
                 const data = JSON.parse(event.data);
-                if (data.action === 'player_joined') {
+                if (data.action === 'player_joined_pong') {
                     console.log(`${data.guest_name} has joined the game.`);
                     if (data.guest_name) {
                         namePlayer[1] = data.guest_name;
                     }
                 }
                 // Handle countdown message
-                if (data.action === 'countdown') {
+                if (data.action === 'countdown_pong') {
                     updateCountdownDisplay(data.message);
-                } else if (data.action === 'start_game') {
+                } else if (data.action === 'start_game_pong') {
                     let countdownElement = document.getElementById('countdown');
                     if (countdownElement) {
                         countdownElement.remove(); // Remove the countdown display
                     }
-                    startTheGame(); // Function to initialize or start the game
+                    startTheGamePong(); // Function to initialize or start the game
                 }
-                if (data.action === 'update_player_position') {
+                if (data.action === 'update_player_position_pong') {
 
                     if (data.player === 'player2') {
                         player2.y = data.position_y;
@@ -340,8 +340,6 @@ async function remoteHost() {
     }
 }
 
-
-
 // clientsocket
 let roomSocket = null;
 
@@ -350,12 +348,12 @@ async function remoteClient() {
 
     socket.onopen = function(event) {
         // Request the list of active game rooms once the WebSocket connection is open
-        socket.send(JSON.stringify({ action: 'list_rooms' }));
+        socket.send(JSON.stringify({ action: 'list_rooms_pong' }));
     };
 
     socket.onmessage = function(event) {
         const data = JSON.parse(event.data);
-        if (data.action === 'list_rooms') {
+        if (data.action === 'list_rooms_pong') {
             const games = data.rooms; // Array of active game rooms
             var gameList = document.getElementById('content');
             gameList.innerHTML = ''; // Clear previous content
@@ -375,7 +373,7 @@ async function remoteClient() {
                 // Display message if no active games are available
                 gameList.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em;">No active games</p>';
             }
-        } else if (data.action === 'joined_room') {
+        } else if (data.action === 'joined_room_pong') {
             console.log('Joined room:', data.room_id);
             
         }
@@ -389,36 +387,39 @@ async function remoteClient() {
         
         roomSocket.onopen = function() {
             // Notify the server that the client has joined the room
-            roomSocket.send(JSON.stringify({ action: 'join_room', room_id: roomId , guest_name: "{{ user.username }}"}));
+            console.log("Game room connection established for client.");
+            roomSocket.send(JSON.stringify({ action: 'join_room_pong', room_id: roomId , guest_name: "{{ user.username }}"}));
             namePlayer[0] =  roomId.replace('_Game', '');
         };
-
+        console.log("next step");
         roomSocket.onmessage = function(event) {
             const data = JSON.parse(event.data);
             if (data.action === 'countdown') {
+                console.log('Countdown:');
                 updateCountdownDisplay(data.message);
-            } else if (data.action === 'start_game') {
+            } else if (data.action === 'start_game_pong') {
+                console.log('Game is starting...');
                 let countdownElement = document.getElementById('countdown');
                 if (countdownElement) {
                     countdownElement.remove();
                 }
-                startTheGame(); 
+                startTheGamePong(); 
             }
-            if (data.action === 'update_ball_position') {
+            if (data.action === 'update_ball_position_pong') {
                 newBall.x = data.ball_x;
                 newBall.y = data.ball_y;
                 console.log("ball position received");
             }
-            if (data.action === 'update_player_scores') {
+            if (data.action === 'update_player_scores_pong') {
                 newPlayer1Score = data.player1;
                 newPlayer2Score = data.player2;
                 console.log("player scores received");
             }
-            if (data.action === 'game_ended') {
+            if (data.action === 'game_ended_pong') {
                 endGame(data.winner);
                 console.log("game ended");
             }
-            if (data.action === 'update_player_position') {
+            if (data.action === 'update_player_position_pong') {
                 if (data.player === 'player1') {
                     player1.y = data.position_y;
                 } 
@@ -439,14 +440,14 @@ async function remoteClient() {
     }
 }
 
-
-function startTheGame() {
+function startTheGamePong() {
     console.log('Game is starting...');
     launchGamePong(); 
 }
 
 // Function to update or create the countdown display
 function updateCountdownDisplay(message) {
+    console.log('Countdown:', message);
     let countdownElement = document.getElementById('countdown');
     if (!countdownElement) {
         countdownElement = document.getElementById('content');
