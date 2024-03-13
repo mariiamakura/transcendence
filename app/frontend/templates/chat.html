@@ -1,0 +1,80 @@
+{% extends 'index.html' %}
+{% block content %}
+{% if request.user.is_authenticated %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="page-header">PongChat, the best chat in the world</h1>
+            <hr>
+            
+        </div>
+    </div>
+</div>
+
+<form id="form">
+    <input type="text" name="message" />
+   
+</form>
+
+<div id="messages">
+</div>
+<script type="text/javascript">
+    let url = `wss://${window.location.host}/wss/socket-server/`
+
+    const chatSocket = new WebSocket(url)
+
+    chatSocket.onmessage = function(e){
+        let data = JSON.parse(e.data)
+        console.log('Data:', data)
+
+        if(data.type === 'pong_message'){
+            let messages = document.getElementById('messages')
+
+            messages.insertAdjacentHTML('beforeend', `<div>
+                                    <p>${data.message}</p>
+                                </div>`)
+        } 
+    }
+
+    let form = document.getElementById('form')
+    form.addEventListener('submit', (e)=> {
+        e.preventDefault()
+        let message = e.target.message.value 
+        chatSocket.send(JSON.stringify({
+            'message':message
+        }))
+        form.reset()
+    }) 
+
+</script>
+  {% else %}
+  <li class="nav-item">
+      <a class="nav-link" href="signIn">Sign In</a>
+  </li>
+  <li class="nav-item">
+      <a class="nav-link" href="signUp">Sign Up</a>
+  </li>
+  {% endif %}
+{% endblock %}
+
+          {% comment %} <div class="chat">
+                <div class="chat-history">
+                    <ul>
+                        {% for message in messages %}
+                        <li class="clearfix">
+                            <div class="message-data align-right">
+                                <span class="message-data-time" >{{ message.date }}</span> &nbsp; &nbsp;
+                                <span class="message-data-name" >{{ message.user }}</span>
+                            </div>
+                            <div class="message other-message float-right">
+                                {{ message.message }}
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="chat-message clearfix">
+                    <textarea name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="3"></textarea>
+                    <button id="send" class="btn btn-primary">Send</button>
+                </div>
+            </div> {% endcomment %}
