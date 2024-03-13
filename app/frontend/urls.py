@@ -12,7 +12,4 @@ urlpatterns = [
     path('showProfile', views.showProfile, name='ShowProfile'),
     path('editProfile', views.editProfile, name='editProfile'),
     path('showHome', views.showHome, name='ShowHome'),
-
 ]
-
-
