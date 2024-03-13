@@ -281,7 +281,10 @@ let isHost = false;
 let gameRoomSocket = null;
 
 async function remoteHost() {
-    let hostName = "{{ user.username }}"; 
+	var mainElement = document.getElementById('content');
+	// mainElement.innerHTML +=  '<p style="text-align: center;  font-size:2em;>Waiting for Players...</p>';
+	mainElement.innerHTML += '<p class="text-center" style="font-size: 1.5em;">Waiting for Players...</p>';
+	let hostName = "{{ user.username }}"; 
     let sanitizedRoomName = encodeURIComponent(`${hostName}_Game`).replace(/'/g, ""); // Sanitize and remove special characters
     let socket = new WebSocket(`wss://${window.location.host}/wss/socket-server/lobby/`); 
 
@@ -467,7 +470,10 @@ function updateCountdownDisplay(message) {
     if (!countdownElement) {
         countdownElement = document.getElementById('content');
         countdownElement.innerHTML = '';
-        countdownElement = document.createElement('div');
+		countdownElement = document.createElement('div');
+		countdownElement.id = 'countdown';
+		countdownElement.classList.add('text-center', 'display-4', 'mb-4');
+		document.getElementById('content').appendChild(countdownElement);
         countdownElement.id = 'countdown';
         document.getElementById('content').appendChild(countdownElement);
     }
@@ -853,11 +859,11 @@ function endGame(winner) {
     var mainElement = document.getElementById('content');
     mainElement.innerHTML = ''; // Remove all inner HTML content  
     mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
-    '<p style="text-align: center; font-size:4em;">Game Over ! </p>' +
-    '<iframe src="https://giphy.com/embed/OScDfyJIQaXe" width="480" height="480" frameborder="0" class="giphy-embed" allowfullscreen></iframe>' +
-    '<p><a href="https://giphy.com/gifs/rabbids-dance-cute-OScDfyJIQaXe"></a></p>' +
-    '<p style="text-align: center;">' + winner + ' won ! <br>' + //<br> If you want to play again with the same settings, press the button below.</p>' +
-    '</div>';
+		'<p style="text-align: center; font-size:4em;">Game Over ! </p>' +
+		'<p style="text-align: center; font-size:2em;">' + winner + ' won ! <br>' + //<br> If you want to play again with the same settings, press the button below.</p>' +
+		'<iframe src="https://giphy.com/embed/OScDfyJIQaXe" width="480" height="480" frameborder="0" class="giphy-embed" allowfullscreen></iframe>' +
+		'<p><a href="https://giphy.com/gifs/rabbids-dance-cute-OScDfyJIQaXe"></a></p>' +
+		'</div>';
     {% comment %} var startAgain = document.createElement("button");
     startAgain.textContent = "Start again";
     startAgain.classList.add("styled-button")
