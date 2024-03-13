@@ -1,0 +1,26 @@
+global:
+  resolve_timeout: 1m
+
+route:
+  receiver: 'slack-notifications'
+  repeat_interval: 1h
+
+receivers:
+- name: 'slack-notifications'
+  slack_configs: 
+  - api_url: https://hooks.slack.com/services/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
+    channel: '#alerts'
+    send_resolved: true
+    text: |
+      {{- if eq .Status "firing" -}}
+      *Alert:* {{ .CommonAnnotations.summary }}
+      *Description:* {{ .CommonAnnotations.description }}
+      *Details:*
+      {{ range .Alerts }}
+        - *{{ .Labels.severity }}* alert for {{ .Labels.job }} on {{ .Labels.instance }}: {{ .Annotations.message }}
+      {{ end }}
+      {{- else -}}
+      *Resolved:* {{ .CommonAnnotations.summary }}
+      *Description:* {{ .CommonAnnotations.description }}
+      {{- end -}}
+
