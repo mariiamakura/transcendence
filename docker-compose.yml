@@ -126,17 +126,17 @@ volumes:
     # driver_opts:
     #   o: bind
     #   type: none
-    #   device: /Users/mishamakura/Documents/Programming/42Berin/transcendence/devops_data/prometheus #change to local env
+    #   device: /home/${USER}/tasks/my_github/transcendence/devops_data/prometheus #change to local env
   grafana-data:
     # driver_opts:
     #   o: bind
     #   type: none
-    #   device: /Users/mishamakura/Documents/Programming/42Berin/transcendence/devops_data/grafana #change to local env
+    #   device: /home/${USER}/tasks/my_github/transcendence/devops_data/grafana #change to local env
   alertmanager-data:
     # driver_opts:
     #   o: bind
     #   type: none
-    #   device: /Users/mishamakura/Documents/Programming/42Berin/transcendence/devops_data/alertmanager #change to local env
+    #   device: /home/${USER}/tasks/my_github/transcendence/alertmanager #change to local env
 
 
 networks:
