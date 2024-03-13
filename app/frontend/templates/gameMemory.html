@@ -379,8 +379,8 @@ async function remoteHost() {
 }
 
 function updateClientSettings(receivedSettings) {
-    gameSettings.numberOfCards = receivedSettings.numberOfCards;
-    gameSettings.chosenSet = receivedSettings.chosenSet;
+   // gameSettings.numberOfCards = receivedSettings.numberOfCards;
+    //gameSettings.chosenSet = receivedSettings.chosenSet;
     console.log("settings updated");
 }
 
@@ -408,7 +408,7 @@ async function remoteClient() {
                     button.textContent = game;
                     button.classList.add("styled-button"); // Assuming you have styling for buttons
                     button.addEventListener("click", function() {
-                        joinGameRoom(game); // Function to join a game room
+                        joinGameRoomMemory(game); // Function to join a game room
                     });
                     gameList.appendChild(button);
                 });
@@ -423,7 +423,7 @@ async function remoteClient() {
         
     };
 
-    function joinGameRoom(roomId) {
+    function joinGameRoomMemory(roomId) {
         // Close the current lobby connection
         socket.close();
         
@@ -432,9 +432,11 @@ async function remoteClient() {
         
         roomSocket.onopen = function() {
             // Notify the server that the client has joined the room
+            console.log("Game room connection established for client.");
             roomSocket.send(JSON.stringify({ action: 'join_room_memory', room_id: roomId , guest_name: "{{ user.username }}"}));
+            namePlayer[0] =  roomId.replace('_Game', '');
         };
-
+        console.log("next step");
         roomSocket.onmessage = function(event) {
             // Handle messages for game state updates
             const data = JSON.parse(event.data);
@@ -442,7 +444,7 @@ async function remoteClient() {
             // Implement game state update logic here based on the messages received
             if (data.action === 'countdown_memory') {
                 console.log('Countdown');
-                updateCountdownDisplay(data.message);
+                updateCountdownDisplayMemory(data.message);
             } else if (data.action === 'start_game_memory') {
                 // Clear the countdown and start the game
                 console.log("start game guest side")
@@ -450,14 +452,14 @@ async function remoteClient() {
                 if (countdownElement) {
                     countdownElement.remove(); // Remove the countdown display
                 }
-                startTheGameMemory(); // Function to initialize or start the game
+                // startTheGameMemory(); // Function to initialize or start the game
             }
-            // if (data.action === 'update_ball_position_pong') {
-            //     // Implement game state update logic here based on the messages received
-            //     newBall.x = data.ball_x;
-            //     newBall.y = data.ball_y;
-            //     console.log("ball position received");
-            // }
+            if (data.action === 'card_info') {
+                // Implement game state update logic here based on the messages received
+                var cards_info = data.cards;
+                console.log("cards received");
+                launchGameMemory(cards);
+            }
             // if (data.action === 'update_player_scores_pong') {
             //     // Implement game state update logic here based on the messages received
             //     newPlayer1Score = data.player1;
@@ -467,15 +469,16 @@ async function remoteClient() {
         };
     }
 }
+let cardInfo = [];
 
 function startTheGameMemory() {
     // Function to initialize or start the game
     console.log('Game is starting...');
-    launchGameMemory(); // Or any function you use to start the game
+    launchGameMemory(cardInfo); // Or any function you use to start the game
 }
 
 // Function to update or create the countdown display
-function updateCountdownDisplay(message) {
+function updateCountdownDisplayMemory(message) {
     let countdownElement = document.getElementById('countdown');
     if (!countdownElement) {
         countdownElement = document.getElementById('content');
@@ -489,9 +492,7 @@ function updateCountdownDisplay(message) {
     countdownElement.textContent = `Game starts in: ${message}`;
 }
 
-// BELOW IS THE GAME DYNAMIC 
-
-
+// BELOW IS THE GAME'S DYNAMICS
 
 let cards = {
     id: null,
@@ -523,13 +524,13 @@ let PlayerToPlay;
 let firstSet;
 let secondSet;
 
-function launchGameMemory() {
+function launchGameMemory(cards_info) {
+    console.log("launch game");
     var mainElement = document.getElementById('content');
-    if (!namePlayer[0] || !namePlayer[1])
-    {
-        namePlayer[0] = "Player1";
-        namePlayer[1] = "Player2";
-    }
+    if (isHost) 
+        namePlayer[0] = "{{ user.username }}";
+    else
+        namePlayer[1] = "{{ user.username }}";
     PlayerToPlay = namePlayer[0];
     let sets = [natureFirstSet12, natureSecondSet12, natureFirstSet16, natureSecondSet16, natureFirstSet24, natureSecondSet24, natureFirstSet32, natureSecondSet32, 
                         robotFirstSet12, robotSecondSet12, robotFirstSet16, robotSecondSet16, robotFirstSet24, robotSecondSet24, robotFirstSet32, robotSecondSet32]
@@ -555,31 +556,52 @@ function launchGameMemory() {
             secondSet = sets[7];
             break;
     }
-
     let widthBoard = (cards.width + cards.margin * 2 + cards.border * 2) * (Math.ceil(gameSettings.numberOfCards / 4));
     mainElement.innerHTML = '<div id="whole">' + 
                                 '<div id="Player1"><p id = "turn1"></p><div id = "progress-bar-container1"></div></div>' +
                                 '<div id="memory-game" style = "width:' + widthBoard + 'px;"></div>' + 
                                 '<div id="Player2"><p id = "turn2"></p><div id = "progress-bar-container2"></div></div>' +
                             '</div>';
-    for (let i = 1; i <= gameSettings.numberOfCards; i++) {
-        var card = document.createElement("div");
-        card.classList.add("card");
-        card.id = "card" + i;
-        // Set the background image based on the condition
-        if (i % 2 === 0)
-        {
-            randomSet(firstSet, card);
-            card.style.setProperty("--bg-image", card.ref);
+    if (isHost)
+    {
+        console.log("get the cards for the host")
+        for (let i = 1; i <= gameSettings.numberOfCards; i++) {
+            console.log("creating card " + i);
+            var card = document.createElement("div");
+            card.classList.add("card");
+            card.id = "card" + i;
+            // Set the background image based on the condition
+            if (i % 2 === 0)
+            {
+                randomSet(firstSet, card);
+                card.style.setProperty("--bg-image", card.ref);
+            }
+            else
+            {
+                randomSet(secondSet, card);
+                card.style.setProperty("--bg-image", card.ref);
+            }        
+            document.getElementById('memory-game').appendChild(card);
+            console.log("card " + i + " created");
+            cardInfo.push(card);
         }
-        else
-        {
-            randomSet(secondSet, card);
-            card.style.setProperty("--bg-image", card.ref);
-        }        
-        document.getElementById('memory-game').appendChild(card);
+        console.log("sending cards info to the client")
+        socket.send(JSON.stringify({ action: 'card_info', cards: cardInfo }));
+        playTime();
     }
-    playTime();
+    else
+    {
+        // Add cards to the memory game
+        console.log("Client side : receiving cards information from the host");
+        cards_info.forEach((card, index) => {
+        var cardElement = document.createElement("div");
+        cardElement.classList.add("card");
+        cardElement.id = "card" + (index + 1);
+        cardElement.style.setProperty("--bg-image", cards_info.ref);
+        document.getElementById('memory-game').appendChild(cardElement);
+        });
+        playTime();
+    }
 }
 
 let scorePlayer1 = 0;
@@ -635,6 +657,7 @@ function updatePlayerScore(playerNumber) {
 
 function playTime()
 {
+    console.log("play time");
     PlayerToPlay = namePlayer[0];
     var turn1 = document.getElementById('turn1');
     var turn2 = document.getElementById('turn2');

@@ -461,9 +461,6 @@ function updateCountdownDisplay(message) {
 }
 
 
-
-
-
 // BELOW IS THE GAME'S DYNAMICS
 
 
@@ -723,9 +720,6 @@ function detectCollision(a, b) {
     return (a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y);
 }
 
-
-
-
 function movePlayer() {
     let newVelocity = 5;
     let positionUpdated = false;
@@ -754,7 +748,6 @@ function movePlayer() {
 
        
     }
-
     // Player 2 controls (for client)
     if (!isHost) {
         if (keysPressed["KeyW"] || keysPressed["ArrowUp"]) {
