@@ -48,7 +48,8 @@ services:
 
   nginx:
     container_name: nginx
-    build: ./nginx
+    build: 
+      context: ./nginx
     ports:
       - 9999:80
     env_file:

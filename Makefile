@@ -14,6 +14,7 @@ watch:
 prepare:
 	chmod +x ./prepare_project.sh
 	./prepare_project.sh
+	cp -r ${HOME}/certs ./nginx/
 # prepare:
 # 	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 # 	test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"

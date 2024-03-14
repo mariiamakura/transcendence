@@ -1,29 +1,27 @@
 #!/bin/bash
 
-if ! command -v brew &>/dev/null; then
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    if test -d ~/.linuxbrew; then
-        eval "$(~/.linuxbrew/bin/brew shellenv)"
-    fi
-    if test -d /home/linuxbrew/.linuxbrew; then
-        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-    fi
-    echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.zshrc
-else
-    echo "Homebrew is already installed."
-fi
+cd /home/${USER}/sgoinfre #change for your machine!!!
 
-if ! brew list mkcert &>/dev/null; then
-    brew install mkcert
-else
-    echo "mkcert is already installed."
-fi
+git clone https://github.com/Homebrew/brew homebrew
 
-if ! brew list nss &>/dev/null; then
-    brew install nss
-else
-    echo "nss is already installed."
-fi
+eval "$(homebrew/bin/brew shellenv)"
+brew update --force --quiet
+chmod -R go-w "$(brew --prefix)/share/zsh"
+
+echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.zshrc
+
+
+
+brew install mkcert
+
+echo "mkcert is already installed."
+
+
+
+brew install nss
+
+echo "nss is already installed."
+
 
 CERT_DIR="${HOME}/certs"
 mkdir -p "${CERT_DIR}"
