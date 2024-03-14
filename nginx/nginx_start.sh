@@ -9,7 +9,8 @@
 # fi
 	snap install --classic certbot
 	ln -s /snap/bin/certbot /usr/bin/certbot
-	certbot --nginx 
+	certbot --nginx -d localhost --non-interactive --agree-tos -m admin@localhost
+
 	# if [ ! -f /etc/nginx/ssl/nginx.crt ]; then
 	# 	echo "Nginx: setting up ssl ...";
 	# 	mkdir -p /etc/nginx/ssl
