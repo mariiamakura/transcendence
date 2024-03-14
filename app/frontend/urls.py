@@ -14,3 +14,4 @@ urlpatterns = [
     path('showHome', views.showHome, name='ShowHome'),
     path('showChat', views.showChat, name='ShowChat'),
     path('gamePong', views.gamePong, name='gamePong'),
+    ]
