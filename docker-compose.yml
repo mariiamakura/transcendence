@@ -51,6 +51,10 @@ services:
     build: ./nginx
     ports:
       - 9999:80
+    env_file:
+      - ./.env
+    environment:
+      - SSL_PW=${SSL_PW}
     volumes:
       - static_volume:/home/app/web/staticfiles
     restart: always

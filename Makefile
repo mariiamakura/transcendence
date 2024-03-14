@@ -5,10 +5,25 @@ all:
 	docker compose -f docker-compose.yml exec web python manage.py collectstatic --no-input --clear
 	docker compose -f docker-compose.yml exec web python manage.py makemigrations
 	docker compose -f docker-compose.yml exec web python manage.py migrate --noinput
+	# docker cp nginx:/etc/nginx/ssl/nginx.pfx ~/Downloads/nginx.pfx
 
 #start the watchdog - wuff!
 watch:
 	docker compose watch --no-up
+
+prepare:
+	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+	test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+	test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc
+	echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.zshrc
+	brew install mkcert
+	brew install nss
+
+cert:
+# mkcert localhost
+	mkcert -key-file /home/fhassoun/dev_area/trance_git/nginx/cert/nginx.key -cert-file /home/fhassoun/dev_area/trance_git/nginx/cert/nginx.crt localhost
+	mkcert -install
 
 clean:
 # stops and removes the containers
