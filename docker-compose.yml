@@ -50,9 +50,6 @@ services:
     container_name: nginx
     build: 
       context: ./nginx
-      args:
-        HOME: ${HOME}
-        USER: ${USER}
     ports:
       - 9999:80
     env_file:
