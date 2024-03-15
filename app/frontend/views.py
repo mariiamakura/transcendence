@@ -2,7 +2,7 @@
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model, login, logout, authenticate
-from django.http import HttpResponse
+# from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 
@@ -72,7 +72,8 @@ def signOut(request):
         return render(request=request, template_name="signIn.html", context={})
         # return HttpResponse("<strong>logout successful.<a href='signIn'> Go to Login page</a></strong>")
     else:
-        return HttpResponse("<strong>invalid request</strong>")
+        messages.error(request, 'Something went wrong! Are you signed in?')
+        return render(request=request, template_name="signIn.html", context={})
 
 
 @csrf_exempt
@@ -94,7 +95,8 @@ def editProfile(request):
             return render(request=request, template_name="profile.html", context={"user": user})
         return render(request=request, template_name="editProfile.html", context={"user": user})
     else:
-        return HttpResponse("You are not logged in")
+        messages.error(request, 'You are not signed in! Please sign in to edit your profile.')
+        return render(request=request, template_name="signIn.html", context={})
 
 
 @csrf_exempt
@@ -105,11 +107,19 @@ def showProfile(request):
         user = User.objects.get(username=request.user)
 
         return render(request=request, template_name="profile.html", context={"user": user})
+    else:
+        messages.error(request, 'You are not signed in! Please sign in to view your profile.')
+        return render(request=request, template_name="signIn.html", context={})
 
 
 @csrf_exempt
 def showHome(request):
-    return render(request=request, template_name="home.html", context={})
+    if request.user.is_authenticated:
+        return render(request=request, template_name="home.html", context={})
+    else:
+        messages.error(request, 'You are not signed in! Please sign in to view the home page.')
+        return render(request=request, template_name="signIn.html", context={})
+    
 
 
 @csrf_exempt
@@ -121,8 +131,9 @@ def showChat(request):
 @csrf_exempt
 def gamePong(request):
     # User = get_user_model()
-    # if request.user.is_authenticated:
-    #     # user = User.objects.get(username=request.user.username)
-    #     user = User.objects.get(username=request.user)
-    return render(request, 'gamePong.html', context={})
+    if request.user.is_authenticated:
+        return render(request, 'gamePong.html', context={})
+    else:
+        messages.error(request, 'You are not signed in! Please sign in to play the game.')
+        return render(request=request, template_name="signIn.html", context={})
     # return render(request=request, template_name="pong.html", context={})
