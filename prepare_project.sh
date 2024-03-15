@@ -34,4 +34,14 @@ mkcert -pkcs12 -key-file "${CERT_DIR}/nginx.key" -cert-file "${CERT_DIR}/nginx.c
 # need to check if we need to install the root certificate, as we are importing the pfx file to the browser manually
 # mkcert -install
 
+certutil -d sql:$HOME/.pki/nssdb -A -t "P,," -n "nginx.crt" -i /home/${USER}/certs/nginx.crt
+
+FIREFOX_DIR="/home/${USER}/.mozilla/firefox/"
+for folder in "${FIREFOX_DIR}"*; do
+    if [[ $(basename "$folder") == *"default"* ]]; then
+        echo "Adding certificate to: $folder"
+        certutil -A -n "nginx.crt" -t "TCu,Cuw,Tuw" -i "/home/${USER}/certs/nginx.crt" -d "sql:${folder}/"
+    fi
+done
+
 echo "SSL certificates are set up!"
