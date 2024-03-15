@@ -11,23 +11,16 @@ all:
 watch:
 	docker compose watch --no-up
 
-prepare:
-	chmod +x ./prepare_project.sh
-	./prepare_project.sh
-	@cp -r ${HOME}/certs ./nginx/
-# prepare:
-# 	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-# 	test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
-# 	test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-# # echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc
-# 	echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.zshrc
-# 	brew install mkcert
-# 	brew install nss
+prepare: create_cert install_cert
 
-# cert:
-# # mkcert localhost
-# 	mkcert -key-file /home/fhassoun/dev_area/trance_git/nginx/cert/nginx.key -cert-file /home/fhassoun/dev_area/trance_git/nginx/cert/nginx.crt localhost
-# 	mkcert -install
+create_cert:
+	@chmod +x ./create_cert.sh
+	@./create_cert.sh
+	@cp -r ${HOME}/certs ./nginx/
+
+install_cert:
+	@chmod +x ./install_cert.sh
+	@./install_cert.sh
 
 clean:
 # stops and removes the containers
@@ -93,4 +86,4 @@ fclean_force:
 	@docker network prune --force
 	@docker volume prune --force
 
-.PHONY: all, clean, fclean, re, ls, restart, logs, reload_static, down, up, migrate, connect_db, makemigrations, show_migrations, create_superuser
+.PHONY: all, clean, fclean, re, ls, restart, logs, reload_static, down, up, migrate, connect_db, makemigrations, show_migrations, create_superuser , prepare, create_cert, install_cert, watch
