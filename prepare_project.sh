@@ -2,45 +2,52 @@
 
 cd /home/${USER}/sgoinfre #change for your machine!!!
 
-git clone https://github.com/Homebrew/brew homebrew
-
-eval "$(homebrew/bin/brew shellenv)"
-brew update --force --quiet
-chmod -R go-w "$(brew --prefix)/share/zsh"
-
-echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.zshrc
-
-
-
-brew install mkcert
-
-echo "mkcert is already installed."
+if ! command -v brew &>/dev/null; then
+    echo "Installing Homebrew..."
+    git clone https://github.com/Homebrew/brew homebrew
+    eval "$(homebrew/bin/brew shellenv)"
+    brew update --force --quiet
+    chmod -R go-w "$(brew --prefix)/share/zsh"
+    echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.zshrc
+else
+    echo "Homebrew is already installed."
+fi
 
 
+if ! brew list mkcert &>/dev/null; then
+    echo "Installing mkcert..."
+    brew install mkcert
+else
+    echo "mkcert is already installed."
+fi
 
-brew install nss
 
-echo "nss is already installed."
+if ! brew list nss &>/dev/null; then
+    echo "Installing nss..."
+    brew install nss
+else
+    echo "nss is already installed."
+fi
 
 
 CERT_DIR="${HOME}/certs"
 mkdir -p "${CERT_DIR}"
 
-mkcert -pkcs12 -key-file "${CERT_DIR}/nginx.key" -cert-file "${CERT_DIR}/nginx.crt" -p12-file "${CERT_DIR}/nginx.pfx"  localhost
-# password for importing the pfx file to the browser : changeit 
-# the password is hardcoded in the mkcert source code and cannot be changed
+CURRENT_IP=$(hostname -I | awk '{print $1}')
+echo "Setting up SSL certificates..."
+mkcert -key-file "${CERT_DIR}/nginx.key" -cert-file "${CERT_DIR}/nginx.crt" localhost "${CURRENT_IP}"
 
-# this command failes for missing sudo permissions, but the files are created in the CERT_DIR, so 
-# need to check if we need to install the root certificate, as we are importing the pfx file to the browser manually
-# mkcert -install
 
-certutil -d sql:$HOME/.pki/nssdb -A -t "P,," -n "nginx.crt" -i /home/${USER}/certs/nginx.crt
+echo "Installing certificate for Chrome..."
+certutil -d sql:$HOME/.pki/nssdb -A -t "P,," -n "nginx.crt" -i "${CERT_DIR}/nginx.crt" &>/dev/null
 
+
+echo "Installing certificate for Firefox..."
 FIREFOX_DIR="/home/${USER}/.mozilla/firefox/"
 for folder in "${FIREFOX_DIR}"*; do
     if [[ $(basename "$folder") == *"default"* ]]; then
         echo "Adding certificate to: $folder"
-        certutil -A -n "nginx.crt" -t "TCu,Cuw,Tuw" -i "/home/${USER}/certs/nginx.crt" -d "sql:${folder}/"
+        certutil -A -n "nginx.crt" -t "TCu,Cuw,Tuw" -i "${CERT_DIR}/nginx.crt" -d "sql:${folder}/" &>/dev/null
     fi
 done
 
