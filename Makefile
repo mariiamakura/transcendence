@@ -21,7 +21,9 @@ install_cert:
 	@chmod +x ./install_cert.sh
 	@./install_cert.sh
 
-
+delete_cert:
+	@chmod +x ./delete_cert.sh
+	@./delete_cert.sh
 
 clean:
 # stops and removes the containers
