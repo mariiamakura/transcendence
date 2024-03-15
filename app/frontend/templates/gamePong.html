@@ -342,7 +342,10 @@ async function remoteHost() {
                     } else if (data.key === 'stop') {
                         player2.velocityY = 0;
                     }
-                 }
+				}
+				if (data.type === 'player_left') {
+					console.log('Player left the game');
+				}
             }
             gameRoomSocket.onclose = function() {
                 console.log("Game room connection closed.");

@@ -5,7 +5,6 @@ all:
 	docker compose -f docker-compose.yml exec web python manage.py collectstatic --no-input --clear
 	docker compose -f docker-compose.yml exec web python manage.py makemigrations
 	docker compose -f docker-compose.yml exec web python manage.py migrate --noinput
-	# docker cp nginx:/etc/nginx/ssl/nginx.pfx ~/Downloads/nginx.pfx
 
 #start the watchdog - wuff!
 watch:
@@ -21,6 +20,8 @@ create_cert:
 install_cert:
 	@chmod +x ./install_cert.sh
 	@./install_cert.sh
+
+
 
 clean:
 # stops and removes the containers

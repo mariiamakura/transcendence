@@ -7,6 +7,7 @@ NC="\033[0m" # No Color
 
 cd /home/${USER}/sgoinfre #change for your machine!!!
 
+
 if ! command -v brew &>/dev/null; then
     echo -e "${BLUE}Installing Homebrew...${NC}"
     git clone https://github.com/Homebrew/brew homebrew
@@ -36,7 +37,7 @@ fi
 
 
 CERT_DIR="${HOME}/certs"
-
+rm -rf "${CERT_DIR}"
 mkdir -p "${CERT_DIR}" 
 
 
