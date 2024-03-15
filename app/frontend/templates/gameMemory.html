@@ -268,7 +268,6 @@ async function showButton() {
 	});
 }
 
-
 async function showGameMemory() {
 
 	var mainElement = document.getElementById('content');
@@ -458,7 +457,7 @@ async function remoteClient() {
                 // Implement game state update logic here based on the messages received
                 var cards_info = data.cards;
                 console.log("cards received");
-                launchGameMemory(cards);
+                launchGameMemoryGuest(cards_info);
             }
             // if (data.action === 'update_player_scores_pong') {
             //     // Implement game state update logic here based on the messages received
@@ -473,7 +472,8 @@ let cardInfo = [];
 
 function startTheGameMemory() {
     // Function to initialize or start the game
-    console.log('Game is starting...');
+    // console.log('Game is starting...');
+    // console.log("cards info" + cardInfo[1]);
     launchGameMemory(cardInfo); // Or any function you use to start the game
 }
 
@@ -526,6 +526,8 @@ let secondSet;
 
 function launchGameMemory(cards_info) {
     console.log("launch game");
+    if (!isHost)
+        console.log("cards info is :" + cards_info[0]);
     var mainElement = document.getElementById('content');
     if (isHost) 
         namePlayer[0] = "{{ user.username }}";
@@ -586,8 +588,8 @@ function launchGameMemory(cards_info) {
             cardInfo.push(card);
         }
         console.log("sending cards info to the client")
-        socket.send(JSON.stringify({ action: 'card_info', cards: cardInfo }));
-        playTime();
+        socket.send(JSON.stringify({action: 'card_info', cards: cardInfo}));
+        // playTime();
     }
     else
     {
@@ -600,8 +602,8 @@ function launchGameMemory(cards_info) {
         cardElement.style.setProperty("--bg-image", cards_info.ref);
         document.getElementById('memory-game').appendChild(cardElement);
         });
-        playTime();
     }
+    playTime();
 }
 
 let scorePlayer1 = 0;
@@ -609,6 +611,19 @@ let scorePlayer2 = 0;
 let cardTurned = 0;
 let cardTurnedArrayIndex = [];
 let cardTurnedArrayId = [];
+
+function launchGameMemoryGuest(cards_info)
+{
+    console.log("Client side : receiving cards information from the host");
+    cards_info.forEach((card, index) => {
+    var cardElement = document.createElement("div");
+    cardElement.classList.add("card");
+    cardElement.id = "card" + (index + 1);
+    cardElement.style.setProperty("--bg-image", cards_info.ref);
+    document.getElementById('memory-game').appendChild(cardElement);
+    });
+}
+
 
 function updatePlayerTurns() {
     if (PlayerToPlay === namePlayer[0])

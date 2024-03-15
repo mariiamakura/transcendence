@@ -187,12 +187,9 @@ class GameConsumer(AsyncWebsocketConsumer):
             )
 
     async def send_card_info(self, event):
-        cards = event['cards']
-
-        # Send card information to the guest
         await self.send(text_data=json.dumps({
             'action': 'card_info',
-            'cards': cards
+            'cards': event['cards']
         }))
 
     async def get_host_player(self, event):
