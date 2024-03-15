@@ -119,7 +119,6 @@ def showHome(request):
     else:
         messages.error(request, 'You are not signed in! Please sign in to view the home page.')
         return render(request=request, template_name="signIn.html", context={})
-    
 
 
 @csrf_exempt
