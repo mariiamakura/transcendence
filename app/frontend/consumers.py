@@ -80,7 +80,6 @@ class GameConsumer(AsyncWebsocketConsumer):
             host_name = data.get('host_name')
             room_id = GameRoomManagerMemory.create_room_memory(host_name)
             await self.send(text_data=json.dumps({'action': 'room_created_memory', 'room_id': room_id}))
-
         elif action == 'list_rooms_pong':
             rooms = GameRoomManagerPong.list_rooms_pong()
             await self.send(text_data=json.dumps({'action': 'list_rooms_pong', 'rooms': rooms}))
@@ -123,6 +122,14 @@ class GameConsumer(AsyncWebsocketConsumer):
             else:
                 await self.send(text_data=json.dumps({'action': 'error', 'message': 'Room not found or full'}))
 
+        elif action == 'send_settings_memory':
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'send_settings_memory',
+                    'settings': data['settings']
+                }
+            )
         elif action == 'update_ball_position_pong':
             await self.channel_layer.group_send(
                 self.room_group_name,
@@ -141,6 +148,7 @@ class GameConsumer(AsyncWebsocketConsumer):
                     'player2': data['player2']
                 }
             )
+
         elif action == 'game_ended_pong_pong':
             await self.channel_layer.group_send(
                 self.room_group_name,
@@ -182,14 +190,46 @@ class GameConsumer(AsyncWebsocketConsumer):
                 self.room_group_name,
                 {
                     'type': 'send_card_info',
-                    'cards': data['cards']
+                    'cards': data['cards'],
+                    'settings': data['settings']
                 }
             )
+
+        elif action == 'player_turn_memory':
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'player_turn_memory',
+                    'player': data['player']
+                }
+            )
+
+        elif action == 'card_clicked':
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'card_clicked',
+                    'card_id': data['card_id']
+                }
+            )
+
+    async def card_clicked(self, event):
+        await self.send(text_data=json.dumps({
+            'action': 'card_clicked',
+            'card_id': event['card_id']
+        }))
+
+    async def player_turn_memory(self, event):
+        await self.send(text_data=json.dumps({
+            'action': 'player_turn_memory',
+            'player': event['player']
+        }))
 
     async def send_card_info(self, event):
         await self.send(text_data=json.dumps({
             'action': 'card_info',
-            'cards': event['cards']
+            'cards': event['cards'],
+            'settings': event['settings']
         }))
 
     async def get_host_player(self, event):

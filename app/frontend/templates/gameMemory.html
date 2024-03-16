@@ -16,7 +16,7 @@
 <script>
 	// Define the showGameMemory function
 	// let gameSettings.numberOfCards;
-let set;
+// let set;
 let gameSettings = {
 	numberOfCards: 0,
 	chosenSet: ""
@@ -309,7 +309,7 @@ async function showGameMemory() {
 		}
 	}
 }
-
+let gameStarted = false;
 let isHost = false; 
 let gameRoomSocket = null;
 
@@ -319,13 +319,10 @@ async function remoteHost() {
     let socket = new WebSocket(`wss://${window.location.host}/wss/socket-server/lobby/`); // Connect to the lobby
 
     socket.onopen = function(event) {
-        // Notify the server to create a new room with a unique and sanitized room name
-        // socket.send(JSON.stringify({ action: 'create_room', host_name: hostName, room_name: sanitizedRoomName }));
 		socket.send(JSON.stringify({ 
 			action: 'create_room_memory', 
 			host_name: hostName, 
 			room_name: sanitizedRoomName, 
-			settings: gameSettings 
 		}));
     };
     
@@ -335,36 +332,50 @@ async function remoteHost() {
             console.log('Room created:', data.room_id);
             // Close the lobby connection after creating the room
             socket.close();
-
             // Now, establish a new WebSocket connection to the newly created game room
             gameRoomSocket = new WebSocket(`wss://${window.location.host}/wss/socket-server/${sanitizedRoomName}/`);
             isHost = true;
             gameRoomSocket.onopen = function() {
                 console.log("Game room connection established for host.");
-                // The host is now waiting for a second player to join the room
+            // The host is now waiting for a second player to join the room
             };
             gameRoomSocket.onmessage = function(event) {
                 // Handle messages from the server, such as a player joining the room
                 const data = JSON.parse(event.data);
                 if (data.action === 'player_joined_memory') {
                     console.log(`${data.guest_name} has joined the game.`);
-                    // Game can now start or wait for more players based on your game logic
-					const receivedSettings = data.settings; // Extract game settings
-					// Update client's game settings with receivedSettings
-					updateClientSettings(receivedSettings);
+                    namePlayer[1] = data.guest_name;
                 }
-                // Handle countdown message
                 if (data.action === 'countdown_memory') {
                     console.log('Countdown:', data.message);
-                    updateCountdownDisplay(data.message);
-                } else if (data.action === 'start_game_memory') {
+                    // updateCountdownDisplay(data.message);
+                }
+                if (data.action === 'start_game_memory') {
                     // Clear the countdown and start the game
-                    console.log('Game is starting... Host function '); 
-                    let countdownElement = document.getElementById('countdown');
-                    if (countdownElement) {
-                        countdownElement.remove(); // Remove the countdown display
+                    if (gameStarted === false)
+                    {
+                        gameStarted = true;
+                        console.log('Game is starting... Host function ');
+                        let countdownElement = document.getElementById('countdown');
+                        if (countdownElement) {
+                            countdownElement.remove();
+                        }
+                        launchGameMemory(cardInfo);
                     }
-                    startTheGameMemory(); // Function to initialize or start the game
+                }
+                if (data.action === 'player_turn_memory') 
+                {
+                    console.log("player turn updated");
+                    console.log("Host:" + data.player);
+                    PlayerToPlay = data.player;
+                    updatePlayerTurnsDisplay();
+                }
+                if (data.action === 'card_clicked') {
+                    console.log("card clicked");
+                    let clickedCard = document.getElementById(data.card_id);
+                    if (clickedCard) {
+                        clickedCard.classList.toggle("show-image");
+                    }
                 }
             }
             gameRoomSocket.onclose = function() {
@@ -378,9 +389,9 @@ async function remoteHost() {
 }
 
 function updateClientSettings(receivedSettings) {
-   // gameSettings.numberOfCards = receivedSettings.numberOfCards;
-    //gameSettings.chosenSet = receivedSettings.chosenSet;
-    console.log("settings updated");
+   gameSettings.numberOfCards = receivedSettings.numberOfCards;
+   gameSettings.chosenSet = receivedSettings.chosenSet;
+   console.log("settings updated");
 }
 
 // clientsocket
@@ -405,9 +416,9 @@ async function remoteClient() {
                 games.forEach((game) => {
                     var button = document.createElement('button');
                     button.textContent = game;
-                    button.classList.add("styled-button"); // Assuming you have styling for buttons
+                    button.classList.add("styled-button");
                     button.addEventListener("click", function() {
-                        joinGameRoomMemory(game); // Function to join a game room
+                        joinGameRoomMemory(game);
                     });
                     gameList.appendChild(button);
                 });
@@ -421,63 +432,53 @@ async function remoteClient() {
         }
         
     };
-
+    
     function joinGameRoomMemory(roomId) {
         // Close the current lobby connection
         socket.close();
-        
         // Open a new WebSocket connection for the selected room
         roomSocket = new WebSocket(`wss://${window.location.host}/wss/socket-server/${roomId}/`);
-        
         roomSocket.onopen = function() {
-            // Notify the server that the client has joined the room
             console.log("Game room connection established for client.");
             roomSocket.send(JSON.stringify({ action: 'join_room_memory', room_id: roomId , guest_name: "{{ user.username }}"}));
-            namePlayer[0] =  roomId.replace('_Game', '');
+            namePlayer[0] = roomId.replace('_Game', '');
         };
-        console.log("next step");
         roomSocket.onmessage = function(event) {
-            // Handle messages for game state updates
             const data = JSON.parse(event.data);
             console.log(data);
-            // Implement game state update logic here based on the messages received
             if (data.action === 'countdown_memory') {
                 console.log('Countdown');
-                updateCountdownDisplayMemory(data.message);
+                // updateCountdownDisplayMemory(data.message);
             } else if (data.action === 'start_game_memory') {
-                // Clear the countdown and start the game
                 console.log("start game guest side")
                 let countdownElement = document.getElementById('countdown');
                 if (countdownElement) {
-                    countdownElement.remove(); // Remove the countdown display
+                    countdownElement.remove();
                 }
-                // startTheGameMemory(); // Function to initialize or start the game
             }
             if (data.action === 'card_info') {
-                // Implement game state update logic here based on the messages received
                 var cards_info = data.cards;
                 console.log("cards received");
-                launchGameMemoryGuest(cards_info);
+                updateClientSettings(data.settings);
+                launchGameMemory(cards_info);
             }
-            // if (data.action === 'update_player_scores_pong') {
-            //     // Implement game state update logic here based on the messages received
-            //     newPlayer1Score = data.player1;
-            //     newPlayer2Score = data.player2;
-            //     console.log("player scores received");
-            // }
+            if (data.action === 'player_turn_memory') {
+                console.log("player turn updated");
+                PlayerToPlay = data.player;
+                updatePlayerTurnsDisplay();
+            }
+            if (data.action === 'card_clicked') {
+                console.log("card clicked");
+                let clickedCard = document.getElementById(data.card_id);
+                if (clickedCard) {
+                    clickedCard.classList.toggle("show-image");
+                }
+            }
         };
     }
 }
 let cardInfo = [];
 
-function startTheGameMemory() {
-    // Function to initialize or start the game
-    // console.log('Game is starting...');
-    // console.log("cards info" + cardInfo[1]);
-    launchGameMemory(cardInfo); // Or any function you use to start the game
-}
-
-// Function to update or create the countdown display
 function updateCountdownDisplayMemory(message) {
     let countdownElement = document.getElementById('countdown');
     if (!countdownElement) {
@@ -485,8 +486,6 @@ function updateCountdownDisplayMemory(message) {
         countdownElement.innerHTML = '';
         countdownElement = document.createElement('div');
         countdownElement.id = 'countdown';
-        // Append the countdown element somewhere appropriate
-        // For example, appending to the content div or another specific location
         document.getElementById('content').appendChild(countdownElement);
     }
     countdownElement.textContent = `Game starts in: ${message}`;
@@ -527,12 +526,8 @@ let secondSet;
 function launchGameMemory(cards_info) {
     console.log("launch game");
     if (!isHost)
-        console.log("cards info is :" + cards_info[0]);
+        console.log("cards info is :" + cards_info[1].ref);
     var mainElement = document.getElementById('content');
-    if (isHost) 
-        namePlayer[0] = "{{ user.username }}";
-    else
-        namePlayer[1] = "{{ user.username }}";
     PlayerToPlay = namePlayer[0];
     let sets = [natureFirstSet12, natureSecondSet12, natureFirstSet16, natureSecondSet16, natureFirstSet24, natureSecondSet24, natureFirstSet32, natureSecondSet32, 
                         robotFirstSet12, robotSecondSet12, robotFirstSet16, robotSecondSet16, robotFirstSet24, robotSecondSet24, robotFirstSet32, robotSecondSet32]
@@ -566,13 +561,10 @@ function launchGameMemory(cards_info) {
                             '</div>';
     if (isHost)
     {
-        console.log("get the cards for the host")
         for (let i = 1; i <= gameSettings.numberOfCards; i++) {
-            console.log("creating card " + i);
             var card = document.createElement("div");
             card.classList.add("card");
             card.id = "card" + i;
-            // Set the background image based on the condition
             if (i % 2 === 0)
             {
                 randomSet(firstSet, card);
@@ -584,24 +576,24 @@ function launchGameMemory(cards_info) {
                 card.style.setProperty("--bg-image", card.ref);
             }        
             document.getElementById('memory-game').appendChild(card);
-            console.log("card " + i + " created");
+            console.log("HOST : card " + i + " created, bg is " + card.ref);
             cardInfo.push(card);
         }
-        console.log("sending cards info to the client")
-        socket.send(JSON.stringify({action: 'card_info', cards: cardInfo}));
-        // playTime();
+        gameRoomSocket.send(JSON.stringify({action: 'card_info', cards: cardInfo, settings: gameSettings}));
     }
     else
     {
         // Add cards to the memory game
         console.log("Client side : receiving cards information from the host");
-        cards_info.forEach((card, index) => {
-        var cardElement = document.createElement("div");
-        cardElement.classList.add("card");
-        cardElement.id = "card" + (index + 1);
-        cardElement.style.setProperty("--bg-image", cards_info.ref);
-        document.getElementById('memory-game').appendChild(cardElement);
-        });
+        for (let j = 0; j < gameSettings.numberOfCards; j++) {
+            var cardElement = document.createElement("div");
+            cardElement.classList.add("card");
+            cardElement.id = "card" + j + 1;
+            cardElement.style.setProperty("--bg-image", cards_info[j].ref);
+            cardElement.index = cards_info[j].index;
+            document.getElementById('memory-game').appendChild(cardElement);
+            console.log("GUEST : card " + j + " created, bg is " + cards_info[j].ref);
+        }
     }
     playTime();
 }
@@ -612,20 +604,14 @@ let cardTurned = 0;
 let cardTurnedArrayIndex = [];
 let cardTurnedArrayId = [];
 
-function launchGameMemoryGuest(cards_info)
-{
-    console.log("Client side : receiving cards information from the host");
-    cards_info.forEach((card, index) => {
-    var cardElement = document.createElement("div");
-    cardElement.classList.add("card");
-    cardElement.id = "card" + (index + 1);
-    cardElement.style.setProperty("--bg-image", cards_info.ref);
-    document.getElementById('memory-game').appendChild(cardElement);
-    });
+function updatePlayerTurns() {
+    if (isHost)
+        gameRoomSocket.send(JSON.stringify({action: 'player_turn_memory', player: PlayerToPlay}));
+    else
+        roomSocket.send(JSON.stringify({action: 'player_turn_memory', player: PlayerToPlay}));
 }
 
-
-function updatePlayerTurns() {
+function updatePlayerTurnsDisplay() {
     if (PlayerToPlay === namePlayer[0])
     {
         document.getElementById('Player1').style.backgroundColor = 'skyblue';
@@ -636,7 +622,7 @@ function updatePlayerTurns() {
         document.getElementById('Player1').style.backgroundColor =  'white';
         document.getElementById('Player2').style.backgroundColor = 'skyblue';
     }
-}
+}   
 
 function updatePlayerScore(playerNumber) {
     var score_max = gameSettings.numberOfCards / 2;
@@ -670,9 +656,10 @@ function updatePlayerScore(playerNumber) {
     scoreTextElement.style.transform = 'translateX(-50%)';
 }
 
-function playTime()
-{
-    console.log("play time");
+let init = false;
+function initializeGameMemory() {
+    console.log("init game memory");
+    init = true;
     PlayerToPlay = namePlayer[0];
     var turn1 = document.getElementById('turn1');
     var turn2 = document.getElementById('turn2');
@@ -681,22 +668,111 @@ function playTime()
     updatePlayerTurns();
     updatePlayerScore(1);
     updatePlayerScore(2);
-    document.getElementById('memory-game').addEventListener("click", function(event) {
+}
+
+function playTime() {
+    console.log("play time");
+    if (init === false) {
+        initializeGameMemory();
+    }
+    // if (isHost) {
+    //     document.getElementById('memory-game').addEventListener("click", function(event) {
+    //         if (PlayerToPlay === namePlayer[0])
+    //         {
+    //             if (event.target.classList.contains("card")) {
+    //                 if (cardTurned < 2 && !event.target.classList.contains("show-image")) {
+    //                     event.target.classList.toggle("show-image");
+    //                     cardTurned++;
+    //                     cardTurnedArrayIndex.push(event.target.index);
+    //                     cardTurnedArrayId.push(event.target.id);
+    //                     if (cardTurned === 2) {
+    //                         checkCards();
+    //                     }
+    //                     if (scorePlayer1 + scorePlayer2 === gameSettings.numberOfCards / 2) {
+    //                         endGameMemory(scorePlayer1 > scorePlayer2 ? namePlayer[0] : namePlayer[1]);
+    //                     }
+    //                     if (isHost)
+    //                         gameRoomSocket.send(JSON.stringify({ action: 'card_clicked', card_id: event.target.id }));
+    //                     else
+    //                         roomSocket.send(JSON.stringify({ action: 'card_clicked', card_id: event.target.id }));
+    //                 }
+    //             }
+    //         }
+    //             // toggleCards();
+    //     });
+    // } else if (!isHost) {
+    //     document.getElementById('memory-game').addEventListener("click", function(event) {
+    //         if (PlayerToPlay === namePlayer[1])
+    //         {
+    //             if (event.target.classList.contains("card")) {
+    //                 if (cardTurned < 2 && !event.target.classList.contains("show-image")) {
+    //                     event.target.classList.toggle("show-image");
+    //                     cardTurned++;
+    //                     cardTurnedArrayIndex.push(event.target.index);
+    //                     cardTurnedArrayId.push(event.target.id);
+    //                     if (cardTurned === 2) {
+    //                         checkCards();
+    //                     }
+    //                     if (scorePlayer1 + scorePlayer2 === gameSettings.numberOfCards / 2) {
+    //                         endGameMemory(scorePlayer1 > scorePlayer2 ? namePlayer[0] : namePlayer[1]);
+    //                     }
+    //                     if (isHost)
+    //                         gameRoomSocket.send(JSON.stringify({ action: 'card_clicked', card_id: event.target.id }));
+    //                     else
+    //                         roomSocket.send(JSON.stringify({ action: 'card_clicked', card_id: event.target.id }));
+    //                 }
+    //             }
+    //         }
+    //             // toggleCards(event);
+    //     });
+    // }
+    function toggleCards(event) {
+    if ((isHost && PlayerToPlay === namePlayer[0]) || (!isHost && PlayerToPlay === namePlayer[1])) {
         if (event.target.classList.contains("card")) {
-            if (cardTurned < 2 && !event.target.classList.contains("show-image"))
-            {
+            if (cardTurned < 2 && !event.target.classList.contains("show-image")) {
                 event.target.classList.toggle("show-image");
                 cardTurned++;
                 cardTurnedArrayIndex.push(event.target.index);
                 cardTurnedArrayId.push(event.target.id);
-                if (cardTurned === 2)
+                if (cardTurned === 2) {
                     checkCards();
-                if (scorePlayer1 + scorePlayer2 === gameSettings.numberOfCards / 2)
+                }
+                if (scorePlayer1 + scorePlayer2 === gameSettings.numberOfCards / 2) {
                     endGameMemory(scorePlayer1 > scorePlayer2 ? namePlayer[0] : namePlayer[1]);
+                }
+                if (isHost) {
+                    gameRoomSocket.send(JSON.stringify({ action: 'card_clicked', card_id: event.target.id }));
+                } else {
+                    roomSocket.send(JSON.stringify({ action: 'card_clicked', card_id: event.target.id }));
+                }
+            }
         }
     }
-});
 }
+// Add event listener with toggleCards function
+    document.getElementById('memory-game').addEventListener("click", toggleCards);
+}
+
+// function toggleCards(event) {
+//     if (event.target.classList.contains("card")) {
+//         if (cardTurned < 2 && !event.target.classList.contains("show-image")) {
+//             event.target.classList.toggle("show-image");
+//             cardTurned++;
+//             cardTurnedArrayIndex.push(event.target.index);
+//             cardTurnedArrayId.push(event.target.id);
+//             if (cardTurned === 2) {
+//                 checkCards();
+//             }
+//             if (scorePlayer1 + scorePlayer2 === gameSettings.numberOfCards / 2) {
+//                 endGameMemory(scorePlayer1 > scorePlayer2 ? namePlayer[0] : namePlayer[1]);
+//             }
+//             if (isHost)
+//                 gameRoomSocket.send(JSON.stringify({ action: 'card_clicked', card_id: event.target.id }));
+//             else
+//                 roomSocket.send(JSON.stringify({ action: 'card_clicked', card_id: event.target.id }));
+//         }
+//     }
+// }
 
 function endGameMemory(winner)
 {
@@ -718,18 +794,19 @@ function endGameMemory(winner)
         scorePlayer1 = 0;
         scorePlayer2 = 0;
         setAlreadyUsed.length = 0;
-        launchGameMemory();
+        // launchGameMemory();
     });
 }
 
 function checkCards() {
+
     if (cardTurnedArrayIndex[0] === cardTurnedArrayIndex[1])
     {        
         if (PlayerToPlay === namePlayer[0])
             scorePlayer1++;
         else if (PlayerToPlay === namePlayer[1])
             scorePlayer2++;
-        turnUpdate(1); // mode 1, players do not  switch
+        turnUpdate(1); // mode 1, players do not switch
     }
     else
     {
