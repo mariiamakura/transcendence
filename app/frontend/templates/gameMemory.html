@@ -371,11 +371,18 @@ async function remoteHost() {
                     updatePlayerTurnsDisplay();
                 }
                 if (data.action === 'card_clicked') {
-                    console.log("card clicked");
+                    console.log("card clicked HOST SIDE");
                     let clickedCard = document.getElementById(data.card_id);
-                    if (clickedCard) {
                         clickedCard.classList.toggle("show-image");
-                    }
+                }
+                if (data.action === 'card_returned') {
+                    let returnedCard = document.getElementById(data.card_id);
+                    if (returnedCard)
+                        returnedCard.classList.toggle("show-image");
+                }
+                if (data.action === 'update_score_memory') {
+                    scorePlayer1 = data.score1;
+                    scorePlayer2 = data.score2;
                 }
             }
             gameRoomSocket.onclose = function() {
@@ -468,11 +475,18 @@ async function remoteClient() {
                 updatePlayerTurnsDisplay();
             }
             if (data.action === 'card_clicked') {
-                console.log("card clicked");
                 let clickedCard = document.getElementById(data.card_id);
-                if (clickedCard) {
+                if (clickedCard)
                     clickedCard.classList.toggle("show-image");
-                }
+            }
+            if (data.action === 'card_returned') {
+                    let returnedCard = document.getElementById(data.card_id);
+                    if (returnedCard)
+                        returnedCard.classList.toggle("show-image");
+            }
+            if (data.action === 'update_score_memory') {
+                    scorePlayer1 = data.score1;
+                    scorePlayer2 = data.score2;
             }
         };
     }
@@ -588,7 +602,8 @@ function launchGameMemory(cards_info) {
         for (let j = 0; j < gameSettings.numberOfCards; j++) {
             var cardElement = document.createElement("div");
             cardElement.classList.add("card");
-            cardElement.id = "card" + j + 1;
+            let k = j + 1;
+            cardElement.id = "card" + k;
             cardElement.style.setProperty("--bg-image", cards_info[j].ref);
             cardElement.index = cards_info[j].index;
             document.getElementById('memory-game').appendChild(cardElement);
@@ -672,107 +687,32 @@ function initializeGameMemory() {
 
 function playTime() {
     console.log("play time");
-    if (init === false) {
+    if (init === false)
         initializeGameMemory();
-    }
-    // if (isHost) {
-    //     document.getElementById('memory-game').addEventListener("click", function(event) {
-    //         if (PlayerToPlay === namePlayer[0])
-    //         {
-    //             if (event.target.classList.contains("card")) {
-    //                 if (cardTurned < 2 && !event.target.classList.contains("show-image")) {
-    //                     event.target.classList.toggle("show-image");
-    //                     cardTurned++;
-    //                     cardTurnedArrayIndex.push(event.target.index);
-    //                     cardTurnedArrayId.push(event.target.id);
-    //                     if (cardTurned === 2) {
-    //                         checkCards();
-    //                     }
-    //                     if (scorePlayer1 + scorePlayer2 === gameSettings.numberOfCards / 2) {
-    //                         endGameMemory(scorePlayer1 > scorePlayer2 ? namePlayer[0] : namePlayer[1]);
-    //                     }
-    //                     if (isHost)
-    //                         gameRoomSocket.send(JSON.stringify({ action: 'card_clicked', card_id: event.target.id }));
-    //                     else
-    //                         roomSocket.send(JSON.stringify({ action: 'card_clicked', card_id: event.target.id }));
-    //                 }
-    //             }
-    //         }
-    //             // toggleCards();
-    //     });
-    // } else if (!isHost) {
-    //     document.getElementById('memory-game').addEventListener("click", function(event) {
-    //         if (PlayerToPlay === namePlayer[1])
-    //         {
-    //             if (event.target.classList.contains("card")) {
-    //                 if (cardTurned < 2 && !event.target.classList.contains("show-image")) {
-    //                     event.target.classList.toggle("show-image");
-    //                     cardTurned++;
-    //                     cardTurnedArrayIndex.push(event.target.index);
-    //                     cardTurnedArrayId.push(event.target.id);
-    //                     if (cardTurned === 2) {
-    //                         checkCards();
-    //                     }
-    //                     if (scorePlayer1 + scorePlayer2 === gameSettings.numberOfCards / 2) {
-    //                         endGameMemory(scorePlayer1 > scorePlayer2 ? namePlayer[0] : namePlayer[1]);
-    //                     }
-    //                     if (isHost)
-    //                         gameRoomSocket.send(JSON.stringify({ action: 'card_clicked', card_id: event.target.id }));
-    //                     else
-    //                         roomSocket.send(JSON.stringify({ action: 'card_clicked', card_id: event.target.id }));
-    //                 }
-    //             }
-    //         }
-    //             // toggleCards(event);
-    //     });
-    // }
-    function toggleCards(event) {
-    if ((isHost && PlayerToPlay === namePlayer[0]) || (!isHost && PlayerToPlay === namePlayer[1])) {
-        if (event.target.classList.contains("card")) {
-            if (cardTurned < 2 && !event.target.classList.contains("show-image")) {
-                event.target.classList.toggle("show-image");
-                cardTurned++;
-                cardTurnedArrayIndex.push(event.target.index);
-                cardTurnedArrayId.push(event.target.id);
-                if (cardTurned === 2) {
-                    checkCards();
-                }
-                if (scorePlayer1 + scorePlayer2 === gameSettings.numberOfCards / 2) {
-                    endGameMemory(scorePlayer1 > scorePlayer2 ? namePlayer[0] : namePlayer[1]);
-                }
-                if (isHost) {
-                    gameRoomSocket.send(JSON.stringify({ action: 'card_clicked', card_id: event.target.id }));
-                } else {
-                    roomSocket.send(JSON.stringify({ action: 'card_clicked', card_id: event.target.id }));
+    document.getElementById('memory-game').addEventListener("click", function(event) {
+        if ((isHost && PlayerToPlay === namePlayer[0]) || (!isHost && PlayerToPlay === namePlayer[1])) {
+            if (event.target.classList.contains("card")) {
+                if (cardTurned < 2 && !event.target.classList.contains("show-image")) {
+                    console.log("In function, card id is " + event.target.id);
+                    console.log("In function, card target is " + event.target);
+                if (isHost)
+                    gameRoomSocket.send(JSON.stringify({ action: 'card_clicked', card_id: event.target.id}));
+                else
+                    roomSocket.send(JSON.stringify({ action: 'card_clicked', card_id: event.target.id}));
+                    cardTurned++;
+                    cardTurnedArrayIndex.push(event.target.index);
+                    cardTurnedArrayId.push(event.target.id);
+                    if (cardTurned === 2) {
+                        checkCards();
+                    }
+                    if (scorePlayer1 + scorePlayer2 === gameSettings.numberOfCards / 2) {
+                        endGameMemory(scorePlayer1 > scorePlayer2 ? namePlayer[0] : namePlayer[1]);
+                    }
                 }
             }
         }
+        });
     }
-}
-// Add event listener with toggleCards function
-    document.getElementById('memory-game').addEventListener("click", toggleCards);
-}
-
-// function toggleCards(event) {
-//     if (event.target.classList.contains("card")) {
-//         if (cardTurned < 2 && !event.target.classList.contains("show-image")) {
-//             event.target.classList.toggle("show-image");
-//             cardTurned++;
-//             cardTurnedArrayIndex.push(event.target.index);
-//             cardTurnedArrayId.push(event.target.id);
-//             if (cardTurned === 2) {
-//                 checkCards();
-//             }
-//             if (scorePlayer1 + scorePlayer2 === gameSettings.numberOfCards / 2) {
-//                 endGameMemory(scorePlayer1 > scorePlayer2 ? namePlayer[0] : namePlayer[1]);
-//             }
-//             if (isHost)
-//                 gameRoomSocket.send(JSON.stringify({ action: 'card_clicked', card_id: event.target.id }));
-//             else
-//                 roomSocket.send(JSON.stringify({ action: 'card_clicked', card_id: event.target.id }));
-//         }
-//     }
-// }
 
 function endGameMemory(winner)
 {
@@ -794,7 +734,6 @@ function endGameMemory(winner)
         scorePlayer1 = 0;
         scorePlayer2 = 0;
         setAlreadyUsed.length = 0;
-        // launchGameMemory();
     });
 }
 
@@ -803,9 +742,15 @@ function checkCards() {
     if (cardTurnedArrayIndex[0] === cardTurnedArrayIndex[1])
     {        
         if (PlayerToPlay === namePlayer[0])
+        {
             scorePlayer1++;
+            gameRoomSocket.send(JSON.stringify({action: 'update_score_memory', score1: scorePlayer1, score2: scorePlayer2}));
+        }
         else if (PlayerToPlay === namePlayer[1])
+        {
             scorePlayer2++;
+            gameRoomSocket.send(JSON.stringify({action: 'update_score_memory', score1: scorePlayer1, score2: scorePlayer2}));
+        }
         turnUpdate(1); // mode 1, players do not switch
     }
     else
@@ -814,8 +759,16 @@ function checkCards() {
         var card1 = document.getElementById(cardTurnedArrayId[0]);
         var card2 = document.getElementById(cardTurnedArrayId[1]);
         if (card1 && card2) {
-            card1.classList.toggle("show-image");
-            card2.classList.toggle("show-image");
+            if (isHost)
+            {
+                gameRoomSocket.send(JSON.stringify({ action: 'card_returned', card_id: cardTurnedArrayId[0]}));
+                gameRoomSocket.send(JSON.stringify({ action: 'card_returned', card_id: cardTurnedArrayId[1]}));
+            }
+            else
+            {
+                roomSocket.send(JSON.stringify({ action: 'card_returned', card_id: cardTurnedArrayId[0]}));
+                roomSocket.send(JSON.stringify({ action: 'card_returned', card_id: cardTurnedArrayId[1]}));
+            }
             turnUpdate(2); // mode 2, players switch
         }
         }, 2000);
@@ -825,12 +778,7 @@ function checkCards() {
 function turnUpdate(mode)
 {
     if (mode === 2)
-    {
-        if (PlayerToPlay === namePlayer[0])
-            PlayerToPlay = namePlayer[1];
-        else
-            PlayerToPlay = namePlayer[0];
-    }
+       PlayerToPlay = (PlayerToPlay === namePlayer[0] ? namePlayer[1] : namePlayer[0]);
     cardTurnedArrayId.length = 0;
     cardTurnedArrayIndex.length = 0;
     cardTurned -= 2;

@@ -213,6 +213,38 @@ class GameConsumer(AsyncWebsocketConsumer):
                 }
             )
 
+        elif action == 'card_returned':
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'card_returned',
+                    'card_id': data['card_id']
+                }
+            )
+
+        elif action == 'update_score_memory':
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'update_score_memory',
+                    'score1': data['score1'],
+                    'score2': data['score2']
+                }
+            )
+
+    async def update_score_memory(self, event):
+        await self.send(text_data=json.dumps({
+            'action': 'update_score_memory',
+            'score1': event['score1'],
+            'score2': event['score2']
+        }))
+
+    async def card_returned(self, event):
+        await self.send(text_data=json.dumps({
+            'action': 'card_returned',
+            'card_id': event['card_id']
+        }))
+
     async def card_clicked(self, event):
         await self.send(text_data=json.dumps({
             'action': 'card_clicked',
