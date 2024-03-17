@@ -416,7 +416,7 @@ async function remoteClient() {
                 newPlayer2Score = data.player2;
                 console.log("player scores received");
             }
-            if (data.action === 'game_ended_pong_pong') {
+            if (data.action === 'game_ended_pong') {
                 endGame(data.winner);
                 console.log("game ended");
             }
@@ -626,7 +626,6 @@ function handleResize() {
 function update() {
     if (gameEnded === true)
         return;
-    //console.log("update");
     requestAnimationFrame(update);
     context.clearRect(0, 0, board.width, board.height);
     context.fillStyle = "skyblue";

@@ -141,7 +141,6 @@ function update() {
     // Update the game
     if (gameEnded === true)
         return;
-    console.log("update");
     window.addEventListener('resize', handleResize);
     requestAnimationFrame(update);
     context.clearRect(0, 0, board.width, board.height);
