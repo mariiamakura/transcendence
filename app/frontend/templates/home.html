@@ -3,14 +3,22 @@
 {% block content %}
 {% if request.user.is_authenticated %}
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <h2 class="text-center" style="align-items: center; padding-top: 3em;">Welcome, {{ request.user.username }}!</h2>
-            <p class="text-center">You are now logged in.</p>
-        </div>
+<div class="container mt-4">
+  <h1 class="text-center">Welcome to Pong!</h1>
+</div>
+<div class="container mt-4">
+  <h1 class="text-center">Ranking</h1>
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <ul class="list-group">
+        {% for user in top_three_users %}
+        <li class="list-group-item">{{ forloop.counter }}: {{ user.username }} Games won: {{ user.pong_games_won }}</li>
+        {% endfor %}
+      </ul>
     </div>
   </div>
+</div>
+  
 {% else %}
 <div class="login-prompt">
     <div class="text-center">

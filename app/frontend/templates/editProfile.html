@@ -11,19 +11,35 @@
             <input type="name" class="form-control" id="inputName" placeholder="Enter your Firstame" name="name" />
           </div>
           <div class="form-group">
-            <label for="Surename">Familyname</label>
-            <input type="surname" class="form-control" id="inputSureName" placeholder="Enter your Familyname" name="surname" />
+            <label for="Surname">Surname</label>
+            <input type="surname" class="form-control" id="inputSureName" placeholder="Enter your Surname" name="surname" />
           </div>
           <div class="form-group">
             <label for="inputEmail">Email address</label>
             <input type="email" class="form-control" id="inputEmail" placeholder="Enter email" name="email" />
           </div>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label for="inputBirthDate">Birth Date</label>
             <input type="date" class="form-control" id="inputBirthDate" placeholder="Enter your birth date" name="birthdate" />
-          </div>
+          </div> -->
           <button type="submit" class="btn btn-primary btn-block">Save Profile</button>
         </form>
+        {% comment %} <form action="editProfile" method="POST">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="Name">Name</label>
+            <input type="name" class="form-control" id="inputName" placeholder="Enter your name" name="name" />
+          </div>
+          <div class="form-group">
+            <label for="Surname">Surname</label>
+            <input type="surname" class="form-control" id="inputSurName" placeholder="Enter your Surname" name="surname" />
+          </div>
+          <div class="form-group">
+            <label for="inputEmail">Email address</label>
+            <input type="email" class="form-control" id="inputEmail" placeholder="Enter email" name="email" />
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Save Profile</button>
+        </form> {% endcomment %}
       </div>
     </div>
   </div>
