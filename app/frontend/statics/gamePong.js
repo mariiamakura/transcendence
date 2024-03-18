@@ -141,7 +141,6 @@ function update() {
     // Update the game
     if (gameEnded === true)
         return;
-    console.log("update");
     window.addEventListener('resize', handleResize);
     requestAnimationFrame(update);
     context.clearRect(0, 0, board.width, board.height);
@@ -266,7 +265,28 @@ function resetGame(direction)
 }
 
 function endGame(winner) {
-    gameEnded = true;   
+    gameEnded = true;
+    console.log(winner + " won !");
+    fetch('/update_game_result_pong/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ winner: winner }),
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Game result updated successfully');
+            // Optionally, handle success response
+        } else {
+            console.error('Failed to update game result');
+            // Optionally, handle error response
+        }
+    })
+    .catch(error => {
+        console.error('Error updating game result:', error);
+        // Optionally, handle fetch error
+    });
     var mainElement = document.getElementById('content');
     mainElement.innerHTML = ''; // Remove all inner HTML content  
     mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
@@ -284,5 +304,4 @@ function endGame(winner) {
         player2Score = 0;
         launchGamePong();
     });
-    
 }

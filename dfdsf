@@ -1,0 +1,320 @@
+[33mcommit 0032e8ef301e1fd02321232443f49c19a12bf936[m[33m ([m[1;36mHEAD -> [m[1;32mEmilie_2[m[33m, [m[1;31morigin/Emilie_2[m[33m)[m
+Merge: 12272e1 717e15f
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Sat Mar 9 17:18:18 2024 +0100
+
+    score
+
+[33mcommit 12272e1bce8c56d0e0c457d2f9f85b8a0a73287d[m
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Sat Mar 9 17:16:55 2024 +0100
+
+    score
+
+[33mcommit 717e15f6ab60a1a99d138a42bedb3279d59e8b54[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Fri Mar 8 15:34:29 2024 +0100
+
+    scoreboard in home
+
+[33mcommit 588b0bd23f1c58b05f628feee4b800180efee251[m
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Fri Mar 1 16:48:06 2024 +0100
+
+    scoreboard changed
+
+[33mcommit 536216bb2045d7d6793d9cb37a5ccf345e1ab088[m
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Fri Mar 1 15:55:55 2024 +0100
+
+    scoreboard update
+
+[33mcommit 2e8ba0b34732b9a9aea203d2ba25e4607e80fa30[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Thu Feb 29 17:32:30 2024 +0100
+
+    scoreboard
+
+[33mcommit b4e9fcd21f9a8d237d8a948d5aeda4cbb10ed36a[m
+Merge: cb5a09c 4fa594d
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Thu Feb 29 12:14:24 2024 +0100
+
+    merged
+
+[33mcommit cb5a09c88cec159935023c59b92740b386a15aee[m
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Wed Feb 28 16:55:22 2024 +0100
+
+    test on db
+
+[33mcommit 4fa594d0c137c60ad95139809e8bce3f7dae0b40[m[33m ([m[1;31morigin/feras_20240221[m[33m, [m[1;32mferas_20240221[m[33m)[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Wed Feb 28 15:57:48 2024 +0100
+
+    code cleanup and small profile edit fix
+
+[33mcommit 5fe701dd988bdaf3b32bdd6b7e2beb39e129a680[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Wed Feb 28 14:19:45 2024 +0100
+
+    profile edit fixed
+
+[33mcommit 44deee8bf0ccd49e6111add825638473f5ead293[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Tue Feb 27 10:02:36 2024 +0100
+
+    another db fix
+
+[33mcommit 0584dd5282983844b2b70960c5e97a158d92e81a[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Tue Feb 27 09:47:31 2024 +0100
+
+    db and some visual fixes, added bootstrap to index.html
+
+[33mcommit a1d98b3294c18aaab665af555fb3b2cfd3ba57b6[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Mon Feb 26 17:29:07 2024 +0100
+
+    implemented templates and connection to db works
+
+[33mcommit d89ecfa36c8133a986d8c29ba1571cf73aebf1b6[m[33m ([m[1;32mtesttest[m[33m)[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Mon Feb 26 08:25:37 2024 +0100
+
+    nothing important
+
+[33mcommit 9156f3f3842dcade321f8938300ff867c6a28e75[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Fri Feb 23 16:21:39 2024 +0100
+
+    added some functionality to store and retrieve data, still WIP
+
+[33mcommit 5521ac193ec4cd9a7ee18a625c0fc094fcebcdc6[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Fri Feb 23 07:09:42 2024 +0100
+
+    database fixed
+
+[33mcommit 808cb8b2a09bfa433ee4e1fe94e029263bf61610[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Wed Feb 21 12:58:51 2024 +0100
+
+    added some rules to makefile
+
+[33mcommit aca5132d2d42a964b73c8eb5d277f23ad874727a[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Wed Feb 21 12:54:09 2024 +0100
+
+    rewrote everything from scratch
+
+[33mcommit 2d91989c31a36528ded04e52121c08589e99a513[m
+Merge: 37e68fc f7d2bef
+Author: Feras Hassouneh <36226489+fhassoun@users.noreply.github.com>
+Date:   Fri Feb 16 12:08:54 2024 +0100
+
+    Merge pull request #2 from EmilieD8/nginx-update
+    
+    Nginx update
+
+[33mcommit f7d2befd80d59523c6f45c05ee0743d980bbbf63[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Thu Feb 15 13:23:19 2024 +0100
+
+    nginx dockerfile update
+
+[33mcommit 37e68fcaa4778910d43b423e52f5bdf0dea88a69[m
+Merge: b46f0eb e843409
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Wed Feb 14 14:06:31 2024 +0100
+
+    Merge pull request #1 from EmilieD8/Emilie
+    
+    Emilie
+
+[33mcommit e8434091952a3deeb53889016103016a3e0c2e48[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Wed Feb 14 14:01:42 2024 +0100
+
+    Memory game done
+
+[33mcommit ee1c61783bc9b57f4f560bbb12e1c1bd7133ca8c[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Sun Feb 11 17:19:54 2024 +0100
+
+    Progress bar added and turns added for Memory
+
+[33mcommit 99de7b53363f4456e0b1aa047b0c348777284163[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Fri Feb 9 18:13:35 2024 +0100
+
+    Robot game
+
+[33mcommit f1ad817fff9cfc811b2eb05bbe4d8168cf31e93f[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Thu Feb 8 17:23:30 2024 +0100
+
+    memory done
+
+[33mcommit c69d8d6849f12cd1c9a2d1c3b95af12cc2505fa4[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Wed Feb 7 19:16:43 2024 +0100
+
+    memory game coded
+
+[33mcommit 54355a7a3e28dec16906b0fbab46e28b622338f8[m
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Tue Feb 6 21:21:19 2024 +0100
+
+    game almost done
+
+[33mcommit 23d63298b958f7d353b1defcdf58adbb9387e2a7[m
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Mon Feb 5 22:39:37 2024 +0100
+
+    Issue with the ball fixed, added names next to the board
+
+[33mcommit b4c2a54a875e2e0ace8033c65d4a97232f9fbd94[m[33m ([m[1;31morigin/feras-20240204[m[33m, [m[1;32mferas-20240204[m[33m)[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Sun Feb 4 12:28:43 2024 +0100
+
+    added sql file to create db, updated documentation
+
+[33mcommit f846cb7688b0bbdca9666605302658d5cc6135de[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Sat Feb 3 16:25:39 2024 +0100
+
+     Buttons finished + better pong
+
+[33mcommit b46f0ebbfd9bbf89a9b761991efd157da26c70e6[m[33m ([m[1;31morigin/feras[m[33m, [m[1;32mferas[m[33m)[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Sat Feb 3 10:54:47 2024 +0100
+
+    changed port
+
+[33mcommit 34346cbe901a691f9cb07844a4cce9057dafd36f[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Sat Feb 3 09:30:11 2024 +0100
+
+    small fixes and added simple documentation
+
+[33mcommit 18c164234ff022fe8b97cc0b1041ee226a6b81ce[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Fri Feb 2 11:28:03 2024 +0100
+
+    basic nginx and postgres images with pong-website integrated
+
+[33mcommit 4170fe2d9bad4b3254b0e3c2afd6583640f391c3[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Thu Feb 1 17:55:05 2024 +0100
+
+    Commit message describing your changes
+
+[33mcommit 3524c60bce421755bc3571e693d871aeb9ad8927[m
+Merge: 76ed89f d374df8
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Thu Feb 1 17:49:12 2024 +0100
+
+    buttons added
+
+[33mcommit 76ed89f7038f200a2fc3116442759b889d639962[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Thu Feb 1 17:45:40 2024 +0100
+
+    adding ball direction and button for the menu
+
+[33mcommit d88be4bcf5ccbd78268b8fc3235932dcdeb2638d[m[33m ([m[1;31morigin/max[m[33m, [m[1;32mmax[m[33m)[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Thu Feb 1 10:58:11 2024 +0100
+
+    added buttons
+
+[33mcommit d374df8101def72b4c7dbf5f9b4bff4830305588[m
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Wed Jan 31 21:50:29 2024 +0100
+
+    added buttons
+
+[33mcommit 8f329a2c428693527e1fbffc2707f33597dd443c[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Mon Jan 29 17:22:32 2024 +0100
+
+    front
+
+[33mcommit f31e0446e78c1648809fc2f6043f38c6c5823f6a[m
+Author: mars12161 <108153152+mars12161@users.noreply.github.com>
+Date:   Mon Jan 29 15:50:41 2024 +0100
+
+    added a super basic database config
+
+[33mcommit fd047704a43bd8ea10421f16df51fe39ac0f98e2[m
+Author: mars12161 <108153152+mars12161@users.noreply.github.com>
+Date:   Mon Jan 29 14:32:33 2024 +0100
+
+    restructured the project
+
+[33mcommit f032e32c13afc44e0ae5db80f4f543039ce14dff[m
+Merge: 0b9b695 eb1cc7d
+Author: mars12161 <108153152+mars12161@users.noreply.github.com>
+Date:   Mon Jan 29 13:28:31 2024 +0100
+
+    Merge branch 'mimi'
+    
+    # Conflicts:
+    #       backend/game/apps.py
+    #       backend/manage.py
+    #       backend/transcendence_backend/asgi.py
+    #       backend/transcendence_backend/settings.py
+    #       backend/transcendence_backend/urls.py
+    #       backend/transcendence_backend/wsgi.py
+    #       backend/user_management/admin.py
+    #       backend/user_management/models.py
+    #       backend/user_management/tests.py
+
+[33mcommit eb1cc7d255508b7088fac53a3929c18f4dcdfa27[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Mon Jan 29 13:26:08 2024 +0100
+
+    backend deleted
+
+[33mcommit bd48792984207498631f4faaad3d533939864afb[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Mon Jan 29 11:42:20 2024 +0100
+
+    game done
+
+[33mcommit ca4d05a3880ae7ef592b43da184b2f2041dc91d8[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Sun Jan 28 19:30:10 2024 +0100
+
+    Home Page and Pong table
+
+[33mcommit 0b9b6952894369772890dd5b2fecad35a074ca2b[m
+Author: mars12161 <108153152+mars12161@users.noreply.github.com>
+Date:   Sat Jan 27 15:49:36 2024 +0100
+
+    added empty frontend directory
+
+[33mcommit 9a2d3e8d5bc58b01079841f29048c9c4584c8a69[m
+Author: mars12161 <108153152+mars12161@users.noreply.github.com>
+Date:   Sat Jan 27 15:48:58 2024 +0100
+
+    put backend files into backend directory
+
+[33mcommit f6fd256a53f172f919e9e6153ab2a88b4431a35b[m
+Author: mars12161 <108153152+mars12161@users.noreply.github.com>
+Date:   Sat Jan 27 15:47:13 2024 +0100
+
+    separated files for front and backend, created basic structure for microservices game logic and user management
+
+[33mcommit ab516da02d4fec7417a8b251bd61cbf2e73e4e6b[m
+Author: mars12161 <108153152+mars12161@users.noreply.github.com>
+Date:   Sat Jan 27 14:44:55 2024 +0100
+
+    Basic backend structure
+
+[33mcommit b1f834d12ac209e222005bfcefb0f3f2662d64c5[m
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Sat Jan 27 14:24:44 2024 +0100
+
+    Initial commit

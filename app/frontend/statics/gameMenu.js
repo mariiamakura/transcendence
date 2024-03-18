@@ -4,7 +4,6 @@ let singleGame;
 let numberPlayers;
 
 function showButton() {
-
     var main = document.getElementById('content');
     main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> Which type of game do you wanna play ? </p></div>';
     var buttonTournament = document.createElement("button");
@@ -87,28 +86,48 @@ function submitButton(submit) {
     });
 }
 
-
 async function getNamePlayer() {
     var main = document.getElementById('content');
-    let i = 1;
-    while (i <= numberPlayers) {
-        main.innerHTML += '<div id="choice">' + 
-            '<form style="display: flex; flex-direction: column; align-items: center;">' +
+    let i = 2;
+
+    try {
+        const response = await fetch('/get_username/');
+        const data = await response.json();
+        main.innerHTML += `<p style="padding-top: 2em; display: flex; align-items:center; justify-content:center;">First player is: ${data.username}</p>`;
+        namePlayer.push(data.username);
+
+        for (; i <= numberPlayers; i++) {
+            main.innerHTML += '<div id="choice">' +
+                '<form style="display: flex; flex-direction: column; align-items: center;">' +
                 '<p style="padding-top: 2em; display: flex; align-items:center; justify-content:center;" > Name of player ' + i + ' : </p>' +
                 '<input type="text" id="name' + i + '">' +
                 '<button type="submit" class="styled-button" style="margin-top: 1em;">Submit</button>' +
-            '</form>' +
-        '</div>';
-        const Submit = main.querySelector('#choice:last-child button');
-        const input = main.querySelector('#choice:last-child input');
-        const isSubmitted = await submitButton(Submit);
-        if (isSubmitted === true && input.value !== "") {
-            namePlayer.push(input.value);
-            main.querySelector('#choice:last-child').remove();
-            i++;
+                '</form>' +
+                '</div>';
+
+            const submitButton = main.querySelector('#choice:last-child button');
+            const input = main.querySelector('#choice:last-child input');
+
+            // Wait for the submit button click event
+            await new Promise(resolve => {
+                submitButton.addEventListener("click", function(event) {
+                    event.preventDefault(); // Prevent the default form submission
+                    if (input.value !== "") {
+                        namePlayer.push(input.value);
+                        main.querySelector('#choice:last-child').remove();
+                        resolve(); // Resolve the promise to continue the loop
+                    }
+                });
+            });
         }
+    } catch (error) {
+        console.error('Error:', error);
     }
+
+    console.log("Exited loop");
+    console.log(namePlayer[0], namePlayer[1]);
 }
+
    
 let scoreToDo = 0;
 let debugPong = 1; // 1 not debug. 2 is directly the game, 3 is the menu and the score todo will be 1 instead of 12
@@ -143,7 +162,7 @@ function scoreChoice() {
             if (debugPong === 3)
                 scoreToDo = 12;
             else
-                scoreToDo = 12;
+                scoreToDo = 1; // change for testing
             document.getElementById('choice').remove();
         });
         scoreEighteen.addEventListener("click", function() {
