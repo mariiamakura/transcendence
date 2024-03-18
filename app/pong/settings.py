@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
 ]
 
 
@@ -65,6 +66,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'pong.urls'
@@ -161,6 +163,9 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # STATICFILES_DIRS = [BASE_DIR / "static"]
 STATICFILES_DIRS = [BASE_DIR / "frontend" / "statics"]
 
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -169,3 +174,83 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 CSRF_TRUSTED_ORIGINS = ["https://localhost:9999/*", "http://localhost:9999/*"]
+
+# Allow all domains during development
+CORS_ALLOW_ALL_ORIGINS = True
+
+# For production, use:
+# CORS_ALLOWED_ORIGINS = [
+#     "https://example.com",
+#     "https://www.example.com",
+# ]
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SAMESITE = 'None'  # 'Lax' or 'Strict' can also be used depending on your requirements
+
+# CSRF Cookie
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
+
+
+# def callback(request):
+#     User = get_user_model()
+
+#     code = request.GET.get('code')
+#     if code:
+#         data = {
+#             'grant_type': 'authorization_code',
+#             'client_id': 'u-s4t2ud-ff92aa7c60b93ab9ab76619c369de4f8c7bb33c3e8c8a0ffdb386d35d2007a4c',
+#             'client_secret': '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',
+#             'code': code,
+#             'redirect_uri': 'https://localhost:9999/callback'
+#         }
+
+#         try:
+#             response = requests.post('https://api.intra.42.fr/oauth/token', data=data)
+#             response_data = response.json()
+#             access_token = response_data['access_token']
+
+#             user_info_response = requests.get('https://api.intra.42.fr/v2/me', headers={'Authorization': f'Bearer {access_token}'})
+#             user_info = user_info_response.json()
+#             print(user_info)
+
+#             username = user_info['login']
+#             password1 = user_info['login']
+#             email = user_info['email']
+#             avatar_url = user_info['image']['link']
+#             surename = user_info['last_name']
+#             name = user_info['first_name']
+#             # # campus = user_info['campus']
+#             # # level = user_info['cursus_users'][0]['level']
+
+#             user = User.objects.filter(username=username).first()
+#             if user:
+#                 user = authenticate(username=username, password=password1)
+#                 if user is not None:
+#                     login(request, user)  # login the user so they do not have to re enter the same information again
+#                 return redirect("/")
+#             else:
+#                 user = User.objects.create_user(username=username, email=email, password=password1, avatar_url=avatar_url, name=name, surname=surename)
+#                 # redirect the user to the home page
+#                 user = authenticate(username=username, password=password1)
+#                 if user is not None:
+#                     login(request, user)  # login the user so they do not have to re enter the same information again
+#                 return redirect("/")
+
+#             # Here, use the user_info to authenticate or create a user in your system
+#             # This step depends on how you manage users in your Django project
+#             # For example, you could match users by their email or a custom user ID from 42
+
+#             # Assuming you have a method to get or create a Django user:
+#             # user = get_or_create_user(user_info)
+#             # login(request, user)
+
+#             # return redirect('/')  # Redirect to the home page or dashboard
+#         except Exception:
+#             # Handle errors, e.g., invalid code, request failure
+#             messages.error(request, 'Failed to authenticate user. Please try again.')
+#             return render(request=request, template_name="signIn.html", context={})
+#     else:
+#         messages.error(request, 'Failed to reach API. Please try again.')
+#         return render(request=request, template_name="signIn.html", context={})

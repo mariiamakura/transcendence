@@ -14,7 +14,7 @@ for folder in "${FIREFOX_DIR}"*; do
     if [[ $(basename "$folder") == *"default"* ]]; then
   
         # Check if a cert with the name exists, list certificates with certutil, grep for the name.
-        exists=$(certutil -L -d sql:"$folder" | grep "$certName") &>/dev/null
+        exists=$(certutil -L -d sql:"$folder" | grep "$certName") #&>/dev/null
 
         # If the certificate exists, delete it.
         if [ ! -z "$exists" ]; then
@@ -22,7 +22,7 @@ for folder in "${FIREFOX_DIR}"*; do
             
             # Delete the certificate.
             # You might need to adjust the deletion command according to your certutil version or setup.
-            certutil -D -d sql:"$folder" -n "$certName" &>/dev/null
+            certutil -D -d sql:"$folder" -n "$certName" #&>/dev/null
             
             # Check if the deletion was successful
             if [ $? -eq 0 ]; then

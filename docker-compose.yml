@@ -11,6 +11,7 @@ services:
     #   - "daphne pong.asgi:application -b 0.0.0.0 -p 8001 &"
     volumes:
       - static_volume:/home/app/web/staticfiles
+      - media_volume:/home/app/web/media
     expose:
       - 8000
       - 8001
@@ -51,13 +52,14 @@ services:
     build: 
       context: ./nginx
     ports:
-      - 9999:80
+      - 9999:443
     env_file:
       - ./.env
     environment:
       - SSL_PW=${SSL_PW}
     volumes:
       - static_volume:/home/app/web/staticfiles
+      - media_volume:/home/app/web/media
     restart: always
     init: true  
     depends_on:
@@ -143,6 +145,7 @@ services:
 volumes:
   postgres_data:
   static_volume:
+  media_volume:
   prometheus-data:
     # driver_opts:
     #   o: bind

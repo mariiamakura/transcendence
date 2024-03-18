@@ -9,6 +9,7 @@ class User(AbstractUser):
     user_id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=50, unique=True)
     # intra_name = models.CharField(max_length=50, unique=True)
+    display_name = models.CharField(max_length=50, default=username)
     name = models.CharField(max_length=50, default='Name')
     surname = models.CharField(max_length=50, default='Surname')
     email = models.EmailField(max_length=100, unique=True)
@@ -20,6 +21,11 @@ class User(AbstractUser):
     tournaments_won = models.IntegerField(default=0)
     # wallet_id = models.CharField(max_length=42, unique=True, null=True)
     date_of_creation = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
+    avatar_url = models.URLField(default='https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png')
+    avatar = models.FileField(upload_to='avatars/', null=True, blank=True)
+    online = models.BooleanField(default=False)
+    friends = models.JSONField(default=list)
 
     def __str__(self):
         return self.username
