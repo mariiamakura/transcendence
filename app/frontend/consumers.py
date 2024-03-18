@@ -351,7 +351,7 @@ class GameConsumer(AsyncWebsocketConsumer):
                 }
             )
 
-   async def player_joined_memory(self, event):
+    async def player_joined_memory(self, event):
         await self.send(text_data=json.dumps({
             'action': 'player_joined_memory',
             'room_id': event['room_id'],
