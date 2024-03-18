@@ -241,6 +241,9 @@ function startButton() {
 	});
 }
 
+let local = false;
+let remote = false;
+
 async function showButton() {
 	var main = document.getElementById('content');
 	main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> Which type of game do you wanna play ? </p></div>';
@@ -261,7 +264,7 @@ async function showButton() {
 			remote = true;
 		});
 		buttonLocal.addEventListener("click", function() {
-			resolve(false);
+            resolve(false);
 			document.getElementById('choice').remove();
 			local = true;
 		});
@@ -299,18 +302,17 @@ async function showGameMemory() {
 	else
 	{
 		//local Game
+        await choiceSet();
+		await choiceCards();
 		namePlayer[0] = "{{user.username}}";
 		namePlayer[1] = "Guest Player";
-		if (namePlayer.length === numberPlayers && scoreToDo !== 0)
-		{
-			await startButton();
-			if (startGame === true)
-				launchGameMemory();
-		}
+        await startButton();
+        if (startGame === true)
+            launchGameMemory();
 	}
 }
 let gameStarted = false;
-let isHost = false; 
+let isHost = false;
 let gameRoomSocket = null;
 
 async function remoteHost() {
@@ -573,7 +575,7 @@ function launchGameMemory(cards_info) {
                                 '<div id="memory-game" style = "width:' + widthBoard + 'px;"></div>' + 
                                 '<div id="Player2"><p id = "turn2"></p><div id = "progress-bar-container2"></div></div>' +
                             '</div>';
-    if (isHost)
+    if ((isHost && remote === true) || local === true)
     {
         for (let i = 1; i <= gameSettings.numberOfCards; i++) {
             var card = document.createElement("div");
@@ -592,7 +594,8 @@ function launchGameMemory(cards_info) {
             document.getElementById('memory-game').appendChild(card);
             cardInfo.push(card);
         }
-        gameRoomSocket.send(JSON.stringify({action: 'card_info', cards: cardInfo, settings: gameSettings}));
+        if (isHost && remote === true)
+            gameRoomSocket.send(JSON.stringify({action: 'card_info', cards: cardInfo, settings: gameSettings}));
     }
     else
     {
@@ -618,13 +621,16 @@ let cardTurnedArrayIndex = [];
 let cardTurnedArrayId = [];
 
 function updatePlayerTurns() {
-    if (isHost)
+    if (isHost && remote === true)
         gameRoomSocket.send(JSON.stringify({action: 'player_turn_memory', player: PlayerToPlay}));
-    else
+    else if (remote === true)
         roomSocket.send(JSON.stringify({action: 'player_turn_memory', player: PlayerToPlay}));
+    else if (local === true)
+        updatePlayerTurnsDisplay();
 }
 
 function updatePlayerTurnsDisplay() {
+    console.log("update player turns display")
     if (PlayerToPlay === namePlayer[0])
     {
         document.getElementById('Player1').style.backgroundColor = 'skyblue';
@@ -638,6 +644,7 @@ function updatePlayerTurnsDisplay() {
 }   
 
 function updatePlayerScore(playerNumber) {
+    console.log("update player score");
     var score_max = gameSettings.numberOfCards / 2;
     var progressBar = document.createElement('div');
     progressBar.classList.add('progress-bar');
@@ -677,7 +684,8 @@ function initializeGameMemory() {
     var turn2 = document.getElementById('turn2');
     turn1.innerHTML = '<p> ' + namePlayer[0] + ' </p>';
     turn2.innerHTML = '<p> ' + namePlayer[1] + ' </p>';
-    updatePlayerTurns();
+    if (remote === true)
+        updatePlayerTurns();
     updatePlayerTurnsDisplay();
     updatePlayerScore(1);
     updatePlayerScore(2);
@@ -688,26 +696,28 @@ function playTime() {
     if (init === false)
         initializeGameMemory();
     document.getElementById('memory-game').addEventListener("click", function(event) {
-        if ((isHost && PlayerToPlay === namePlayer[0]) || (!isHost && PlayerToPlay === namePlayer[1])) {
+        if ((isHost && PlayerToPlay === namePlayer[0]) || (!isHost && PlayerToPlay === namePlayer[1]) || local === true) {
             if (event.target.classList.contains("card")) {
                 if (cardTurned < 2 && !event.target.classList.contains("show-image")) {
-                    if (isHost)
+                    if (isHost && remote === true)
                         gameRoomSocket.send(JSON.stringify({ action: 'card_clicked', card_id: event.target.id}));
-                    else
+                    else if (remote === true)
                         roomSocket.send(JSON.stringify({ action: 'card_clicked', card_id: event.target.id}));
-                        cardTurned++;
-                        cardTurnedArrayIndex.push(event.target.index);
-                        cardTurnedArrayId.push(event.target.id);
-                        if (cardTurned === 2) {
-                            checkCards();
-                        }
-                        if (scorePlayer1 + scorePlayer2 === gameSettings.numberOfCards / 2) {
-                            if (isHost)
-                                gameRoomSocket.send(JSON.stringify({action: 'game_ended_memory', winner: scorePlayer1 > scorePlayer2 ? namePlayer[0] : namePlayer[1]}));
-                            else
-                                roomSocket.send(JSON.stringify({action: 'game_ended_memory', winner: scorePlayer1 > scorePlayer2 ? namePlayer[0] : namePlayer[1]}));
-                        }
+                    else if (local === true)
+                        event.target.classList.toggle("show-image");
+                    cardTurned++;
+                    cardTurnedArrayIndex.push(event.target.index);
+                    cardTurnedArrayId.push(event.target.id);
+                    if (cardTurned === 2) {
+                        checkCards();
                     }
+                    if (scorePlayer1 + scorePlayer2 === gameSettings.numberOfCards / 2) {
+                        if (isHost && remote === true)
+                            gameRoomSocket.send(JSON.stringify({action: 'game_ended_memory', winner: scorePlayer1 > scorePlayer2 ? namePlayer[0] : namePlayer[1]}));
+                        else if (remote === true)
+                            roomSocket.send(JSON.stringify({action: 'game_ended_memory', winner: scorePlayer1 > scorePlayer2 ? namePlayer[0] : namePlayer[1]}));
+                    }
+                }
             }
         }
         });
@@ -745,17 +755,17 @@ function checkCards() {
         if (PlayerToPlay === namePlayer[0])
         {
             scorePlayer1++;
-            if (isHost)
+            if (isHost && remote === true)
                 gameRoomSocket.send(JSON.stringify({action: 'update_score_memory', score1: scorePlayer1, score2: scorePlayer2}));
-            else
+            else if (remote === true)
                 roomSocket.send(JSON.stringify({action: 'update_score_memory', score1: scorePlayer1, score2: scorePlayer2}));
         }
         else if (PlayerToPlay === namePlayer[1])
         {
             scorePlayer2++;
-            if (isHost)
+            if (isHost && remote === true)
                 gameRoomSocket.send(JSON.stringify({action: 'update_score_memory', score1: scorePlayer1, score2: scorePlayer2}));
-            else
+            else if (remote === true)
                 roomSocket.send(JSON.stringify({action: 'update_score_memory', score1: scorePlayer1, score2: scorePlayer2}));
         }
         turnUpdate(1); // mode 1, players do not switch
@@ -766,15 +776,20 @@ function checkCards() {
         var card1 = document.getElementById(cardTurnedArrayId[0]);
         var card2 = document.getElementById(cardTurnedArrayId[1]);
         if (card1 && card2) {
-            if (isHost)
+            if (isHost && remote === true)
             {
                 gameRoomSocket.send(JSON.stringify({ action: 'card_returned', card_id: cardTurnedArrayId[0]}));
                 gameRoomSocket.send(JSON.stringify({ action: 'card_returned', card_id: cardTurnedArrayId[1]}));
             }
-            else
+            else if (remote === true)
             {
                 roomSocket.send(JSON.stringify({ action: 'card_returned', card_id: cardTurnedArrayId[0]}));
                 roomSocket.send(JSON.stringify({ action: 'card_returned', card_id: cardTurnedArrayId[1]}));
+            }
+            else if (local === true)
+            {
+                card1.classList.toggle("show-image");
+                card2.classList.toggle("show-image");
             }
             turnUpdate(2); // mode 2, players switch
         }
