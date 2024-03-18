@@ -365,15 +365,12 @@ async function remoteHost() {
                 }
                 if (data.action === 'player_turn_memory') 
                 {
-                    console.log("player turn updated");
-                    console.log("Host:" + data.player);
                     PlayerToPlay = data.player;
                     updatePlayerTurnsDisplay();
                     updatePlayerScore(1);
                     updatePlayerScore(2);
                 }
                 if (data.action === 'card_clicked') {
-                    console.log("card clicked HOST SIDE");
                     let clickedCard = document.getElementById(data.card_id);
                         clickedCard.classList.toggle("show-image");
                 }
@@ -386,10 +383,8 @@ async function remoteHost() {
                     scorePlayer1 = data.score1;
                     scorePlayer2 = data.score2;
                 }
-                if (data.action === 'game_ended_memory') {
-                    console.log("game ended and winner is " + data.winner);
+                if (data.action === 'game_ended_memory')
                     endGameMemory(data.winner);
-                }
             }
             gameRoomSocket.onclose = function() {
                 console.log("Game room connection closed.");
@@ -404,7 +399,6 @@ async function remoteHost() {
 function updateClientSettings(receivedSettings) {
    gameSettings.numberOfCards = receivedSettings.numberOfCards;
    gameSettings.chosenSet = receivedSettings.chosenSet;
-   console.log("settings updated");
 }
 
 // clientsocket
@@ -459,10 +453,9 @@ async function remoteClient() {
         roomSocket.onmessage = function(event) {
             const data = JSON.parse(event.data);
             console.log(data);
-            if (data.action === 'countdown_memory') {
+            if (data.action === 'countdown_memory')
                 console.log('Countdown');
-                // updateCountdownDisplayMemory(data.message);
-            } else if (data.action === 'start_game_memory') {
+            else if (data.action === 'start_game_memory') {
                 console.log("start game guest side")
                 let countdownElement = document.getElementById('countdown');
                 if (countdownElement) {
@@ -496,10 +489,8 @@ async function remoteClient() {
                 scorePlayer1 = data.score1;
                 scorePlayer2 = data.score2;
             }
-            if (data.action === 'game_ended_memory') {
-                    console.log("game ended and winner is " + data.winner);
-                    endGameMemory(data.winner);
-            }
+            if (data.action === 'game_ended_memory')
+                endGameMemory(data.winner);
         };
     }
 }
@@ -550,9 +541,6 @@ let firstSet;
 let secondSet;
 
 function launchGameMemory(cards_info) {
-    console.log("launch game");
-    if (!isHost)
-        console.log("cards info is :" + cards_info[1].ref);
     var mainElement = document.getElementById('content');
     PlayerToPlay = namePlayer[0];
     let sets = [natureFirstSet12, natureSecondSet12, natureFirstSet16, natureSecondSet16, natureFirstSet24, natureSecondSet24, natureFirstSet32, natureSecondSet32, 
@@ -602,7 +590,6 @@ function launchGameMemory(cards_info) {
                 card.style.setProperty("--bg-image", card.ref);
             }        
             document.getElementById('memory-game').appendChild(card);
-            console.log("HOST : card " + i + " created, bg is " + card.ref);
             cardInfo.push(card);
         }
         gameRoomSocket.send(JSON.stringify({action: 'card_info', cards: cardInfo, settings: gameSettings}));
@@ -619,7 +606,6 @@ function launchGameMemory(cards_info) {
             cardElement.style.setProperty("--bg-image", cards_info[j].ref);
             cardElement.index = cards_info[j].index;
             document.getElementById('memory-game').appendChild(cardElement);
-            console.log("GUEST : card " + j + " created, bg is " + cards_info[j].ref);
         }
     }
     playTime();
@@ -636,7 +622,6 @@ function updatePlayerTurns() {
         gameRoomSocket.send(JSON.stringify({action: 'player_turn_memory', player: PlayerToPlay}));
     else
         roomSocket.send(JSON.stringify({action: 'player_turn_memory', player: PlayerToPlay}));
-    // updatePlayerTurnsDisplay();
 }
 
 function updatePlayerTurnsDisplay() {
@@ -670,10 +655,6 @@ function updatePlayerScore(playerNumber) {
     progressBar.querySelector('.scored').style.height = pourcentageScored +'%';
     progressBar.querySelector('.back').style.height = (100 - pourcentageScored) + '%'; 
     progressBar.querySelector('.scored').style.backgroundColor = '#1e90ff'; // Blue color for the scored part
-    // if (playerNumber === 1)
-    //     progressBar.querySelector('.back').style.backgroundColor = document.getElementById('Player1').style.backgroundColor;
-    // else
-    //     progressBar.querySelector('.back').style.backgroundColor = document.getElementById('Player2').style.backgroundColor;
     progressBar.querySelector('.back').style.backgroundColor = (playerNumber === 1 ? document.getElementById('Player1').style.backgroundColor : document.getElementById('Player2').style.backgroundColor);
     progressBar.querySelector('.scored').style.position = 'absolute';
     progressBar.querySelector('.scored').style.bottom = '0';
@@ -710,26 +691,23 @@ function playTime() {
         if ((isHost && PlayerToPlay === namePlayer[0]) || (!isHost && PlayerToPlay === namePlayer[1])) {
             if (event.target.classList.contains("card")) {
                 if (cardTurned < 2 && !event.target.classList.contains("show-image")) {
-                    console.log("In function, card id is " + event.target.id);
-                    console.log("In function, card target is " + event.target);
-                if (isHost)
-                    gameRoomSocket.send(JSON.stringify({ action: 'card_clicked', card_id: event.target.id}));
-                else
-                    roomSocket.send(JSON.stringify({ action: 'card_clicked', card_id: event.target.id}));
-                    cardTurned++;
-                    cardTurnedArrayIndex.push(event.target.index);
-                    cardTurnedArrayId.push(event.target.id);
-                    if (cardTurned === 2) {
-                        checkCards();
+                    if (isHost)
+                        gameRoomSocket.send(JSON.stringify({ action: 'card_clicked', card_id: event.target.id}));
+                    else
+                        roomSocket.send(JSON.stringify({ action: 'card_clicked', card_id: event.target.id}));
+                        cardTurned++;
+                        cardTurnedArrayIndex.push(event.target.index);
+                        cardTurnedArrayId.push(event.target.id);
+                        if (cardTurned === 2) {
+                            checkCards();
+                        }
+                        if (scorePlayer1 + scorePlayer2 === gameSettings.numberOfCards / 2) {
+                            if (isHost)
+                                gameRoomSocket.send(JSON.stringify({action: 'game_ended_memory', winner: scorePlayer1 > scorePlayer2 ? namePlayer[0] : namePlayer[1]}));
+                            else
+                                roomSocket.send(JSON.stringify({action: 'game_ended_memory', winner: scorePlayer1 > scorePlayer2 ? namePlayer[0] : namePlayer[1]}));
+                        }
                     }
-                    if (scorePlayer1 + scorePlayer2 === gameSettings.numberOfCards / 2) {
-                        if (isHost)
-                            gameRoomSocket.send(JSON.stringify({action: 'game_ended_memory', winner: scorePlayer1 > scorePlayer2 ? namePlayer[0] : namePlayer[1]}));
-                        else
-                            roomSocket.send(JSON.stringify({action: 'game_ended_memory', winner: scorePlayer1 > scorePlayer2 ? namePlayer[0] : namePlayer[1]}));
-                        // endGameMemory(scorePlayer1 > scorePlayer2 ? namePlayer[0] : namePlayer[1]);
-                    }
-                }
             }
         }
         });
@@ -812,11 +790,8 @@ function turnUpdate(mode)
     cardTurnedArrayIndex.length = 0;
     cardTurned -= 2;
     updatePlayerTurns();
-    // if (mode === 1)
-    // {
-        updatePlayerScore(1);
-        updatePlayerScore(2);
-    // }
+    updatePlayerScore(1);
+    updatePlayerScore(2);
 }
 </script>
 
