@@ -4,9 +4,7 @@ function showProfile()
 	var mainElement = document.getElementById('content');
 	mainElement.innerHTML = '<h1>Profile Page</h1>';
 	
-
 	console.log(User);
-
 	var username = document.createElement("p");
 	username.textContent = "Username: " + User.username;
 	mainElement.appendChild(username);
