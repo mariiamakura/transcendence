@@ -22,10 +22,10 @@ up:
 # starts the containers
 	docker compose -f docker-compose.yml up -d 
 	
-restart: down up
+restart:
 # stops and starts the containers
-# docker compose -f docker-compose.yml down
-# docker compose -f docker-compose.yml up -d
+	docker compose -f docker-compose.yml down
+	docker compose -f docker-compose.yml up -d
 
 fclean: clean
 # removes all the images
@@ -66,5 +66,12 @@ connect_db:
 create_superuser:
 # creates a superuser
 	docker compose -f docker-compose.yml exec web python manage.py createsuperuser
+
+fclean_force:
+	@printf "Total clean of all configurations docker\n"
+	@docker stop $$(docker ps -qa)
+	@docker system prune --all --force --volumes
+	@docker network prune --force
+	@docker volume prune --force
 
 .PHONY: all, clean, fclean, re, ls, restart, logs, reload_static, down, up, migrate, connect_db, makemigrations, show_migrations, create_superuser

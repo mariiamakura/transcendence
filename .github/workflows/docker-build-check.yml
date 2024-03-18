@@ -1,0 +1,72 @@
+name: Docker Build Test
+
+on:
+  push:
+    branches:
+      - mariia
+      - main
+  pull_request:
+    branches:
+      - mariia
+      - main
+
+#job on building container and testing whether we can reach end points
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Docker dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get remove containerd.io -y
+          sudo apt-get update
+
+      - name: Install Docker
+        run: |
+          sudo apt-get install -y docker.io
+
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get install -y docker-compose
+
+      - name: Build and Run Containers
+        run: make all
+
+      - name: Check Docker Containers Status
+        run: |
+          docker ps -a
+          exit $(docker ps -aq -f status=exited | wc -l)
+      
+      - name: Test Localhost:9999 Reachability
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:9999)
+          if [ $response -eq 200 ]; then
+            echo "Localhost:9999 is reachable"
+          else
+            echo "Localhost:9999 is not reachable"
+            exit 1
+          fi
+
+      - name: Test Localhost:9090 Reachability
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" -L http://localhost:9090)
+          if [ $response -eq 200 ]; then
+            echo "Localhost:9090 is reachable"
+          else
+            echo "Localhost:9090 is not reachable"
+            exit 1
+          fi
+
+      - name: Test Localhost:3000 Reachability
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" -L http://localhost:3000)
+          if [ $response -eq 200 ]; then
+            echo "Localhost:3000 is reachable"
+          else
+            echo "Localhost:3000 is not reachable"
+            exit 1
+          fi

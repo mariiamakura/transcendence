@@ -1,0 +1,17 @@
+{
+	"ulid": "01HRCVACM2ERVS0573GNK8YDFY",
+	"minTime": 1709735868969,
+	"maxTime": 1709740800000,
+	"stats": {
+		"numSamples": 242434,
+		"numSeries": 2091,
+		"numChunks": 2172
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01HRCVACM2ERVS0573GNK8YDFY"
+		]
+	},
+	"version": 1
+}

@@ -1,6 +1,8 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 import asyncio
+import time
+from asgiref.sync import async_to_sync
 
 
 class GameRoomManagerPong:
@@ -62,6 +64,13 @@ class GameConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         # Leave room group
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'player_left',
+                'channel_name': self.channel_name
+            }
+        )
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
@@ -342,7 +351,7 @@ class GameConsumer(AsyncWebsocketConsumer):
                 }
             )
 
-    async def player_joined_memory(self, event):
+   async def player_joined_memory(self, event):
         await self.send(text_data=json.dumps({
             'action': 'player_joined_memory',
             'room_id': event['room_id'],
