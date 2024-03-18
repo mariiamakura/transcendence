@@ -82,7 +82,7 @@ services:
     env_file:
       .env
     command:
-      --nginx.scrape-uri=http://nginx:80/metrics
+      --nginx.scrape-uri=https://nginx:80/metrics
       --web.telemetry-path=/metrics
     expose: 
       - 9113
