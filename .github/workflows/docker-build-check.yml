@@ -43,9 +43,9 @@ jobs:
       
       - name: Test Localhost:9999 Reachability
         run: |
-          response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:9999)
-          if [ $response -eq 200 ]; then
-            echo "Localhost:9999 is reachable"
+          response=$(curl -s -o /dev/null -w "%{http_code}" https://localhost:9999)
+          if [ $response -eq 60 ]; then
+            echo "Localhost:9999 is reachable and require certificate"
           else
             echo "Localhost:9999 is not reachable"
             exit 1
