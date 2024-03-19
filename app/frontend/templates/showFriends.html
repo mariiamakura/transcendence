@@ -28,7 +28,7 @@
                 {% endif %}
 
                 <form id="searchUserForm">
-                    <input type="text" name="username" placeholder="Search for users..." autocomplete="username"> <!-- or autocomplete="username" -->
+                    <input type="text" name="username" placeholder="Search for users..." autocomplete="username"> 
                     <button type="submit">Search</button>
                 </form>
                 
@@ -53,6 +53,7 @@
                                     <button onclick="addFriend('${data.username}')">Add Friend</button>
                                 `;
                                 document.getElementById('searchResults').innerHTML = addUserHtml;
+
                             }
                         })
                         .catch(error => {
@@ -68,46 +69,50 @@
                             'Content-Type': 'application/json',
                             'X-CSRFToken': getCookie('csrftoken')
                         },
-                        body: JSON.stringify({ friend_username: username })
+                        body: JSON.stringify({ username_: username })
                     })
                     .then(response => response.json())
                     .then(data => {
+                        console.log(data);
                         if(data.error) {
                             displayMessage(data.error, false);
                         } else {
-                            updateFriendList(username, data); // Update the UI to show the new friend
+                            updateFriendList(username, data); 
                             displayMessage("Friend added successfully.", true);
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        // displayMessage('An error occurred while attempting to add a friend. Please try again.', false);
+                        displayMessage('An error occurred while attempting to add a friend. Please try again.', false); 
                     });
                 }
                 
                 function updateFriendList(username, data) {
-                    // Implementation depends on how you wish to display newly added friends
-                    // This could involve appending a new element to an existing list
-                    // For simplicity, this is just an example:
                     const friendList = document.getElementById('friendsList');
                     const newFriend = document.createElement('li');
-                    newFriend.innerHTML = `${username} - <span style="color:green;">Now a Friend</span>`;
+                    newFriend.textContent = `${username} `; 
+                    if (data.online) {
+                        const onlineSpan = document.createElement('span');
+                        onlineSpan.style.color = "green";
+                        onlineSpan.textContent = "Online";
+                        newFriend.appendChild(onlineSpan);
+                    }
                     friendList.appendChild(newFriend);
                 }
                 
                 
                 function displayMessage(message, isSuccess) {
-                    var messageArea = document.getElementById('messages'); // Ensure you have a div with id="messages"
+                    var messageArea = document.getElementById('messages'); 
                     var newMessage = document.createElement('div');
                     
                     newMessage.innerHTML = `<div class="${isSuccess ? 'alert alert-success' : 'alert alert-danger'}">${message}</div>`; // Display message in an alert box
-                    messageArea.prepend(newMessage); // Add the new message at the top of the message area
+                    messageArea.prepend(newMessage); 
                 
-                    // Optionally, remove the message after a delay to keep the UI clean
+                    
                     setTimeout(() => newMessage.remove(), 5000);
                 }
                 
-                // Helper function to get CSRF token from cookies
+                
                 function getCookie(name) {
                     let cookieValue = null;
                     if (document.cookie && document.cookie !== '') {
@@ -126,23 +131,6 @@
         </div>
     </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 {% else %}
 <li class="nav-item">
