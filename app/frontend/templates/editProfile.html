@@ -7,6 +7,10 @@
         <form action="editProfile" method="POST">
           {% csrf_token %}
           <div class="form-group">
+            <label for="displayName">Display Name</label>
+            <input type="name" class="form-control" id="displayName" placeholder="Enter your Display Name" name="displayName" />
+          </div>
+          <div class="form-group">
             <label for="Name">Firstname</label>
             <input type="name" class="form-control" id="inputName" placeholder="Enter your Firstame" name="name" />
           </div>

@@ -6,6 +6,10 @@ from django.core.files.storage import FileSystemStorage
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 import requests
+import json
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.utils.timezone import now
 import os
@@ -26,6 +30,7 @@ def signUp(request):
     # handle the form submission logic here
     if request.method == 'POST':
         username = request.POST.get('username', '')
+        display_name = request.POST.get('username', '')
         email = request.POST.get('email', '')
         password1 = request.POST.get('password1', '')
         password2 = request.POST.get('password2', '')
@@ -33,7 +38,7 @@ def signUp(request):
             messages.error(request, 'Passwords do not match')
             return render(request=request, template_name="signUp.html", context={})
         try:
-            user = User.objects.create_user(username=username, email=email, password=password1)
+            user = User.objects.create_user(username=username, email=email, password=password1, display_name=display_name)
             # redirect the user to the home page
             user = authenticate(username=username, password=password1)
             if user is not None:
@@ -83,14 +88,16 @@ def editProfile(request):
         if request.method == 'POST':
             if request.POST.get('name') != "":
                 user.name = request.POST.get('name')
+            if request.POST.get('displayName') != "":
+                user.display_name = request.POST.get('displayName')
             if request.POST.get('surname') != "":
                 user.surname = request.POST.get('surname')
             if request.POST.get('email') != "":
                 user.email = request.POST.get('email')
             if request.POST.get('birthdate') != "":
                 user.birthdate = request.POST.get('birthdate')
-            if request.POST.get('avatar_url') != "":
-                user.avatar_url = request.POST.get('avatar_url')
+            # if request.POST.get('avatar_url') != "":
+            #     user.avatar_url = request.POST.get('avatar_url')
             user.save()
             # return HttpResponse("Profile updated successfully")
             return render(request=request, template_name="profile.html", context={"user": user})
@@ -162,6 +169,7 @@ def callback(request):
             avatar_url = user_info['image']['link']
             surename = user_info['last_name']
             name = user_info['first_name']
+            display_name = user_info['login']
             # # campus = user_info['campus']
             # # level = user_info['cursus_users'][0]['level']
 
@@ -172,7 +180,7 @@ def callback(request):
                     login(request, user)  # login the user so they do not have to re enter the same information again
                 return redirect("/")
             else:
-                user = User.objects.create_user(username=username, email=email, password=password1, avatar_url=avatar_url, name=name, surname=surename)
+                user = User.objects.create_user(username=username, email=email, password=password1, avatar_url=avatar_url, name=name, surname=surename, display_name=display_name)
                 # redirect the user to the home page
                 user = authenticate(username=username, password=password1)
                 if user is not None:
@@ -243,6 +251,136 @@ def changeAvatar(request):
     else:
         messages.error(request, 'You are not signed in! Please sign in to edit your profile.')
         return redirect('signIn')
+
+
+# def showFriends(request):
+#     User = get_user_model()
+#     if request.user.is_authenticated:
+#         user = User.objects.get(username=request.user)
+
+#         friends_ids = user.friends
+#         friends = list(User.objects.filter(user_id__in=friends_ids))
+#         return render(request=request, template_name="showFriends.html", context={"user": user, "friends": friends})
+#     else:
+#         messages.error(request, 'You are not signed in! Please sign in to view your friends.')
+#         return render(request=request, template_name="signIn.html", context={})
+
+
+def searchUsers(request):
+    if request.user.is_authenticated:
+        if request.method == "GET":
+            username = request.GET.get('username', None)
+            if username:
+                User = get_user_model()
+                try:
+                    user = User.objects.get(username=username)
+                    # You might want to return more details or render a template
+                    return JsonResponse({"username": user.username, "user_id": user.user_id, "online": user.online}, safe=False)
+                except User.DoesNotExist:
+                    return JsonResponse({"error": "User not found"}, status=404)
+            return JsonResponse({"error": "No username provided"}, status=400)
+
+
+@login_required
+@csrf_exempt
+def addFriend(request):
+    if request.method == 'POST':
+        User = get_user_model()
+        data = json.loads(request.body)
+        friend_username = data.get('friend_username', '').strip()
+
+        if not friend_username:
+            return JsonResponse({"error": "Username required."}, status=400)
+
+        if friend_username == request.user.username:
+            return JsonResponse({"error": "You cannot add yourself as a friend."}, status=400)
+
+        try:
+            friend = User.objects.get(username=friend_username)
+            friend  # to avoid flake warning
+        except User.DoesNotExist:
+            return JsonResponse({"error": "User not found."}, status=404)
+
+        # Updated check for already a friend
+        if any(friend['username'] == friend_username for friend in request.user.friends):
+            return JsonResponse({"error": "This user is already your friend."}, status=400)
+
+        request.user.friends.append(friend.pk)  # Add friend
+
+        # request.user.friends.append({"username": friend_username})
+        request.user.save()
+
+        return JsonResponse({"success": True, "message": "Friend added successfully.", "friend_username": friend_username})
+    else:
+        return JsonResponse({"error": "Invalid request method."}, status=405)
+
+
+def showFriends(request):
+    if not request.user.is_authenticated:
+        messages.error(request, 'You are not signed in! Please sign in to view your friends.')
+        return redirect('signIn')
+
+    # Assuming 'friends' is a list of user IDs stored in a JSONField.
+    User = get_user_model()
+    friend_ids = request.user.friends
+    friends = User.objects.filter(user_id__in=friend_ids)
+
+    return render(request, 'showFriends.html', {'friends': friends})
+
+# def showFriends(request):
+#     if not request.user.is_authenticated:
+#         messages.error(request, "You need to be signed in to view friends.")
+#         return redirect("signIn")
+
+#     friend_ids = request.user.friends  # Assuming this is a list of IDs
+#     friends = []
+
+#     for friend_id in friend_ids:
+#         try:
+#             friend = User.objects.get(id=friend_id)
+#             friends.append(friend)
+#         except ObjectDoesNotExist:
+#             # Handle the case where a friend ID does not correspond to an existing user
+#             pass
+
+#     return render(request, "showFriends.html", {"friends": friends})
+
+# @login_required
+# @require_POST
+# def addFriend(request):
+#     try:
+#         data = json.loads(request.body)
+#         User = get_user_model()
+#         friend_id = data.get('friend_id')
+
+#         if friend_id == request.user.pk:
+#             return JsonResponse({"error": "You cannot add yourself as a friend."}, status=400)
+
+#         if friend_id in request.user.friends:
+#             return JsonResponse({"error": "This user is already your friend."}, status=400)
+
+#         friend = User.objects.get(pk=friend_id)  # Ensure you're using primary key lookup
+
+#         # If friends field is not initialized
+#         if not request.user.friends:
+#             request.user.friends = []
+
+#         request.user.friends.append(friend.pk)  # Add friend
+#         request.user.save()
+
+#         return JsonResponse({
+#             "success": "Friend added",
+#             "friend_id": friend.pk,
+#             "display_name": friend.display_name,  # Assuming username is the display name
+#             "online": friend.online
+#         }, status=200)
+#     except User.DoesNotExist:
+#         return JsonResponse({"error": "Friend not found"}, status=404)
+#     except json.JSONDecodeError:
+#         return JsonResponse({"error": "Invalid JSON"}, status=400)
+#     except Exception as e:
+#         return JsonResponse({"error": str(e)}, status=400)
+
 
 # def changeAvatar(request):
 #     User = get_user_model()

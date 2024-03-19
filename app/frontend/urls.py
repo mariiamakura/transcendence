@@ -19,7 +19,11 @@ urlpatterns = [
     path('gamePong', views.gamePong, name='gamePong'),
     path('callback', views.callback, name='callback'),
     path('changeAvatar', views.changeAvatar, name='changeAvatar'),
+    path('showFriends', views.showFriends, name='showFriends'),
+    path('searchUsers/', views.searchUsers, name='searchUsers'),
+    path('addFriend/', views.addFriend, name='addFriend'),
 ]
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

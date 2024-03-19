@@ -34,6 +34,8 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - ./.env.db
+    ports:
+      - 5432:5432
     networks:
       - localhost
 

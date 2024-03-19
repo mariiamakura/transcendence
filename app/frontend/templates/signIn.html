@@ -14,7 +14,7 @@
       <form action="signIn" method="POST">
         {% csrf_token %}
         <div class="form-group">
-          <label for="inputEmail">Intraname</label>
+          <label for="inputUsername">Intraname</label>
           <input type="username" class="form-control" id="inputUsername" placeholder="Enter Intraname" name="username"
             required>
         </div>
@@ -32,7 +32,7 @@
         <input type="hidden" name="response_type" value="code">
         <input type="hidden" name="scope" value="public">
         <input type="hidden" name="state" id="stateInput">
-        <input type="hidden" name="prompt" value="consent">
+        {% comment %} <input type="hidden" name="prompt" value="consent"> {% endcomment %}
         <div class="text-center">
           <p>or</p>
           <button class="btn btn-success" type="submit">SignIn with 42</button>

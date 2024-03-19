@@ -1,0 +1,158 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            {% if request.user.is_authenticated %}
+                <h2 class="text-center mb-4">Friendlist</h2>
+                <div id="messages">
+                    {% for message in messages %}
+                    <div class="{% if message.tags %}alert alert-{{ message.tags }}{% endif %}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+                {% if friends %}
+                    <ul id="friendsList">
+                        {% for friend in friends %}
+                        <li id="friend-{{ friend.id }}">
+                            {{ friend.username }}
+                            {% if friend.online %}
+                            <span style="color:green;">● Online</span>
+                            {% else %}
+                            <span style="color:red;">● Offline</span>
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>You have no friends yet.</p>
+                {% endif %}
+
+                <form id="searchUserForm">
+                    <input type="text" name="username" placeholder="Search for users..." autocomplete="username"> <!-- or autocomplete="username" -->
+                    <button type="submit">Search</button>
+                </form>
+                
+                
+                <div id="searchResults"></div>
+                
+                    
+
+            <script>
+                document.getElementById('searchUserForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    var username = this.elements['username'].value;
+                
+                    fetch(`/searchUsers/?username=${username}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if(data.error) {
+                                displayMessage(data.error, false);
+                            } else {
+                                let addUserHtml = `
+                                    <p>${data.username} (${data.online ? 'Online' : 'Offline'})</p>
+                                    <button onclick="addFriend('${data.username}')">Add Friend</button>
+                                `;
+                                document.getElementById('searchResults').innerHTML = addUserHtml;
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error during fetch:', error);
+                            displayMessage(`An error occurred: ${error.message}`, false);
+                        });
+                });
+                
+                function addFriend(username) {
+                    fetch('/addFriend/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken')
+                        },
+                        body: JSON.stringify({ friend_username: username })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if(data.error) {
+                            displayMessage(data.error, false);
+                        } else {
+                            updateFriendList(username, data); // Update the UI to show the new friend
+                            displayMessage("Friend added successfully.", true);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        // displayMessage('An error occurred while attempting to add a friend. Please try again.', false);
+                    });
+                }
+                
+                function updateFriendList(username, data) {
+                    // Implementation depends on how you wish to display newly added friends
+                    // This could involve appending a new element to an existing list
+                    // For simplicity, this is just an example:
+                    const friendList = document.getElementById('friendsList');
+                    const newFriend = document.createElement('li');
+                    newFriend.innerHTML = `${username} - <span style="color:green;">Now a Friend</span>`;
+                    friendList.appendChild(newFriend);
+                }
+                
+                
+                function displayMessage(message, isSuccess) {
+                    var messageArea = document.getElementById('messages'); // Ensure you have a div with id="messages"
+                    var newMessage = document.createElement('div');
+                    
+                    newMessage.innerHTML = `<div class="${isSuccess ? 'alert alert-success' : 'alert alert-danger'}">${message}</div>`; // Display message in an alert box
+                    messageArea.prepend(newMessage); // Add the new message at the top of the message area
+                
+                    // Optionally, remove the message after a delay to keep the UI clean
+                    setTimeout(() => newMessage.remove(), 5000);
+                }
+                
+                // Helper function to get CSRF token from cookies
+                function getCookie(name) {
+                    let cookieValue = null;
+                    if (document.cookie && document.cookie !== '') {
+                        const cookies = document.cookie.split(';');
+                        for (let i = 0; i < cookies.length; i++) {
+                            const cookie = cookies[i].trim();
+                            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                            }
+                        }
+                    }
+                    return cookieValue;
+                }
+            </script>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% else %}
+<li class="nav-item">
+	<a class="nav-link" href="signIn">Sign In</a>
+</li>
+<li class="nav-item">
+	<a class="nav-link" href="signUp">Sign Up</a>
+</li>
+{% endif %}
+
+
+
+{% endblock  %}

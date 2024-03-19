@@ -8,8 +8,7 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     user_id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=50, unique=True)
-    # intra_name = models.CharField(max_length=50, unique=True)
-    display_name = models.CharField(max_length=50, default=username)
+    display_name = models.CharField(max_length=50, unique=True, blank=True)
     name = models.CharField(max_length=50, default='Name')
     surname = models.CharField(max_length=50, default='Surname')
     email = models.EmailField(max_length=100, unique=True)
@@ -29,6 +28,11 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+
+# def save(self, *args, **kwargs):
+#     if not self.display_name:
+#         self.display_name = self.username
+#     super(User, self).save(*args, **kwargs)
 
 
 class Tournament(models.Model):

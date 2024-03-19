@@ -1,5 +1,95 @@
 {% extends 'index.html' %}
 {% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            {% if request.user.is_authenticated %}
+            
+            <form method="post" enctype="multipart/form-data" class="mt-5">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="avatar_url">Avatar URL:</label>
+                    <input type="text" class="form-control" name="avatar_url" id="avatar_url">
+                </div>
+
+                <div class="form-group">
+                    <label for="avatar_file"> or Upload Avatar:</label>
+                    <input type="file" class="form-control-file" name="avatar_file" id="avatar_file">
+                </div>
+
+                <div class="form-group">
+                    <label for="static_avatar">or Choose an Avatar:</label>
+                    <select class="form-control" name="static_avatar" id="static_avatar" onchange="updateAvatarPreview()">
+                        {% for filename, fileurl in available_avatars %}
+                            <option value="{{ filename }}" data-img-src="{{ fileurl }}">{{ filename }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div id="avatar_preview" class="mb-3 text-center">
+                    <!-- Preview will be inserted here -->
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Change Avatar</button>
+                </div>
+            </form>
+
+            <script>
+                function updateAvatarPreview() {
+                    var select = document.getElementById('static_avatar');
+                    var previewDiv = document.getElementById('avatar_preview');
+                    var selectedOption = select.options[select.selectedIndex];
+                    var imgUrl = selectedOption.getAttribute('data-img-src');
+                    
+                    // Clear current preview
+                    previewDiv.innerHTML = '';
+                    
+                    if (imgUrl) {
+                        var img = new Image();
+                        img.src = imgUrl;
+                        img.alt = 'Selected Avatar';
+                        img.style.maxWidth = '100px'; // Adjust as needed
+                        img.style.height = 'auto';
+                        previewDiv.appendChild(img);
+                    }
+                }
+                // Update preview on page load
+                window.onload = updateAvatarPreview;
+            </script>
+        </div>
+    </div>
+</div>
+
+            
+{% else %}
+<div class="login-prompt">
+    <div class="text-center">
+        <h2>Welcome!</h2>
+        <p>Please sign in or sign up to continue...</p>
+        <div class="mt-4">
+            <a href="signIn" class="btn btn-primary mr-2">Sign In</a>
+            <a href="signUp" class="btn btn-success">Sign Up</a>
+            <form id="authForm" action="https://api.intra.42.fr/oauth/authorize" method="GET">
+                <input type="hidden" name="client_id" value="...">
+                <input type="hidden" name="redirect_uri" value="...">
+                <input type="hidden" name="response_type" value="code">
+                <input type="hidden" name="scope" value="public">
+                <input type="hidden" name="state" id="stateInput">
+                <input type="hidden" name="prompt" value="consent">
+                <button class="btn btn-success" type="submit">SignIn with 42</button>
+            </form>  
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+
+
+{% comment %} {% extends 'index.html' %}
+{% block content %}
 {% if request.user.is_authenticated %}
 
 <form method="post" enctype="multipart/form-data">
@@ -72,4 +162,4 @@
 {% endif %}
 
 {% endblock %}
-```
+``` {% endcomment %}
