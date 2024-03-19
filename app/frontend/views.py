@@ -219,7 +219,6 @@ def showHome(request):
         return render(request=request, template_name="signIn.html", context={})
 
 
-
 @csrf_exempt
 def scoreboard(request):
     User = get_user_model()
