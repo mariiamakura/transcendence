@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 
+
 app_name = 'frontend'
 
 
@@ -21,7 +22,4 @@ urlpatterns = [
     path('update_game_result_memory/', views.update_game_result_memory, name='update_game_result_memory'),
     path('get_username/', views.get_username, name='get_username'),
 ]
-# urlpatterns = [
-#     path('signup/', views.signup_view, name='signup'),  # Endpoint for sign-up form
-#     path('signup_endpoint/', views.signup_view, name='signup'),
-# ]
+

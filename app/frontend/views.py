@@ -2,7 +2,7 @@
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model, login, logout, authenticate
-from django.http import HttpResponse
+# from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from django.http import JsonResponse
@@ -29,11 +29,15 @@ def signUp(request):
     if request.method == 'POST':
         username = request.POST.get('username', '')
         email = request.POST.get('email', '')
-        password = request.POST.get('password1', '')
+        password1 = request.POST.get('password1', '')
+        password2 = request.POST.get('password2', '')
+        if password1 != password2:
+            messages.error(request, 'Passwords do not match')
+            return render(request=request, template_name="signUp.html", context={})
         try:
-            user = User.objects.create_user(username=username, email=email, password=password)
+            user = User.objects.create_user(username=username, email=email, password=password1)
             # redirect the user to the home page
-            user = authenticate(username=username, password=password)
+            user = authenticate(username=username, password=password1)
             if user is not None:
                 login(request, user)  # login the user so they do not have to re enter the same information again
             return redirect("/")
@@ -134,7 +138,8 @@ def signOut(request):
         return render(request=request, template_name="signIn.html", context={})
         # return HttpResponse("<strong>logout successful.<a href='signIn'> Go to Login page</a></strong>")
     else:
-        return HttpResponse("<strong>invalid request</strong>")
+        messages.error(request, 'Something went wrong! Are you signed in?')
+        return render(request=request, template_name="signIn.html", context={})
 
 
 @csrf_exempt
@@ -156,7 +161,8 @@ def editProfile(request):
             return render(request=request, template_name="profile.html", context={"user": user})
         return render(request=request, template_name="editProfile.html", context={"user": user})
     else:
-        return HttpResponse("You are not logged in")
+        messages.error(request, 'You are not signed in! Please sign in to edit your profile.')
+        return render(request=request, template_name="signIn.html", context={})
 
 
 @csrf_exempt
@@ -166,6 +172,9 @@ def showProfile(request):
         # user = User.objects.get(username=request.user.username)
         user = User.objects.get(username=request.user)
         return render(request=request, template_name="profile.html", context={"user": user})
+    else:
+        messages.error(request, 'You are not signed in! Please sign in to view your profile.')
+        return render(request=request, template_name="signIn.html", context={})
 
 
 @csrf_exempt
@@ -202,8 +211,13 @@ def add_users(request):
 
 @csrf_exempt
 def showHome(request):
-    # Call the function to add users
-    return render(request=request, template_name="home.html", context={})
+
+    if request.user.is_authenticated:
+        return render(request=request, template_name="home.html", context={})
+    else:
+        messages.error(request, 'You are not signed in! Please sign in to view the home page.')
+        return render(request=request, template_name="signIn.html", context={})
+
 
 
 @csrf_exempt
@@ -234,10 +248,11 @@ def home(request):
 @csrf_exempt
 def gamePong(request):
     # User = get_user_model()
-    # if request.user.is_authenticated:
-    #     # user = User.objects.get(username=request.user.username)
-    #     user = User.objects.get(username=request.user)
-    return render(request, 'gamePong.html', context={})
+    if request.user.is_authenticated:
+        return render(request, 'gamePong.html', context={})
+    else:
+        messages.error(request, 'You are not signed in! Please sign in to play the game.')
+        return render(request=request, template_name="signIn.html", context={})
     # return render(request=request, template_name="pong.html", context={})
 
 

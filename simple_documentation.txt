@@ -44,3 +44,6 @@ Docker:
 
 			- exit with 
 					\q
+
+
+check if 

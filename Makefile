@@ -10,6 +10,21 @@ all:
 watch:
 	docker compose watch --no-up
 
+prepare: create_cert install_cert
+
+create_cert:
+	@chmod +x ./create_cert.sh
+	@./create_cert.sh
+	@cp -r ${HOME}/certs ./nginx/
+
+install_cert:
+	@chmod +x ./install_cert.sh
+	@./install_cert.sh
+
+delete_cert:
+	@chmod +x ./delete_cert.sh
+	@./delete_cert.sh
+
 clean:
 # stops and removes the containers
 	docker compose -f docker-compose.yml down --rmi all -v
@@ -74,4 +89,4 @@ fclean_force:
 	@docker network prune --force
 	@docker volume prune --force
 
-.PHONY: all, clean, fclean, re, ls, restart, logs, reload_static, down, up, migrate, connect_db, makemigrations, show_migrations, create_superuser
+.PHONY: all, clean, fclean, re, ls, restart, logs, reload_static, down, up, migrate, connect_db, makemigrations, show_migrations, create_superuser , prepare, create_cert, install_cert, watch

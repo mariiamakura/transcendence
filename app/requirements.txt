@@ -9,4 +9,7 @@ channels-redis==4.2.0
 # async-timeout>=4.0.2
 asyncio_redis==0.16.0
 asgiref==3.7.0
+# requests
+# oauthlib
+
 
