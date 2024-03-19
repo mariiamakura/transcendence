@@ -726,7 +726,7 @@ function playTime() {
 
 function endGameMemory(winner)
 {
-    console.log(winner + " won !")
+    console.log(winner);
     fetch('/update_game_result_memory/', {
         method: 'POST',
         headers: {
