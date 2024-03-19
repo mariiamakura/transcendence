@@ -316,25 +316,27 @@ let gameRoomSocket = null;
 
 async function remoteHost() {
     let hostName = "{{ user.username }}"; // This should be sanitized to ensure URL-friendliness
-    let sanitizedRoomName = encodeURIComponent(`${hostName}_Game`).replace(/'/g, ""); // Sanitize and remove special characters
+    let nameRoom = encodeURIComponent(`${hostName}_Game`).replace(/'/g, ""); // Sanitize and remove special characters
+    let setName = gameSettings.chosenSet === 1 ? "Nature" : "Robot";
+    let sanitizedRoomName = encodeURIComponent(`room_of_${hostName}_with_${gameSettings.numberOfCards}_cards_and_set_of_${setName}`).replace(/'/g, ""); // Sanitize and remove special characters
     let socket = new WebSocket(`wss://${window.location.host}/wss/socket-server/lobby/`); // Connect to the lobby
 
     socket.onopen = function(event) {
+        console.log("sanitizedRoomName", sanitizedRoomName);
 		socket.send(JSON.stringify({ 
 			action: 'create_room_memory', 
 			host_name: hostName, 
-			room_name: sanitizedRoomName, 
+			room_settings: sanitizedRoomName, 
 		}));
     };
     
     socket.onmessage = function(event) {
         const data = JSON.parse(event.data);
         if (data.action === 'room_created_memory') {
-            console.log('Room created:', data.room_id);
             // Close the lobby connection after creating the room
             socket.close();
             // Now, establish a new WebSocket connection to the newly created game room
-            gameRoomSocket = new WebSocket(`wss://${window.location.host}/wss/socket-server/${sanitizedRoomName}/`);
+            gameRoomSocket = new WebSocket(`wss://${window.location.host}/wss/socket-server/${nameRoom}/`);
             isHost = true;
             gameRoomSocket.onopen = function() {
                 console.log("Game room connection established for host.");
@@ -422,11 +424,14 @@ async function remoteClient() {
             if (games.length > 0) {
                 // Dynamically create buttons for each active game
                 games.forEach((game) => {
+                    var room_id = game[0]; // Accessing the room_id from the tuple
+                    var room_name = game[1]; // Accessing the room_name from the tuple
                     var button = document.createElement('button');
-                    button.textContent = game;
+                    button.textContent = room_name;
                     button.classList.add("styled-button");
                     button.addEventListener("click", function() {
-                        joinGameRoomMemory(game);
+                        console.log('Joining room:', room_id);
+                        joinGameRoomMemory(room_id);
                     });
                     gameList.appendChild(button);
                 });
@@ -726,7 +731,7 @@ function playTime() {
 
 function endGameMemory(winner)
 {
-    console.log(winner);
+    console.log(winner)
     fetch('/update_game_result_memory/', {
         method: 'POST',
         headers: {
