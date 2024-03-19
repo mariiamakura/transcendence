@@ -132,6 +132,7 @@ def showHome(request):
 def showChat(request):
     return render(request, 'chat.html')
 
+
 def gamePong(request):
     # User = get_user_model()
     if request.user.is_authenticated:
@@ -148,8 +149,10 @@ def callback(request):
     if code:
         data = {
             'grant_type': 'authorization_code',
-            'client_id': 'u-s4t2ud-ff92aa7c60b93ab9ab76619c369de4f8c7bb33c3e8c8a0ffdb386d35d2007a4c',
-            'client_secret': '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',
+            # 'client_id': 'u-s4t2ud-ff92aa7c60b93ab9ab76619c369de4f8c7bb33c3e8c8a0ffdb386d35d2007a4c',
+            # 'client_secret': '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',
+            'client_id': os.environ.get("OAUTH_CLIENT_ID"),
+            'client_secret': os.environ.get("OAUTH_CLIENT_SECRET"),
             'code': code,
             'redirect_uri': 'https://localhost:9999/callback'
         }
@@ -298,3 +301,18 @@ def showFriends(request):
     friends = User.objects.filter(pk__in=friend_ids)
 
     return render(request, 'showFriends.html', {'friends': friends})
+
+
+@login_required
+def removeFriends(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        friend_ids_to_remove = data.get('friend_ids', [])
+        current_friends = request.user.friends
+
+        request.user.friends = [friend_id for friend_id in current_friends if str(friend_id) not in friend_ids_to_remove]
+        request.user.save()
+
+        return JsonResponse({"success": True, "message": "Selected friends removed successfully."})
+    else:
+        return JsonResponse({"error": "Invalid request method"}, status=405)

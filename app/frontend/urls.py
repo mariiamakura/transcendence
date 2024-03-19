@@ -22,6 +22,7 @@ urlpatterns = [
     path('showFriends', views.showFriends, name='showFriends'),
     path('searchUsers/', views.searchUsers, name='searchUsers'),
     path('addFriend/', views.addFriend, name='addFriend'),
+    path('removeFriends/', views.removeFriends, name='removeFriends'),
 ]
 
 
