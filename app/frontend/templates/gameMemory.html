@@ -31,8 +31,6 @@ function decideHost() {
 	var buttonClient= document.createElement("button"); 
 	buttonHost.textContent = "Create New Game";
 	buttonClient.textContent = "Join Existing Game";
-	// buttonSingle.textContent = "1 vs 1";
-	// buttonTournament.textContent = "Tournament";
 	buttonHost.classList.add("styled-button")
 	buttonClient.classList.add("styled-button");
 	document.getElementById('choice').appendChild(buttonHost);
@@ -124,8 +122,6 @@ function showButton() {
 	main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> Which type of game do you wanna play ? </p></div>';
 	var buttonTournament = document.createElement("button");
 	var buttonSingle = document.createElement("button");
-	// buttonSingle.textContent = "Find existing game";
-	// buttonTournament.textContent = "Create New Game";
 	buttonSingle.textContent = "1 vs 1";
 	buttonTournament.textContent = "Tournament";
 	buttonSingle.classList.add("styled-button")
@@ -251,8 +247,6 @@ async function showButton() {
 	var buttonLocal = document.createElement("button"); 
 	buttonLocal.textContent = "Play local Game";
 	buttonRemote.textContent = "Play remote Game";
-	// buttonSingle.textContent = "1 vs 1";
-	// buttonTournament.textContent = "Tournament";
 	buttonLocal.classList.add("styled-button")
 	buttonRemote.classList.add("styled-button");
 	document.getElementById('choice').appendChild(buttonRemote);

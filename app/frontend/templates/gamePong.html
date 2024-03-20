@@ -14,11 +14,37 @@
 {% comment %} gameMenu.js {% endcomment %}
 
 let startGame;
-let tournament;
 let singleGame;
 let numberPlayers;
 let local;
 let remote;
+let tournament;
+
+function TwoOrTournament() {
+
+    var main = document.getElementById('content');
+    main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> Do you want to play a 1vs1 game or a tournament ? </p></div>';
+    var button1vs1 = document.createElement("button");
+    var buttonTournament = document.createElement("button"); 
+    buttonTournament.textContent = "Play tournament";
+    button1vs1.textContent = "Play 1vs1";
+    buttonTournament.classList.add("styled-button")
+    button1vs1.classList.add("styled-button");
+    document.getElementById('choice').appendChild(button1vs1);
+    document.getElementById('choice').appendChild(buttonTournament);
+    return new Promise(function (resolve) {
+        button1vs1.addEventListener("click", function() {
+            resolve(true);
+            document.getElementById('choice').remove();
+            tournament = false;
+        });
+        buttonTournament.addEventListener("click", function() {
+            resolve(false);
+            document.getElementById('choice').remove();
+            tournament = true;
+        });
+    });
+}
 
 function showButton() {
 
@@ -28,8 +54,6 @@ function showButton() {
     var buttonLocal = document.createElement("button"); 
     buttonLocal.textContent = "Play local Game";
     buttonRemote.textContent = "Play remote Game";
-	// buttonSingle.textContent = "1 vs 1";
-    // buttonTournament.textContent = "Tournament";
     buttonLocal.classList.add("styled-button")
     buttonRemote.classList.add("styled-button");
     document.getElementById('choice').appendChild(buttonRemote);
@@ -58,8 +82,6 @@ function decideHost() {
     var buttonClient= document.createElement("button"); 
     buttonHost.textContent = "Create New Game";
     buttonClient.textContent = "Join Existing Game";
-	// buttonSingle.textContent = "1 vs 1";
-    // buttonTournament.textContent = "Tournament";
     buttonHost.classList.add("styled-button")
     buttonClient.classList.add("styled-button");
     document.getElementById('choice').appendChild(buttonHost);
@@ -182,15 +204,12 @@ function scoreChoice() {
     return new Promise(function (resolve) {
         unlimited.addEventListener("click", function() {
             resolve(true);
-            scoreToDo = -1;
+            scoreToDo = 10000;
             document.getElementById('choice').remove();
         });
         scoreTwelve.addEventListener("click", function() {
             resolve(true);
-            if (debugPong === 3)
-                scoreToDo = 12;
-            else
-                scoreToDo = 12;
+            scoreToDo = 12;
             document.getElementById('choice').remove();
         });
         scoreEighteen.addEventListener("click", function() {
@@ -233,14 +252,16 @@ async function showGamePong() {
 	singleGame = false;
 	numberPlayers = 0;
 	namePlayer = [];
-	//namePlayer = {{  user.username  }};
 	
 	if (await showButton())
 	{
-        await scoreChoice();
 		//remote Game
+        await TwoOrTournament();
+        if (tournament === true)
+            await numPlayers();
 		if (await decideHost())
 		{
+            await scoreChoice();
             namePlayer[0] = "{{  user.username  }}";
 			//host
 			remoteHost();
@@ -256,9 +277,16 @@ async function showGamePong() {
 	else
 	{
 		//local Game
+        await TwoOrTournament();
+        if (tournament === true)
+        {
+            await numPlayers();
+            await getNamePlayer();
+        }
 		namePlayer[0] = "{{  user.username  }}";
-		namePlayer[1] = "Guest Player";
-		numberPlayers = 2;
+		// namePlayer[1] = "Guest Player";
+
+		// numberPlayers = 2;
 		await scoreChoice();
 		if (namePlayer.length === numberPlayers && scoreToDo !== 0)
 		{
@@ -296,7 +324,6 @@ async function remoteHost() {
             gameRoomSocket.onopen = function() {
                 console.log("Game room connection established for host.");
             };
-
             gameRoomSocket.onmessage = function(event) {
                 // Handle messages from the server, such as a player joining the room
                 const data = JSON.parse(event.data);
@@ -373,14 +400,10 @@ async function remoteClient() {
                     });
                     gameList.appendChild(button);
                 });
-            } else {
-                // Display message if no active games are available
+            } else
                 gameList.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em;">No active games</p>';
-            }
-        } else if (data.action === 'joined_room_pong') {
+        } else if (data.action === 'joined_room_pong')
             console.log('Joined room:', data.room_id);
-            
-        }
         
     };
 
@@ -395,9 +418,7 @@ async function remoteClient() {
             roomSocket.send(JSON.stringify({ action: 'join_room_pong', room_id: roomId , guest_name: "{{ user.username }}"}));
             namePlayer[0] =  roomId.replace('_Game', '');
         };
-        console.log("next step");
         roomSocket.onmessage = function(event) {
-            console.log("received message");    
             const data = JSON.parse(event.data);
             if (data.action === 'countdown_pong')
                 updateCountdownDisplay(data.message);
@@ -407,7 +428,7 @@ async function remoteClient() {
                 if (countdownElement) {
                     countdownElement.remove();
                 }
-                startTheGamePong(); 
+                startTheGamePong();
             }
             if (data.action === 'update_ball_position_pong') {
                 newBall.x = data.ball_x;
