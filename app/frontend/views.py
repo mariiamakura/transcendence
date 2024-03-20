@@ -151,10 +151,13 @@ def callback(request):
             'grant_type': 'authorization_code',
             # 'client_id': 'u-s4t2ud-ff92aa7c60b93ab9ab76619c369de4f8c7bb33c3e8c8a0ffdb386d35d2007a4c',
             # 'client_secret': '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',
-            'client_id': os.environ.get("OAUTH_CLIENT_ID"),
-            'client_secret': os.environ.get("OAUTH_CLIENT_SECRET"),
+            # 'client_id': os.environ.get("OAUTH_CLIENT_ID"),
+            # 'client_secret': os.environ.get("OAUTH_CLIENT_SECRET"),
+            'client_id': 'u-s4t2ud-3340582d8e36a59e556f11439d37e50342b0e10bdf98037b38befbf6e410bbca',
+            'client_secret': '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',
             'code': code,
-            'redirect_uri': 'https://localhost:9999/callback'
+            # 'redirect_uri': 'https://localhost:9999/callback'
+            'redirect_uri': 'https://42pong.ddns.net:9999/callback'
         }
 
         try:

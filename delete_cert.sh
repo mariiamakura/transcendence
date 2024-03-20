@@ -35,5 +35,5 @@ for folder in "${FIREFOX_DIR}"*; do
         fi
     fi
 done
-
+rm -f /home/${USER}/sgoinfre/homebrew/etc/ddclient.conf
 echo "Process completed."

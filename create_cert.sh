@@ -20,6 +20,13 @@ else
     echo -e "${GREEN}Homebrew is already installed.${NC}"
 fi
 
+if ! brew list ddclient &>/dev/null; then
+	echo -e "${BLUE}Installing ddclient...${NC}"
+	brew install ddclient
+	cp ddcclient.conf /home/${USER}/sgoinfre/homebrew/etc/ddclient.conf
+else
+	echo -e "${GREEN}ddclient is already installed.${NC}"
+fi
 
 if ! brew list mkcert &>/dev/null; then
     echo -e "${BLUE}Installing mkcert...${NC}"
@@ -44,7 +51,7 @@ mkdir -p "${CERT_DIR}"
 
 CURRENT_IP=$(hostname -I | awk '{print $1}')
 echo -e "${BLUE}Setting up SSL certificates...${NC}"
-mkcert -key-file "${CERT_DIR}/nginx.key" -cert-file "${CERT_DIR}/nginx.crt" localhost "${CURRENT_IP}" &>/dev/null
+mkcert -key-file "${CERT_DIR}/nginx.key" -cert-file "${CERT_DIR}/nginx.crt" localhost "${CURRENT_IP}" "42pong.ddns.net" &>/dev/null
 
 
 echo -e "${GREEN}SSL certificates created!${NC}"

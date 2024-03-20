@@ -9,7 +9,7 @@ channels-redis==4.2.0
 asyncio_redis==0.16.0
 asgiref==3.7.0
 requests
-oauthlib
+# oauthlib
 django-cors-headers
 
 

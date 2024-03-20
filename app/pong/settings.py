@@ -173,7 +173,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-CSRF_TRUSTED_ORIGINS = ["https://localhost:9999/*", "http://localhost:9999/*"]
+CSRF_TRUSTED_ORIGINS = ["https://localhost:9999/*", "http://localhost:9999/*", "https://42pong.ddns.net:9999/*", "http://42pong.ddns.net:9999/*"]
 
 # Allow all domains during development
 CORS_ALLOW_ALL_ORIGINS = True
