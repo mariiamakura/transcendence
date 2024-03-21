@@ -210,8 +210,12 @@ def add_users(request):
     # Loop through the users data and add them to the database if they don't exist
     for user_data in users_data:
         username = user_data['username']
+        email = user_data['email']
+        display_name = user_data['display_name']
         if not User.objects.filter(username=username).exists():
-            User.objects.create_user(**user_data)
+            if not User.objects.filter(email=email).exists():
+                if not User.objects.filter(display_name=display_name).exists():
+                    User.objects.create_user(**user_data)
 
 
 def showHome(request):
