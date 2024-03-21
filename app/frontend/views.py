@@ -194,6 +194,7 @@ def add_users(request):
             "email": fake.email(),
             "name": fake.first_name(),
             "surname": fake.last_name(),
+            "display_name": fake.user_name(),
             "pong_games_played": random.randint(0, 50),
             "pong_games_won": random.randint(0, 50),
             "pong_win_streak": random.randint(0, 20),
