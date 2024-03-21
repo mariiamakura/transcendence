@@ -36,4 +36,5 @@ for folder in "${FIREFOX_DIR}"*; do
     fi
 done
 rm -f /home/${USER}/sgoinfre/homebrew/etc/ddclient.conf
+brew uninstall ddclient
 echo "Process completed."

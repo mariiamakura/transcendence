@@ -20,13 +20,16 @@ else
     echo -e "${GREEN}Homebrew is already installed.${NC}"
 fi
 
-if ! brew list ddclient &>/dev/null; then
-	echo -e "${BLUE}Installing ddclient...${NC}"
-	brew install ddclient
-	cp ddcclient.conf /home/${USER}/sgoinfre/homebrew/etc/ddclient.conf
-else
-	echo -e "${GREEN}ddclient is already installed.${NC}"
-fi
+# UNCOMMENT FOR EVALUATION!!!!!!!!!!
+# if ! brew list ddclient &>/dev/null; then
+# 	echo -e "${BLUE}Installing ddclient...${NC}"
+# 	brew install ddclient
+# 	cp ddcclient.conf /home/${USER}/sgoinfre/homebrew/etc/ddclient.conf
+#   cp .env.ddclient /home/${USER}/sgoinfre/homebrew/etc/.env.ddclient
+# else
+# 	echo -e "${GREEN}ddclient is already installed.${NC}"
+# fi
+# ddclient
 
 if ! brew list mkcert &>/dev/null; then
     echo -e "${BLUE}Installing mkcert...${NC}"
