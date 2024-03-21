@@ -3,6 +3,7 @@
 {% block content %}
 {% if request.user.is_authenticated %}
 
+
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -15,8 +16,23 @@
                 <img src="https://apply.42berlin.de/uploads/admissions/campus/logo_website/82/42bln_logo_black.svg" style="width: 20%; height: auto;">
             </div>
         </div>
+
+        <div class="container mt-4">
+          <h1 class="text-center">Ranking</h1>
+          <div class="row">
+            <div class="col-md-6 offset-md-3">
+              <ul class="list-group">
+                {% for user in top_three_users %}
+                  <li class="list-group-item">{{ forloop.counter }}: {{ user.username }} Games won: {{ user.pong_games_won }}</li>
+                {% endfor %}
+            </ul>
+
+        </div>
+      </div>
     </div>
   </div>
+</div>
+  
 {% else %}
 <div class="login-prompt">
     <div class="text-center">

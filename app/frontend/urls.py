@@ -23,8 +23,16 @@ urlpatterns = [
     path('searchUsers/', views.searchUsers, name='searchUsers'),
     path('addFriend/', views.addFriend, name='addFriend'),
     path('removeFriends/', views.removeFriends, name='removeFriends'),
+    path('scoreboard', views.scoreboard, name='scoreboard'),
+    path('home', views.home, name='home'),
+    path('gameMemory', views.gameMemory, name='gameMemory'),
+    path('update_game_result_pong/', views.update_game_result_pong, name='update_game_result_pong'),
+    path('update_game_result_memory/', views.update_game_result_memory, name='update_game_result_memory'),
+    path('get_username/', views.get_username, name='get_username'),
+
 ]
 
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

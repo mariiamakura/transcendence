@@ -85,20 +85,22 @@ services:
   #   networks:
   #     - localhost
 
-  # nginx-prometheus-exporter:
-  #   image: nginx/nginx-prometheus-exporter:1.0
-  #   container_name: prometheus-nginx-exporter
-  #   env_file:
-  #     .env
-  #   command:
-  #     --nginx.scrape-uri=http://nginx:80/metrics
-  #     --web.telemetry-path=/metrics
-  #   expose: 
-  #     - 9113
-  #   depends_on:
-  #     - prometheus
-  #   networks:
-  #     - localhost
+ 
+#   nginx-prometheus-exporter:
+#     image: nginx/nginx-prometheus-exporter:1.0
+#     container_name: prometheus-nginx-exporter
+#     env_file:
+#       .env
+#     command:
+#       --nginx.scrape-uri=https://nginx:80/metrics
+#       --web.telemetry-path=/metrics
+#     expose: 
+#       - 9113
+#     depends_on:
+#       - prometheus
+#     networks:
+#       - localhost
+
 
   # prometheus-node-exporter:
   #   image: prom/node-exporter:latest

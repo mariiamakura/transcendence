@@ -13,6 +13,10 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.utils.timezone import now
 import os
+from database.models import User
+from faker import Faker
+import random
+
 
 
 def signUp(request):
@@ -67,8 +71,74 @@ def signIn(request):
     return render(request=request, template_name="signIn.html", context={})
 
 
+
 def home(request):
     return render(request=request, template_name="home.html", context={})
+
+
+def update_game_result_pong(request):
+    print("UPDATING")
+    if request.method == 'POST':
+        # Parse JSON data from the request body
+        data = json.loads(request.body)
+        winner = data.get('winner')
+        # Update the logged-in user's data based on the game result
+        if winner == request.user.username:
+            # Increment the logged-in user's games won count
+            request.user.pong_games_won += 1
+            request.user.pong_win_streak += 1
+            request.user.pong_games_played += 1  # Increment games played
+            request.user.save()
+            return JsonResponse({'message': 'Game result updated successfully'})
+        else:
+            request.user.pong_win_streak = 0
+            request.user.pong_games_played += 1  # Increment games played
+            request.user.save()
+            return JsonResponse({'message': 'Game result updated successfully'})
+    else:
+        # Return error response for unsupported methods
+        return JsonResponse({'error': 'Unsupported method'}, status=405)
+
+
+def update_game_result_memory(request):
+    print("UPDATING")
+    if request.method == 'POST':
+        # Parse JSON data from the request body
+        data = json.loads(request.body)
+        winner = data.get('winner')
+        # Update the logged-in user's data based on the game result
+        if winner == request.user.username:
+            # Increment the logged-in user's games won count
+            request.user.memory_games_won += 1
+            request.user.memory_win_streak += 1
+            request.user.memory_games_played += 1  # Increment games played
+            request.user.save()
+            return JsonResponse({'message': 'Game result updated successfully'})
+        else:
+            request.user.memory_win_streak = 0
+            request.user.memory_games_played += 1  # Increment games played
+            request.user.save()
+            return JsonResponse({'message': 'Game result updated successfully'})
+    else:
+        # Return error response for unsupported methods
+        return JsonResponse({'error': 'Unsupported method'}, status=405)
+
+
+
+def get_user_statistics(request):
+    if request.user.is_authenticated:
+        # Fetch the user's statistics from the database
+        user_statistics = {
+            'username': request.user.username,
+            'pong_games_played': request.user.pong_games_played,
+            'pong_games_won': request.user.pong_games_won,
+            'pong_win_streak': request.user.pong_win_streak,
+            'date_joined': request.user.date_joined.strftime('%Y-%m-%d %H:%M:%S'),
+        }
+        return JsonResponse(user_statistics)
+    else:
+        return JsonResponse({'error': 'User is not authenticated'}, status=401)
+
 
 
 def signOut(request):
@@ -97,12 +167,11 @@ def editProfile(request):
                 user.surname = request.POST.get('surname')
             if request.POST.get('email') != "":
                 user.email = request.POST.get('email')
+
             if request.POST.get('birthdate') != "":
                 user.birthdate = request.POST.get('birthdate')
-            # if request.POST.get('avatar_url') != "":
-            #     user.avatar_url = request.POST.get('avatar_url')
+
             user.save()
-            # return HttpResponse("Profile updated successfully")
             return render(request=request, template_name="profile.html", context={"user": user})
         return render(request=request, template_name="editProfile.html", context={"user": user})
     else:
@@ -121,7 +190,40 @@ def showProfile(request):
         return render(request=request, template_name="signIn.html", context={})
 
 
+
+def add_users(request):
+    User = get_user_model()
+    fake = Faker()
+
+    # Generate 50 users with random data
+    users_data = []
+    for _ in range(50):
+        user_data = {
+            "username": fake.user_name(),
+            "email": fake.email(),
+            "name": fake.first_name(),
+            "surname": fake.last_name(),
+            "pong_games_played": random.randint(0, 50),
+            "pong_games_won": random.randint(0, 50),
+            "pong_win_streak": random.randint(0, 20),
+            "pong_tournaments_won": random.randint(0, 5),
+            "memory_games_played": random.randint(0, 50),
+            "memory_games_won": random.randint(0, 50),
+            "memory_win_streak": random.randint(0, 20),
+            "memory_tournaments_won": random.randint(0, 5),
+            "date_of_creation": fake.date_time_this_decade().isoformat()
+        }
+        users_data.append(user_data)
+
+    # Loop through the users data and add them to the database if they don't exist
+    for user_data in users_data:
+        username = user_data['username']
+        if not User.objects.filter(username=username).exists():
+            User.objects.create_user(**user_data)
+
+
 def showHome(request):
+
     if request.user.is_authenticated:
         return render(request=request, template_name="home.html", context={})
     else:
@@ -129,8 +231,33 @@ def showHome(request):
         return render(request=request, template_name="signIn.html", context={})
 
 
+
 def showChat(request):
     return render(request, 'chat.html')
+
+def scoreboard(request):
+    User = get_user_model()
+    if request.user.is_authenticated:
+        user = User.objects.get(username=request.user)
+        return render(request=request, template_name="scoreboard.html", context={"user": user})
+
+
+@csrf_exempt
+def get_username(request):
+    if request.method == 'GET':
+        # Assuming the user is authenticated and you want to get the username of the authenticated user
+        username = request.user.username
+        return JsonResponse({'username': username})
+
+
+@csrf_exempt
+def home(request):
+    # Retrieve the top three users based on games won
+    top_three_users = User.objects.order_by('-pong_games_won')[:3]
+    context = {'top_three_users': top_three_users}
+    add_users(request)
+    return render(request, 'home.html', context)
+
 
 
 def gamePong(request):
@@ -315,3 +442,8 @@ def removeFriends(request):
         return JsonResponse({"success": True, "message": "Selected friends removed successfully."})
     else:
         return JsonResponse({"error": "Invalid request method"}, status=405)
+
+
+def gameMemory(request):
+    return render(request, 'gameMemory.html', context={})
+

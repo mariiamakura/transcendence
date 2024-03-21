@@ -183,10 +183,17 @@ main {
     transition: background-color 0.3s;
   }
   
+.dropdown {
+    position: relative;
+    display: inline-block;
+    z-index: 1;
+}
+
   /* Style the dropdown content (hidden by default) */
-.dropdown-content {
+ .dropdown-content {
     display: none;
     position: absolute;
+    z-index: 2;
 }
 
 /* Style the links inside the dropdown */
@@ -213,6 +220,11 @@ main {
     background-color: #dfe4ea;
 }
 
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
 #choice {
     overflow: visible;
     background-color: white;
@@ -223,5 +235,4 @@ main {
     width: auto;
     height: auto;
     overflow:hidden;
-
 }

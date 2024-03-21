@@ -9,15 +9,10 @@
 		</div>
 	</div>
 </div>
-
-
-
 <script>
 
-
-
-
 {% comment %} gameMenu.js {% endcomment %}
+
 let startGame;
 let tournament;
 let singleGame;
@@ -48,7 +43,7 @@ function showButton() {
         buttonLocal.addEventListener("click", function() {
             resolve(false);
             document.getElementById('choice').remove();
-            loacal = true;
+            local = true;
         });
     });
 }
@@ -139,7 +134,6 @@ function submitButton(submit) {
         });
     });
 }
-
 
 async function getNamePlayer() {
     var main = document.getElementById('content');
@@ -243,7 +237,7 @@ async function showGamePong() {
 	
 	if (await showButton())
 	{
-        scoreToDo = 12;
+        await scoreChoice();
 		//remote Game
 		if (await decideHost())
 		{
@@ -265,7 +259,7 @@ async function showGamePong() {
 		namePlayer[0] = "{{  user.username  }}";
 		namePlayer[1] = "Guest Player";
 		numberPlayers = 2;
-		scoreToDo = 12;
+		await scoreChoice();
 		if (namePlayer.length === numberPlayers && scoreToDo !== 0)
 		{
 			await startButton();
@@ -289,12 +283,12 @@ async function remoteHost() {
     let socket = new WebSocket(`wss://${window.location.host}/wss/socket-server/lobby/`); 
 
     socket.onopen = function(event) {
-        socket.send(JSON.stringify({ action: 'create_room', host_name: hostName, room_name: sanitizedRoomName }));
+        socket.send(JSON.stringify({ action: 'create_room_pong', host_name: hostName, room_name: sanitizedRoomName }));
     };
     
     socket.onmessage = function(event) {
         const data = JSON.parse(event.data);
-        if (data.action === 'room_created') {
+        if (data.action === 'room_created_pong') {
             console.log('Room created:', data.room_id);
             socket.close();
             gameRoomSocket = new WebSocket(`wss://${window.location.host}/wss/socket-server/${sanitizedRoomName}/`);
@@ -306,29 +300,23 @@ async function remoteHost() {
             gameRoomSocket.onmessage = function(event) {
                 // Handle messages from the server, such as a player joining the room
                 const data = JSON.parse(event.data);
-                if (data.action === 'player_joined') {
-                        console.log(`${data.guest_name} has joined the game.`);
-                        // for (let i = 5; i > 0; i--) {
-						// setTimeout(() => {
-						// 	gameRoomSocket.send(JSON.stringify({ action: 'countdown', message: i }));
-						// }, 1000);
-					// }
-                    if (data.guest_name) {
+                if (data.action === 'player_joined_pong') {
+                    console.log(`${data.guest_name} has joined the game.`);
+                  if (data.guest_name) {
                         namePlayer[1] = data.guest_name;
                     }
                 }
                 // Handle countdown message
-                if (data.action === 'game_countdown') {
-					console.log("game_countdown " + data.message);
+                if (data.action === 'countdown_pong')
                     updateCountdownDisplay(data.message);
-                } else if (data.action === 'start_game') {
+                else if (data.action === 'start_game_pong') {
                     let countdownElement = document.getElementById('countdown');
                     if (countdownElement) {
                         countdownElement.remove(); // Remove the countdown display
                     }
-                    startTheGame(); // Function to initialize or start the game
+                    startTheGamePong(); // Function to initialize or start the game
                 }
-                if (data.action === 'update_player_position') {
+                if (data.action === 'update_player_position_pong') {
 
                     if (data.player === 'player2') {
                         player2.y = data.position_y;
@@ -357,8 +345,6 @@ async function remoteHost() {
     }
 }
 
-
-
 // clientsocket
 let roomSocket = null;
 
@@ -367,12 +353,12 @@ async function remoteClient() {
 
     socket.onopen = function(event) {
         // Request the list of active game rooms once the WebSocket connection is open
-        socket.send(JSON.stringify({ action: 'list_rooms' }));
+        socket.send(JSON.stringify({ action: 'list_rooms_pong' }));
     };
 
     socket.onmessage = function(event) {
         const data = JSON.parse(event.data);
-        if (data.action === 'list_rooms') {
+        if (data.action === 'list_rooms_pong') {
             const games = data.rooms; // Array of active game rooms
             var gameList = document.getElementById('content');
             gameList.innerHTML = ''; // Clear previous content
@@ -392,7 +378,7 @@ async function remoteClient() {
                 // Display message if no active games are available
                 gameList.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em;">No active games</p>';
             }
-        } else if (data.action === 'joined_room') {
+        } else if (data.action === 'joined_room_pong') {
             console.log('Joined room:', data.room_id);
             
         }
@@ -406,33 +392,35 @@ async function remoteClient() {
         
         roomSocket.onopen = function() {
             // Notify the server that the client has joined the room
-            roomSocket.send(JSON.stringify({ action: 'join_room', room_id: roomId , guest_name: "{{ user.username }}"}));
+            console.log("Game room connection established for client.");
+            roomSocket.send(JSON.stringify({ action: 'join_room_pong', room_id: roomId , guest_name: "{{ user.username }}"}));
             namePlayer[0] =  roomId.replace('_Game', '');
         };
-
+        console.log("next step");
         roomSocket.onmessage = function(event) {
+            console.log("received message");    
             const data = JSON.parse(event.data);
-            if (data.action === 'game_countdown') {
-                console.log("game_countdown " + data.message);
+            if (data.action === 'countdown_pong')
                 updateCountdownDisplay(data.message);
-            } else if (data.action === 'start_game') {
+            else if (data.action === 'start_game_pong') {
+                console.log('Game is starting...');
                 let countdownElement = document.getElementById('countdown');
                 if (countdownElement) {
                     countdownElement.remove();
                 }
-                startTheGame(); 
+                startTheGamePong(); 
             }
-            if (data.action === 'update_ball_position') {
+            if (data.action === 'update_ball_position_pong') {
                 newBall.x = data.ball_x;
                 newBall.y = data.ball_y;
                 console.log("ball position received");
             }
-            if (data.action === 'update_player_scores') {
+            if (data.action === 'update_player_scores_pong') {
                 newPlayer1Score = data.player1;
                 newPlayer2Score = data.player2;
                 console.log("player scores received");
             }
-            if (data.action === 'game_ended') {
+            if (data.action === 'game_ended_pong') {
                 endGame(data.winner);
                 console.log("game ended");
             }
@@ -461,14 +449,14 @@ async function remoteClient() {
     }
 }
 
-
-function startTheGame() {
+function startTheGamePong() {
     console.log('Game is starting...');
     launchGamePong(); 
 }
 
 // Function to update or create the countdown display
 function updateCountdownDisplay(message) {
+    console.log('Countdown:', message);
     let countdownElement = document.getElementById('countdown');
     if (!countdownElement) {
         countdownElement = document.getElementById('content');
@@ -484,11 +472,7 @@ function updateCountdownDisplay(message) {
 }
 
 
-
-
-
-
-
+// BELOW IS THE GAME'S DYNAMICS
 
 
 {% comment %} gamePong.js {% endcomment %}
@@ -580,16 +564,10 @@ function initVariables() {
 function launchGamePong() {
     initVariables();
     var mainElement = document.getElementById('content');
-    if (isHost) 
+    if (isHost && remote === true) 
         namePlayer[0] = "{{ user.username }}";
-    else
+    else if (remote === true)
         namePlayer[1] = "{{ user.username }}";
-
-    if (!namePlayer[0]  )
-        namePlayer[0] = "Player1";
-    if (!namePlayer[1]) 
-        namePlayer[1] = "Player2";
-
     let htmlContent = '<div id="board-container" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden">' +
     '<p class="name_player">' + namePlayer[0] + '</p>' +
     '<canvas id="board" width="' + boardWidth + '" height="' + boardHeight + '"></canvas>' +
@@ -607,10 +585,10 @@ function launchGamePong() {
     player1.y = board.height / 2 - playerHeight / 2;
     player2.x = board.width - playerWidth - 10;
     player2.y = board.height / 2 - playerHeight / 2;
-    if (!player1.name)
-        player1.name = namePlayer[0];
-    if (!player2.name)
-        player2.name = namePlayer[1];
+    // if (!player1.name)
+    //     player1.name = namePlayer[0];
+    // if (!player2.name)
+    //     player2.name = namePlayer[1];
     //set ball
     ball.x = board.width / 2;
     ball.y = board.height / 2;
@@ -659,7 +637,6 @@ function handleResize() {
 function update() {
     if (gameEnded === true)
         return;
-    //console.log("update");
     requestAnimationFrame(update);
     context.clearRect(0, 0, board.width, board.height);
     context.fillStyle = "skyblue";
@@ -676,29 +653,31 @@ function update() {
     context.arc(ball.x + ball.radius, ball.y + ball.radius, ball.radius, 0, Math.PI * 2);
     context.fillStyle = "white";
     context.fill();
-    if (isHost){
+    if (isHost && remote === true){
         ball.x += ball.velocityX;
         ball.y += ball.velocityY;
-        let socket = gameRoomSocket;
-        socket.send(JSON.stringify({ action: 'update_ball_position', ball_x: ball.x, ball_y: ball.y }));
+        gameRoomSocket.send(JSON.stringify({ action: 'update_ball_position_pong', ball_x: ball.x, ball_y: ball.y }));
         console.log("ball position sent");
     }
-    else {
+    else if (remote === true) {
         ball.x = newBall.x;
         ball.y = newBall.y;
+    }
+    else if (local === true) {
+        ball.x += ball.velocityX;
+        ball.y += ball.velocityY;
     }
     if (ball.y <= 0 || ball.y + ball.height >= board.height) {
         ball.velocityY *= -1;
     }
     checkCollision(ball.y, ball.x);
-    if (isHost)
+    if (isHost && remote == true)
     {
-        let socket = gameRoomSocket;
         if (ball.x < 0) {
             player2Score++;
             if (player2Score >= scoreToDo){
                 endGame(player2.name);
-                socket.send(JSON.stringify({ action: 'game_ended', winner: player2.name}));
+                gameRoomSocket.send(JSON.stringify({ action: 'game_ended_pong', winner: player2.name}));
             }
             else
                 resetGame(1);
@@ -707,17 +686,34 @@ function update() {
             player1Score++;
             if (player1Score >= scoreToDo){
                 endGame(player1.name);
-                socket.send(JSON.stringify({ action: 'game_ended', winner: player1.name}));
+                gameRoomSocket.send(JSON.stringify({ action: 'game_ended_pong', winner: player1.name}));
             }
             else
                 resetGame(-1);
         }
-        socket.send(JSON.stringify({ action: 'update_player_scores', player1: player1Score, player2: player2Score }));
+        gameRoomSocket.send(JSON.stringify({ action: 'update_player_scores_pong', player1: player1Score, player2: player2Score }));
         console.log("player scores sent");
     }
-    else {
+    else if (remote === true) {
         player1Score = newPlayer1Score;
         player2Score = newPlayer2Score;
+    }
+    else if (local === true)
+    {
+        if (ball.x < 0) {
+            player2Score++;
+            if (player2Score >= scoreToDo)
+                endGame(player2.name);
+            else
+                resetGame(1);
+            } 
+        else if (ball.x + ball.width > board.width) {
+            player1Score++;
+            if (player1Score >= scoreToDo)
+                endGame(player1.name);
+            else
+                resetGame(-1);
+        }
     }
     context.font = "45px sans-serif";
     context.fillText(player1Score, boardWidth / 5, 45);
@@ -753,81 +749,75 @@ function detectCollision(a, b) {
     return (a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y);
 }
 
-
-
-
 function movePlayer() {
     let newVelocity = 5;
     let positionUpdated = false;
 
     // Player 1 controls
-    if (isHost) {
-        if (keysPressed["KeyW"] || keysPressed["ArrowUp"]) {
-            player1.velocityY = -newVelocity;
-            gameRoomSocket.send(JSON.stringify({
-                action: 'host_key_event',
-                key: 'up'
-            }));
-        } else if (keysPressed["KeyS"] || keysPressed["ArrowDown"]) {
-            player1.velocityY = newVelocity;
-            gameRoomSocket.send(JSON.stringify({
-                action: 'host_key_event',
-                key: 'down'
-            }));
-        } else if (player1.velocityY !== 0) {
-            player1.velocityY = 0; 
-            gameRoomSocket.send(JSON.stringify({
-                action: 'host_key_event',
-                key: 'stop'
-            }));
+    if (remote === true)
+    {
+        if (isHost) {
+            if (keysPressed["KeyW"] || keysPressed["ArrowUp"]) {
+                player1.velocityY = -newVelocity;
+                gameRoomSocket.send(JSON.stringify({
+                    action: 'host_key_event',
+                    key: 'up'
+                }));
+            } else if (keysPressed["KeyS"] || keysPressed["ArrowDown"]) {
+                player1.velocityY = newVelocity;
+                gameRoomSocket.send(JSON.stringify({
+                    action: 'host_key_event',
+                    key: 'down'
+                }));
+            } else if (player1.velocityY !== 0) {
+                player1.velocityY = 0; 
+                gameRoomSocket.send(JSON.stringify({
+                    action: 'host_key_event',
+                    key: 'stop'
+                }));
+            }  
         }
-
-       
-    }
-
-    // Player 2 controls (for client)
-    if (!isHost) {
-        if (keysPressed["KeyW"] || keysPressed["ArrowUp"]) {
-            player2.velocityY = -newVelocity;
-            roomSocket.send(JSON.stringify({
-                action: 'client_key_event',
-                key: 'up'
-            }));
-        } else if (keysPressed["KeyS"] || keysPressed["ArrowDown"]) {
-            player2.velocityY = newVelocity;
-            roomSocket.send(JSON.stringify({
-                action: 'client_key_event',
-                key: 'down'
-            }));
-        } else if (player2.velocityY !== 0) {
-            player2.velocityY = 0;
-            roomSocket.send(JSON.stringify({
-                action: 'client_key_event',
-                key: 'stop'
-            }));
+        if (!isHost) {
+            // Player 2 controls (for client)
+            if (keysPressed["KeyW"] || keysPressed["ArrowUp"]) {
+                player2.velocityY = -newVelocity;
+                roomSocket.send(JSON.stringify({
+                    action: 'client_key_event',
+                    key: 'up'
+                }));
+            } else if (keysPressed["KeyS"] || keysPressed["ArrowDown"]) {
+                player2.velocityY = newVelocity;
+                roomSocket.send(JSON.stringify({
+                    action: 'client_key_event',
+                    key: 'down'
+                }));
+            } else if (player2.velocityY !== 0) {
+                player2.velocityY = 0;
+                roomSocket.send(JSON.stringify({
+                    action: 'client_key_event',
+                    key: 'stop'
+                }));
+            }
         }
     }
-} 
-
-{% comment %} function movePlayer() {
-    // Player 1 controls
-    let newVelocity = 10;
-    if (keysPressed["KeyW"]) {
+    else if (local === true)
+    {
+        if (keysPressed["KeyW"]) {
         player1.velocityY = -newVelocity;
-    } else if (keysPressed["KeyS"]) {
-        player1.velocityY = newVelocity;
-    } else {
-        player1.velocityY = 0; // Stop movement if no key is pressed
-    }
-    
+        } else if (keysPressed["KeyS"]) {
+            player1.velocityY = newVelocity;
+        } else {
+            player1.velocityY = 0; // Stop movement if no key is pressed
+        }
     // Player 2 controls
-    if (keysPressed["ArrowUp"])
-        player2.velocityY = -newVelocity;
-    else if (keysPressed["ArrowDown"])
-        player2.velocityY = newVelocity;
-    else
-        player2.velocityY = 0; // Stop movement if no key is pressed
-}{% endcomment %}
+        if (keysPressed["ArrowUp"])
+            player2.velocityY = -newVelocity;
+        else if (keysPressed["ArrowDown"])
+            player2.velocityY = newVelocity;
+        else
+            player2.velocityY = 0; // Stop movement if no key is pressed
+        }
+} 
 
 function generateRandomAngle() {
     var minAngle = 30 * Math.PI / 180; // Convert degrees to radians
@@ -867,40 +857,24 @@ function endGame(winner) {
 		'<iframe src="https://giphy.com/embed/OScDfyJIQaXe" width="480" height="480" frameborder="0" class="giphy-embed" allowfullscreen></iframe>' +
 		'<p><a href="https://giphy.com/gifs/rabbids-dance-cute-OScDfyJIQaXe"></a></p>' +
 		'</div>';
-    {% comment %} var startAgain = document.createElement("button");
-    startAgain.textContent = "Start again";
-    startAgain.classList.add("styled-button")
-    document.getElementById('endGame').appendChild(startAgain);
-    startAgain.addEventListener("click", function() {
-        player1Score = 0;
-        player2Score = 0;
-        launchGamePong();
-    }); {% endcomment %}
+    // {% comment %} var startAgain = document.createElement("button");
+    // startAgain.textContent = "Start again";
+    // startAgain.classList.add("styled-button")
+    // document.getElementById('endGame').appendChild(startAgain);
+    // startAgain.addEventListener("click", function() {
+    //     player1Score = 0;
+    //     player2Score = 0;
+    //     launchGamePong();
+    // }); {% endcomment %}
     
 }
 
-
-
-
-
-
-
-
 </script>
-
-
-
-
 
 <div class="button d-flex justify-content-center align-items-center">
 	<a href="#" onclick="showGamePong()" class="btn btn-primary">Pong</a> 
-
-	{% comment %} <a href="#" onclick="showGameMemory()" class="btn btn-primary" style="margin-left: 1em;">Memory</a> {% endcomment %}
+    <!-- <a href="#" onclick="showGameMemory()" class="btn btn-primary" style="margin-left: 1em;">Memory</a> -->
 </div> 
-
-
-
-
 
 
 {% else %}
