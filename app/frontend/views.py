@@ -18,7 +18,6 @@ from faker import Faker
 import random
 
 
-
 def signUp(request):
     User = get_user_model()
 
@@ -71,11 +70,6 @@ def signIn(request):
     return render(request=request, template_name="signIn.html", context={})
 
 
-
-def home(request):
-    return render(request=request, template_name="home.html", context={})
-
-
 def update_game_result_pong(request):
     print("UPDATING")
     if request.method == 'POST':
@@ -124,7 +118,6 @@ def update_game_result_memory(request):
         return JsonResponse({'error': 'Unsupported method'}, status=405)
 
 
-
 def get_user_statistics(request):
     if request.user.is_authenticated:
         # Fetch the user's statistics from the database
@@ -138,7 +131,6 @@ def get_user_statistics(request):
         return JsonResponse(user_statistics)
     else:
         return JsonResponse({'error': 'User is not authenticated'}, status=401)
-
 
 
 def signOut(request):
@@ -190,7 +182,6 @@ def showProfile(request):
         return render(request=request, template_name="signIn.html", context={})
 
 
-
 def add_users(request):
     User = get_user_model()
     fake = Faker()
@@ -223,7 +214,6 @@ def add_users(request):
 
 
 def showHome(request):
-
     if request.user.is_authenticated:
         return render(request=request, template_name="home.html", context={})
     else:
@@ -231,9 +221,9 @@ def showHome(request):
         return render(request=request, template_name="signIn.html", context={})
 
 
-
 def showChat(request):
     return render(request, 'chat.html')
+
 
 def scoreboard(request):
     User = get_user_model()
@@ -242,7 +232,6 @@ def scoreboard(request):
         return render(request=request, template_name="scoreboard.html", context={"user": user})
 
 
-@csrf_exempt
 def get_username(request):
     if request.method == 'GET':
         # Assuming the user is authenticated and you want to get the username of the authenticated user
@@ -250,14 +239,12 @@ def get_username(request):
         return JsonResponse({'username': username})
 
 
-@csrf_exempt
 def home(request):
     # Retrieve the top three users based on games won
     top_three_users = User.objects.order_by('-pong_games_won')[:3]
     context = {'top_three_users': top_three_users}
     add_users(request)
     return render(request, 'home.html', context)
-
 
 
 def gamePong(request):
@@ -446,4 +433,3 @@ def removeFriends(request):
 
 def gameMemory(request):
     return render(request, 'gameMemory.html', context={})
-
