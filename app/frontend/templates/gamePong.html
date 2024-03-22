@@ -420,7 +420,7 @@ async function remoteClient() {
         };
         roomSocket.onmessage = function(event) {
             const data = JSON.parse(event.data);
-            if (data.action === 'countdown_pong')
+            if (data.action === 'game_countdown_pong')
                 updateCountdownDisplay(data.message);
             else if (data.action === 'start_game_pong') {
                 console.log('Game is starting...');

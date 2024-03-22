@@ -116,6 +116,23 @@ class GameConsumer(AsyncWebsocketConsumer):
                 await self.send(text_data=json.dumps({'action': 'joined_room_pong', 'room_id': room_id}))
             else:
                 await self.send(text_data=json.dumps({'action': 'error', 'message': 'Room not found or full'}))
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'game_countdown_pong',
+                    'message': 'message'
+                }
+            )
+            # await asyncio.sleep(1)
+            # time.sleep(1)
+
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'start_game_pong',
+                    'message': 'start'
+                }
+            )
 
         elif action == 'join_room_memory':
             room_id = data.get('room_id')
