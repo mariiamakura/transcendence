@@ -333,9 +333,9 @@ async function remoteHost() {
                         namePlayer[1] = data.guest_name;
                 }
                 // Handle countdown message
-                if (data.action === 'countdown_pong')
+                if (data.action === 'game_countdown_pong')
                     updateCountdownDisplay(data.message);
-                else if (data.action === 'start_game_pong') {
+                if (data.action === 'start_game_pong') {
                     let countdownElement = document.getElementById('countdown');
                     if (countdownElement) {
                         countdownElement.remove(); // Remove the countdown display
@@ -422,7 +422,7 @@ async function remoteClient() {
             const data = JSON.parse(event.data);
             if (data.action === 'game_countdown_pong')
                 updateCountdownDisplay(data.message);
-            else if (data.action === 'start_game_pong') {
+            if (data.action === 'start_game_pong') {
                 console.log('Game is starting...');
                 let countdownElement = document.getElementById('countdown');
                 if (countdownElement) {
@@ -485,8 +485,6 @@ function updateCountdownDisplay(message) {
 		countdownElement.id = 'countdown';
 		countdownElement.classList.add('text-center', 'display-4', 'mb-4');
 		document.getElementById('content').appendChild(countdownElement);
-        countdownElement.id = 'countdown';
-        document.getElementById('content').appendChild(countdownElement);
     }
     countdownElement.textContent = `Game starts in: ${message}`;
 }
