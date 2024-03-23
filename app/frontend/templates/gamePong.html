@@ -307,7 +307,7 @@ async function remoteHost() {
                     }
                 }
                 // Handle countdown message
-                if (data.action === 'countdown_pong')
+                if (data.action === 'game_countdown_pong')
                     updateCountdownDisplay(data.message);
                 else if (data.action === 'start_game_pong') {
                     let countdownElement = document.getElementById('countdown');
@@ -393,14 +393,14 @@ async function remoteClient() {
         roomSocket.onopen = function() {
             // Notify the server that the client has joined the room
             console.log("Game room connection established for client.");
-            roomSocket.send(JSON.stringify({ action: 'join_room_pong', room_id: roomId , guest_name: "{{ user.username }}"}));
+            roomSocket.send(JSON.stringify({ action: 'join_room_pong', room_id: roomId , guest_name: "{{ user.display_name }}"}));
             namePlayer[0] =  roomId.replace('_Game', '');
         };
         console.log("next step");
         roomSocket.onmessage = function(event) {
             console.log("received message");    
             const data = JSON.parse(event.data);
-            if (data.action === 'countdown_pong')
+            if (data.action === 'game_countdown_pong')
                 updateCountdownDisplay(data.message);
             else if (data.action === 'start_game_pong') {
                 console.log('Game is starting...');
@@ -456,7 +456,6 @@ function startTheGamePong() {
 
 // Function to update or create the countdown display
 function updateCountdownDisplay(message) {
-    console.log('Countdown:', message);
     let countdownElement = document.getElementById('countdown');
     if (!countdownElement) {
         countdownElement = document.getElementById('content');
@@ -465,8 +464,7 @@ function updateCountdownDisplay(message) {
 		countdownElement.id = 'countdown';
 		countdownElement.classList.add('text-center', 'display-4', 'mb-4');
 		document.getElementById('content').appendChild(countdownElement);
-        countdownElement.id = 'countdown';
-        document.getElementById('content').appendChild(countdownElement);
+        
     }
     countdownElement.textContent = `Game starts in: ${message}`;
 }
@@ -565,9 +563,9 @@ function launchGamePong() {
     initVariables();
     var mainElement = document.getElementById('content');
     if (isHost && remote === true) 
-        namePlayer[0] = "{{ user.username }}";
+        namePlayer[0] = "{{ user.display_name }}";
     else if (remote === true)
-        namePlayer[1] = "{{ user.username }}";
+        namePlayer[1] = "{{ user.display_name }}";
     let htmlContent = '<div id="board-container" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden">' +
     '<p class="name_player">' + namePlayer[0] + '</p>' +
     '<canvas id="board" width="' + boardWidth + '" height="' + boardHeight + '"></canvas>' +
@@ -585,10 +583,10 @@ function launchGamePong() {
     player1.y = board.height / 2 - playerHeight / 2;
     player2.x = board.width - playerWidth - 10;
     player2.y = board.height / 2 - playerHeight / 2;
-    // if (!player1.name)
-    //     player1.name = namePlayer[0];
-    // if (!player2.name)
-    //     player2.name = namePlayer[1];
+    if (!player1.name)
+         player1.name = namePlayer[0];
+    if (!player2.name)
+         player2.name = namePlayer[1];
     //set ball
     ball.x = board.width / 2;
     ball.y = board.height / 2;
