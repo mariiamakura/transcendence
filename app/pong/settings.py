@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
 from pathlib import Path
-from channels.layers import get_channel_layer
+# from channels.layers import get_channel_layer
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
 ]
 
 
@@ -65,6 +66,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'pong.urls'
@@ -80,6 +82,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'frontend.context_processors.export_vars',
             ],
         },
     },
@@ -161,6 +164,9 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # STATICFILES_DIRS = [BASE_DIR / "static"]
 STATICFILES_DIRS = [BASE_DIR / "frontend" / "statics"]
 
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -168,4 +174,21 @@ STATICFILES_DIRS = [BASE_DIR / "frontend" / "statics"]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-CSRF_TRUSTED_ORIGINS = ["https://localhost:9999/*", "http://localhost:9999/*"]
+CSRF_TRUSTED_ORIGINS = ["https://localhost:9999/*", "http://localhost:9999/*", "https://42pong.ddns.net:9999/*", "http://42pong.ddns.net:9999/*"]
+
+# Allow all domains during development
+CORS_ALLOW_ALL_ORIGINS = True
+
+# For production, use:
+# CORS_ALLOWED_ORIGINS = [
+#     "https://example.com",
+#     "https://www.example.com",
+# ]
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SAMESITE = 'None'  # 'Lax' or 'Strict' can also be used depending on your requirements
+
+# CSRF Cookie
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
