@@ -46,7 +46,7 @@ function TwoOrTournament() {
     });
 }
 
-function showButton() {
+function remoteOrLocal() {
 
     var main = document.getElementById('content');
     main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> Which type of game do you wanna play ? </p></div>';
@@ -103,13 +103,9 @@ function decideHost() {
 function numPlayers() {
     var main = document.getElementById('content');
     main.innerHTML += '<div id="choice"><p style="padding-top: 2em; display: flex; " > How many players do you want to be ? </p></div>';
-    var buttonTwo = document.createElement("button");
     var buttonFour = document.createElement("button");
-    buttonTwo.textContent = "2 players";
     buttonFour.textContent = "4 players";
-    buttonTwo.classList.add("styled-button")
     buttonFour.classList.add("styled-button");
-    document.getElementById('choice').appendChild(buttonTwo);
     document.getElementById('choice').appendChild(buttonFour);
     if (tournament) {
         var buttonEight = document.createElement("button");
@@ -122,11 +118,6 @@ function numPlayers() {
         document.getElementById('choice').appendChild(buttonSixteen);
     }
     return new Promise(function (resolve) {
-        buttonTwo.addEventListener("click", function() {
-            resolve(true);
-            numberPlayers = 2;
-            document.getElementById('choice').remove();
-        });
         buttonFour.addEventListener("click", function() {
             resolve(true);
             numberPlayers = 4;
@@ -149,34 +140,44 @@ function numPlayers() {
 
 let namePlayer = [];
 
-function submitButton(submit) {
-    return new Promise(function (resolve) {
-        submit.addEventListener("click", function() {
-            resolve(true);
-        });
-    });
-}
-
 async function getNamePlayer() {
     var main = document.getElementById('content');
     let i = 1;
     while (i <= numberPlayers) {
         main.innerHTML += '<div id="choice">' + 
-            '<form style="display: flex; flex-direction: column; align-items: center;">' +
+            '<form id="form' + i + '" style="display: flex; flex-direction: column; align-items: center;">' +
                 '<p style="padding-top: 2em; display: flex; align-items:center; justify-content:center;" > Name of player ' + i + ' : </p>' +
                 '<input type="text" id="name' + i + '">' +
                 '<button type="submit" class="styled-button" style="margin-top: 1em;">Submit</button>' +
             '</form>' +
         '</div>';
-        const Submit = main.querySelector('#choice:last-child button');
-        const input = main.querySelector('#choice:last-child input');
-        const isSubmitted = await submitButton(Submit);
-        if (isSubmitted === true && input.value !== "") {
-            namePlayer.push(input.value);
-            main.querySelector('#choice:last-child').remove();
+
+        // Get form and input elements
+        const form = main.querySelector('#form' + i);
+        const input = main.querySelector('#name' + i);
+
+        // Submit form and await submission
+        const isSubmitted = await submitForm(form);
+
+        // If form is submitted and input is not empty, push the input value
+        if (isSubmitted && input.value.trim() !== "") {
+            namePlayer.push(input.value.trim());
+            main.querySelector('#choice:last-child').remove(); // Remove the form container
             i++;
+        } else {
+            main.querySelector('#choice:last-child').remove(); // Remove the form container
         }
     }
+}
+
+// Function to handle form submission
+function submitForm(form) {
+    return new Promise((resolve) => {
+        form.addEventListener("submit", function(event) {
+            // event.preventDefault(); // Prevent default form submission
+            resolve(true); // Resolve the promise when the form is submitted
+        });
+    });
 }
    
 let scoreToDo = 0;
@@ -185,10 +186,13 @@ let debugPong = 1; // 1 not debug. 2 is directly the game, 3 is the menu and the
 function scoreChoice() {
     var main = document.getElementById('content');
     main.innerHTML += `<div id="choice"><p style="padding-top: 2em; display: flex; " > Chose how many points wins: </p></div>`;
-    var unlimited = document.createElement("button");
-    unlimited.textContent = "Unlimited";
-    unlimited.classList.add("styled-button");
-    document.getElementById('choice').appendChild(unlimited);
+    if (tournament === false)
+    {
+        var unlimited = document.createElement("button");
+        unlimited.textContent = "Unlimited";
+        unlimited.classList.add("styled-button");
+        document.getElementById('choice').appendChild(unlimited);
+    }
     var scoreTwelve = document.createElement("button");
     scoreTwelve.textContent = "12";
     scoreTwelve.classList.add("styled-button");
@@ -202,11 +206,13 @@ function scoreChoice() {
     scoreTwentyFour.classList.add("styled-button");
     document.getElementById('choice').appendChild(scoreTwentyFour);
     return new Promise(function (resolve) {
-        unlimited.addEventListener("click", function() {
-            resolve(true);
-            scoreToDo = 10000;
-            document.getElementById('choice').remove();
-        });
+        if (tournament === false) {
+            unlimited.addEventListener("click", function() {
+                resolve(true);
+                scoreToDo = 10000;
+                document.getElementById('choice').remove();
+            });
+        }
         scoreTwelve.addEventListener("click", function() {
             resolve(true);
             scoreToDo = 12;
@@ -221,6 +227,27 @@ function scoreChoice() {
             resolve(true);
             scoreToDo = 24;
             document.getElementById('choice').remove();
+        });
+    });
+}
+
+function startButtonTournament() {
+    var main = document.getElementById('content');
+    main.innerHTML += '<div id="choice"><p> Welcome to the pong tournament ! <br> <br> The rounds are the following: </p></div>';
+    for (let i = 0; i < numberPlayers; i++) {
+        main.innerHTML += '<p style="text-align: center;>' + namePlayer[i] + ' against ' + namePlayer[i+1] + '</p>';
+        i++;
+    }
+    main.innerHTML += '<p style="text-align: center; padding-top:5em;"> Ready to start ? <br> <br> Let\'s go !</p></div>';
+    var startButton = document.createElement("button");
+    startButton.textContent = "Start !";
+    startButton.classList.add("styled-button");
+    document.getElementById('choice').appendChild(startButton);
+    return new Promise (function (resolve) {
+        startButton.addEventListener("click", function() {
+            startGame = true;
+            document.getElementById('choice').remove();
+            resolve(true);
         });
     });
 }
@@ -253,12 +280,12 @@ async function showGamePong() {
 	numberPlayers = 0;
 	namePlayer = [];
 	
-	if (await showButton())
+	if (await remoteOrLocal())
 	{
 		//remote Game
-        await TwoOrTournament();
-        if (tournament === true)
-            await numPlayers();
+        // await TwoOrTournament();
+        // if (tournament === true)
+        //     await numPlayers();
 		if (await decideHost())
 		{
             await scoreChoice();
@@ -290,7 +317,10 @@ async function showGamePong() {
 		await scoreChoice();
 		if (namePlayer.length === numberPlayers && scoreToDo !== 0)
 		{
-			await startButton();
+            if (tournament === true)
+                await startButtonTournament();
+            else
+                await startButton();
 			if (startGame === true)
 				launchGamePong();
 		}
