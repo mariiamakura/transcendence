@@ -1,8 +1,11 @@
 import json
+from django.conf import settings
 from channels.generic.websocket import AsyncWebsocketConsumer
 import asyncio
 import time
-from asgiref.sync import async_to_sync
+from datetime import datetime
+# from database.models import User
+from channels.db import database_sync_to_async
 
 
 class GameRoomManagerPong:
@@ -47,6 +50,66 @@ class GameRoomManagerMemory:
             cls.rooms[room_id]["guest"] = guest_name
             return True
         return False
+
+
+class KeepAliveConsumer(AsyncWebsocketConsumer):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user = None
+        self.last_alive_time = datetime.now()
+        self.alive_timeout = 120  # seconds
+        self.check_interval = 10  # seconds
+
+    async def connect(self):
+        self.room_name = self.scope['url_route']['kwargs']['room_name']
+        self.room_group_name = f'{self.room_name}'
+        self.user = await self.get_user(self.room_name)
+        await self.channel_layer.group_add(
+            self.room_group_name,
+            self.channel_name
+        )
+        await self.accept()
+
+    async def disconnect(self, close_code):
+        await self.channel_layer.group_discard(
+            self.room_group_name,
+            self.channel_name
+        )
+        await self.set_user_online(False)
+
+    async def receive(self, text_data):
+        data = json.loads(text_data)
+        action = data.get('action')
+
+        if action == 'alive':
+            self.last_alive_time = datetime.now()
+            await asyncio.sleep(5)
+            await self.send(text_data=json.dumps({'action': 'keep_alive'}))
+
+    async def keep_alive(self, event):
+        await self.send(text_data=json.dumps({
+            'action': 'keep_alive'
+        }))
+
+    async def check_alive(self):
+        while True:
+            await asyncio.sleep(self.check_interval)
+            if (datetime.now() - self.last_alive_time).total_seconds() > self.alive_timeout:
+                await self.set_user_online(False)
+                await self.close()
+                break
+
+    @database_sync_to_async
+    def get_user(self, username):
+        from database.models import User
+        return User.objects.get(username=username)
+
+    @database_sync_to_async
+    def set_user_online(self, online):
+        if self.user:
+            self.user.online = online
+            self.user.save()
 
 
 class GameConsumer(AsyncWebsocketConsumer):

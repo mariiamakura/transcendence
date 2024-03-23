@@ -1,4 +1,7 @@
 from django.apps import AppConfig
+import os
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pong.settings')
 
 
 class DatabaseConfig(AppConfig):
