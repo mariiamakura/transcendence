@@ -15,7 +15,7 @@
           {% csrf_token %}
           <div class="form-group">
             <label for="inputUsername">Intraname</label>
-            <input type="text" class="form-control" id="inputUsername" placeholder="Enter Intraname" name="username" required />
+            <input type="text" class="form-control" id="inputUsername" placeholder="Enter Intraname" name="username" autocomplete="username" required />
           </div>
           <div class="form-group">
             <label for="inputPassword1">Password</label>
@@ -27,7 +27,7 @@
           </div>
           <div class="form-group">
             <label for="inputEmail">Email address</label>
-            <input type="email" class="form-control" id="inputEmail" placeholder="Enter email" name="email" required />
+            <input type="email" class="form-control" id="inputEmail" placeholder="Enter email" name="email" autocomplete="email" required />
           </div>
           <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
         </form>

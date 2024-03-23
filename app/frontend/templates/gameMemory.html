@@ -343,11 +343,11 @@ async function remoteHost() {
                     console.log(`${data.guest_name} has joined the game.`);
                     namePlayer[1] = data.guest_name;
                 }
-                if (data.action === 'countdown_memory') {
-                    console.log('Countdown:', data.message);
-                    // updateCountdownDisplay(data.message);
+                if (data.action === 'game_countdown_memory') {
+                    
+                    updateCountdownDisplayMemory(data.message);
                 }
-                if (data.action === 'start_game_memory') {
+                else if (data.action === 'start_game_memory') {
                     // Clear the countdown and start the game
                     if (gameStarted === false)
                     {
@@ -453,8 +453,8 @@ async function remoteClient() {
         roomSocket.onmessage = function(event) {
             const data = JSON.parse(event.data);
             console.log(data);
-            if (data.action === 'countdown_memory')
-                console.log('Countdown');
+            if (data.action === 'game_countdown_memory')
+                updateCountdownDisplayMemory(data.message);
             else if (data.action === 'start_game_memory') {
                 console.log("start game guest side")
                 let countdownElement = document.getElementById('countdown');
@@ -503,6 +503,7 @@ function updateCountdownDisplayMemory(message) {
         countdownElement.innerHTML = '';
         countdownElement = document.createElement('div');
         countdownElement.id = 'countdown';
+        countdownElement.classList.add('text-center', 'display-4', 'mb-4');
         document.getElementById('content').appendChild(countdownElement);
     }
     countdownElement.textContent = `Game starts in: ${message}`;

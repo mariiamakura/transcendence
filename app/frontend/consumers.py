@@ -116,23 +116,23 @@ class GameConsumer(AsyncWebsocketConsumer):
                 await self.send(text_data=json.dumps({'action': 'joined_room_pong', 'room_id': room_id}))
             else:
                 await self.send(text_data=json.dumps({'action': 'error', 'message': 'Room not found or full'}))
-            # await self.channel_layer.group_send(
-            #     self.room_group_name,
-            #     {
-            #         'type': 'game_countdown_pong',
-            #         'message': 'message'
-            #     }
-            # )
-            # # await asyncio.sleep(1)
-            # # time.sleep(1)
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'game_countdown_pong',
+                    'message': 'message'
+                }
+            )
+            # await asyncio.sleep(1)
+            # time.sleep(1)
 
-            # await self.channel_layer.group_send(
-            #     self.room_group_name,
-            #     {
-            #         'type': 'start_game_pong',
-            #         'message': 'start'
-            #     }
-            # )
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'start_game_pong',
+                    'message': 'start'
+                }
+            )
 
         elif action == 'join_room_memory':
             room_id = data.get('room_id')
@@ -150,6 +150,23 @@ class GameConsumer(AsyncWebsocketConsumer):
                 await self.send(text_data=json.dumps({'action': 'joined_room_memory', 'room_id': room_id}))
             else:
                 await self.send(text_data=json.dumps({'action': 'error', 'message': 'Room not found or full'}))
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'game_countdown_memory',
+                    'message': 'message'
+                }
+            )
+            # await asyncio.sleep(1)
+            # time.sleep(1)
+
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'start_game_memory',
+                    'message': 'start'
+                }
+            )
 
         elif action == 'send_settings_memory':
             await self.channel_layer.group_send(
@@ -352,21 +369,24 @@ class GameConsumer(AsyncWebsocketConsumer):
             'guest_name': event['guest_name'],
             'message': f"{event['guest_name']} has joined the game."
         }))
-        if GameRoomManagerPong.rooms[event['room_id']]['guest'] is not None:
-            await self.channel_layer.group_send(
-                self.room_group_name,
-                {
-                    'type': 'game_countdown_pong',
-                    'message': 'message'
-                }
-            )
-            await self.channel_layer.group_send(
-                self.room_group_name,
-                {
-                    'type': 'start_game_pong',
-                    'message': 'start'
-                }
-            )
+        # if GameRoomManagerPong.rooms[event['room_id']]['guest'] is not None:
+        #     for i in range(5, 0, -1):
+        #         await self.channel_layer.group_send(
+        #             self.room_group_name,
+        #             {
+        #                 'type': 'game_countdown_pong',
+        #                 'message': str(i)
+        #             }
+        #         )
+        #         await asyncio.sleep(1)
+
+        #     await self.channel_layer.group_send(
+        #         self.room_group_name,
+        #         {
+        #             'type': 'start_game_pong',
+        #             'message': 'start'
+        #         }
+        #     )
 
     async def player_joined_memory(self, event):
         await self.send(text_data=json.dumps({
@@ -375,24 +395,24 @@ class GameConsumer(AsyncWebsocketConsumer):
             'guest_name': event['guest_name'],
             'message': f"{event['guest_name']} has joined the game."
         }))
-        if GameRoomManagerMemory.rooms[event['room_id']]['guest'] is not None:
-            for i in range(5, 0, -1):
-                await self.channel_layer.group_send(
-                    self.room_group_name,
-                    {
-                        'type': 'game_countdown_memory',
-                        'message': str(i)
-                    }
-                )
-                await asyncio.sleep(1)
+        # if GameRoomManagerMemory.rooms[event['room_id']]['guest'] is not None:
+        #     for i in range(5, 0, -1):
+        #         await self.channel_layer.group_send(
+        #             self.room_group_name,
+        #             {
+        #                 'type': 'game_countdown_memory',
+        #                 'message': str(i)
+        #             }
+        #         )
+        #         await asyncio.sleep(1)
 
-            await self.channel_layer.group_send(
-                self.room_group_name,
-                {
-                    'type': 'start_game_memory',
-                    'message': 'start'
-                }
-            )
+        #     await self.channel_layer.group_send(
+        #         self.room_group_name,
+        #         {
+        #             'type': 'start_game_memory',
+        #             'message': 'start'
+        #         }
+        #     )
 
     async def game_countdown_pong(self, event):
         for i in range(5, 0, -1):
@@ -409,10 +429,12 @@ class GameConsumer(AsyncWebsocketConsumer):
         }))
 
     async def game_countdown_memory(self, event):
-        await self.send(text_data=json.dumps({
-            'action': 'countdown_memory',
-            'message': event['message']
-        }))
+        for i in range(5, 0, -1):
+            await self.send(text_data=json.dumps({
+                'action': 'game_countdown_memory',
+                'message': str(i)
+            }))
+            await asyncio.sleep(1)
 
     async def start_game_memory(self, event):
         await self.send(text_data=json.dumps({
