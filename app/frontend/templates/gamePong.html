@@ -138,47 +138,47 @@ function numPlayers() {
     });
 }
 
-let namePlayer = [];
-
 async function getNamePlayer() {
     var main = document.getElementById('content');
-    let i = 1;
-    while (i <= numberPlayers) {
-        main.innerHTML += '<div id="choice">' + 
-            '<form id="form' + i + '" style="display: flex; flex-direction: column; align-items: center;">' +
+    let i = 2;
+
+    try {
+        const response = await fetch('/get_username/');
+        const data = await response.json();
+        main.innerHTML += `<p style="padding-top: 2em; display: flex; align-items:center; justify-content:center;">First player is: ${data.username}</p>`;
+        namePlayer.push(data.username);
+
+        for (; i <= numberPlayers; i++) {
+            main.innerHTML += '<div id="choice">' +
+                '<form style="display: flex; flex-direction: column; align-items: center;">' +
                 '<p style="padding-top: 2em; display: flex; align-items:center; justify-content:center;" > Name of player ' + i + ' : </p>' +
                 '<input type="text" id="name' + i + '">' +
                 '<button type="submit" class="styled-button" style="margin-top: 1em;">Submit</button>' +
-            '</form>' +
-        '</div>';
+                '</form>' +
+                '</div>';
 
-        // Get form and input elements
-        const form = main.querySelector('#form' + i);
-        const input = main.querySelector('#name' + i);
+            const submitButton = main.querySelector('#choice:last-child button');
+            const input = main.querySelector('#choice:last-child input');
 
-        // Submit form and await submission
-        const isSubmitted = await submitForm(form);
-
-        // If form is submitted and input is not empty, push the input value
-        if (isSubmitted && input.value.trim() !== "") {
-            namePlayer.push(input.value.trim());
-            main.querySelector('#choice:last-child').remove(); // Remove the form container
-            i++;
-        } else {
-            main.querySelector('#choice:last-child').remove(); // Remove the form container
+            // Wait for the submit button click event
+            await new Promise(resolve => {
+                submitButton.addEventListener("click", function(event) {
+                    event.preventDefault(); // Prevent the default form submission
+                    if (input.value !== "") {
+                        namePlayer.push(input.value);
+                        main.querySelector('#choice:last-child').remove();
+                        resolve(); // Resolve the promise to continue the loop
+                    }
+                });
+            });
         }
+    } catch (error) {
+        console.error('Error:', error);
     }
+    return namePlayer;
 }
 
-// Function to handle form submission
-function submitForm(form) {
-    return new Promise((resolve) => {
-        form.addEventListener("submit", function(event) {
-            // event.preventDefault(); // Prevent default form submission
-            resolve(true); // Resolve the promise when the form is submitted
-        });
-    });
-}
+
    
 let scoreToDo = 0;
 let debugPong = 1; // 1 not debug. 2 is directly the game, 3 is the menu and the score todo will be 1 instead of 12
@@ -215,7 +215,7 @@ function scoreChoice() {
         }
         scoreTwelve.addEventListener("click", function() {
             resolve(true);
-            scoreToDo = 12;
+            scoreToDo = 1; // debugging
             document.getElementById('choice').remove();
         });
         scoreEighteen.addEventListener("click", function() {
@@ -233,20 +233,37 @@ function scoreChoice() {
 
 function startButtonTournament() {
     var main = document.getElementById('content');
-    main.innerHTML += '<div id="choice"><p> Welcome to the pong tournament ! <br> <br> The rounds are the following: </p></div>';
-    for (let i = 0; i < numberPlayers; i++) {
-        main.innerHTML += '<p style="text-align: center;>' + namePlayer[i] + ' against ' + namePlayer[i+1] + '</p>';
+    var choiceDiv = document.createElement("div");
+    choiceDiv.id = "choice";
+    
+    var welcomeParagraph = document.createElement("p");
+    welcomeParagraph.textContent = "Welcome to the pong tournament !\n\nThe rounds are the following:";
+    choiceDiv.appendChild(welcomeParagraph);
+    
+    for (let i = 0; i < numberPlayers - 1; i++) {
+        var matchParagraph = document.createElement("p");
+        matchParagraph.style.textAlign = "center";
+        matchParagraph.textContent = namePlayer[i] + ' against ' + namePlayer[i+1];
+        choiceDiv.appendChild(matchParagraph);
         i++;
     }
-    main.innerHTML += '<p style="text-align: center; padding-top:5em;"> Ready to start ? <br> <br> Let\'s go !</p></div>';
+    
+    var readyParagraph = document.createElement("p");
+    readyParagraph.style.textAlign = "center";
+    readyParagraph.style.paddingTop = "1em";
+    readyParagraph.textContent = "Ready to start ?\n\nLet's go !";
+    choiceDiv.appendChild(readyParagraph);
+    
     var startButton = document.createElement("button");
     startButton.textContent = "Start !";
     startButton.classList.add("styled-button");
-    document.getElementById('choice').appendChild(startButton);
-    return new Promise (function (resolve) {
+    choiceDiv.appendChild(startButton);
+    main.appendChild(choiceDiv);
+    return new Promise(function(resolve) {
         startButton.addEventListener("click", function() {
             startGame = true;
-            document.getElementById('choice').remove();
+            console.log("startGame is ", startGame);
+            choiceDiv.remove();
             resolve(true);
         });
     });
@@ -268,6 +285,7 @@ function startButton() {
     });
 }
 
+let namePlayer = [];
 async function showGamePong() {
     var mainElement = document.getElementById('content');
 	mainElement.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em;">Pong</p>';
@@ -309,23 +327,25 @@ async function showGamePong() {
         {
             await numPlayers();
             await getNamePlayer();
+            await scoreChoice();
         }
-		namePlayer[0] = "{{  user.username  }}";
+        else
+            await scoreChoice();
+		// namePlayer[0] = "{{  user.username  }}";
 		// namePlayer[1] = "Guest Player";
 
 		// numberPlayers = 2;
-		await scoreChoice();
-		if (namePlayer.length === numberPlayers && scoreToDo !== 0)
+		if (namePlayer.length  === numberPlayers && scoreToDo !== 0)
 		{
             if (tournament === true)
                 await startButtonTournament();
             else
                 await startButton();
+            console.log("startGame is ", startGame);
 			if (startGame === true)
 				launchGamePong();
 		}
 	}
-
 }
 
 let isHost = false; 
@@ -609,20 +629,24 @@ function initVariables() {
     player2.height = playerHeight;    
 }
 
+let firstPlayer = 0;
+let secondPlayer = 1;
+
 function launchGamePong() {
+    console.log('Game is starting...');
     initVariables();
+
     var mainElement = document.getElementById('content');
     if (isHost && remote === true) 
         namePlayer[0] = "{{ user.display_name }}";
     else if (remote === true)
         namePlayer[1] = "{{ user.display_name }}";
-    let htmlContent = '<div id="board-container" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden">' +
-    '<p class="name_player">' + namePlayer[0] + '</p>' +
+    mainElement.innerHTML = '<div id="board-container" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; overflow:hidden">' +
+    '<p class="name_player">' + namePlayer[firstPlayer] + '</p>' +
     '<canvas id="board" width="' + boardWidth + '" height="' + boardHeight + '"></canvas>' +
-    '<p class="name_player">' + namePlayer[1] + '</p>' +
+    '<p class="name_player">' + namePlayer[secondPlayer] + '</p>' +
     '</div>';
 
-    mainElement.innerHTML = htmlContent;
     document.body.style.overflow = 'padding-bottom : 5em';
     board = document.getElementById('board');
     board.width = boardWidth;
@@ -633,10 +657,11 @@ function launchGamePong() {
     player1.y = board.height / 2 - playerHeight / 2;
     player2.x = board.width - playerWidth - 10;
     player2.y = board.height / 2 - playerHeight / 2;
-    if (!player1.name)
-         player1.name = namePlayer[0];
-    if (!player2.name)
-         player2.name = namePlayer[1];
+    player1.name = namePlayer[firstPlayer];
+    player2.name = namePlayer[secondPlayer];
+    
+    console.log("player1 name is ", player1.name);
+    console.log("player2 name is ", player2.name);
     //set ball
     ball.x = board.width / 2;
     ball.y = board.height / 2;
@@ -926,16 +951,128 @@ function endGame(winner) {
 		'<iframe src="https://giphy.com/embed/OScDfyJIQaXe" width="480" height="480" frameborder="0" class="giphy-embed" allowfullscreen></iframe>' +
 		'<p><a href="https://giphy.com/gifs/rabbids-dance-cute-OScDfyJIQaXe"></a></p>' +
 		'</div>';
-    // {% comment %} var startAgain = document.createElement("button");
-    // startAgain.textContent = "Start again";
-    // startAgain.classList.add("styled-button")
-    // document.getElementById('endGame').appendChild(startAgain);
-    // startAgain.addEventListener("click", function() {
-    //     player1Score = 0;
-    //     player2Score = 0;
-    //     launchGamePong();
-    // }); {% endcomment %}
-    
+    if (tournament === false)
+    {
+        var startAgain = document.createElement("button");
+        startAgain.textContent = "Start again";
+        startAgain.classList.add("styled-button")
+        document.getElementById('endGame').appendChild(startAgain);
+        startAgain.addEventListener("click", function() {
+            player1Score = 0;
+            player2Score = 0;
+            launchGamePong();
+        });
+    }
+    else
+    {
+        if (winner === namePlayer[firstPlayer])
+            namePlayer.splice(secondPlayer, 1);
+        else
+            namePlayer.splice(firstPlayer, 1);
+    }
+    console.log("namePlayer length is ", namePlayer.length);
+    if (tournament === true && firstPlayer < namePlayer.length - 1)
+    {
+        firstPlayer++;
+        secondPlayer++;
+        mainElement.innerHTML += '<div id="nextRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
+        '<p style="text-align: center; font-size:4em;">Next Round ! </p>' +
+        '<p style="text-align: center; font-size:2em;">' + namePlayer[firstPlayer] + ' against ' + namePlayer[secondPlayer] + '</p>' +
+        '<button id="startNextRound" class="styled-button">Start Next Round</button>' +
+        '</div>';
+        document.getElementById('startNextRound').addEventListener("click", function() {
+            player1Score = 0;
+            player2Score = 0;
+            launchGamePong();
+        });
+    }
+    else if (tournament === true && namePlayer.length > 2 && namePlayer.length === (numberPlayers / 2))
+    {
+        console.log("second round");
+        // if (winner === namePlayer[firstPlayer])
+        //     namePlayer.splice(secondPlayer, 1);
+        // else
+        //     namePlayer.splice(firstPlayer, 1);
+        firstPlayer = 0;
+        secondPlayer = 1;
+        mainElement.innerHTML += '<div id="SecondRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
+                                    '<p style="text-align: center; font-size:4em;">Second Round ! </p>';
+
+        for (let i = 0; i < namePlayer.length - 1; i++) {
+            var matchParagraph = document.createElement("p");
+            matchParagraph.style.textAlign = "center";
+            matchParagraph.textContent = namePlayer[i] + ' against ' + namePlayer[i+1];
+            mainElement.appendChild(matchParagraph);
+            i++;
+        }
+        mainElement.innerHTML += '<div id="nextRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
+        '<p style="text-align: center; font-size:4em;">Next Round ! </p>' +
+        '<p style="text-align: center; font-size:2em;">' + namePlayer[firstPlayer] + ' against ' + namePlayer[secondPlayer] + '</p>' +
+        '<button id="startNextRound" class="styled-button">Start Next Round</button>' +
+        '</div>';
+        document.getElementById('startNextRound').addEventListener("click", function() {
+            player1Score = 0;
+            player2Score = 0;
+            launchGamePong();
+        });
+    }
+    else if (tournament === true && namePlayer.length > 3 && namePlayer.length === (numberPlayers / 4))
+    {
+        console.log("third round");
+        // if (winner === namePlayer[firstPlayer])
+        //     namePlayer.splice(secondPlayer, 1);
+        // else
+        //     namePlayer.splice(firstPlayer, 1);
+        firstPlayer = 0;
+        secondPlayer = 1;
+        mainElement.innerHTML += '<div id="ThirdRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
+                                    '<p style="text-align: center; font-size:4em;">Third Round ! </p>';
+
+        for (let i = 0; i < namePlayer.length - 1; i++) {
+            var matchParagraph = document.createElement("p");
+            matchParagraph.style.textAlign = "center";
+            matchParagraph.textContent = namePlayer[i] + ' against ' + namePlayer[i+1];
+            mainElement.appendChild(matchParagraph);
+            i++;
+        }
+        mainElement.innerHTML += '<div id="nextRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
+        '<p style="text-align: center; font-size:4em;">Next Round ! </p>' +
+        '<p style="text-align: center; font-size:2em;">' + namePlayer[firstPlayer] + ' against ' + namePlayer[secondPlayer] + '</p>' +
+        '<button id="startNextRound" class="styled-button">Start Next Round</button>' +
+        '</div>';
+        document.getElementById('startNextRound').addEventListener("click", function() {
+            player1Score = 0;
+            player2Score = 0;
+            launchGamePong();
+        });
+    }
+    else if (tournament === true && namePlayer.length === 2 ) {
+        console.log("final round");
+        // if (winner === namePlayer[firstPlayer])
+        //     namePlayer.splice(secondPlayer, 1);
+        // else
+        //     namePlayer.splice(firstPlayer, 1);
+        firstPlayer = 0;
+        secondPlayer = 1;
+        mainElement.innerHTML += '<div id="Finale" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
+                                    '<p style="text-align: center; font-size:4em;">Final! </p>' +
+                                    '<p style="text-align: center; font-size:2em;">' + namePlayer[firstPlayer] + ' against ' + namePlayer[secondPlayer] + '</p>' +
+                                    '<button id="startNextRound" class="styled-button">Start Next Round</button>' +
+                                    '</div>';
+
+        document.getElementById('startNextRound').addEventListener("click", function() {
+            player1Score = 0;
+            player2Score = 0;
+            launchGamePong();
+        });
+    }
+    else if (tournament === true && namePlayer.length === 1) {
+        console.log("end of the tournament");
+        mainElement.innerHTML += '<div id="endTournament" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
+        '<p style="text-align: center; font-size:4em;">End of the Tournament ! </p>' +
+        '<p style="text-align: center; font-size:2em;">' + winner + ' won the tournament !</p>' +
+        '</div>';
+    }
 }
 
 </script>
