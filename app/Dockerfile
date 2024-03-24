@@ -14,7 +14,7 @@ ENV PYTHONUNBUFFERED 1
 
 # install system dependencies
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends gcc
+    apt-get install -y --no-install-recommends gcc gettext
 
 # lint
 RUN pip install --upgrade pip
@@ -49,9 +49,9 @@ WORKDIR $APP_HOME
 
 
 # Install Redis
-RUN apt-get update && apt-get install -y --no-install-recommends redis-server
+RUN apt-get update && apt-get install -y --no-install-recommends redis-server nano
 # install dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends netcat
+RUN apt-get update && apt-get install -y --no-install-recommends netcat gettext
 COPY --from=builder /usr/src/app/wheels /wheels
 COPY --from=builder /usr/src/app/requirements.txt .
 RUN pip install --upgrade pip

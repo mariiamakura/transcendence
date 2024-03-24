@@ -16,6 +16,7 @@ import os
 from database.models import User
 from faker import Faker
 import random
+from django.utils.translation import gettext
 
 
 def signUp(request):
@@ -31,7 +32,8 @@ def signUp(request):
         password1 = request.POST.get('password1', '')
         password2 = request.POST.get('password2', '')
         if password1 != password2:
-            messages.error(request, 'Passwords do not match')
+            message = gettext('Passwords do not match')
+            messages.error(request, message)
             return render(request=request, template_name="signUp.html", context={})
         try:
             user = User.objects.create_user(username=username, email=email, password=password1, display_name=display_name)
@@ -42,10 +44,13 @@ def signUp(request):
                 request.user.save()
             return redirect("/")
         except Exception:
-            messages.error(request, 'Failed to create user: User or Email already exists')
+            message = gettext('Failed to create user: User or Email already exists')
+            messages.error(request, message)
             return render(request=request, template_name="signUp.html", context={})
     return render(request=request, template_name="signUp.html", context={})
 
+
+# def twoFactorAuth()
 
 def signIn(request):
     # User = get_user_model()
@@ -55,6 +60,7 @@ def signIn(request):
 
         user = authenticate(username=username, password=password)
         if user is not None:
+
             login(request, user)
             request.user.online = True
             request.user.save()
@@ -65,7 +71,8 @@ def signIn(request):
 
             return redirect("/")
         else:
-            messages.error(request, 'Sign in failed. Please check your Intraname and password.')
+            message = gettext('Sign in failed. Please check your Intraname and password.')
+            messages.error(request, message)
             return render(request=request, template_name="signIn.html", context={})
     return render(request=request, template_name="signIn.html", context={})
 
@@ -138,11 +145,13 @@ def signOut(request):
         request.user.online = False
         request.user.save()
         logout(request)
-        messages.error(request, 'Logout successful')
+        message = gettext('Logout successful')
+        messages.error(request, message)
         return render(request=request, template_name="signIn.html", context={})
         # return HttpResponse("<strong>logout successful.<a href='signIn'> Go to Login page</a></strong>")
     else:
-        messages.error(request, 'Something went wrong! Are you signed in?')
+        message = gettext('Something went wrong! Are you signed in?')
+        messages.error(request, message)
         return render(request=request, template_name="signIn.html", context={})
 
 
@@ -167,7 +176,8 @@ def editProfile(request):
             return render(request=request, template_name="profile.html", context={"user": user})
         return render(request=request, template_name="editProfile.html", context={"user": user})
     else:
-        messages.error(request, 'You are not signed in! Please sign in to edit your profile.')
+        message = gettext('You are not signed in! Please sign in to edit your profile.')
+        messages.error(request, message)
         return render(request=request, template_name="signIn.html", context={})
 
 
@@ -178,7 +188,8 @@ def showProfile(request):
         user = User.objects.get(username=request.user)
         return render(request=request, template_name="profile.html", context={"user": user, "timestamp": now()})
     else:
-        messages.error(request, 'You are not signed in! Please sign in to view your profile.')
+        message = gettext('You are not signed in! Please sign in to view your profile.')
+        messages.error(request, message)
         return render(request=request, template_name="signIn.html", context={})
 
 
@@ -222,7 +233,8 @@ def showHome(request):
     if request.user.is_authenticated:
         return render(request=request, template_name="home.html", context={})
     else:
-        messages.error(request, 'You are not signed in! Please sign in to view the home page.')
+        message = gettext('You are not signed in! Please sign in to view the home page.')
+        messages.error(request, message)
         return render(request=request, template_name="signIn.html", context={})
 
 
@@ -257,7 +269,8 @@ def gamePong(request):
     if request.user.is_authenticated:
         return render(request, 'gamePong.html', context={})
     else:
-        messages.error(request, 'You are not signed in! Please sign in to play the game.')
+        message = gettext('You are not signed in! Please sign in to play the game.')
+        messages.error(request, message)
         return render(request=request, template_name="signIn.html", context={})
 
 
@@ -313,10 +326,12 @@ def callback(request):
                 return redirect("/")
 
         except Exception:
-            messages.error(request, 'Failed to authenticate user. Please try again.')
+            message = gettext('Failed to authenticate user. Please try again.')
+            messages.error(request, message)
             return render(request=request, template_name="signIn.html", context={})
     else:
-        messages.error(request, 'Failed to reach API. Please try again.')
+        message = gettext('Failed to reach API. Please try again.')
+        messages.error(request, message)
         return render(request=request, template_name="signIn.html", context={})
 
 
@@ -359,7 +374,8 @@ def changeAvatar(request):
                                  if os.path.isfile(os.path.join(robot_avatars_path, file)) and file.endswith('.png')] if os.path.isdir(robot_avatars_path) else []
             return render(request, 'changeAvatar.html', {'user': user, 'available_avatars': available_avatars})
     else:
-        messages.error(request, 'You are not signed in! Please sign in to edit your profile.')
+        message = gettext('You are not signed in! Please sign in to edit your profile.')
+        messages.error(request, message)
         return redirect('signIn')
 
 

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+import secrets
 
 # Create your models here.
 
@@ -29,6 +30,14 @@ class User(AbstractUser):
     avatar = models.FileField(upload_to='avatars/', null=True, blank=True)
     online = models.BooleanField(default=False)
     friends = models.JSONField(default=list)
+    # AUTH_METHOD_CHOICES = (
+    #     ('email', 'Email'),
+    #     ('sms', 'SMS'),
+    #     ('google-authenticator', 'Google Authenticator'),
+    # )
+    # auth_method = models.CharField(max_length=20, choices=AUTH_METHOD_CHOICES, default='email')
+    # salt = models.CharField(max_length=255, default=secrets.token_urlsafe)
+    # secret_key = models.CharField(max_length=255, default=secrets.token_urlsafe)
 
     def __str__(self):
         return self.username

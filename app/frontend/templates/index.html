@@ -1,10 +1,11 @@
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pong - The ultimate tournament</title>
+    <title>{% trans "Pong - The ultimate tournament" %}</title>
 	<link href="{% static "style.css" %}" rel="stylesheet">
     <link rel="stylesheet" href="{% static "pong.css" %}">
     <link rel="stylesheet" href="{% static "memory.css" %}">
@@ -30,10 +31,10 @@
     <nav>
         <ul>
 			{% if request.user.is_authenticated %}
-            <li><a class="nav-link" href="showHome">Home</a></li>
+            <li><a class="nav-link" href="showHome">{% trans "Home" %}</a></li>
                     <li>
                         <div class="dropdown">
-                        <button class="dropbtn">Games</button>
+                        <button class="dropbtn">{% trans "Games" %}</button>
                         <div class="dropdown-content">
                             <a class="nav-link" href="gamePong">Pong</a>
                             <a class="nav-link" href="gameMemory">Memory</a>
@@ -43,17 +44,17 @@
                         <a class="nav-link" href="scoreboard">Scoreboard</a>
                     </li>
                     <li class="nav-item ">
-                        <a class="nav-link" href="showProfile">Profile</a>
+                        <a class="nav-link" href="showProfile">{% trans "Profile" %}</a>
                     </li>
 			<li class="nav-item ">
-				<a class="nav-link" href="signOut">Sign Out</a>
+				<a class="nav-link" href="signOut">{% trans "Sign Out" %}</a>
 			</li>
 			{% else %}
 			<li class="nav-item">
-				<a class="nav-link" href="signIn">Sign In</a>
+				<a class="nav-link" href="signIn">{% trans "Sign In" %}</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="signUp">Sign Up</a>
+				<a class="nav-link" href="signUp">{% trans "Sign Up" %}</a>
 			</li>
             
 
