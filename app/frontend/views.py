@@ -237,7 +237,9 @@ def scoreboard(request):
     if request.user.is_authenticated:
         user = User.objects.get(username=request.user)
         return render(request=request, template_name="scoreboard.html", context={"user": user})
-
+    else:
+        messages.error(request, 'You are not signed in! Please sign in to view the scoreboard.')
+        return render(request=request, template_name="signIn.html", context={})
 
 def get_username(request):
     if request.method == 'GET':
@@ -440,4 +442,9 @@ def removeFriends(request):
 
 
 def gameMemory(request):
-    return render(request, 'gameMemory.html', context={})
+    if request.user.is_authenticated:
+        return render(request, 'gameMemory.html', context={})
+    else:
+        messages.error(request, 'You are not signed in! Please sign in to play the game.')
+        return render(request=request, template_name="signIn.html", context={})
+    
