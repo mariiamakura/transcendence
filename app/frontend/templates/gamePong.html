@@ -232,6 +232,7 @@ function scoreChoice() {
 }
 
 function startButtonTournament() {
+    namePlayerTournament = namePlayer;
     var main = document.getElementById('content');
     var choiceDiv = document.createElement("div");
     choiceDiv.id = "choice";
@@ -262,7 +263,6 @@ function startButtonTournament() {
     return new Promise(function(resolve) {
         startButton.addEventListener("click", function() {
             startGame = true;
-            console.log("startGame is ", startGame);
             choiceDiv.remove();
             resolve(true);
         });
@@ -286,6 +286,8 @@ function startButton() {
 }
 
 let namePlayer = [];
+let namePlayerTournament = [];
+
 async function showGamePong() {
     var mainElement = document.getElementById('content');
 	mainElement.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em;">Pong</p>';
@@ -335,7 +337,6 @@ async function showGamePong() {
                 await startButtonTournament();
             else
                 await startButton();
-            console.log("startGame is ", startGame);
 			if (startGame === true)
 				launchGamePong();
 		}
@@ -653,9 +654,7 @@ function launchGamePong() {
     player2.y = board.height / 2 - playerHeight / 2;
     player1.name = namePlayer[firstPlayer];
     player2.name = namePlayer[secondPlayer];
-    
-    console.log("player1 name is ", player1.name);
-    console.log("player2 name is ", player2.name);
+
     //set ball
     ball.x = board.width / 2;
     ball.y = board.height / 2;
@@ -917,6 +916,15 @@ function resetGame(direction)
 function endGame(winner) {
     gameEnded = true;
     console.log(winner + " won !");
+    if (remote === true)
+        updateGameResultRemote(winner);
+    else if (local === true && tournament === false)
+        updateGameResultLocal(winner);
+
+
+
+
+
     fetch('/update_game_result_pong/', {
         method: 'POST',
         headers: {
@@ -1042,6 +1050,7 @@ function endGame(winner) {
     }
     else if (tournament === true && namePlayer.length === 1) {
         console.log("end of the tournament");
+        updateGameResultTournament(winner);
         mainElement.innerHTML += '<div id="endTournament" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
         '<p style="text-align: center; font-size:4em;">End of the Tournament ! </p>' +
         '<p style="text-align: center; font-size:2em;">' + winner + ' won the tournament !</p>' +
