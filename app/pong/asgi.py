@@ -15,6 +15,7 @@ from channels.auth import AuthMiddlewareStack
 import frontend.routing
 import frontend.consumers as consumers
 
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pong.settings')
 
 # application = get_asgi_application()
