@@ -21,7 +21,59 @@ let gameSettings = {
 	numberOfCards: 0,
 	chosenSet: ""
 };
-	
+
+
+function TwoOrTournament() {
+
+var main = document.getElementById('content');
+main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> Do you want to play a 1vs1 game or a tournament ? </p></div>';
+var button1vs1 = document.createElement("button");
+var buttonTournament = document.createElement("button"); 
+buttonTournament.textContent = "Play tournament";
+button1vs1.textContent = "Play 1vs1";
+buttonTournament.classList.add("styled-button")
+button1vs1.classList.add("styled-button");
+document.getElementById('choice').appendChild(button1vs1);
+document.getElementById('choice').appendChild(buttonTournament);
+return new Promise(function (resolve) {
+    button1vs1.addEventListener("click", function() {
+        resolve(true);
+        document.getElementById('choice').remove();
+        tournament = false;
+    });
+    buttonTournament.addEventListener("click", function() {
+        resolve(false);
+        document.getElementById('choice').remove();
+        tournament = true;
+    });
+});
+}
+
+function remoteOrLocal() {
+    var main = document.getElementById('content');
+    main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> Which type of game do you wanna play ? </p></div>';
+    var buttonRemote = document.createElement("button");
+    var buttonLocal = document.createElement("button"); 
+    buttonLocal.textContent = "Play local Game";
+    buttonRemote.textContent = "Play remote Game";
+    buttonLocal.classList.add("styled-button")
+    buttonRemote.classList.add("styled-button");
+    document.getElementById('choice').appendChild(buttonRemote);
+    document.getElementById('choice').appendChild(buttonLocal);
+    return new Promise(function (resolve) {
+        buttonRemote.addEventListener("click", function() {
+            resolve(true);
+            document.getElementById('choice').remove();
+            remote = true;
+        });
+        buttonLocal.addEventListener("click", function() {
+            resolve(false);
+            document.getElementById('choice').remove();
+            local = true;
+        });
+    });
+}
+
 function decideHost() {
 	let host;
 	let client;
@@ -117,41 +169,37 @@ function choiceCards() {
     });
 }
 
-function showButton() {
-	var main = document.getElementById('content');
-	main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> Which type of game do you wanna play ? </p></div>';
-	var buttonTournament = document.createElement("button");
-	var buttonSingle = document.createElement("button");
-	buttonSingle.textContent = "1 vs 1";
-	buttonTournament.textContent = "Tournament";
-	buttonSingle.classList.add("styled-button")
-	buttonTournament.classList.add("styled-button");
-	document.getElementById('choice').appendChild(buttonTournament);
-	document.getElementById('choice').appendChild(buttonSingle);
-	return new Promise(function (resolve) {
-		buttonTournament.addEventListener("click", function() {
-			resolve(true);
-			document.getElementById('choice').remove();
-			tournament = true;
-		});
-		buttonSingle.addEventListener("click", function() {
-			resolve(false);
-			document.getElementById('choice').remove();
-			singleGame = true;
-		});
-	});
-}
+// function showButton() {
+// 	var main = document.getElementById('content');
+// 	main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> Which type of game do you wanna play ? </p></div>';
+// 	var buttonTournament = document.createElement("button");
+// 	var buttonSingle = document.createElement("button");
+// 	buttonSingle.textContent = "1 vs 1";
+// 	buttonTournament.textContent = "Tournament";
+// 	buttonSingle.classList.add("styled-button")
+// 	buttonTournament.classList.add("styled-button");
+// 	document.getElementById('choice').appendChild(buttonTournament);
+// 	document.getElementById('choice').appendChild(buttonSingle);
+// 	return new Promise(function (resolve) {
+// 		buttonTournament.addEventListener("click", function() {
+// 			resolve(true);
+// 			document.getElementById('choice').remove();
+// 			tournament = true;
+// 		});
+// 		buttonSingle.addEventListener("click", function() {
+// 			resolve(false);
+// 			document.getElementById('choice').remove();
+// 			singleGame = true;
+// 		});
+// 	});
+// }
 
 function numPlayers() {
 	var main = document.getElementById('content');
 	main.innerHTML += '<div id="choice"><p style="padding-top: 2em; display: flex; " > How many players do you want to be ? </p></div>';
-	var buttonTwo = document.createElement("button");
 	var buttonFour = document.createElement("button");
-	buttonTwo.textContent = "2 players";
 	buttonFour.textContent = "4 players";
-	buttonTwo.classList.add("styled-button")
 	buttonFour.classList.add("styled-button");
-	document.getElementById('choice').appendChild(buttonTwo);
 	document.getElementById('choice').appendChild(buttonFour);
 	if (tournament) {
 		var buttonEight = document.createElement("button");
@@ -164,11 +212,6 @@ function numPlayers() {
 		document.getElementById('choice').appendChild(buttonSixteen);
 	}
 	return new Promise(function (resolve) {
-		buttonTwo.addEventListener("click", function() {
-			resolve(true);
-			numberPlayers = 2;
-			document.getElementById('choice').remove();
-		});
 		buttonFour.addEventListener("click", function() {
 			resolve(true);
 			numberPlayers = 4;
@@ -200,25 +243,80 @@ return new Promise(function (resolve) {
 }
 
 async function getNamePlayer() {
-	var main = document.getElementById('content');
-	let i = 1;
-	while (i <= numberPlayers) {
-		main.innerHTML += '<div id="choice">' + 
-			'<form style="display: flex; flex-direction: column; align-items: center;">' +
-				'<p style="padding-top: 2em; display: flex; align-items:center; justify-content:center;" > Name of player ' + i + ' : </p>' +
-				'<input type="text" id="name' + i + '">' +
-				'<button type="submit" class="styled-button" style="margin-top: 1em;">Submit</button>' +
-			'</form>' +
-		'</div>';
-		const Submit = main.querySelector('#choice:last-child button');
-		const input = main.querySelector('#choice:last-child input');
-		const isSubmitted = await submitButton(Submit);
-		if (isSubmitted === true && input.value !== "") {
-			namePlayer.push(input.value);
-			main.querySelector('#choice:last-child').remove();
-			i++;
-		}
-	}
+    var main = document.getElementById('content');
+    let i = 2;
+
+    try {
+        const response = await fetch('/get_username/');
+        const data = await response.json();
+        main.innerHTML += `<p style="padding-top: 2em; display: flex; align-items:center; justify-content:center;">First player is: ${data.username}</p>`;
+        namePlayer.push(data.username);
+
+        for (; i <= numberPlayers; i++) {
+            main.innerHTML += '<div id="choice">' +
+                '<form style="display: flex; flex-direction: column; align-items: center;">' +
+                '<p style="padding-top: 2em; display: flex; align-items:center; justify-content:center;" > Name of player ' + i + ' : </p>' +
+                '<input type="text" id="name' + i + '">' +
+                '<button type="submit" class="styled-button" style="margin-top: 1em;">Submit</button>' +
+                '</form>' +
+                '</div>';
+
+            const submitButton = main.querySelector('#choice:last-child button');
+            const input = main.querySelector('#choice:last-child input');
+
+            // Wait for the submit button click event
+            await new Promise(resolve => {
+                submitButton.addEventListener("click", function(event) {
+                    event.preventDefault(); // Prevent the default form submission
+                    if (input.value !== "") {
+                        namePlayer.push(input.value);
+                        main.querySelector('#choice:last-child').remove();
+                        resolve(); // Resolve the promise to continue the loop
+                    }
+                });
+            });
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+    return namePlayer;
+}
+
+function startButtonTournament() {
+    var main = document.getElementById('content');
+    var choiceDiv = document.createElement("div");
+    choiceDiv.id = "choice";
+    
+    var welcomeParagraph = document.createElement("p");
+    welcomeParagraph.textContent = "Welcome to the memory tournament !\n\nThe rounds are the following:";
+    choiceDiv.appendChild(welcomeParagraph);
+    
+    for (let i = 0; i < numberPlayers - 1; i++) {
+        var matchParagraph = document.createElement("p");
+        matchParagraph.style.textAlign = "center";
+        matchParagraph.textContent = namePlayer[i] + ' against ' + namePlayer[i+1];
+        choiceDiv.appendChild(matchParagraph);
+        i++;
+    }
+    
+    var readyParagraph = document.createElement("p");
+    readyParagraph.style.textAlign = "center";
+    readyParagraph.style.paddingTop = "1em";
+    readyParagraph.textContent = "Ready to start ?\n\nLet's go !";
+    choiceDiv.appendChild(readyParagraph);
+    
+    var startButton = document.createElement("button");
+    startButton.textContent = "Start !";
+    startButton.classList.add("styled-button");
+    choiceDiv.appendChild(startButton);
+    main.appendChild(choiceDiv);
+    return new Promise(function(resolve) {
+        startButton.addEventListener("click", function() {
+            startGame = true;
+            choiceDiv.remove();
+            resolve(true);
+        });
+    });
 }
 
 function startButton() {
@@ -263,6 +361,8 @@ async function showButton() {
 	});
 }
 
+let cards_info = [];
+
 async function showGameMemory() {
 
 	var mainElement = document.getElementById('content');
@@ -274,7 +374,7 @@ async function showGameMemory() {
 	singleGame = false;
 	numberPlayers = 0;
 	namePlayer = [];
-	if (await showButton())
+	if (await remoteOrLocal())
 	{
 		remote = true;
 		numberPlayers = 2;
@@ -295,13 +395,20 @@ async function showGameMemory() {
 	else
 	{
 		local = true;
+        await TwoOrTournament();
+        if (tournament === true)
+            await numPlayers();
+        else
+            numberPlayers = 2;
+        await getNamePlayer();
         await choiceSet();
 		await choiceCards();
-		namePlayer[0] = "{{user.username}}";
-		namePlayer[1] = "Guest Player";
-        await startButton();
+        if (tournament === true)
+            await startButtonTournament();
+        else
+            await startButton();
         if (startGame === true)
-            launchGameMemory();
+            launchGameMemory(cards_info);
 	}
 }
 let gameStarted = false;
@@ -316,7 +423,6 @@ async function remoteHost() {
     let socket = new WebSocket(`wss://${window.location.host}/wss/socket-server/lobby/`); // Connect to the lobby
 
     socket.onopen = function(event) {
-        console.log("sanitizedRoomName", sanitizedRoomName);
 		socket.send(JSON.stringify({ 
 			action: 'create_room_memory', 
 			host_name: hostName, 
@@ -357,7 +463,7 @@ async function remoteHost() {
                         if (countdownElement) {
                             countdownElement.remove();
                         }
-                        launchGameMemory(cardInfo);
+                        launchGameMemory(cards_info);
                     }
                 }
                 if (data.action === 'player_turn_memory') 
@@ -463,10 +569,10 @@ async function remoteClient() {
                 }
             }
             if (data.action === 'card_info') {
-                var cards_info = data.cards;
+                var cards_infoG = data.cards;
                 console.log("cards received");
                 updateClientSettings(data.settings);
-                launchGameMemory(cards_info);
+                launchGameMemory(cards_infoG);
             }
             if (data.action === 'player_turn_memory') {
                 console.log("player turn updated");
@@ -494,7 +600,6 @@ async function remoteClient() {
         };
     }
 }
-let cardInfo = [];
 
 function updateCountdownDisplayMemory(message) {
     let countdownElement = document.getElementById('countdown');
@@ -525,12 +630,12 @@ let setAlreadyUsed = [];
 function randomSet(set, card) {
     let index;
     let ref;
-
+    
     do {
         index = Math.floor(Math.random() * set.length);
         ref = set[index];
     } while (setAlreadyUsed.includes(ref));
-
+    
     card.ref = ref;
     card.index = index;
     setAlreadyUsed.push(ref);
@@ -540,10 +645,13 @@ function randomSet(set, card) {
 let PlayerToPlay;
 let firstSet;
 let secondSet;
+let firstPlayer = 0;
+let secondPlayer = 1;
+let cardInfo = [];
 
 function launchGameMemory(cards_info) {
     var mainElement = document.getElementById('content');
-    PlayerToPlay = namePlayer[0];
+    PlayerToPlay = namePlayer[firstPlayer];
     let sets = [natureFirstSet12, natureSecondSet12, natureFirstSet16, natureSecondSet16, natureFirstSet24, natureSecondSet24, natureFirstSet32, natureSecondSet32, 
                         robotFirstSet12, robotSecondSet12, robotFirstSet16, robotSecondSet16, robotFirstSet24, robotSecondSet24, robotFirstSet32, robotSecondSet32]
     if (gameSettings.chosenSet === 1)
@@ -592,6 +700,7 @@ function launchGameMemory(cards_info) {
             }        
             document.getElementById('memory-game').appendChild(card);
             cardInfo.push(card);
+
         }
         if (isHost && remote === true)
             gameRoomSocket.send(JSON.stringify({action: 'card_info', cards: cardInfo, settings: gameSettings}));
@@ -629,8 +738,7 @@ function updatePlayerTurns() {
 }
 
 function updatePlayerTurnsDisplay() {
-    console.log("update player turns display")
-    if (PlayerToPlay === namePlayer[0])
+    if (PlayerToPlay === namePlayer[firstPlayer])
     {
         document.getElementById('Player1').style.backgroundColor = 'skyblue';
         document.getElementById('Player2').style.backgroundColor =  'white';
@@ -643,7 +751,6 @@ function updatePlayerTurnsDisplay() {
 }   
 
 function updatePlayerScore(playerNumber) {
-    console.log("update player score");
     var score_max = gameSettings.numberOfCards / 2;
     var progressBar = document.createElement('div');
     progressBar.classList.add('progress-bar');
@@ -675,14 +782,17 @@ function updatePlayerScore(playerNumber) {
 }
 
 let init = false;
+
 function initializeGameMemory() {
     console.log("init game memory");
     init = true;
-    PlayerToPlay = namePlayer[0];
+    scorePlayer1 = 0;
+    scorePlayer2 = 0;
+    PlayerToPlay = namePlayer[firstPlayer];
     var turn1 = document.getElementById('turn1');
     var turn2 = document.getElementById('turn2');
-    turn1.innerHTML = '<p> ' + namePlayer[0] + ' </p>';
-    turn2.innerHTML = '<p> ' + namePlayer[1] + ' </p>';
+    turn1.innerHTML = '<p> ' + namePlayer[firstPlayer] + ' </p>';
+    turn2.innerHTML = '<p> ' + namePlayer[secondPlayer] + ' </p>';
     if (remote === true)
         updatePlayerTurns();
     updatePlayerTurnsDisplay();
@@ -691,11 +801,10 @@ function initializeGameMemory() {
 }
 
 function playTime() {
-    console.log("play time");
     if (init === false)
         initializeGameMemory();
     document.getElementById('memory-game').addEventListener("click", function(event) {
-        if ((isHost && PlayerToPlay === namePlayer[0]) || (!isHost && PlayerToPlay === namePlayer[1]) || local === true) {
+        if ((isHost && PlayerToPlay === namePlayer[firstPlayer]) || (!isHost && PlayerToPlay === namePlayer[secondPlayer]) || local === true) {
             if (event.target.classList.contains("card")) {
                 if (cardTurned < 2 && !event.target.classList.contains("show-image")) {
                     if (isHost && remote === true)
@@ -712,11 +821,11 @@ function playTime() {
                     }
                     if (scorePlayer1 + scorePlayer2 === gameSettings.numberOfCards / 2) {
                         if (isHost && remote === true)
-                            gameRoomSocket.send(JSON.stringify({action: 'game_ended_memory', winner: scorePlayer1 > scorePlayer2 ? namePlayer[0] : namePlayer[1]}));
+                            gameRoomSocket.send(JSON.stringify({action: 'game_ended_memory', winner: scorePlayer1 > scorePlayer2 ? namePlayer[firstPlayer] : namePlayer[secondPlayer]}));
                         else if (remote === true)
-                            roomSocket.send(JSON.stringify({action: 'game_ended_memory', winner: scorePlayer1 > scorePlayer2 ? namePlayer[0] : namePlayer[1]}));
+                            roomSocket.send(JSON.stringify({action: 'game_ended_memory', winner: scorePlayer1 > scorePlayer2 ? namePlayer[firstPlayer] : namePlayer[secondPlayer]}));
                         else if (local === true)
-                            endGameMemory(scorePlayer1 > scorePlayer2 ? namePlayer[0] : namePlayer[1]);
+                            endGameMemory(scorePlayer1 > scorePlayer2 ? namePlayer[firstPlayer] : namePlayer[secondPlayer]);
                     }
                 }
             }
@@ -752,29 +861,155 @@ function endGameMemory(winner)
     mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
     '<p style="text-align: center; font-size:4em;">' + winner + ' won ! </p>' +
     '<p><img src="img/gif_robot.gif" alt="Victory logo" style = "width: 50vh; height: 50vh;"></p>' +
-    '<p style="text-align: center;"> If you want to play again with the same settings, press the button below.</p>' +
+    // '<p style="text-align: center;"> If you want to play again with the same settings, press the button below.</p>' +
     '</div>';
-    cardTurned = 0;
-    cardTurnedArrayIndex.length = 0;
-    scorePlayer1 = 0;
-    scorePlayer2 = 0;
-    cardTurnedArrayId.length = 0;
-    setAlreadyUsed.length = 0;
-    cardInfo.length = 0;
-    var startAgain = document.createElement("button");
-    startAgain.textContent = "Start again";
-    startAgain.classList.add("styled-button")
-    document.getElementById('endGame').appendChild(startAgain);
-    startAgain.addEventListener("click", function() {
-        launchGameMemory(cardInfo);
-    });
+    cards_info = [];
+    cardInfo = [];
+    setAlreadyUsed = [];
+    init = false;
+    if (tournament === false)
+    {
+        var startAgain = document.createElement("button");
+        startAgain.textContent = "Start again";
+        startAgain.classList.add("styled-button")
+        document.getElementById('endGame').appendChild(startAgain);
+        startAgain.addEventListener("click", function() {
+            player1Score = 0;
+            player2Score = 0;
+            launchGameMemory(cards_info);
+        });
+    }
+    else
+    {
+        if (winner === namePlayer[firstPlayer])
+            namePlayer.splice(secondPlayer, 1);
+        else
+            namePlayer.splice(firstPlayer, 1);
+    }
+    if (tournament === true && firstPlayer < namePlayer.length - 1)
+    {
+        firstPlayer++;
+        secondPlayer++;
+        mainElement.innerHTML += '<div id="nextRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
+        '<p style="text-align: center; font-size:4em;">Next Round ! </p>' +
+        '<p style="text-align: center; font-size:2em;">' + namePlayer[firstPlayer] + ' against ' + namePlayer[secondPlayer] + '</p>' +
+        '<button id="startNextRound" class="styled-button">Start Next Round</button>' +
+        '</div>';
+        document.getElementById('startNextRound').addEventListener("click", function() {
+            player1Score = 0;
+            player2Score = 0;
+            launchGameMemory(cards_info);
+        });
+    }
+    else if (tournament === true && namePlayer.length > 2 && namePlayer.length === (numberPlayers / 2))
+    {
+        firstPlayer = 0;
+        secondPlayer = 1;
+        mainElement.innerHTML += '<div id="SecondRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
+                                    '<p style="text-align: center; font-size:4em;">Second Round ! </p>';
+
+        for (let i = 0; i < namePlayer.length - 1; i++) {
+            var matchParagraph = document.createElement("p");
+            matchParagraph.style.textAlign = "center";
+            matchParagraph.textContent = namePlayer[i] + ' against ' + namePlayer[i+1];
+            mainElement.appendChild(matchParagraph);
+            i++;
+        }
+        mainElement.innerHTML += '<div id="nextRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
+        '<p style="text-align: center; font-size:4em;">Next Round ! </p>' +
+        '<p style="text-align: center; font-size:2em;">' + namePlayer[firstPlayer] + ' against ' + namePlayer[secondPlayer] + '</p>' +
+        '<button id="startNextRound" class="styled-button">Start Next Round</button>' +
+        '</div>';
+        document.getElementById('startNextRound').addEventListener("click", function() {
+            player1Score = 0;
+            player2Score = 0;
+            launchGameMemory(cards_info);
+        });
+    }
+    else if (tournament === true && namePlayer.length > 3 && namePlayer.length === (numberPlayers / 4))
+    {
+        firstPlayer = 0;
+        secondPlayer = 1;
+        mainElement.innerHTML += '<div id="ThirdRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
+                                    '<p style="text-align: center; font-size:4em;">Third Round ! </p>';
+
+        for (let i = 0; i < namePlayer.length - 1; i++) {
+            var matchParagraph = document.createElement("p");
+            matchParagraph.style.textAlign = "center";
+            matchParagraph.textContent = namePlayer[i] + ' against ' + namePlayer[i+1];
+            mainElement.appendChild(matchParagraph);
+            i++;
+        }
+        mainElement.innerHTML += '<div id="nextRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
+        '<p style="text-align: center; font-size:4em;">Next Round ! </p>' +
+        '<p style="text-align: center; font-size:2em;">' + namePlayer[firstPlayer] + ' against ' + namePlayer[secondPlayer] + '</p>' +
+        '<button id="startNextRound" class="styled-button">Start Next Round</button>' +
+        '</div>';
+        document.getElementById('startNextRound').addEventListener("click", function() {
+            player1Score = 0;
+            player2Score = 0;
+            launchGameMemory(cards_info);
+        });
+    }
+    else if (tournament === true && namePlayer.length === 2 ) {
+        firstPlayer = 0;
+        secondPlayer = 1;
+        mainElement.innerHTML += '<div id="Finale" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
+                                    '<p style="text-align: center; font-size:4em;">Final! </p>' +
+                                    '<p style="text-align: center; font-size:2em;">' + namePlayer[firstPlayer] + ' against ' + namePlayer[secondPlayer] + '</p>' +
+                                    '<button id="startNextRound" class="styled-button">Start Next Round</button>' +
+                                    '</div>';
+
+        document.getElementById('startNextRound').addEventListener("click", function() {
+            player1Score = 0;
+            player2Score = 0;
+            launchGameMemory(cards_info);
+        });
+    }
+    else if (tournament === true && namePlayer.length === 1) {
+        mainElement.innerHTML += '<div id="endTournament" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
+        '<p style="text-align: center; font-size:4em;">End of the Tournament ! </p>' +
+        '<p style="text-align: center; font-size:2em;">' + winner + ' won the tournament !</p>' +
+        '</div>';
+        cardTurned = 0;
+        cardTurnedArrayIndex.length = 0;
+        scorePlayer1 = 0;
+        scorePlayer2 = 0;
+        cardTurnedArrayId.length = 0;
+        setAlreadyUsed.length = 0;
+        cardInfo.length = 0;
+        var startAgain = document.createElement("button");
+        startAgain.textContent = "Start again";
+        startAgain.classList.add("styled-button")
+        document.getElementById('endGame').appendChild(startAgain);
+        startAgain.addEventListener("click", function() {
+            launchGameMemory(cards_info);
+        });
+    }
+    if (tournament === false)
+    {
+        cardTurned = 0;
+        cardTurnedArrayIndex.length = 0;
+        scorePlayer1 = 0;
+        scorePlayer2 = 0;
+        cardTurnedArrayId.length = 0;
+        setAlreadyUsed.length = 0;
+        cardInfo.length = 0;
+        var startAgain = document.createElement("button");
+        startAgain.textContent = "Start again";
+        startAgain.classList.add("styled-button")
+        document.getElementById('endGame').appendChild(startAgain);
+        startAgain.addEventListener("click", function() {
+            launchGameMemory(cards_info);
+        });
+    }
 }
 
 function checkCards() {
 
     if (cardTurnedArrayIndex[0] === cardTurnedArrayIndex[1])
     {        
-        if (PlayerToPlay === namePlayer[0])
+        if (PlayerToPlay === namePlayer[firstPlayer])
         {
             scorePlayer1++;
             if (isHost && remote === true)
@@ -782,7 +1017,7 @@ function checkCards() {
             else if (remote === true)
                 roomSocket.send(JSON.stringify({action: 'update_score_memory', score1: scorePlayer1, score2: scorePlayer2}));
         }
-        else if (PlayerToPlay === namePlayer[1])
+        else if (PlayerToPlay === namePlayer[secondPlayer])
         {
             scorePlayer2++;
             if (isHost && remote === true)
@@ -822,7 +1057,7 @@ function checkCards() {
 function turnUpdate(mode)
 {
     if (mode === 2)
-       PlayerToPlay = (PlayerToPlay === namePlayer[0] ? namePlayer[1] : namePlayer[0]);
+       PlayerToPlay = (PlayerToPlay === namePlayer[firstPlayer] ? namePlayer[secondPlayer] : namePlayer[firstPlayer]);
     cardTurnedArrayId.length = 0;
     cardTurnedArrayIndex.length = 0;
     cardTurned -= 2;

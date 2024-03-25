@@ -29,7 +29,6 @@ urlpatterns = [
     path('update_game_result_pong/', views.update_game_result_pong, name='update_game_result_pong'),
     path('update_game_result_memory/', views.update_game_result_memory, name='update_game_result_memory'),
     path('get_username/', views.get_username, name='get_username'),
-
 ]
 
 

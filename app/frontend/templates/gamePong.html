@@ -324,17 +324,11 @@ async function showGamePong() {
 		//local Game
         await TwoOrTournament();
         if (tournament === true)
-        {
             await numPlayers();
-            await getNamePlayer();
-            await scoreChoice();
-        }
         else
-            await scoreChoice();
-		// namePlayer[0] = "{{  user.username  }}";
-		// namePlayer[1] = "Guest Player";
-
-		// numberPlayers = 2;
+            numberPlayers = 2;
+        await getNamePlayer();
+        await scoreChoice();
 		if (namePlayer.length  === numberPlayers && scoreToDo !== 0)
 		{
             if (tournament === true)
@@ -933,18 +927,15 @@ function endGame(winner) {
     .then(response => {
         if (response.ok) {
             console.log('Game result updated successfully');
-            // Optionally, handle success response
         } else {
             console.error('Failed to update game result');
-            // Optionally, handle error response
         }
     })
     .catch(error => {
         console.error('Error updating game result:', error);
-        // Optionally, handle fetch error
     });
     var mainElement = document.getElementById('content');
-    mainElement.innerHTML = ''; // Remove all inner HTML content  
+    mainElement.innerHTML = '';
     mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
 		'<p style="text-align: center; font-size:4em;">Game Over ! </p>' +
 		'<p style="text-align: center; font-size:2em;">' + winner + ' won ! <br>' + //<br> If you want to play again with the same settings, press the button below.</p>' +
@@ -970,7 +961,6 @@ function endGame(winner) {
         else
             namePlayer.splice(firstPlayer, 1);
     }
-    console.log("namePlayer length is ", namePlayer.length);
     if (tournament === true && firstPlayer < namePlayer.length - 1)
     {
         firstPlayer++;
@@ -988,11 +978,6 @@ function endGame(winner) {
     }
     else if (tournament === true && namePlayer.length > 2 && namePlayer.length === (numberPlayers / 2))
     {
-        console.log("second round");
-        // if (winner === namePlayer[firstPlayer])
-        //     namePlayer.splice(secondPlayer, 1);
-        // else
-        //     namePlayer.splice(firstPlayer, 1);
         firstPlayer = 0;
         secondPlayer = 1;
         mainElement.innerHTML += '<div id="SecondRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
@@ -1018,11 +1003,6 @@ function endGame(winner) {
     }
     else if (tournament === true && namePlayer.length > 3 && namePlayer.length === (numberPlayers / 4))
     {
-        console.log("third round");
-        // if (winner === namePlayer[firstPlayer])
-        //     namePlayer.splice(secondPlayer, 1);
-        // else
-        //     namePlayer.splice(firstPlayer, 1);
         firstPlayer = 0;
         secondPlayer = 1;
         mainElement.innerHTML += '<div id="ThirdRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
@@ -1047,11 +1027,6 @@ function endGame(winner) {
         });
     }
     else if (tournament === true && namePlayer.length === 2 ) {
-        console.log("final round");
-        // if (winner === namePlayer[firstPlayer])
-        //     namePlayer.splice(secondPlayer, 1);
-        // else
-        //     namePlayer.splice(firstPlayer, 1);
         firstPlayer = 0;
         secondPlayer = 1;
         mainElement.innerHTML += '<div id="Finale" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
@@ -1059,7 +1034,6 @@ function endGame(winner) {
                                     '<p style="text-align: center; font-size:2em;">' + namePlayer[firstPlayer] + ' against ' + namePlayer[secondPlayer] + '</p>' +
                                     '<button id="startNextRound" class="styled-button">Start Next Round</button>' +
                                     '</div>';
-
         document.getElementById('startNextRound').addEventListener("click", function() {
             player1Score = 0;
             player2Score = 0;
