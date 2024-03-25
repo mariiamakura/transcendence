@@ -362,7 +362,7 @@ def changeAvatar(request):
             return render(request, 'changeAvatar.html', {'user': user, 'available_avatars': available_avatars})
     else:
         messages.error(request, 'You are not signed in! Please sign in to edit your profile.')
-        return redirect('signIn')
+        return render(request=request, template_name="signIn.html", context={})
 
 
 def searchUsers(request):
@@ -415,12 +415,13 @@ def addFriend(request):
 
 def showFriends(request):
     User = get_user_model()
-    if not request.user.is_authenticated:
-        return redirect('signIn')
-    friend_ids = request.user.friends
-    friends = User.objects.filter(pk__in=friend_ids)
-
-    return render(request, 'showFriends.html', {'friends': friends})
+    if request.user.is_authenticated:
+        friend_ids = request.user.friends
+        friends = User.objects.filter(pk__in=friend_ids)
+        return render(request, 'showFriends.html', {'friends': friends})
+    else:
+        messages.error(request, 'You are not signed in! Please sign in to view your friends.')
+        return render(request=request, template_name="signIn.html", context={})
 
 
 @login_required
