@@ -791,20 +791,26 @@ function update() {
 }
 
 function checkCollision(ballY, ballX) {
-    ballX -= 5;
+    // ballX -= 5;
     let LoclPad1XPos = player1.x + player1.width / 2;
     let distance1 = Math.abs(ballX - LoclPad1XPos);
     
     if (distance1 < 5 && ballY > (player1.y - playerWidth) && player1.y + player1.height + playerWidth > ballY) {
         ball.velocityX *= -1; // Reverse the x velocity
+		if (ballY <= player1.y || ballY >= player1.y + player1.height) {
+            ball.velocityY *= -1; // Reverse the y velocity
+        }
     }
     
-    ballX += 10;
-    let LoclPad2XPos = player2.x;
+    ballX += 5;
+    let LoclPad2XPos = player2.x - player2.width / 2;
     let distance2 = Math.abs(ballX - LoclPad2XPos);
     
     if (distance2 < 5 && ballY > (player2.y - playerWidth) && player2.y + player2.height + playerWidth > ballY) {
         ball.velocityX *= -1; // Reverse the x velocity
+		if (ballY <= player2.y || ballY >= player2.y + player2.height) {
+            ball.velocityY *= -1; // Reverse the y velocity
+        }
     }
 }
 

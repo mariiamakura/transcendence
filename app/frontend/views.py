@@ -241,6 +241,7 @@ def scoreboard(request):
         messages.error(request, 'You are not signed in! Please sign in to view the scoreboard.')
         return render(request=request, template_name="signIn.html", context={})
 
+
 def get_username(request):
     if request.method == 'GET':
         # Assuming the user is authenticated and you want to get the username of the authenticated user
@@ -447,4 +448,3 @@ def gameMemory(request):
     else:
         messages.error(request, 'You are not signed in! Please sign in to play the game.')
         return render(request=request, template_name="signIn.html", context={})
-    
