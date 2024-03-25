@@ -70,8 +70,9 @@ def signIn(request):
     return render(request=request, template_name="signIn.html", context={})
 
 
+@csrf_exempt
+@require_POST
 def update_game_result_pong(request):
-    print("UPDATING")
     if request.method == 'POST':
         # Parse JSON data from the request body
         data = json.loads(request.body)
@@ -94,8 +95,9 @@ def update_game_result_pong(request):
         return JsonResponse({'error': 'Unsupported method'}, status=405)
 
 
+@csrf_exempt
+@require_POST
 def update_game_result_memory(request):
-    print("UPDATING")
     if request.method == 'POST':
         # Parse JSON data from the request body
         data = json.loads(request.body)

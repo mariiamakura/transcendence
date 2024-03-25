@@ -32,14 +32,15 @@ class GameRoomManagerMemory:
     rooms = {}  # Stores room_name: host_name
 
     @classmethod
-    def create_room_memory(cls, host_name):
+    def create_room_memory(cls, host_name, room_settings):
         room_id = f"{host_name}_Game"
-        cls.rooms[room_id] = {"host": host_name, "guest": None}
+        cls.rooms[room_id] = {"host": host_name, "guest": None, "room_settings": room_settings}
         return room_id
 
     @classmethod
     def list_rooms_memory(cls):
-        return [room_id for room_id, details in cls.rooms.items() if details["guest"] is None]
+        # return [cls.rooms[room_id] for room_id, details in cls.rooms.items() if details["guest"] is None]
+        return [(room_id, details['room_settings']) for room_id, details in cls.rooms.items() if details["guest"] is None]
 
     @classmethod
     def join_room_memory(cls, room_id, guest_name):
@@ -87,8 +88,10 @@ class GameConsumer(AsyncWebsocketConsumer):
 
         elif action == 'create_room_memory':
             host_name = data.get('host_name')
-            room_id = GameRoomManagerMemory.create_room_memory(host_name)
+            room_settings = data.get('room_settings')
+            room_id = GameRoomManagerMemory.create_room_memory(host_name, room_settings)
             await self.send(text_data=json.dumps({'action': 'room_created_memory', 'room_id': room_id}))
+
         elif action == 'list_rooms_pong':
             rooms = GameRoomManagerPong.list_rooms_pong()
             await self.send(text_data=json.dumps({'action': 'list_rooms_pong', 'rooms': rooms}))
