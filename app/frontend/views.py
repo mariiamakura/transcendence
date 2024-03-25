@@ -262,7 +262,9 @@ def scoreboard(request):
     if request.user.is_authenticated:
         user = User.objects.get(username=request.user)
         return render(request=request, template_name="scoreboard.html", context={"user": user})
-
+    else:
+        messages.error(request, 'You are not signed in! Please sign in to view the scoreboard.')
+        return render(request=request, template_name="signIn.html", context={})
 
 def get_username(request):
     if request.method == 'GET':
@@ -387,7 +389,7 @@ def changeAvatar(request):
             return render(request, 'changeAvatar.html', {'user': user, 'available_avatars': available_avatars})
     else:
         messages.error(request, 'You are not signed in! Please sign in to edit your profile.')
-        return redirect('signIn')
+        return render(request=request, template_name="signIn.html", context={})
 
 
 def searchUsers(request):
@@ -440,12 +442,13 @@ def addFriend(request):
 
 def showFriends(request):
     User = get_user_model()
-    if not request.user.is_authenticated:
-        return redirect('signIn')
-    friend_ids = request.user.friends
-    friends = User.objects.filter(pk__in=friend_ids)
-
-    return render(request, 'showFriends.html', {'friends': friends})
+    if request.user.is_authenticated:
+        friend_ids = request.user.friends
+        friends = User.objects.filter(pk__in=friend_ids)
+        return render(request, 'showFriends.html', {'friends': friends})
+    else:
+        messages.error(request, 'You are not signed in! Please sign in to view your friends.')
+        return render(request=request, template_name="signIn.html", context={})
 
 
 @login_required
@@ -464,4 +467,9 @@ def removeFriends(request):
 
 
 def gameMemory(request):
-    return render(request, 'gameMemory.html', context={})
+    if request.user.is_authenticated:
+        return render(request, 'gameMemory.html', context={})
+    else:
+        messages.error(request, 'You are not signed in! Please sign in to play the game.')
+        return render(request=request, template_name="signIn.html", context={})
+    
