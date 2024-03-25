@@ -9,13 +9,12 @@
           <ul class="list-group">
             <li class="list-group-item">Username: {{ request.user.username }}</li>
             <p>Pong:</p>
-            <li class="list-group-item">Games Played: {{ request.user.pong_games_played }}</li>
-            <li class="list-group-item">Games Won: {{ request.user.pong_games_won }}</li>
-            <li class="list-group-item">Win Streak: {{ request.user.pong_win_streak }}</span></li>
+              <li class="list-group-item">Games Played: {{ games_played }}</li>
+              <li class="list-group-item">Games Won: {{ games_won }}</li>
             <p>Memory:</p>
-            <li class="list-group-item">Games Played: {{ request.user.memory_games_played }}</li>
-            <li class="list-group-item">Games Won: {{ request.user.memory_games_won }}</li>
-            <li class="list-group-item">Win Streak: {{ request.user.memory_win_streak }}</span></li>
+              <li class="list-group-item">Games Played: 1</li>
+              <!-- <li class="list-group-item">Games Won: {{ request.user.memory_games_won }}</li>
+              <li class="list-group-item">Win Streak: {{ request.user.memory_win_streak }}</span></li> -->
           </ul>
         </div>
       </div>

@@ -231,8 +231,10 @@ function scoreChoice() {
     });
 }
 
+let tournament_id = null;
+
 function startButtonTournament() {
-    namePlayerTournament = namePlayer;
+    tournament_id = updateStartTournament();
     var main = document.getElementById('content');
     var choiceDiv = document.createElement("div");
     choiceDiv.id = "choice";
@@ -286,7 +288,6 @@ function startButton() {
 }
 
 let namePlayer = [];
-let namePlayerTournament = [];
 
 async function showGamePong() {
     var mainElement = document.getElementById('content');
@@ -302,10 +303,6 @@ async function showGamePong() {
 	
 	if (await remoteOrLocal())
 	{
-		//remote Game
-        // await TwoOrTournament();
-        // if (tournament === true)
-        //     await numPlayers();
 		if (await decideHost())
 		{
             await scoreChoice();
@@ -913,24 +910,16 @@ function resetGame(direction)
     ball.velocityY = Math.sin(generateRandomAngle()) * board.height / 100 * generateRandomNumber() * velocity;
 }
 
-function endGame(winner) {
-    gameEnded = true;
-    console.log(winner + " won !");
-    if (remote === true)
-        updateGameResultRemote(winner);
-    else if (local === true && tournament === false)
-        updateGameResultLocal(winner);
-
-
-
-
-
+function updateGameResult(winner, scoreWinner, scoreLoser, tournament, tournament_id)
+{
+    console.log('Updating game result...');
+    
     fetch('/update_game_result_pong/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ winner: winner }),
+        body: JSON.stringify({ winner: winner, players : namePlayer, scoreToDo: scoreToDo, scoreW: scoreWinner, scoreL: scoreLoser, tournament: tournament, tournament_id: tournament_id }),
     })
     .then(response => {
         if (response.ok) {
@@ -942,6 +931,35 @@ function endGame(winner) {
     .catch(error => {
         console.error('Error updating game result:', error);
     });
+}
+
+function updateStartTournament()
+{
+    fetch('/update_start_tournament/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ players : namePlayer, scoreToDo: scoreToDo }),
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Tournament started successfully');
+        } else {
+            console.error('Failed to start tournament');
+        }
+    })
+    .catch(error => {
+        console.error('Error starting tournament:', error);
+    });
+}
+
+function endGame(winner) {
+    gameEnded = true;
+    console.log(winner + " won !");
+    let scoreWinner = player1Score > player2Score ? player1Score : player2Score;
+    let scoreLoser = player1Score < player2Score ? player1Score : player2Score;
+    updateGameResult(winner, namePlayer, scoreToDo, scoreWinner, scoreLoser, tournament, tournament_id);
     var mainElement = document.getElementById('content');
     mainElement.innerHTML = '';
     mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +

@@ -31,19 +31,27 @@ class User(AbstractUser):
         return self.username
 
 
+class Tournament(models.Model):
+    tournament_id = models.AutoField(primary_key=True)
+    numbers_of_participants = models.IntegerField(default=0)
+    participants = models.ManyToManyField(User)
+    start_date = models.DateTimeField(auto_now_add=True)
+    end_date = models.DateTimeField(auto_now_add=True)
+    winner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='won_tournaments')
+
+
 class Game(models.Model):
     game_id = models.AutoField(primary_key=True)
     is_tournament = models.BooleanField(default=False)
     pong_game = models.BooleanField(default=False)
+    scoreToDo = models.IntegerField(default=0)
     memory_game = models.BooleanField(default=False)
+    chosen_set = models.CharField(default='not_defined')
+    number_of_cards = models.IntegerField(default=0)
     participants = models.ManyToManyField(User, related_name='games_participated')
     game_date = models.DateTimeField(auto_now_add=True)
     winner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='won_games')
+    score_winner = models.IntegerField(default=0)
+    score_loser = models.IntegerField(default=0)
+    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, null=True, related_name='tournament_games')
 
-
-class Tournament(models.Model):
-    tournament_id = models.AutoField(primary_key=True)
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
-    participants = models.ManyToManyField(User)
-    winner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='won_tournaments')
