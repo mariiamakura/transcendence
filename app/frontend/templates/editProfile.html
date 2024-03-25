@@ -1,48 +1,49 @@
 {% extends 'index.html' %}
+{% load i18n %}
 {% block content %}
   <div class="container mt-5">
     <div class="row justify-content-center">
       <div class="col-md-6">
-        <h2 class="text-center mb-4">Edit {{ user.username }}'s Profile</h2>
+        <h2 class="text-center mb-4">{% trans "Edit Profile:" %} {{ user.username }}</h2>
         <form action="editProfile" method="POST">
           {% csrf_token %}
           <div class="form-group">
-            <label for="displayName">Display Name</label>
-            <input type="name" class="form-control" id="displayName" placeholder="Enter your Display Name" name="displayName" />
+            <label for="displayName">{% trans "Display Name" %}</label>
+            <input type="name" class="form-control" id="displayName" placeholder="{% trans 'Enter your Display Name' %}" name="displayName" />
           </div>
           <div class="form-group">
-            <label for="Name">Firstname</label>
-            <input type="name" class="form-control" id="inputName" placeholder="Enter your Firstame" name="name" />
+            <label for="Name">{% trans "Firstname" %}</label>
+            <input type="name" class="form-control" id="inputName" placeholder="{% trans 'Enter your Firstame' %}" name="name" />
           </div>
           <div class="form-group">
-            <label for="Surname">Surname</label>
-            <input type="surname" class="form-control" id="inputSureName" placeholder="Enter your Surname" name="surname" />
+            <label for="Surname">{% trans "Surname" %}</label>
+            <input type="surname" class="form-control" id="inputSureName" placeholder="{% trans 'Enter your Surname' %}" name="surname" />
           </div>
           <div class="form-group">
-            <label for="inputEmail">Email address</label>
-            <input type="email" class="form-control" id="inputEmail" placeholder="Enter email" name="email" />
+            <label for="inputEmail">{% trans "Email address" %}</label>
+            <input type="email" class="form-control" id="inputEmail" placeholder="{% trans 'Enter email' %}" name="email" />
           </div>
           <!-- <div class="form-group">
             <label for="inputBirthDate">Birth Date</label>
             <input type="date" class="form-control" id="inputBirthDate" placeholder="Enter your birth date" name="birthdate" />
           </div> -->
-          <button type="submit" class="btn btn-primary btn-block">Save Profile</button>
+          <button type="submit" class="btn btn-primary btn-block">{% trans "Save Profile" %}</button>
         </form>
         {% comment %} <form action="editProfile" method="POST">
           {% csrf_token %}
           <div class="form-group">
-            <label for="Name">Name</label>
-            <input type="name" class="form-control" id="inputName" placeholder="Enter your name" name="name" />
+            <label for="Name">{% trans "Name" %}</label>
+            <input type="name" class="form-control" id="inputName" placeholder="{% trans 'Enter your name' %}" name="name" />
           </div>
           <div class="form-group">
-            <label for="Surname">Surname</label>
-            <input type="surname" class="form-control" id="inputSurName" placeholder="Enter your Surname" name="surname" />
+            <label for="Surname">{% trans 'Surname' %}</label>
+            <input type="surname" class="form-control" id="inputSurName" placeholder="{% trans 'Enter your Surname' %}" name="surname" />
           </div>
           <div class="form-group">
-            <label for="inputEmail">Email address</label>
-            <input type="email" class="form-control" id="inputEmail" placeholder="Enter email" name="email" />
+            <label for="inputEmail">{% trans 'Email address' %}</label>
+            <input type="email" class="form-control" id="inputEmail" placeholder="{% trans 'Enter email' %}" name="email" />
           </div>
-          <button type="submit" class="btn btn-primary btn-block">Save Profile</button>
+          <button type="submit" class="btn btn-primary btn-block">{% trans "Save Profile" %}</button>
         </form> {% endcomment %}
       </div>
     </div>

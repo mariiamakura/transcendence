@@ -1,16 +1,17 @@
 {% extends 'index.html' %}
+{% load i18n %}
 {% block content %}
 {% if request.user.is_authenticated %}
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
-			<h1 class="page-header">Memoryyyyyyyy</h1>
+			<h1 class="page-header">{% trans "Memoryyyyyyyy" %}</h1>
 			<hr>
 		</div>
 	</div>
 </div>
 <div class="button d-flex justify-content-center align-items-center">
-	<a href="#" onclick="showGameMemory()" class="btn btn-primary" style="margin-left: 1em;">Memory</a>
+	<a href="#" onclick="showGameMemory()" class="btn btn-primary" style="margin-left: 1em;">{% trans "Memory" %}</a>
 </div>
 
 <script>
@@ -832,13 +833,7 @@ function turnUpdate(mode)
     updatePlayerScore(2);
 }
 </script>
-
 {% else %}
-<li class="nav-item">
-	<a class="nav-link" href="signIn">Sign In</a>
-</li>
-<li class="nav-item">
-	<a class="nav-link" href="signUp">Sign Up</a>
-</li>
+    {% include '_login_signup.html' %}
 {% endif %}
 {% endblock %}

@@ -157,7 +157,8 @@ LANGUAGES = [
     ('es', 'Spanish'),
     ('ko', ('Korean')),
     ('ru', ('Russian')),
-    ('ar', ('Arabic')),
+    ('fr', ('French')),
+    ('uk', ('Ukrainian')),
 ]
 
 LANGUAGE_CODE = 'en-us'

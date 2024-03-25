@@ -19,6 +19,7 @@ RUN apt-get update && \
 # lint
 RUN pip install --upgrade pip
 RUN pip install flake8==6.0.0
+RUN pip install Django
 COPY . /usr/src/app/
 RUN flake8 --ignore=E501,F401,W391 .
 
@@ -60,6 +61,7 @@ RUN pip install --no-cache /wheels/*
 # copy entrypoint.prod.sh
 COPY ./entrypoint.sh .
 COPY ./frontend/statics $APP_HOME/static
+COPY ./frontend/statics/locale $APP_HOME/locale
 RUN sed -i 's/\r$//g'  $APP_HOME/entrypoint.sh
 RUN chmod +x  $APP_HOME/entrypoint.sh
 

@@ -1,35 +1,26 @@
 {% extends "index.html" %}
-
+{% load i18n %}
 {% block content %}
   {% if request.user.is_authenticated %}
     <div class="container mt-4">
-      <h1 class="text-center">User Information</h1>
+      <h1 class="text-center">{% trans "User Information" %}</h1>
       <div class="row">
         <div class="col-md-6 offset-md-3">
           <ul class="list-group">
-            <li class="list-group-item">Username: {{ request.user.username }}</li>
-            <p>Pong:</p>
-            <li class="list-group-item">Games Played: {{ request.user.pong_games_played }}</li>
-            <li class="list-group-item">Games Won: {{ request.user.pong_games_won }}</li>
-            <li class="list-group-item">Win Streak: {{ request.user.pong_win_streak }}</span></li>
-            <p>Memory:</p>
-            <li class="list-group-item">Games Played: {{ request.user.memory_games_played }}</li>
-            <li class="list-group-item">Games Won: {{ request.user.memory_games_won }}</li>
-            <li class="list-group-item">Win Streak: {{ request.user.memory_win_streak }}</span></li>
+            <li class="list-group-item">{% trans "Username:" %} {{ request.user.username }}</li>
+            <p>{% trans "Pong:" %}</p>
+            <li class="list-group-item">{% trans "Games Played:" %} {{ request.user.pong_games_played }}</li>
+            <li class="list-group-item">{% trans "Games Won:" %} {{ request.user.pong_games_won }}</li>
+            <li class="list-group-item">{% trans "Win Streak:" %} {{ request.user.pong_win_streak }}</span></li>
+            <p>{% trans "Memory:" %}</p>
+            <li class="list-group-item">{% trans "Games Played:" %} {{ request.user.memory_games_played }}</li>
+            <li class="list-group-item">{% trans "Games Won:" %} {{ request.user.memory_games_won }}</li>
+            <li class="list-group-item">{% trans "Win Streak:" %} {{ request.user.memory_win_streak }}</span></li>
           </ul>
         </div>
       </div>
     </div>
-  {% else %}
-    <div class="login-prompt">
-      <div class="text-center">
-        <h2>Welcome!</h2>
-        <p>Please sign in or sign up to continue.</p>
-        <div class="mt-4">
-          <a href="signIn" class="btn btn-primary mr-2">Sign In</a>
-          <a href="signUp" class="btn btn-success">Sign Up</a>
-        </div>
-      </div>
-    </div>
+    {% else %}
+      {% include '_login_signup.html' %}
   {% endif %}
 {% endblock %}

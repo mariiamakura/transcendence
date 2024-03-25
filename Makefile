@@ -25,8 +25,15 @@ delete_cert:
 	@chmod +x ./delete_cert.sh
 	@./delete_cert.sh
 
+compile_messages:
+	docker compose -f docker-compose.yml exec web python manage.py compilemessages
+
 messages:
-	docker compose -f docker-compose.yml exec web python manage.py makemessages -l en -l es -l ko -l ar -l ru app/frontend/views.py
+	docker compose -f docker-compose.yml up --build -d 
+	docker compose -f docker-compose.yml exec web python manage.py makemessages -l en -l es -l ko -l ru -l fr -l uk
+	docker compose -f docker-compose.yml exec web python manage.py collectstatic --no-input --clear
+	docker compose -f docker-compose.yml exec web python manage.py makemigrations
+	docker compose -f docker-compose.yml exec web python manage.py migrate --noinput
 
 clean:
 # stops and removes the containers

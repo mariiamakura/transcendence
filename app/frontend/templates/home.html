@@ -1,5 +1,5 @@
 {% extends "index.html" %}
-
+{% load i18n %}
 {% block content %}
 {% if request.user.is_authenticated %}
 
@@ -10,15 +10,15 @@
             <div class="text-center">
                 <img src="{{ request.user.avatar_url }}" style="width: 20%; height: auto; border-radius: 50%;">
             </div>
-            <h2 class="text-center">Welcome, {{ request.user.username }}!</h2>
-            <p class="text-center">You are now logged in.</p>
+            <h2 class="text-center">{% trans "Welcome" %}, {{ request.user.username }}!</h2>
+            <p class="text-center">{% trans "You are now logged in." %}</p>
             <div class="text-center">
                 <img src="https://apply.42berlin.de/uploads/admissions/campus/logo_website/82/42bln_logo_black.svg" style="width: 20%; height: auto;">
             </div>
         </div>
 
         <div class="container mt-4">
-          <h1 class="text-center">Ranking</h1>
+          <h1 class="text-center">{% trans "Ranking" %}</h1>
           <div class="row">
             <div class="col-md-6 offset-md-3">
               <ul class="list-group">
@@ -36,11 +36,11 @@
 {% else %}
 <div class="login-prompt">
     <div class="text-center">
-        <h2>Welcome!</h2>
-        <p>Please sign in or sign up to continue...</p>
+        <h2>{% trans "Welcome!" %}</h2>
+        <p>{% trans "Please sign in or sign up to continue..." %}</p>
         <div class="mt-4">
-            <a href="signIn" class="btn btn-primary mr-2">Sign In</a>
-            <a href="signUp" class="btn btn-success">Sign Up</a>
+            <a href="signIn" class="btn btn-primary mr-2">{% trans "Sign In" %}</a>
+            <a href="signUp" class="btn btn-success">{% trans "Sign Up" %}</a>
             <form id="authForm" action="https://api.intra.42.fr/oauth/authorize" method="GET">
 				<input type="hidden" name="client_id" value="{{ OAUTH_CLIENT_ID }}">
                 {% comment %} <input type="hidden" name="redirect_uri" value="https://42pong.ddns.net:9999/callback"> {% endcomment %}
@@ -49,7 +49,7 @@
                 <input type="hidden" name="scope" value="public">
                 <input type="hidden" name="state" id="stateInput">
                 <input type="hidden" name="prompt" value="consent">
-                <button class="btn btn-success" type="submit">SignIn with 42</button>
+                <button class="btn btn-success" type="submit">{% trans "SignIn with 42" %}</button>
             </form>  
         </div>
     </div>
