@@ -974,7 +974,7 @@ function updateStartTournamentPong(namePlayer)
     .then(data => {
         // Access tournament_id from the data
         console.log('Tournament ID:', data.tournament_id);
-        // You can use data.tournament_id as needed
+        tournament_id = data.tournament_id;
     })
     .catch(error => {
         console.error('Error starting tournament:', error);

@@ -173,6 +173,22 @@ def end_tournament(request):
         data = json.loads(request.body)
         end_date = timezone.now()
         tournament_id = data.get('tournament_id')
+        winner = data.get('winner')
+
+        winner_user = None
+        winner = User.objects.filter(display_name=data.get('winner')).first()
+        if winner:
+            winner_user = winner
+        else:
+            username = data.get('winner') + '_guest'
+            display_name = data.get('winner') + '_guest'
+            email = data.get('winner') + '@guest.com'
+            user = User.objects.filter(display_name=display_name).first()
+            if user:
+                winner_user = winner
+            else:
+                winner_user = User.objects.create_user(username=username, display_name=display_name, email=email)
+
         if tournament_id:
             # If tournament ID is provided, retrieve the tournament object
             try:
@@ -180,7 +196,7 @@ def end_tournament(request):
             except Tournament.DoesNotExist:
                 return JsonResponse({'error': 'Tournament does not exist'}, status=404)
             tournamentObj.end_date = end_date
-            tournamentObj.winner = data.get('winner')
+            tournamentObj.winner = winner_user
             tournamentObj.save()
             return JsonResponse({'message': 'Tournament result updated successfully'})
         else:
