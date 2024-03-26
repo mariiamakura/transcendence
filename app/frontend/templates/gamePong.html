@@ -477,12 +477,12 @@ async function remoteClient() {
             if (data.action === 'update_ball_position_pong') {
                 newBall.x = data.ball_x;
                 newBall.y = data.ball_y;
-                console.log("ball position received");
+                // console.log("ball position received");
             }
             if (data.action === 'update_player_scores_pong') {
                 newPlayer1Score = data.player1;
                 newPlayer2Score = data.player2;
-                console.log("player scores received");
+                // console.log("player scores received");
             }
             if (data.action === 'game_ended_pong') {
                 endGame(data.winner);
@@ -724,7 +724,7 @@ function update() {
         ball.x += ball.velocityX;
         ball.y += ball.velocityY;
         gameRoomSocket.send(JSON.stringify({ action: 'update_ball_position_pong', ball_x: ball.x, ball_y: ball.y }));
-        console.log("ball position sent");
+        // console.log("ball position sent");
     }
     else if (remote === true) {
         ball.x = newBall.x;
@@ -759,7 +759,7 @@ function update() {
                 resetGame(-1);
         }
         gameRoomSocket.send(JSON.stringify({ action: 'update_player_scores_pong', player1: player1Score, player2: player2Score }));
-        console.log("player scores sent");
+        // console.log("player scores sent");
     }
     else if (remote === true) {
         player1Score = newPlayer1Score;
