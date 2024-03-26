@@ -283,6 +283,7 @@ async function getNamePlayer() {
 }
 
 function startButtonTournament() {
+    tournament_id = updateStartTournamentMemory(namePlayer); // sending pong true, memory false
     var main = document.getElementById('content');
     var choiceDiv = document.createElement("div");
     choiceDiv.id = "choice";
@@ -367,7 +368,6 @@ async function showGameMemory() {
 
 	var mainElement = document.getElementById('content');
 	mainElement.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em; ">Memory game</p>';    
-	gameEnded = true;
 	debug = 0;
 	startGame = false;
 	tournament = false;
@@ -834,16 +834,19 @@ function playTime() {
     }
 
 
-function updateGameResult(winner, namePlayer, scoreToDo, scoreWinner, scoreLoser, tournament, tournament_id)
+function updateGameResultMemory(winner, namePlayer, chosenSet, scoreWinner, scoreLoser, tournament, tournament_id)
 {
     console.log('Updating game result...');
-    
-    fetch('/update_game_result_pong/', {
+    if (chosenSet === 1)
+        setName = 'Nature';
+    else
+    setName = 'Robot';
+    fetch('/update_game_result_memmory/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ winner: winner, players : namePlayer, scoreToDo: scoreToDo, scoreW: scoreWinner, scoreL: scoreLoser, tournament: tournament, tournament_id: tournament_id }),
+        body: JSON.stringify({ winner: winner, players : namePlayer, chosenSet: setName, numberOfCards: numberOfCards, scoreW: scoreWinner, scoreL: scoreLoser, tournament: tournament, tournament_id: tournament_id }),
     })
     .then(response => {
         if (response.ok) {
@@ -857,6 +860,27 @@ function updateGameResult(winner, namePlayer, scoreToDo, scoreWinner, scoreLoser
     });
 }
 
+function updateEndTournamentMemory(tournament_id, winner)
+{
+    console.log("END FUNCTION tournament_id: " + tournament_id);
+    fetch('/update_end_tournament/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({tournament_id: tournament_id, winner: winner}),
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Tournament ended successfully');
+        } else {
+            console.error('Failed to end tournament');
+        }
+    })
+    .catch(error => {
+        console.error('Error starting tournament:', error);
+    });
+}
 function updateStartTournamentMemory()
 {
     fetch('/update_start_tournament/', {
@@ -864,43 +888,46 @@ function updateStartTournamentMemory()
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ players : namePlayer, pong_tournament: true, memory_tournament: false}),
+        body: JSON.stringify({ players : namePlayer, pong_tournament: false, memory_tournament: true}),
     })
     .then(response => {
         if (response.ok) {
             console.log('Tournament started successfully');
+            return response.json();
         } else {
-            console.error('Failed to start tournament');
+            throw new Error('Failed to start tournament');
         }
+    })
+    .then(data => {
+        // Access tournament_id from the data
+        console.log('Tournament ID:', data.tournament_id);
+        tournament_id = data.tournament_id;
     })
     .catch(error => {
         console.error('Error starting tournament:', error);
     });
 }
 
+function reinitializeGame()
+{
+    cards_info = [];
+    cardInfo = [];
+    setAlreadyUsed = [];
+    init = false;
+    cardTurned = 0;
+    cardTurnedArrayIndex.length = 0;
+    scorePlayer1 = 0;
+    scorePlayer2 = 0;
+    cardTurnedArrayId.length = 0;
+    setAlreadyUsed.length = 0;
+    cardInfo.length = 0;
+}
 function endGameMemory(winner)
 {
-    console.log(winner)
-    fetch('/update_game_result_memory/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ winner: winner }),
-    })
-    .then(response => {
-        if (response.ok) {
-            console.log('Game result updated successfully');
-            // Optionally, handle success response
-        } else {
-            console.error('Failed to update game result');
-            // Optionally, handle error response
-        }
-    })
-    .catch(error => {
-        console.error('Error updating game result:', error);
-        // Optionally, handle fetch error
-    });
+    console.log("And the winner is ..." + winner);
+    let scoreWinner = scorePlayer1 > scorePlayer2 ? scorePlayer1 : scorePlayer2;
+    let scoreLoser = scorePlayer1 < scorePlayer2 ? scorePlayer1 : scorePlayer2;
+    updateGameResult(winner, namePlayer, chosenSet, numberOfCards, scoreWinner, scoreLoser, tournament, tournament_id);
     var mainElement = document.getElementById('content');
     mainElement.innerHTML = ''; // Remove all inner HTML content  
     mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
@@ -908,10 +935,7 @@ function endGameMemory(winner)
     '<p><img src="img/gif_robot.gif" alt="Victory logo" style = "width: 50vh; height: 50vh;"></p>' +
     // '<p style="text-align: center;"> If you want to play again with the same settings, press the button below.</p>' +
     '</div>';
-    cards_info = [];
-    cardInfo = [];
-    setAlreadyUsed = [];
-    init = false;
+    reinitializeGame();
     if (tournament === false)
     {
         var startAgain = document.createElement("button");
@@ -919,8 +943,6 @@ function endGameMemory(winner)
         startAgain.classList.add("styled-button")
         document.getElementById('endGame').appendChild(startAgain);
         startAgain.addEventListener("click", function() {
-            player1Score = 0;
-            player2Score = 0;
             launchGameMemory(cards_info);
         });
     }
@@ -941,8 +963,6 @@ function endGameMemory(winner)
         '<button id="startNextRound" class="styled-button">Start Next Round</button>' +
         '</div>';
         document.getElementById('startNextRound').addEventListener("click", function() {
-            player1Score = 0;
-            player2Score = 0;
             launchGameMemory(cards_info);
         });
     }
@@ -966,8 +986,6 @@ function endGameMemory(winner)
         '<button id="startNextRound" class="styled-button">Start Next Round</button>' +
         '</div>';
         document.getElementById('startNextRound').addEventListener("click", function() {
-            player1Score = 0;
-            player2Score = 0;
             launchGameMemory(cards_info);
         });
     }
@@ -991,8 +1009,6 @@ function endGameMemory(winner)
         '<button id="startNextRound" class="styled-button">Start Next Round</button>' +
         '</div>';
         document.getElementById('startNextRound').addEventListener("click", function() {
-            player1Score = 0;
-            player2Score = 0;
             launchGameMemory(cards_info);
         });
     }
@@ -1006,23 +1022,23 @@ function endGameMemory(winner)
                                     '</div>';
 
         document.getElementById('startNextRound').addEventListener("click", function() {
-            player1Score = 0;
-            player2Score = 0;
             launchGameMemory(cards_info);
         });
     }
     else if (tournament === true && namePlayer.length === 1) {
+        updateEndTournamentMemory(tournament_id, winner);
         mainElement.innerHTML += '<div id="endTournament" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
         '<p style="text-align: center; font-size:4em;">End of the Tournament ! </p>' +
         '<p style="text-align: center; font-size:2em;">' + winner + ' won the tournament !</p>' +
         '</div>';
-        cardTurned = 0;
-        cardTurnedArrayIndex.length = 0;
-        scorePlayer1 = 0;
-        scorePlayer2 = 0;
-        cardTurnedArrayId.length = 0;
-        setAlreadyUsed.length = 0;
-        cardInfo.length = 0;
+        // cardTurned = 0;
+        // cardTurnedArrayIndex.length = 0;
+        // scorePlayer1 = 0;
+        // scorePlayer2 = 0;
+        // cardTurnedArrayId.length = 0;
+        // setAlreadyUsed.length = 0;
+        // cardInfo.length = 0;
+        reinitializeGame();
         var startAgain = document.createElement("button");
         startAgain.textContent = "Start again";
         startAgain.classList.add("styled-button")
@@ -1033,13 +1049,14 @@ function endGameMemory(winner)
     }
     if (tournament === false)
     {
-        cardTurned = 0;
-        cardTurnedArrayIndex.length = 0;
-        scorePlayer1 = 0;
-        scorePlayer2 = 0;
-        cardTurnedArrayId.length = 0;
-        setAlreadyUsed.length = 0;
-        cardInfo.length = 0;
+        // cardTurned = 0;
+        // cardTurnedArrayIndex.length = 0;
+        // scorePlayer1 = 0;
+        // scorePlayer2 = 0;
+        // cardTurnedArrayId.length = 0;
+        // setAlreadyUsed.length = 0;
+        // cardInfo.length = 0;
+        reinitializeGame();
         var startAgain = document.createElement("button");
         startAgain.textContent = "Start again";
         startAgain.classList.add("styled-button")
