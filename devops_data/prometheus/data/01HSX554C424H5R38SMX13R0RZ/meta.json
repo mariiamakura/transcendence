@@ -1,0 +1,17 @@
+{
+	"ulid": "01HSX554C424H5R38SMX13R0RZ",
+	"minTime": 1710775954132,
+	"maxTime": 1710777600000,
+	"stats": {
+		"numSamples": 16161,
+		"numSeries": 2337,
+		"numChunks": 2337
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01HSX554C424H5R38SMX13R0RZ"
+		]
+	},
+	"version": 1
+}
