@@ -157,8 +157,21 @@ class GameConsumer(AsyncWebsocketConsumer):
 
         await self.accept()
 
+    # async def disconnect(self, close_code):
+    #     # Leave room group
+    #     await self.channel_layer.group_send(
+    #         self.room_group_name,
+    #         {
+    #             'type': 'player_left',
+    #             'channel_name': self.channel_name
+    #         }
+    #     )
+    #     await self.channel_layer.group_discard(
+    #         self.room_group_name,
+    #         self.channel_name
+    #     )
+
     async def disconnect(self, close_code):
-        # Leave room group
         await self.channel_layer.group_send(
             self.room_group_name,
             {
@@ -170,6 +183,28 @@ class GameConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
+        await self.set_user_online(False)
+
+        if self.user == GameRoomManagerPong.rooms[self.room_name]["host"]:
+            await self.close_room_pong(self.room_name)
+        elif self.user == GameRoomManagerPong.rooms[self.room_name]["guest"]:
+            await self.close_room_pong(self.room_name)
+        elif self.user == GameRoomManagerMemory.rooms[self.room_name]["host"]:
+            await self.close_room_memory(self.room_name)
+        elif self.user == GameRoomManagerMemory.rooms[self.room_name]["guest"]:
+            await self.close_room_memory(self.room_name)
+
+    @database_sync_to_async
+    def close_room_pong(self, room_name):
+        # Logic to close the Pong room
+        if room_name in GameRoomManagerPong.rooms:
+            del GameRoomManagerPong.rooms[room_name]
+
+    @database_sync_to_async
+    def close_room_memory(self, room_name):
+        # Logic to close the Memory room
+        if room_name in GameRoomManagerMemory.rooms:
+            del GameRoomManagerMemory.rooms[room_name]
 
     async def receive(self, text_data):
         data = json.loads(text_data)
@@ -379,6 +414,16 @@ class GameConsumer(AsyncWebsocketConsumer):
                     'score2': data['score2']
                 }
             )
+
+    async def notify_winner(self, event):
+        winner = event['winner']
+        # Assuming `winner` is something you can use to send a message directly to them.
+        # You need to implement the logic to actually send a WebSocket message to the winner.
+        await self.send(text_data=json.dumps({
+            'action': 'game_over',
+            'winner': winner,
+            'message': 'Congratulations! The other player has disconnected, you win!'
+        }))
 
     async def game_ended_memory(self, event):
         await self.send(text_data=json.dumps({

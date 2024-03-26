@@ -406,6 +406,7 @@ async function remoteHost() {
 				}
             }
             gameRoomSocket.onclose = function() {
+                endGame(namePlayer[0]);
                 console.log("Game room connection closed.");
             };
         }
@@ -508,6 +509,13 @@ async function remoteClient() {
 			if (data.type === 'player_left') {
 				console.log('Player left the game');
 			}
+            if (data.type === 'notify_winner') {
+                console.log('The winner is:', data.winner);
+            }
+            roomSocket.onclose = function() {
+                endGame(namePlayer[1]);
+                console.log("Game room connection closed.");
+            };
  
         };
     }
