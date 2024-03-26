@@ -140,15 +140,13 @@ function numPlayers() {
 
 async function getNamePlayer() {
     var main = document.getElementById('content');
-    let i = 2;
-
     try {
         const response = await fetch('/get_username/');
         const data = await response.json();
         main.innerHTML += `<p style="padding-top: 2em; display: flex; align-items:center; justify-content:center;">First player is: ${data.username}</p>`;
         namePlayer.push(data.username);
 
-        for (; i <= numberPlayers; i++) {
+        for (let i = 2; i <= numberPlayers; i++) {
             main.innerHTML += '<div id="choice">' +
                 '<form style="display: flex; flex-direction: column; align-items: center;">' +
                 '<p style="padding-top: 2em; display: flex; align-items:center; justify-content:center;" > Name of player ' + i + ' : </p>' +
@@ -178,8 +176,6 @@ async function getNamePlayer() {
     return namePlayer;
 }
 
-
-   
 let scoreToDo = 0;
 let debugPong = 1; // 1 not debug. 2 is directly the game, 3 is the menu and the score todo will be 1 instead of 12
 
@@ -234,7 +230,9 @@ function scoreChoice() {
 let tournament_id = null;
 
 function startButtonTournament() {
+    console.log("BEFORE tournament_id: " + tournament_id);
     tournament_id = updateStartTournament();
+    console.log("AFTER tournament_id: " + tournament_id);
     var main = document.getElementById('content');
     var choiceDiv = document.createElement("div");
     choiceDiv.id = "choice";
@@ -293,14 +291,14 @@ async function showGamePong() {
     var mainElement = document.getElementById('content');
 	mainElement.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em;">Pong</p>';
     gameEnded = true;
-
-
 	startGame = false;
 	tournament = false;
 	singleGame = false;
 	numberPlayers = 0;
-	namePlayer = [];
-	
+    remote = false;
+    local = false;
+	namePlayer.length = 0;
+    // check if all the variables are reinitialized
 	if (await remoteOrLocal())
 	{
 		if (await decideHost())
@@ -328,7 +326,7 @@ async function showGamePong() {
             numberPlayers = 2;
         await getNamePlayer();
         await scoreChoice();
-		if (namePlayer.length  === numberPlayers && scoreToDo !== 0)
+		if (namePlayer.length === numberPlayers && scoreToDo !== 0)
 		{
             if (tournament === true)
                 await startButtonTournament();
@@ -627,7 +625,6 @@ let secondPlayer = 1;
 function launchGamePong() {
     console.log('Game is starting...');
     initVariables();
-
     var mainElement = document.getElementById('content');
     if (isHost && remote === true) 
         namePlayer[0] = "{{ user.display_name }}";
@@ -910,7 +907,7 @@ function resetGame(direction)
     ball.velocityY = Math.sin(generateRandomAngle()) * board.height / 100 * generateRandomNumber() * velocity;
 }
 
-function updateGameResult(winner, scoreWinner, scoreLoser, tournament, tournament_id)
+function updateGameResult(winner, namePlayer, scoreToDo, scoreWinner, scoreLoser, tournament, tournament_id)
 {
     console.log('Updating game result...');
     
@@ -959,6 +956,8 @@ function endGame(winner) {
     console.log(winner + " won !");
     let scoreWinner = player1Score > player2Score ? player1Score : player2Score;
     let scoreLoser = player1Score < player2Score ? player1Score : player2Score;
+    console.log('scoreWinner: ' + scoreWinner);
+    console.log('scoreLoser: ' + scoreLoser);
     updateGameResult(winner, namePlayer, scoreToDo, scoreWinner, scoreLoser, tournament, tournament_id);
     var mainElement = document.getElementById('content');
     mainElement.innerHTML = '';

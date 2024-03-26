@@ -33,7 +33,7 @@ class User(AbstractUser):
 
 class Tournament(models.Model):
     tournament_id = models.AutoField(primary_key=True)
-    numbers_of_participants = models.IntegerField(default=0)
+    number_of_participants = models.IntegerField(default=0)
     participants = models.ManyToManyField(User)
     start_date = models.DateTimeField(auto_now_add=True)
     end_date = models.DateTimeField(auto_now_add=True)
