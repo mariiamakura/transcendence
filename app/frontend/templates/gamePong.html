@@ -905,16 +905,17 @@ function resetGame(direction)
     ball.velocityY = Math.sin(generateRandomAngle()) * board.height / 100 * generateRandomNumber() * velocity;
 }
 
-function updateGameResultPong(winner, namePlayer, scoreToDo, scoreWinner, scoreLoser, tournament, tournament_id)
+function updateGameResultPong(winner, namePlayerPlaying, scoreToDo, scoreWinner, scoreLoser, tournament, tournament_id)
 {
     console.log('Updating game result...');
-    
+    console.log("tournament " + tournament);
+
     fetch('/update_game_result_pong/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ winner: winner, players : namePlayer, scoreToDo: scoreToDo, scoreW: scoreWinner, scoreL: scoreLoser, tournament: tournament, tournament_id: tournament_id }),
+        body: JSON.stringify({ winner: winner, players : namePlayerPlaying, scoreToDo: scoreToDo, scoreW: scoreWinner, scoreL: scoreLoser, is_tournament: tournament, tournament_id: tournament_id }),
     })
     .then(response => {
         if (response.ok) {
@@ -984,7 +985,9 @@ function endGame(winner) {
     let scoreLoser = player1Score < player2Score ? player1Score : player2Score;
     console.log('scoreWinner: ' + scoreWinner);
     console.log('scoreLoser: ' + scoreLoser);
-    updateGameResultPong(winner, namePlayer, scoreToDo, scoreWinner, scoreLoser, tournament, tournament_id);
+    console.log('tournament: ' + tournament);
+    let namePlayerPlaying = [player1.name, player2.name];
+    updateGameResultPong(winner, namePlayerPlaying, scoreToDo, scoreWinner, scoreLoser, tournament, tournament_id);
     var mainElement = document.getElementById('content');
     mainElement.innerHTML = '';
     mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +

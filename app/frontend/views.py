@@ -20,6 +20,7 @@ from faker import Faker
 import random
 from datetime import datetime
 from django.utils import timezone
+from itertools import groupby
 
 
 @csrf_exempt
@@ -83,6 +84,7 @@ def update_game_result_pong(request):
         data = json.loads(request.body)
         players = data.get('players', [])
         participants = []
+
         for player in players:
             user = User.objects.filter(display_name=player).first()
             if user:
@@ -96,39 +98,46 @@ def update_game_result_pong(request):
                     participants.append(user)
                 else:
                     user = User.objects.create_user(username=username, display_name=display_name, email=email)
+                    participants.append(user)
+
+        winner = data.get('winner')
+
+        winner_user = None
+        winner = User.objects.filter(display_name=data.get('winner')).first()
+        if winner:
+            winner_user = winner
+        else:
+            username = data.get('winner') + '_guest'
+            display_name = data.get('winner') + '_guest'
+            email = data.get('winner') + '@guest.com'
+            user = User.objects.filter(display_name=display_name).first()
+            if user:
+                winner_user = winner
+            else:
+                winner_user = User.objects.create_user(username=username, display_name=display_name, email=email)
 
         tournamentObj = None
-        is_tournament = data.get('tournament')
-        if is_tournament:
+        is_tournament_bool = data.get('is_tournament')
+        if is_tournament_bool:
             tournament_id = data.get('tournament_id')
             if tournament_id:
                 # If tournament ID is provided, retrieve the tournament object
                 try:
                     tournamentObj = Tournament.objects.get(pk=tournament_id)
                 except Tournament.DoesNotExist:
-                    # Handle the case where the provided tournament ID does not exist
-                    # You may raise an error, return an appropriate response, or handle it as needed
                     pass
             else:
                 pass
-                # # If tournament ID is not provided, create a new tournament
-                # start_date = datetime.now()
-                # # You need to get participants from data or provide it from somewhere
-                # participants = data.get('participants', [])
-                # tournamentObj = Tournament.objects.create(
-                #     start_date=start_date,
-                #     number_of_participants=len(participants),
-                #     # Set other fields as needed
-                # )
+
         # Create the Pong game object
         pong_id = Game.objects.create(
-            is_tournament=data.get('tournament'),
+            is_tournament=is_tournament_bool,
             pong_game=True,
             scoreToDo=data.get('scoreToDo'),
             score_winner=data.get('scoreW'),
             score_loser=data.get('scoreL'),
             game_date=now(),
-            winner=User.objects.filter(display_name=data.get('winner')).first(),
+            winner=winner_user,
             tournament=tournamentObj
         )
         pong_id.participants.add(*participants)
@@ -250,8 +259,8 @@ def update_game_result_memory(request):
         memory_id = Game.objects.create(
             is_tournament=data.get('tournament'),
             memory_game=True,
-            choseSet=data.get('chosenSet'),
-            number_of_cards=data.get('number_of_cards'),
+            chosen_set=data.get('chosenSet'),
+            number_of_cards=data.get('numberOfCards'),
             score_winner=data.get('scoreW'),
             score_loser=data.get('scoreL'),
             game_date=now(),
@@ -299,9 +308,6 @@ def get_user_statistics(request):
         # Fetch the user's statistics from the database
         user_statistics = {
             'username': request.user.username,
-            # 'pong_games_played': request.user.pong_games_played,
-            # 'pong_games_won': request.user.pong_games_won,
-            # 'pong_win_streak': request.user.pong_win_streak,
             'date_joined': request.user.date_joined.strftime('%Y-%m-%d %H:%M:%S'),
         }
         return JsonResponse(user_statistics)
@@ -375,14 +381,6 @@ def add_users(request):
             "name": fake.first_name(),
             "surname": fake.last_name(),
             "display_name": fake.user_name(),
-            # "pong_games_played": random.randint(0, 50),
-            # "pong_games_won": random.randint(0, 50),
-            # "pong_win_streak": random.randint(0, 20),
-            # "pong_tournaments_won": random.randint(0, 5),
-            # "memory_games_played": random.randint(0, 50),
-            # "memory_games_won": random.randint(0, 50),
-            # "memory_win_streak": random.randint(0, 20),
-            # "memory_tournaments_won": random.randint(0, 5),
             "date_of_creation": fake.date_time_this_decade().isoformat()
         }
         users_data.append(user_data)
@@ -417,16 +415,47 @@ def scoreboard(request):
     User = get_user_model()
     if request.user.is_authenticated:
         user = User.objects.get(username=request.user)
-        games_played = Game.objects.filter(participants=user, pong_game=True).count()
-        games_won = Game.objects.filter(winner=user, pong_game=True).count()
+        pong_games = Game.objects.filter(participants=user, pong_game=True).order_by('game_date')
+        memory_games = Game.objects.filter(participants=user, memory_game=True).order_by('game_date')
+        games_played = Game.objects.filter(participants=user).order_by('-game_date')
+        # Calculate win streak for pong game
+        pong_max_win_streak = calculate_win_streak(pong_games, user)
+
+        # Calculate win streak for memory game
+        memory_max_win_streak = calculate_win_streak(memory_games, user)
+
+        # Count games played and won for both pong and memory games
+        games_played_pong = pong_games.count()
+        games_won_pong = Game.objects.filter(winner=user, pong_game=True).count()
+        games_played_memory = memory_games.count()
+        games_won_memory = Game.objects.filter(winner=user, memory_game=True).count()
+
         context = {
-            'games_played': games_played,
-            'games_won': games_won,
+            'games_played_pong': games_played_pong,
+            'games_won_pong': games_won_pong,
+            'games_played_memory': games_played_memory,
+            'games_won_memory': games_won_memory,
+            'pong_max_win_streak': pong_max_win_streak,
+            'memory_max_win_streak': memory_max_win_streak,
+            'all_games': games_played
         }
         return render(request, 'scoreboard.html', context)
     else:
         messages.error(request, 'You are not signed in! Please sign in to view the scoreboard.')
         return render(request=request, template_name="signIn.html", context={})
+
+
+@csrf_exempt
+def calculate_win_streak(games, user):
+    win_streak = 0
+    max_win_streak = 0
+    for game in games:
+        if game.winner == user:
+            win_streak += 1
+            max_win_streak = max(max_win_streak, win_streak)
+        else:
+            win_streak = 0
+    return max_win_streak
 
 
 @csrf_exempt

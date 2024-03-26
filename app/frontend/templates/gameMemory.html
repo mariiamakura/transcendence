@@ -22,31 +22,29 @@ let gameSettings = {
 	chosenSet: ""
 };
 
-
 function TwoOrTournament() {
-
-var main = document.getElementById('content');
-main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> Do you want to play a 1vs1 game or a tournament ? </p></div>';
-var button1vs1 = document.createElement("button");
-var buttonTournament = document.createElement("button"); 
-buttonTournament.textContent = "Play tournament";
-button1vs1.textContent = "Play 1vs1";
-buttonTournament.classList.add("styled-button")
-button1vs1.classList.add("styled-button");
-document.getElementById('choice').appendChild(button1vs1);
-document.getElementById('choice').appendChild(buttonTournament);
-return new Promise(function (resolve) {
-    button1vs1.addEventListener("click", function() {
-        resolve(true);
-        document.getElementById('choice').remove();
-        tournament = false;
+    var main = document.getElementById('content');
+    main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> Do you want to play a 1vs1 game or a tournament ? </p></div>';
+    var button1vs1 = document.createElement("button");
+    var buttonTournament = document.createElement("button"); 
+    buttonTournament.textContent = "Play tournament";
+    button1vs1.textContent = "Play 1vs1";
+    buttonTournament.classList.add("styled-button")
+    button1vs1.classList.add("styled-button");
+    document.getElementById('choice').appendChild(button1vs1);
+    document.getElementById('choice').appendChild(buttonTournament);
+    return new Promise(function (resolve) {
+        button1vs1.addEventListener("click", function() {
+            resolve(true);
+            document.getElementById('choice').remove();
+            tournament = false;
+        });
+        buttonTournament.addEventListener("click", function() {
+            resolve(false);
+            document.getElementById('choice').remove();
+            tournament = true;
+        });
     });
-    buttonTournament.addEventListener("click", function() {
-        resolve(false);
-        document.getElementById('choice').remove();
-        tournament = true;
-    });
-});
 }
 
 function remoteOrLocal() {
@@ -169,31 +167,6 @@ function choiceCards() {
     });
 }
 
-// function showButton() {
-// 	var main = document.getElementById('content');
-// 	main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> Which type of game do you wanna play ? </p></div>';
-// 	var buttonTournament = document.createElement("button");
-// 	var buttonSingle = document.createElement("button");
-// 	buttonSingle.textContent = "1 vs 1";
-// 	buttonTournament.textContent = "Tournament";
-// 	buttonSingle.classList.add("styled-button")
-// 	buttonTournament.classList.add("styled-button");
-// 	document.getElementById('choice').appendChild(buttonTournament);
-// 	document.getElementById('choice').appendChild(buttonSingle);
-// 	return new Promise(function (resolve) {
-// 		buttonTournament.addEventListener("click", function() {
-// 			resolve(true);
-// 			document.getElementById('choice').remove();
-// 			tournament = true;
-// 		});
-// 		buttonSingle.addEventListener("click", function() {
-// 			resolve(false);
-// 			document.getElementById('choice').remove();
-// 			singleGame = true;
-// 		});
-// 	});
-// }
-
 function numPlayers() {
 	var main = document.getElementById('content');
 	main.innerHTML += '<div id="choice"><p style="padding-top: 2em; display: flex; " > How many players do you want to be ? </p></div>';
@@ -232,6 +205,7 @@ function numPlayers() {
 		}
 	});
 }
+
 let namePlayer = [];
 
 function submitButton(submit) {
@@ -281,6 +255,8 @@ async function getNamePlayer() {
     }
     return namePlayer;
 }
+
+let tournament_id = null;
 
 function startButtonTournament() {
     tournament_id = updateStartTournamentMemory(namePlayer); // sending pong true, memory false
@@ -834,14 +810,14 @@ function playTime() {
     }
 
 
-function updateGameResultMemory(winner, namePlayer, chosenSet, scoreWinner, scoreLoser, tournament, tournament_id)
+function updateGameResultMemory(winner, namePlayer, chosenSet, numberOfCards, scoreWinner, scoreLoser, tournament, tournament_id)
 {
     console.log('Updating game result...');
     if (chosenSet === 1)
         setName = 'Nature';
     else
     setName = 'Robot';
-    fetch('/update_game_result_memmory/', {
+    fetch('/update_game_result_memory/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -881,6 +857,7 @@ function updateEndTournamentMemory(tournament_id, winner)
         console.error('Error starting tournament:', error);
     });
 }
+
 function updateStartTournamentMemory()
 {
     fetch('/update_start_tournament/', {
@@ -927,7 +904,7 @@ function endGameMemory(winner)
     console.log("And the winner is ..." + winner);
     let scoreWinner = scorePlayer1 > scorePlayer2 ? scorePlayer1 : scorePlayer2;
     let scoreLoser = scorePlayer1 < scorePlayer2 ? scorePlayer1 : scorePlayer2;
-    updateGameResult(winner, namePlayer, chosenSet, numberOfCards, scoreWinner, scoreLoser, tournament, tournament_id);
+    updateGameResultMemory(winner, namePlayer, gameSettings.chosenSet, gameSettings.numberOfCards, scoreWinner, scoreLoser, tournament, tournament_id);
     var mainElement = document.getElementById('content');
     mainElement.innerHTML = ''; // Remove all inner HTML content  
     mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
@@ -1026,37 +1003,14 @@ function endGameMemory(winner)
         });
     }
     else if (tournament === true && namePlayer.length === 1) {
+        console.log("End of the tournament");
         updateEndTournamentMemory(tournament_id, winner);
+        firstPlayer = 0;
+        secondPlayer = 0;
         mainElement.innerHTML += '<div id="endTournament" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
         '<p style="text-align: center; font-size:4em;">End of the Tournament ! </p>' +
         '<p style="text-align: center; font-size:2em;">' + winner + ' won the tournament !</p>' +
         '</div>';
-        // cardTurned = 0;
-        // cardTurnedArrayIndex.length = 0;
-        // scorePlayer1 = 0;
-        // scorePlayer2 = 0;
-        // cardTurnedArrayId.length = 0;
-        // setAlreadyUsed.length = 0;
-        // cardInfo.length = 0;
-        reinitializeGame();
-        var startAgain = document.createElement("button");
-        startAgain.textContent = "Start again";
-        startAgain.classList.add("styled-button")
-        document.getElementById('endGame').appendChild(startAgain);
-        startAgain.addEventListener("click", function() {
-            launchGameMemory(cards_info);
-        });
-    }
-    if (tournament === false)
-    {
-        // cardTurned = 0;
-        // cardTurnedArrayIndex.length = 0;
-        // scorePlayer1 = 0;
-        // scorePlayer2 = 0;
-        // cardTurnedArrayId.length = 0;
-        // setAlreadyUsed.length = 0;
-        // cardInfo.length = 0;
-        reinitializeGame();
         var startAgain = document.createElement("button");
         startAgain.textContent = "Start again";
         startAgain.classList.add("styled-button")
