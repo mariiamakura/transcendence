@@ -231,7 +231,7 @@ let tournament_id = null;
 
 function startButtonTournament() {
     console.log("BEFORE tournament_id: " + tournament_id);
-    tournament_id = updateStartTournament();
+    tournament_id = updateStartTournamentPong(namePlayer); // sending pong true, memory false
     console.log("AFTER tournament_id: " + tournament_id);
     var main = document.getElementById('content');
     var choiceDiv = document.createElement("div");
@@ -264,6 +264,7 @@ function startButtonTournament() {
         startButton.addEventListener("click", function() {
             startGame = true;
             choiceDiv.remove();
+            tournament_id = tournament_id;
             resolve(true);
         });
     });
@@ -624,6 +625,7 @@ let secondPlayer = 1;
 
 function launchGamePong() {
     console.log('Game is starting...');
+    console.log("In start game pong : tournament_id: " + tournament_id);
     initVariables();
     var mainElement = document.getElementById('content');
     if (isHost && remote === true) 
@@ -930,21 +932,49 @@ function updateGameResult(winner, namePlayer, scoreToDo, scoreWinner, scoreLoser
     });
 }
 
-function updateStartTournament()
+function updateEndTournamentPong(tournament_id, winner)
+{
+    console.log("END FUNCTION tournament_id: " + tournament_id);
+    fetch('/update_end_tournament/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({tournament_id: tournament_id, winner: winner}),
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Tournament ended successfully');
+        } else {
+            console.error('Failed to end tournament');
+        }
+    })
+    .catch(error => {
+        console.error('Error starting tournament:', error);
+    });
+}
+
+function updateStartTournamentPong(namePlayer)
 {
     fetch('/update_start_tournament/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ players : namePlayer, scoreToDo: scoreToDo }),
+        body: JSON.stringify({ players : namePlayer, pong_tournament: true, memory_tournament: false}),
     })
     .then(response => {
         if (response.ok) {
             console.log('Tournament started successfully');
+            return response.json();
         } else {
-            console.error('Failed to start tournament');
+            throw new Error('Failed to start tournament');
         }
+    })
+    .then(data => {
+        // Access tournament_id from the data
+        console.log('Tournament ID:', data.tournament_id);
+        // You can use data.tournament_id as needed
     })
     .catch(error => {
         console.error('Error starting tournament:', error);
@@ -1067,11 +1097,15 @@ function endGame(winner) {
     }
     else if (tournament === true && namePlayer.length === 1) {
         console.log("end of the tournament");
-        updateGameResultTournament(winner);
+        console.log("tournament_id: " + tournament_id);
+        updateEndTournamentPong(tournament_id, winner);
         mainElement.innerHTML += '<div id="endTournament" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
         '<p style="text-align: center; font-size:4em;">End of the Tournament ! </p>' +
         '<p style="text-align: center; font-size:2em;">' + winner + ' won the tournament !</p>' +
         '</div>';
+        winner = '';
+        tournament = false;
+        tournament_id = 0;
     }
 }
 

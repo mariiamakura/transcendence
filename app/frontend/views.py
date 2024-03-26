@@ -19,6 +19,7 @@ from database.models import Tournament
 from faker import Faker
 import random
 from datetime import datetime
+from django.utils import timezone
 
 
 @csrf_exempt
@@ -109,15 +110,16 @@ def update_game_result_pong(request):
                     # You may raise an error, return an appropriate response, or handle it as needed
                     pass
             else:
-                # If tournament ID is not provided, create a new tournament
-                start_date = datetime.now()
-                # You need to get participants from data or provide it from somewhere
-                participants = data.get('participants', [])
-                tournamentObj = Tournament.objects.create(
-                    start_date=start_date,
-                    number_of_participants=len(participants),
-                    # Set other fields as needed
-                )
+                pass
+                # # If tournament ID is not provided, create a new tournament
+                # start_date = datetime.now()
+                # # You need to get participants from data or provide it from somewhere
+                # participants = data.get('participants', [])
+                # tournamentObj = Tournament.objects.create(
+                #     start_date=start_date,
+                #     number_of_participants=len(participants),
+                #     # Set other fields as needed
+                # )
         # Create the Pong game object
         pong_id = Game.objects.create(
             is_tournament=data.get('tournament'),
@@ -143,16 +145,18 @@ def update_game_result_pong(request):
 def start_tournament(request):
     if request.method == 'POST':
         data = json.loads(request.body)
-        tournament_name = data.get('tournament_name')
         start_date = datetime.now()
+        participants_data = data.get('participants', [])
 
         # Create the tournament object
         tournament = Tournament.objects.create(
-            tournament_name=tournament_name,
             start_date=start_date,
-            number_of_participants=data.get('number_of_participants')
+            number_of_participants=len(participants_data),
+            pong_tournament=data.get('pong_tournament'),
+            memory_tournament=data.get('memory_tournament')
             # Set other fields as needed
         )
+        tournament.participants.set(participants_data)
         response_data = {
             'message': 'Tournament started successfully',
             'tournament_id': tournament.tournament_id
@@ -164,25 +168,110 @@ def start_tournament(request):
 
 
 @csrf_exempt
+def end_tournament(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        end_date = timezone.now()
+        tournament_id = data.get('tournament_id')
+        if tournament_id:
+            # If tournament ID is provided, retrieve the tournament object
+            try:
+                tournamentObj = Tournament.objects.get(pk=tournament_id)
+            except Tournament.DoesNotExist:
+                return JsonResponse({'error': 'Tournament does not exist'}, status=404)
+            tournamentObj.end_date = end_date
+            tournamentObj.winner = data.get('winner')
+            tournamentObj.save()
+            return JsonResponse({'message': 'Tournament result updated successfully'})
+        else:
+            return JsonResponse({'error': 'Unsupported method'}, status=405)
+
+
+@csrf_exempt
 @require_POST
 def update_game_result_memory(request):
     if request.method == 'POST':
-        # Parse JSON data from the request body
         data = json.loads(request.body)
-        winner = data.get('winner')
-        # Update the logged-in user's data based on the game result
-        if winner == request.user.username:
-            # Increment the logged-in user's games won count
-            request.user.memory_games_won += 1
-            request.user.memory_win_streak += 1
-            request.user.memory_games_played += 1  # Increment games played
-            request.user.save()
-            return JsonResponse({'message': 'Game result updated successfully'})
-        else:
-            request.user.memory_win_streak = 0
-            request.user.memory_games_played += 1  # Increment games played
-            request.user.save()
-            return JsonResponse({'message': 'Game result updated successfully'})
+        players = data.get('players', [])
+        participants = []
+        for player in players:
+            user = User.objects.filter(display_name=player).first()
+            if user:
+                participants.append(user)
+            else:
+                username = player + '_guest'
+                display_name = player + '_guest'
+                email = player + '@guest.com'
+                user = User.objects.filter(display_name=display_name).first()
+                if user:
+                    participants.append(user)
+                else:
+                    user = User.objects.create_user(username=username, display_name=display_name, email=email)
+
+        tournamentObj = None
+        is_tournament = data.get('tournament')
+        if is_tournament:
+            tournament_id = data.get('tournament_id')
+            if tournament_id:
+                # If tournament ID is provided, retrieve the tournament object
+                try:
+                    tournamentObj = Tournament.objects.get(pk=tournament_id)
+                except Tournament.DoesNotExist:
+                    # Handle the case where the provided tournament ID does not exist
+                    # You may raise an error, return an appropriate response, or handle it as needed
+                    pass
+            else:
+                # If tournament ID is not provided, create a new tournament
+                start_date = datetime.now()
+                # You need to get participants from data or provide it from somewhere
+                participants = data.get('participants', [])
+                tournamentObj = Tournament.objects.create(
+                    start_date=start_date,
+                    number_of_participants=len(participants),
+                    # Set other fields as needed
+                )
+        # Create the Pong game object
+        memory_id = Game.objects.create(
+            is_tournament=data.get('tournament'),
+            memory_game=True,
+            choseSet=data.get('chosenSet'),
+            number_of_cards=data.get('number_of_cards'),
+            score_winner=data.get('scoreW'),
+            score_loser=data.get('scoreL'),
+            game_date=now(),
+            winner=User.objects.filter(display_name=data.get('winner')).first(),
+            tournament=tournamentObj
+        )
+        memory_id.participants.add(*participants)
+        memory_id.save()
+
+        return JsonResponse({'message': 'Game result updated successfully'})
+    else:
+        # Return error response for unsupported methods
+        return JsonResponse({'error': 'Unsupported method'}, status=405)
+
+
+@csrf_exempt
+@require_POST
+def start_tournament_memory(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        tournament_name = data.get('tournament_name')
+        start_date = datetime.now()
+
+        # Create the tournament object
+        tournament = Tournament.objects.create(
+            tournament_name=tournament_name,
+            start_date=start_date,
+            number_of_participants=data.get('number_of_participants'),
+            pong_tournament=True
+            # Set other fields as needed
+        )
+        response_data = {
+            'message': 'Tournament started successfully',
+            'tournament_id': tournament.tournament_id
+        }
+        return JsonResponse(response_data)
     else:
         # Return error response for unsupported methods
         return JsonResponse({'error': 'Unsupported method'}, status=405)

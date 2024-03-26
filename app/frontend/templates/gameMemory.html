@@ -833,6 +833,51 @@ function playTime() {
         });
     }
 
+
+function updateGameResult(winner, namePlayer, scoreToDo, scoreWinner, scoreLoser, tournament, tournament_id)
+{
+    console.log('Updating game result...');
+    
+    fetch('/update_game_result_pong/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ winner: winner, players : namePlayer, scoreToDo: scoreToDo, scoreW: scoreWinner, scoreL: scoreLoser, tournament: tournament, tournament_id: tournament_id }),
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Game result updated successfully');
+        } else {
+            console.error('Failed to update game result');
+        }
+    })
+    .catch(error => {
+        console.error('Error updating game result:', error);
+    });
+}
+
+function updateStartTournamentMemory()
+{
+    fetch('/update_start_tournament/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ players : namePlayer, pong_tournament: true, memory_tournament: false}),
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Tournament started successfully');
+        } else {
+            console.error('Failed to start tournament');
+        }
+    })
+    .catch(error => {
+        console.error('Error starting tournament:', error);
+    });
+}
+
 function endGameMemory(winner)
 {
     console.log(winner)
