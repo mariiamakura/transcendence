@@ -56,5 +56,17 @@ CURRENT_IP=$(hostname -I | awk '{print $1}')
 echo -e "${BLUE}Setting up SSL certificates...${NC}"
 mkcert -key-file "${CERT_DIR}/nginx.key" -cert-file "${CERT_DIR}/nginx.crt" localhost "${CURRENT_IP}" "42pong.ddns.net" &>/dev/null
 
+PROM_CERTS="${HOME}/certs/certs_prometheus"
+rm -rf "${PROM_CERTS}"
+mkdir -p "${PROM_CERTS}" 
+
+echo -e "${BLUE}Setting up SSL certificates for prometheus...${NC}"
+mkcert -key-file "${PROM_CERTS}/prometheus.key" -cert-file "${PROM_CERTS}/prometheus.crt" localhost "${CURRENT_IP}" &>/dev/null
+chmod 777 ${PROM_CERTS}/prometheus.key
+chmod 777 ${PROM_CERTS}/prometheus.crt
+
+
+
+
 
 echo -e "${GREEN}SSL certificates created!${NC}"
