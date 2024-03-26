@@ -61,7 +61,7 @@ rm -rf "${PROM_CERTS}"
 mkdir -p "${PROM_CERTS}" 
 
 echo -e "${BLUE}Setting up SSL certificates for prometheus...${NC}"
-mkcert -key-file "${PROM_CERTS}/prometheus.key" -cert-file "${PROM_CERTS}/prometheus.crt" localhost "${CURRENT_IP}" &>/dev/null
+mkcert -key-file "${PROM_CERTS}/prometheus.key" -cert-file "${PROM_CERTS}/prometheus.crt" localhost "${CURRENT_IP}" prometheus &>/dev/null
 chmod 777 ${PROM_CERTS}/prometheus.key
 chmod 777 ${PROM_CERTS}/prometheus.crt
 

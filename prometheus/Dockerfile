@@ -14,4 +14,6 @@ COPY certs_prometheus/prometheus.key /etc/prometheus/
 EXPOSE 9090
 
 CMD ["--config.file=/etc/prometheus/prometheus.yml", \ 
-	"--web.config.file=/etc/prometheus/web-config.yml"]
+	"--web.config.file=/etc/prometheus/web-config.yml", \
+	"--storage.tsdb.retention.time=10d", \
+	"--storage.tsdb.retention.size=3GB"]

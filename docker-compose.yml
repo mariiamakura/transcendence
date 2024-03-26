@@ -99,27 +99,26 @@ services:
     networks:
       - localhost
 
-
-  # prometheus-node-exporter:
-  #   image: prom/node-exporter:latest
-  #   container_name: prometheus-node-exporter
-  #   restart: always
-  #   volumes:
-  #     - /proc:/host/proc:ro
-  #     - /sys:/host/sys:ro
-  #     - /:/rootfs:ro
-  #   command: 
-  #     - '--path.procfs=/host/proc' 
-  #     - '--path.sysfs=/host/sys'
-  #     - --collector.filesystem.ignored-mount-points
-  #     - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
-  #   networks:
-  #     - localhost
-  #   privileged: true
-  #   depends_on:
-  #     - prometheus
-  #   expose:
-  #     - 9100
+  prometheus-node-exporter:
+    image: prom/node-exporter:latest
+    container_name: prometheus-node-exporter
+    restart: always
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command: 
+      - '--path.procfs=/host/proc' 
+      - '--path.sysfs=/host/sys'
+      - --collector.filesystem.ignored-mount-points
+      - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+    networks:
+      - localhost
+    privileged: true
+    depends_on:
+      - prometheus
+    expose:
+      - 9100
 
   grafana:
     image: grafana/grafana:latest
@@ -133,37 +132,39 @@ services:
     networks:
       - localhost
   
-  # alertmanager:
-  #   image: quay.io/prometheus/alertmanager:latest
-  #   container_name: alertmanager
-  #   ports:
-  #     - 9093:9093
-  #   volumes: 
-  #     - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
-  #     - alertmanager-data:/data
-  #   networks:
-  #     - localhost
+  alertmanager:
+    image: quay.io/prometheus/alertmanager:latest
+    container_name: alertmanager
+    ports:
+      - 9093:9093
+    volumes: 
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - alertmanager-data:/data
+    networks:
+      - localhost
 
 volumes:
   postgres_data:
   static_volume:
   media_volume:
   prometheus-data:
-    # driver_opts:
-    #   o: bind
-    #   type: none
-    #   device: /home/${USER}/tasks/my_github/transcendence/devops_data/prometheus #change to local env
+    driver_opts:
+      o: bind
+      type: none
+      device: /Users/mishamakura/Documents/Programming/42Berin/Transcendence/devops_data/prometheus #mac
+    #   device: /home/${USER}/tasks/my_github/transcendence/devops_data/prometheus #change to local env #school
   grafana-data:
-    # driver_opts:
-    #   o: bind
-    #   type: none
+    driver_opts:
+      o: bind
+      type: none
+      device: /Users/mishamakura/Documents/Programming/42Berin/Transcendence/devops_data/grafana #mac
     #   device: /home/${USER}/tasks/my_github/transcendence/devops_data/grafana #change to local env
   alertmanager-data:
-    # driver_opts:
-    #   o: bind
-    #   type: none
+    driver_opts:
+      o: bind
+      type: none
+      device: /Users/mishamakura/Documents/Programming/42Berin/Transcendence/devops_data/alertmanager #mac
     #   device: /home/${USER}/tasks/my_github/transcendence/alertmanager #change to local env
-
 
 networks:
     localhost:
