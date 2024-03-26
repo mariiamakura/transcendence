@@ -95,7 +95,11 @@ class KeepAliveConsumer(AsyncWebsocketConsumer):
         # Check if the disconnecting user is the host of a room and close the room if so
         if self.user == GameRoomManagerPong.rooms[self.room_name]["host"]:
             await self.close_room_pong(self.room_name)
+        elif self.user == GameRoomManagerPong.rooms[self.room_name]["guest"]:
+            await self.close_room_pong(self.room_name)
         elif self.user == GameRoomManagerMemory.rooms[self.room_name]["host"]:
+            await self.close_room_memory(self.room_name)
+        elif self.user == GameRoomManagerMemory.rooms[self.room_name]["guest"]:
             await self.close_room_memory(self.room_name)
 
     @database_sync_to_async
