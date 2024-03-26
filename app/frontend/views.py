@@ -16,7 +16,8 @@ import os
 from database.models import User
 from faker import Faker
 import random
-from django.utils.translation import gettext
+from django.utils.translation import gettext, activate, get_language
+from django.http import HttpResponse, HttpResponseBadRequest
 
 
 def signUp(request):
@@ -75,6 +76,25 @@ def signIn(request):
             messages.error(request, message)
             return render(request=request, template_name="signIn.html", context={})
     return render(request=request, template_name="signIn.html", context={})
+
+
+@csrf_exempt
+def switch_language(request):
+    if request.method == 'POST':
+        # data = json.loads(request.body)
+        # lang_code = data.get('langCode')  # Default to English if no language is provided
+        # request.session['django_language'] = lang_code
+
+        activate('ko')
+        context = {'language_code': 'ko'}  # Add language code to context
+        print(get_language())
+        return render(request, 'home.html', context)
+        # Redirect the user back to the page where the language switch occurred
+        # return HttpResponse(status=204)
+        # return redirect(request.META.get('HTTP_REFERER'))
+    else:
+        # Handle potential errors or invalid requests (optional)
+        return HttpResponseBadRequest()
 
 
 def update_game_result_pong(request):

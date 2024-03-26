@@ -340,6 +340,10 @@ msgstr "사용자 인증에 실패했습니다. 다시 시도하세요."
 msgid "Failed to reach API. Please try again."
 msgstr "API에 접근할 수 없습니다. 다시 시도하세요."
 
+#: frontend/index.py:35
+msgid "Language"
+msgstr "언어"
+
 #: frontend/index.py:37
 msgid "English"
 msgstr "영어"

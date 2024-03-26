@@ -15,6 +15,7 @@
     <script src="{% static "setMemoryGames.js" %}" defer></script>
 	<script src="{% static "profile.js" %}" defer></script>
     <script src="{% static "score.js" %}" defer></script>
+    <script src="{% static "language_switch.js" %}" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
@@ -31,16 +32,23 @@
     <nav>
         <ul>
 			{% if request.user.is_authenticated %}
-            <li class="dropdown">
-                <a href="#" class="dropbtn">{% trans "Language" %}</a>
-                <div class="dropdown-content">
-                    <a href="?lang=en">{% trans "English" %}</a>
-                    <a href="?lang=fr">{% trans "French" %}</a>
-                    <a href="?lang=ko">{% trans "Korean" %}</a>
-                    <a href="?lang=uk">{% trans "Ukrainian" %}</a>
-                    <!-- Add more language options as needed -->
+            <form action="{% url 'set_language' %}" method="post">
+                {% csrf_token %}
+                <div class="dropdown">
+                  <select name="language" class="dropbtn">
+                    {% get_current_language as LANGUAGE_CODE %}
+                    {% get_available_languages as LANGUAGES %}
+                    {% get_language_info_list for LANGUAGES as languages %}
+                    {% for language in languages %}
+                      <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %} selected {% endif %}>
+                        {{ language.name_local }} ({{ language.code }})
+                      </option>
+                    {% endfor %}
+                  </select>
                 </div>
-            </li>
+                <input type="submit" value="Go" class="submit-btn">
+            </form>
+            <!-- <script src="{% static '../statics/language_switch.js' %}"></script> -->
             <li><a class="nav-link" href="showHome">{% trans "Home" %}</a></li>
                     <li>
                         <div class="dropdown">
