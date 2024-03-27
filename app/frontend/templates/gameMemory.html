@@ -5,17 +5,23 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
-			<h1 class="page-header">Memoryyyyyyyy</h1>
-			<hr>
-		</div>
-	</div>
+        </div>
+    </div>
 </div>
-<div class="button d-flex justify-content-center align-items-center">
-	<a href="#" onclick="showGameMemory()" class="btn btn-primary" style="margin-left: 1em;">Memory</a>
-
-</div>
-
+{% else %}
+<li class="nav-item">
+    <a class="nav-link" href="signIn">Sign In</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="signUp">Sign Up</a>
+</li>
+{% endif %}
+ 
 <script>
+
+document.addEventListener("DOMContentLoaded", function() {
+    showGameMemory();
+});
 
 function getCookie(name) {
     let cookieValue = null;
@@ -117,7 +123,7 @@ function decideHost() {
 
 function choiceSet() {
     var main = document.getElementById('content');
-    main.innerHTML += `<div id="choice"><p style="padding-top: 1em; display: flex; " > Which set do you want to play with ? </p></div>`;
+    main.innerHTML = `<div id="choice"><p style="padding-top: 1em; display: flex; " > Which set do you want to play with ? </p></div>`;
     var Nature = document.createElement("button");
     Nature.textContent = "Nature (easy)";
     Nature.classList.add("styled-button");
@@ -143,41 +149,41 @@ function choiceSet() {
 function choiceCards() {
     var main = document.getElementById('content');
     main.innerHTML += `<div id="choice"><p style="padding-top: 2em; display: flex; " > How many cards do you want to play with: </p></div>`;
-    var TwelveCards = document.createElement("button");
-    TwelveCards.textContent = "12";
-    TwelveCards.classList.add("styled-button");
-    document.getElementById('choice').appendChild(TwelveCards);
-    var SixteenCards = document.createElement("button");
-    SixteenCards.textContent = "16";
-    SixteenCards.classList.add("styled-button");
-    document.getElementById('choice').appendChild(SixteenCards);
-    var TwentyFourCards = document.createElement("button");
-    TwentyFourCards.textContent = "24";
-    TwentyFourCards.classList.add("styled-button");
-    document.getElementById('choice').appendChild(TwentyFourCards);
-    var ThirtyTwoCards = document.createElement("button");
-    ThirtyTwoCards.textContent = "32";
-    ThirtyTwoCards.classList.add("styled-button");
-    document.getElementById('choice').appendChild(ThirtyTwoCards);
+    var FourteenCards = document.createElement("button");
+    FourteenCards.textContent = "14";
+    FourteenCards.classList.add("styled-button");
+    document.getElementById('choice').appendChild(FourteenCards);
+    var EighteenCards = document.createElement("button");
+    EighteenCards.textContent = "18";
+    EighteenCards.classList.add("styled-button");
+    document.getElementById('choice').appendChild(EighteenCards);
+    var TwentySixCards = document.createElement("button");
+    TwentySixCards.textContent = "26";
+    TwentySixCards.classList.add("styled-button");
+    document.getElementById('choice').appendChild(TwentySixCards);
+    var ThirtyCards = document.createElement("button");
+    ThirtyCards.textContent = "30";
+    ThirtyCards.classList.add("styled-button");
+    document.getElementById('choice').appendChild(ThirtyCards);
     return new Promise(function (resolve) {
-        TwelveCards.addEventListener("click", function() {
+        FourteenCards.addEventListener("click", function() {
             resolve(true);
-            gameSettings.numberOfCards = 12;
+            gameSettings.numberOfCards = 14;
             document.getElementById('choice').remove();
         });
-        SixteenCards.addEventListener("click", function() {
+        EighteenCards.addEventListener("click", function() {
             resolve(true);
-            gameSettings.numberOfCards = 16;
+            gameSettings.numberOfCards = 18;
             document.getElementById('choice').remove();
         });
-        TwentyFourCards.addEventListener("click", function() {
+        TwentySixCards.addEventListener("click", function() {
             resolve(true);
-            gameSettings.numberOfCards = 24;
+            gameSettings.numberOfCards = 26;
             document.getElementById('choice').remove();
         });
-        ThirtyTwoCards.addEventListener("click", function() {
+        ThirtyCards.addEventListener("click", function() {
             resolve(true);
-            gameSettings.numberOfCards = 32;
+            gameSettings.numberOfCards = 30;
             document.getElementById('choice').remove();
         });
     });
@@ -234,34 +240,38 @@ return new Promise(function (resolve) {
 
 async function getNamePlayer() {
     var main = document.getElementById('content');
-    let i = 2;
-
     try {
-        const response = await fetch('/get_username/');
+        const response = await fetch('/get_display_name/');
         const data = await response.json();
-        main.innerHTML += `<p style="padding-top: 2em; display: flex; align-items:center; justify-content:center;">First player is: ${data.username}</p>`;
-        namePlayer.push(data.username);
+        main.innerHTML += `<p style="padding-top: 2em; display: flex; align-items:center; justify-content:center;">First player is: ${data.display_name}</p>`;
+        namePlayer.push(data.display_name);
 
-        for (; i <= numberPlayers; i++) {
+        for (let i = 2; i <= numberPlayers; i++) {
             main.innerHTML += '<div id="choice">' +
-                '<form style="display: flex; flex-direction: column; align-items: center;">' +
+                '<form id="form' + i + '" style="display: flex; flex-direction: column; align-items: center;">' +
                 '<p style="padding-top: 2em; display: flex; align-items:center; justify-content:center;" > Name of player ' + i + ' : </p>' +
-                '<input type="text" id="name' + i + '">' +
+                '<input type="text" id="name' + i + '" required>' + 
                 '<button type="submit" class="styled-button" style="margin-top: 1em;">Submit</button>' +
                 '</form>' +
                 '</div>';
 
-            const submitButton = main.querySelector('#choice:last-child button');
-            const input = main.querySelector('#choice:last-child input');
+            const form = main.querySelector('#form' + i);
+            const input = main.querySelector('#name' + i);
 
-            // Wait for the submit button click event
             await new Promise(resolve => {
-                submitButton.addEventListener("click", function(event) {
-                    event.preventDefault(); // Prevent the default form submission
-                    if (input.value !== "") {
-                        namePlayer.push(input.value);
-                        main.querySelector('#choice:last-child').remove();
-                        resolve(); // Resolve the promise to continue the loop
+                form.addEventListener("submit", async function(event) {
+                    event.preventDefault(); 
+                    if (input.checkValidity()) { 
+                        const newName = input.value;
+                        if (!namePlayer.includes(newName)) {
+                            namePlayer.push(newName);
+                            form.remove();
+                            resolve();
+                        } else {
+                            alert('Name already exists! Please choose a different name.');
+                        }
+                    } else {
+                        input.reportValidity();
                     }
                 });
             });
@@ -359,7 +369,7 @@ let cards_info = [];
 async function showGameMemory() {
 
 	var mainElement = document.getElementById('content');
-	mainElement.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em; ">Memory game</p>';    
+	mainElement.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em; padding-top:3em;">Memory game</p>';    
 	debug = 0;
 	startGame = false;
 	tournament = false;
@@ -372,14 +382,14 @@ async function showGameMemory() {
 		numberPlayers = 2;
 		if (await decideHost())
 		{
-			namePlayer[0] = "{{user.username}}";
+			namePlayer[0] = "{{user.display_name}}";
 			await choiceSet();
 			await choiceCards();
 			remoteHost();
 		}
 		else
 		{
-            namePlayer[1] = "{{user.username}}";
+            namePlayer[1] = "{{user.display_name}}";
             remote = true;
 			remoteClient();
 		}
@@ -408,7 +418,7 @@ let isHost = false;
 let gameRoomSocket = null;
 
 async function remoteHost() {
-    let hostName = "{{ user.username }}"; // This should be sanitized to ensure URL-friendliness
+    let hostName = "{{ user.display_name }}"; // This should be sanitized to ensure URL-friendliness
     let nameRoom = encodeURIComponent(`${hostName}_Game`).replace(/'/g, ""); // Sanitize and remove special characters
     let setName = gameSettings.chosenSet === 1 ? "Nature" : "Robot";
     let sanitizedRoomName = encodeURIComponent(`room_of_${hostName}_with_${gameSettings.numberOfCards}_cards_and_set_of_${setName}`).replace(/'/g, ""); // Sanitize and remove special characters
@@ -545,7 +555,7 @@ async function remoteClient() {
         roomSocket = new WebSocket(`wss://${window.location.host}/wss/socket-server/${roomId}/`);
         roomSocket.onopen = function() {
             console.log("Game room connection established for client.");
-            roomSocket.send(JSON.stringify({ action: 'join_room_memory', room_id: roomId , guest_name: "{{ user.username }}"}));
+            roomSocket.send(JSON.stringify({ action: 'join_room_memory', room_id: roomId , guest_name: "{{ user.display_name }}"}));
             namePlayer[0] = roomId.replace('_Game', '');
         };
         roomSocket.onmessage = function(event) {
@@ -644,26 +654,26 @@ let cardInfo = [];
 function launchGameMemory(cards_info) {
     var mainElement = document.getElementById('content');
     PlayerToPlay = namePlayer[firstPlayer];
-    let sets = [natureFirstSet12, natureSecondSet12, natureFirstSet16, natureSecondSet16, natureFirstSet24, natureSecondSet24, natureFirstSet32, natureSecondSet32, 
-                        robotFirstSet12, robotSecondSet12, robotFirstSet16, robotSecondSet16, robotFirstSet24, robotSecondSet24, robotFirstSet32, robotSecondSet32]
+    let sets = [natureFirstSet14, natureSecondSet14, natureFirstSet18, natureSecondSet18, natureFirstSet26, natureSecondSet26, natureFirstSet30, natureSecondSet30, 
+                        robotFirstSet14, robotSecondSet14, robotFirstSet18, robotSecondSet18, robotFirstSet26, robotSecondSet26, robotFirstSet30, robotSecondSet30]
     if (gameSettings.chosenSet === 1)
         sets = sets.slice(0, 8);
     else if (gameSettings.chosenSet === 2)
         sets = sets.slice(8, 16);
     switch (gameSettings.numberOfCards) {
-        case 12:
+        case 14:
             firstSet = sets[0];
             secondSet = sets[1];
             break;
-        case 16:
+        case 18:
             firstSet = sets[2];
             secondSet = sets[3];
             break;
-        case 24:
+        case 26:
             firstSet = sets[4];
             secondSet = sets[5];
             break;
-        case 32:
+        case 30:
             firstSet = sets[6];
             secondSet = sets[7];
             break;
@@ -921,15 +931,27 @@ function reinitializeGame()
 function endGameMemory(winner)
 {
     console.log("And the winner is ..." + winner);
+    if (scorePlayer1 === scorePlayer2)
+        winner = "Exaequo";
     let scoreWinner = scorePlayer1 > scorePlayer2 ? scorePlayer1 : scorePlayer2;
     let scoreLoser = scorePlayer1 < scorePlayer2 ? scorePlayer1 : scorePlayer2;
     updateGameResultMemory(winner, namePlayer, gameSettings.chosenSet, gameSettings.numberOfCards, scoreWinner, scoreLoser, tournament, tournament_id);
     var mainElement = document.getElementById('content');
     mainElement.innerHTML = ''; // Remove all inner HTML content  
-    mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
-    '<p style="text-align: center; font-size:4em;">' + winner + ' won ! </p>' +
-    '<p><img src="{% static 'img/gif_robot.gif' %}" alt="Victory logo" style="width: 50vh; height: 50vh;"></p>' + 
-    '</div>';
+    if (winner !== "Exaequo")
+    {
+        mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
+        '<p style="text-align: center; font-size:4em;">' + winner + ' won ! </p>' +
+        '<p><img src="{% static 'img/gif_robot.gif' %}" alt="Victory logo" style="width: 50vh; height: 50vh;"></p>' + 
+        '</div>';
+    }
+    else
+    {
+        mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
+        '<p style="text-align: center; font-size:4em;"> It\'s a tie ! </p>' +
+        '<p><img src="{% static 'img/gif_robot.gif' %}" alt="Victory logo" style="width: 50vh; height: 50vh;"></p>' + 
+        '</div>';
+    }
     reinitializeGame();
     if (tournament === false)
     {
@@ -1099,14 +1121,7 @@ function turnUpdate(mode)
     updatePlayerScore(1);
     updatePlayerScore(2);
 }
+  
 </script>
 
-{% else %}
-<li class="nav-item">
-	<a class="nav-link" href="signIn">Sign In</a>
-</li>
-<li class="nav-item">
-	<a class="nav-link" href="signUp">Sign Up</a>
-</li>
-{% endif %}
 {% endblock %}

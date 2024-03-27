@@ -1,23 +1,24 @@
-
-let natureFirstSet12 = [
+let natureFirstSet14 = [
     'url("img/Nature/bird1.png")',
     'url("img/Nature/bee1.png")',
     'url("img/Nature/flower1.png")',
     'url("img/Nature/leaf1.png")',
     'url("img/Nature/mushroom1.png")',
     'url("img/Nature/road1.png")',
+    'url("img/Nature/kids1.png")',
 ];
 
-let natureSecondSet12 = [
+let natureSecondSet14 = [
     'url("img/Nature/bird2.png")',
     'url("img/Nature/bee2.png")',
     'url("img/Nature/flower2.png")',
     'url("img/Nature/leaf2.png")',
     'url("img/Nature/mushroom2.png")',
     'url("img/Nature/road2.png")',
+    'url("img/Nature/kids2.png")',
 ];
 
-let natureFirstSet16 = [
+let natureFirstSet18 = [
     'url("img/Nature/bird1.png")',
     'url("img/Nature/bee1.png")',
     'url("img/Nature/flower1.png")',
@@ -26,9 +27,10 @@ let natureFirstSet16 = [
     'url("img/Nature/road1.png")',
     'url("img/Nature/butterfly_color1.png")',
     'url("img/Nature/kids1.png")',
+    'url("img/Nature/rainbow1.png")',
 ];
 
-let natureSecondSet16 = [
+let natureSecondSet18 = [
     'url("img/Nature/bird2.png")',
     'url("img/Nature/bee2.png")',
     'url("img/Nature/flower2.png")',
@@ -37,9 +39,10 @@ let natureSecondSet16 = [
     'url("img/Nature/road2.png")',
     'url("img/Nature/butterfly_color2.png")',
     'url("img/Nature/kids2.png")',
+    'url("img/Nature/rainbow2.png")',
 ];
 
-let natureFirstSet24 = [
+let natureFirstSet26 = [
     'url("img/Nature/bird1.png")',
     'url("img/Nature/bee1.png")',
     'url("img/Nature/flower1.png")',
@@ -52,9 +55,10 @@ let natureFirstSet24 = [
     'url("img/Nature/rock1.png")',
     'url("img/Nature/rainbow1.png")',
     'url("img/Nature/frog1.png")',
+    'url("img/Nature/trees1.png")',
 ];
 
-let natureSecondSet24 = [
+let natureSecondSet26 = [
     'url("img/Nature/bird2.png")',
     'url("img/Nature/bee2.png")',
     'url("img/Nature/flower2.png")',
@@ -67,9 +71,11 @@ let natureSecondSet24 = [
     'url("img/Nature/rock2.png")',
     'url("img/Nature/rainbow2.png")',
     'url("img/Nature/frog2.png")',
+    'url("img/Nature/trees2.png")',
+
 ];
 
-let natureFirstSet32 = [
+let natureFirstSet30 = [
     'url("img/Nature/bird1.png")',
     'url("img/Nature/bee1.png")',
     'url("img/Nature/flower1.png")',
@@ -77,7 +83,6 @@ let natureFirstSet32 = [
     'url("img/Nature/mushroom1.png")',
     'url("img/Nature/road1.png")',
     'url("img/Nature/butterfly_color1.png")',
-    'url("img/Nature/kids1.png")',
     'url("img/Nature/snail1.png")',
     'url("img/Nature/rock1.png")',
     'url("img/Nature/rainbow1.png")',
@@ -88,7 +93,7 @@ let natureFirstSet32 = [
     'url("img/Nature/butterfly_black1.png")',
 ];
 
-let natureSecondSet32 = [
+let natureSecondSet30 = [
     'url("img/Nature/bird2.png")',
     'url("img/Nature/bee2.png")',
     'url("img/Nature/flower2.png")',
@@ -96,7 +101,6 @@ let natureSecondSet32 = [
     'url("img/Nature/mushroom2.png")',
     'url("img/Nature/road2.png")',
     'url("img/Nature/butterfly_color2.png")',
-    'url("img/Nature/kids2.png")',
     'url("img/Nature/snail2.png")',
     'url("img/Nature/rock2.png")',
     'url("img/Nature/rainbow2.png")',
@@ -107,25 +111,27 @@ let natureSecondSet32 = [
     'url("img/Nature/butterfly_black2.png")',
 ];
 
-let robotFirstSet12 = [
+let robotFirstSet14 = [
     'url("img/Robot/Robot_angry1.png")',
     'url("img/Robot/Robot_ipad1.png")',
     'url("img/Robot/Robot_little_heart1.png")',
     'url("img/Robot/Robot_normal1.png")',
     'url("img/Robot/Robot_pen1.png")',
     'url("img/Robot/Robot_trophee1.png")',
+    'url("img/Robot/Robot_sneaky1.png")',
 ];
 
-let robotSecondSet12 = [
+let robotSecondSet14 = [
     'url("img/Robot/Robot_angry2.png")',
     'url("img/Robot/Robot_ipad2.png")',
     'url("img/Robot/Robot_little_heart2.png")',
     'url("img/Robot/Robot_normal2.png")',
     'url("img/Robot/Robot_pen2.png")',
     'url("img/Robot/Robot_trophee2.png")',
+    'url("img/Robot/Robot_sneaky2.png")',
 ];
 
-let robotFirstSet16 = [
+let robotFirstSet18 = [
     'url("img/Robot/Robot_angry1.png")',
     'url("img/Robot/Robot_coins1.png")',
     'url("img/Robot/Robot_ipad1.png")',
@@ -134,9 +140,10 @@ let robotFirstSet16 = [
     'url("img/Robot/Robot_pen1.png")',
     'url("img/Robot/Robot_sneaky1.png")',
     'url("img/Robot/Robot_trophee1.png")',
+    'url("img/Robot/Robot_welcoming1.png")',
 ];
 
-let robotSecondSet16 = [
+let robotSecondSet18 = [
     'url("img/Robot/Robot_angry2.png")',
     'url("img/Robot/Robot_coins2.png")',
     'url("img/Robot/Robot_ipad2.png")',
@@ -145,9 +152,11 @@ let robotSecondSet16 = [
     'url("img/Robot/Robot_pen2.png")',
     'url("img/Robot/Robot_sneaky2.png")',
     'url("img/Robot/Robot_trophee2.png")',
+    'url("img/Robot/Robot_welcoming2.png")',
+
 ];
 
-let robotFirstSet24 = [
+let robotFirstSet26 = [
     'url("img/Robot/Robot_angry1.png")',
     'url("img/Robot/Robot_coins1.png")',
     'url("img/Robot/Robot_gift1.png")',
@@ -160,9 +169,10 @@ let robotFirstSet24 = [
     'url("img/Robot/Robot_sorry1.png")',
     'url("img/Robot/Robot_trophee1.png")',
     'url("img/Robot/Robot_welcoming1.png")',
+    'url("img/Robot/Robot_Magnifying_glass1.png")',
 ];
 
-let robotSecondSet24 = [
+let robotSecondSet26 = [
     'url("img/Robot/Robot_angry2.png")',
     'url("img/Robot/Robot_coins2.png")',
     'url("img/Robot/Robot_gift2.png")',
@@ -175,9 +185,10 @@ let robotSecondSet24 = [
     'url("img/Robot/Robot_sorry2.png")',
     'url("img/Robot/Robot_trophee2.png")',
     'url("img/Robot/Robot_welcoming2.png")',
+    'url("img/Robot/Robot_Magnifying_glass2.png")',
 ];
 
-let robotFirstSet32 = [
+let robotFirstSet30 = [
     'url("img/Robot/Robot_angry1.png")',
     'url("img/Robot/Robot_calling1.png")',
     'url("img/Robot/Robot_coins1.png")',
@@ -189,14 +200,13 @@ let robotFirstSet32 = [
     'url("img/Robot/Robot_Magnifying_glass1.png")',
     'url("img/Robot/Robot_normal1.png")',
     'url("img/Robot/Robot_pen1.png")',
-    'url("img/Robot/Robot_sad1.png")',
     'url("img/Robot/Robot_sneaky1.png")',
     'url("img/Robot/Robot_sorry1.png")',
     'url("img/Robot/Robot_trophee1.png")',
     'url("img/Robot/Robot_welcoming1.png")',
 ];
 
-let robotSecondSet32 = [
+let robotSecondSet30 = [
     'url("img/Robot/Robot_angry2.png")',
     'url("img/Robot/Robot_calling2.png")',
     'url("img/Robot/Robot_coins2.png")',
@@ -208,7 +218,6 @@ let robotSecondSet32 = [
     'url("img/Robot/Robot_Magnifying_glass2.png")',
     'url("img/Robot/Robot_normal2.png")',
     'url("img/Robot/Robot_pen2.png")',
-    'url("img/Robot/Robot_sad2.png")',
     'url("img/Robot/Robot_sneaky2.png")',
     'url("img/Robot/Robot_sorry2.png")',
     'url("img/Robot/Robot_trophee2.png")',

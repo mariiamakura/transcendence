@@ -438,11 +438,11 @@ def calculate_win_streak(games, user):
     return max_win_streak
 
 
-def get_username(request):
+def get_display_name(request):
     if request.method == 'GET':
         # Assuming the user is authenticated and you want to get the username of the authenticated user
-        username = request.user.username
-        return JsonResponse({'username': username})
+        display_name = request.user.display_name
+        return JsonResponse({'display_name': display_name})
 
 
 def home(request):
