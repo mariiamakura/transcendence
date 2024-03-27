@@ -6,10 +6,10 @@ COPY web-config.yml /etc/prometheus/
 
 COPY certs_prometheus/prometheus.crt /etc/prometheus/
 COPY certs_prometheus/prometheus.key /etc/prometheus/
+COPY rootCA.pem /etc/prometheus
 
 # RUN chmod 777 /etc/prometheus/prometheus.crt && \
 # 	chmod 777 /etc/prometheus/prometheus.key
-
 
 EXPOSE 9090
 

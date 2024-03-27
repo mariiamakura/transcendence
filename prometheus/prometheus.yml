@@ -13,6 +13,12 @@ alerting:
 
 scrape_configs:
   - job_name: 'prometheus'
+    scheme: https
+    tls_config:
+      ca_file: 'rootCA.pem'
+    basic_auth:
+      username: admin
+      password: password
     static_configs:
     - targets: ['prometheus:9090']
 
