@@ -16,8 +16,13 @@ from django.conf import settings
 from django.utils.timezone import now
 import os
 from database.models import User
+from database.models import Game
+from database.models import Tournament
 from faker import Faker
 import random
+from datetime import datetime
+from django.utils import timezone
+from itertools import groupby
 
 
 def signUp(request):
@@ -111,51 +116,217 @@ def signIn(request):
     return render(request=request, template_name="signIn.html", context={})
 
 
-@csrf_exempt
 @require_POST
 def update_game_result_pong(request):
     if request.method == 'POST':
-        # Parse JSON data from the request body
         data = json.loads(request.body)
-        winner = data.get('winner')
-        # Update the logged-in user's data based on the game result
-        if winner == request.user.username:
-            # Increment the logged-in user's games won count
-            request.user.pong_games_won += 1
-            request.user.pong_win_streak += 1
-            request.user.pong_games_played += 1  # Increment games played
-            request.user.save()
-            return JsonResponse({'message': 'Game result updated successfully'})
+        players = data.get('players', [])
+        participants = []
+
+        for player in players:
+            user = User.objects.filter(display_name=player).first()
+            if user:
+                participants.append(user)
+            else:
+                username = player + '_guest'
+                display_name = player + '_guest'
+                email = player + '@guest.com'
+                user = User.objects.filter(display_name=display_name).first()
+                if user:
+                    participants.append(user)
+                else:
+                    user = User.objects.create_user(username=username, display_name=display_name, email=email)
+                    participants.append(user)
+
+        winner_user = None
+        winner = User.objects.filter(display_name=data.get('winner')).first()
+        if winner:
+            winner_user = winner
         else:
-            request.user.pong_win_streak = 0
-            request.user.pong_games_played += 1  # Increment games played
-            request.user.save()
-            return JsonResponse({'message': 'Game result updated successfully'})
+            username = data.get('winner') + '_guest'
+            display_name = data.get('winner') + '_guest'
+            email = data.get('winner') + '@guest.com'
+            user = User.objects.filter(display_name=display_name).first()
+            if user:
+                winner_user = user
+            else:
+                winner_user = User.objects.create_user(username=username, display_name=display_name, email=email)
+
+        tournamentObj = None
+        is_tournament_bool = data.get('is_tournament')
+        if is_tournament_bool:
+            tournament_id = data.get('tournament_id')
+            if tournament_id:
+                # If tournament ID is provided, retrieve the tournament object
+                try:
+                    tournamentObj = Tournament.objects.get(pk=tournament_id)
+                except Tournament.DoesNotExist:
+                    pass
+            else:
+                pass
+
+        # Create the Pong game object
+        pong_id = Game.objects.create(
+            is_tournament=data.get('is_tournament'),
+            pong_game=True,
+            scoreToDo=data.get('scoreToDo'),
+            score_winner=data.get('scoreW'),
+            score_loser=data.get('scoreL'),
+            game_date=now(),
+            winner=winner_user,
+            tournament=tournamentObj
+        )
+        pong_id.participants.add(*participants)
+        pong_id.save()
+
+        return JsonResponse({'message': 'Game result updated successfully'})
     else:
         # Return error response for unsupported methods
         return JsonResponse({'error': 'Unsupported method'}, status=405)
 
 
-@csrf_exempt
 @require_POST
+def start_tournament(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        start_date = datetime.now()
+        participants_data = data.get('participants', [])
+
+        # Create the tournament object
+        tournament = Tournament.objects.create(
+            start_date=start_date,
+            number_of_participants=len(participants_data),
+            pong_tournament=data.get('pong_tournament'),
+            memory_tournament=data.get('memory_tournament')
+            # Set other fields as needed
+        )
+        tournament.participants.set(participants_data)
+        response_data = {
+            'message': 'Tournament started successfully',
+            'tournament_id': tournament.tournament_id
+        }
+        return JsonResponse(response_data)
+    else:
+        # Return error response for unsupported methods
+        return JsonResponse({'error': 'Unsupported method'}, status=405)
+
+
+def end_tournament(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        end_date = timezone.now()
+        tournament_id = data.get('tournament_id')
+        winner = data.get('winner')
+
+        winner_user = None
+        winner = User.objects.filter(display_name=data.get('winner')).first()
+        if winner:
+            winner_user = winner
+        else:
+            username = data.get('winner') + '_guest'
+            display_name = data.get('winner') + '_guest'
+            email = data.get('winner') + '@guest.com'
+            user = User.objects.filter(display_name=display_name).first()
+            if user:
+                winner_user = winner
+            else:
+                winner_user = User.objects.create_user(username=username, display_name=display_name, email=email)
+
+        if tournament_id:
+            # If tournament ID is provided, retrieve the tournament object
+            try:
+                tournamentObj = Tournament.objects.get(pk=tournament_id)
+            except Tournament.DoesNotExist:
+                return JsonResponse({'error': 'Tournament does not exist'}, status=404)
+            tournamentObj.end_date = end_date
+            tournamentObj.winner = winner_user
+            tournamentObj.save()
+            return JsonResponse({'message': 'Tournament result updated successfully'})
+        else:
+            return JsonResponse({'error': 'Unsupported method'}, status=405)
+
+
 def update_game_result_memory(request):
     if request.method == 'POST':
-        # Parse JSON data from the request body
         data = json.loads(request.body)
-        winner = data.get('winner')
-        # Update the logged-in user's data based on the game result
-        if winner == request.user.username:
-            # Increment the logged-in user's games won count
-            request.user.memory_games_won += 1
-            request.user.memory_win_streak += 1
-            request.user.memory_games_played += 1  # Increment games played
-            request.user.save()
-            return JsonResponse({'message': 'Game result updated successfully'})
-        else:
-            request.user.memory_win_streak = 0
-            request.user.memory_games_played += 1  # Increment games played
-            request.user.save()
-            return JsonResponse({'message': 'Game result updated successfully'})
+        players = data.get('players', [])
+        participants = []
+        for player in players:
+            user = User.objects.filter(display_name=player).first()
+            if user:
+                participants.append(user)
+            else:
+                username = player + '_guest'
+                display_name = player + '_guest'
+                email = player + '@guest.com'
+                user = User.objects.filter(display_name=display_name).first()
+                if user:
+                    participants.append(user)
+                else:
+                    user = User.objects.create_user(username=username, display_name=display_name, email=email)
+
+        tournamentObj = None
+        is_tournament = data.get('tournament')
+        if is_tournament:
+            tournament_id = data.get('tournament_id')
+            if tournament_id:
+                # If tournament ID is provided, retrieve the tournament object
+                try:
+                    tournamentObj = Tournament.objects.get(pk=tournament_id)
+                except Tournament.DoesNotExist:
+                    # Handle the case where the provided tournament ID does not exist
+                    # You may raise an error, return an appropriate response, or handle it as needed
+                    pass
+            else:
+                # If tournament ID is not provided, create a new tournament
+                start_date = datetime.now()
+                # You need to get participants from data or provide it from somewhere
+                participants = data.get('participants', [])
+                tournamentObj = Tournament.objects.create(
+                    start_date=start_date,
+                    number_of_participants=len(participants),
+                    # Set other fields as needed
+                )
+        # Create the Pong game object
+        memory_id = Game.objects.create(
+            is_tournament=data.get('tournament'),
+            memory_game=True,
+            chosen_set=data.get('chosenSet'),
+            number_of_cards=data.get('numberOfCards'),
+            score_winner=data.get('scoreW'),
+            score_loser=data.get('scoreL'),
+            game_date=now(),
+            winner=User.objects.filter(display_name=data.get('winner')).first(),
+            tournament=tournamentObj
+        )
+        memory_id.participants.add(*participants)
+        memory_id.save()
+
+        return JsonResponse({'message': 'Game result updated successfully'})
+    else:
+        # Return error response for unsupported methods
+        return JsonResponse({'error': 'Unsupported method'}, status=405)
+
+
+def start_tournament_memory(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        tournament_name = data.get('tournament_name')
+        start_date = datetime.now()
+
+        # Create the tournament object
+        tournament = Tournament.objects.create(
+            tournament_name=tournament_name,
+            start_date=start_date,
+            number_of_participants=data.get('number_of_participants'),
+            pong_tournament=True
+            # Set other fields as needed
+        )
+        response_data = {
+            'message': 'Tournament started successfully',
+            'tournament_id': tournament.tournament_id
+        }
+        return JsonResponse(response_data)
     else:
         # Return error response for unsupported methods
         return JsonResponse({'error': 'Unsupported method'}, status=405)
@@ -166,9 +337,6 @@ def get_user_statistics(request):
         # Fetch the user's statistics from the database
         user_statistics = {
             'username': request.user.username,
-            'pong_games_played': request.user.pong_games_played,
-            'pong_games_won': request.user.pong_games_won,
-            'pong_win_streak': request.user.pong_win_streak,
             'date_joined': request.user.date_joined.strftime('%Y-%m-%d %H:%M:%S'),
         }
         return JsonResponse(user_statistics)
@@ -238,14 +406,6 @@ def add_users(request):
             "name": fake.first_name(),
             "surname": fake.last_name(),
             "display_name": fake.user_name(),
-            "pong_games_played": random.randint(0, 50),
-            "pong_games_won": random.randint(0, 50),
-            "pong_win_streak": random.randint(0, 20),
-            "pong_tournaments_won": random.randint(0, 5),
-            "memory_games_played": random.randint(0, 50),
-            "memory_games_won": random.randint(0, 50),
-            "memory_win_streak": random.randint(0, 20),
-            "memory_tournaments_won": random.randint(0, 5),
             "date_of_creation": fake.date_time_this_decade().isoformat()
         }
         users_data.append(user_data)
@@ -277,22 +437,60 @@ def scoreboard(request):
     User = get_user_model()
     if request.user.is_authenticated:
         user = User.objects.get(username=request.user)
-        return render(request=request, template_name="scoreboard.html", context={"user": user})
+        pong_games = Game.objects.filter(participants=user, pong_game=True).order_by('game_date')
+        memory_games = Game.objects.filter(participants=user, memory_game=True).order_by('game_date')
+        games_played = Game.objects.filter(participants=user).order_by('-game_date')
+        # Calculate win streak for pong game
+        pong_max_win_streak = calculate_win_streak(pong_games, user)
+
+        # Calculate win streak for memory game
+        memory_max_win_streak = calculate_win_streak(memory_games, user)
+
+        # Count games played and won for both pong and memory games
+        games_played_pong = pong_games.count()
+        games_won_pong = Game.objects.filter(winner=user, pong_game=True).count()
+        games_played_memory = memory_games.count()
+        games_won_memory = Game.objects.filter(winner=user, memory_game=True).count()
+
+        context = {
+            'games_played_pong': games_played_pong,
+            'games_won_pong': games_won_pong,
+            'games_played_memory': games_played_memory,
+            'games_won_memory': games_won_memory,
+            'pong_max_win_streak': pong_max_win_streak,
+            'memory_max_win_streak': memory_max_win_streak,
+            'all_games': games_played
+        }
+        return render(request, 'scoreboard.html', context)
     else:
         messages.error(request, 'You are not signed in! Please sign in to view the scoreboard.')
         return render(request=request, template_name="signIn.html", context={})
 
 
-def get_username(request):
+def calculate_win_streak(games, user):
+    win_streak = 0
+    max_win_streak = 0
+    for game in games:
+        if game.winner == user:
+            win_streak += 1
+            max_win_streak = max(max_win_streak, win_streak)
+        else:
+            win_streak = 0
+    return max_win_streak
+
+
+def get_display_name(request):
     if request.method == 'GET':
         # Assuming the user is authenticated and you want to get the username of the authenticated user
-        username = request.user.username
-        return JsonResponse({'username': username})
+        display_name = request.user.display_name
+        return JsonResponse({'display_name': display_name})
 
 
 def home(request):
     # Retrieve the top three users based on games won
-    top_three_users = User.objects.order_by('-pong_games_won')[:3]
+    # top_three_users = User.objects.order_by('-pong_games_won')[:3]
+    top_three_users = User.objects.order_by('username')[:3]
+
     context = {'top_three_users': top_three_users}
     add_users(request)
     return render(request, 'home.html', context)
