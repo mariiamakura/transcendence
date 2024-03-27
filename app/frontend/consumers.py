@@ -29,6 +29,12 @@ class GameRoomManagerPong:
             return True
         return False
 
+    # @classmethod
+    # def close_empty_rooms(cls):
+    #     empty_rooms = [room_id for room_id, details in cls.rooms.items() if details["guest"] is None and not is_host_active(details["host"])]
+    #     for room_id in empty_rooms:
+    #         del cls.rooms[room_id]
+
 
 class GameRoomManagerMemory:
 
@@ -59,8 +65,8 @@ class KeepAliveConsumer(AsyncWebsocketConsumer):
         super().__init__(*args, **kwargs)
         self.user = None
         self.last_alive_time = datetime.now()
-        self.alive_timeout = 120  # seconds
-        self.check_interval = 10  # seconds
+        self.alive_timeout = 5  # seconds
+        self.check_interval = 1  # seconds
 
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
@@ -73,11 +79,40 @@ class KeepAliveConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'player_left',
+                'channel_name': self.channel_name
+            }
+        )
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
         )
         await self.set_user_online(False)
+        await asyncio.sleep(1)
+        # Check if the disconnecting user is the host of a room and close the room if so
+        if self.user == GameRoomManagerPong.rooms[self.room_name]["host"]:
+            await self.close_room_pong(self.room_name)
+        elif self.user == GameRoomManagerPong.rooms[self.room_name]["guest"]:
+            await self.close_room_pong(self.room_name)
+        elif self.user == GameRoomManagerMemory.rooms[self.room_name]["host"]:
+            await self.close_room_memory(self.room_name)
+        elif self.user == GameRoomManagerMemory.rooms[self.room_name]["guest"]:
+            await self.close_room_memory(self.room_name)
+
+    @database_sync_to_async
+    def close_room_pong(self, room_name):
+        # Logic to close the Pong room
+        if room_name in GameRoomManagerPong.rooms:
+            del GameRoomManagerPong.rooms[room_name]
+
+    @database_sync_to_async
+    def close_room_memory(self, room_name):
+        # Logic to close the Memory room
+        if room_name in GameRoomManagerMemory.rooms:
+            del GameRoomManagerMemory.rooms[room_name]
 
     async def receive(self, text_data):
         data = json.loads(text_data)
@@ -85,7 +120,7 @@ class KeepAliveConsumer(AsyncWebsocketConsumer):
 
         if action == 'alive':
             self.last_alive_time = datetime.now()
-            await asyncio.sleep(5)
+            await asyncio.sleep(1)
             await self.send(text_data=json.dumps({'action': 'keep_alive'}))
 
     async def keep_alive(self, event):
@@ -126,8 +161,21 @@ class GameConsumer(AsyncWebsocketConsumer):
 
         await self.accept()
 
+    # async def disconnect(self, close_code):
+    #     # Leave room group
+    #     await self.channel_layer.group_send(
+    #         self.room_group_name,
+    #         {
+    #             'type': 'player_left',
+    #             'channel_name': self.channel_name
+    #         }
+    #     )
+    #     await self.channel_layer.group_discard(
+    #         self.room_group_name,
+    #         self.channel_name
+    #     )
+
     async def disconnect(self, close_code):
-        # Leave room group
         await self.channel_layer.group_send(
             self.room_group_name,
             {
@@ -139,6 +187,28 @@ class GameConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
+        await self.set_user_online(False)
+
+        if self.user == GameRoomManagerPong.rooms[self.room_name]["host"]:
+            await self.close_room_pong(self.room_name)
+        elif self.user == GameRoomManagerPong.rooms[self.room_name]["guest"]:
+            await self.close_room_pong(self.room_name)
+        elif self.user == GameRoomManagerMemory.rooms[self.room_name]["host"]:
+            await self.close_room_memory(self.room_name)
+        elif self.user == GameRoomManagerMemory.rooms[self.room_name]["guest"]:
+            await self.close_room_memory(self.room_name)
+
+    @database_sync_to_async
+    def close_room_pong(self, room_name):
+        # Logic to close the Pong room
+        if room_name in GameRoomManagerPong.rooms:
+            del GameRoomManagerPong.rooms[room_name]
+
+    @database_sync_to_async
+    def close_room_memory(self, room_name):
+        # Logic to close the Memory room
+        if room_name in GameRoomManagerMemory.rooms:
+            del GameRoomManagerMemory.rooms[room_name]
 
     async def receive(self, text_data):
         data = json.loads(text_data)
@@ -348,6 +418,16 @@ class GameConsumer(AsyncWebsocketConsumer):
                     'score2': data['score2']
                 }
             )
+
+    async def notify_winner(self, event):
+        winner = event['winner']
+        # Assuming `winner` is something you can use to send a message directly to them.
+        # You need to implement the logic to actually send a WebSocket message to the winner.
+        await self.send(text_data=json.dumps({
+            'action': 'game_over',
+            'winner': winner,
+            'message': 'Congratulations! The other player has disconnected, you win!'
+        }))
 
     async def game_ended_memory(self, event):
         await self.send(text_data=json.dumps({

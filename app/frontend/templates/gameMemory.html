@@ -492,6 +492,7 @@ async function remoteHost() {
                     endGameMemory(data.winner);
             }
             gameRoomSocket.onclose = function() {
+                endGameMemory(namePlayer[0]);
                 console.log("Game room connection closed.");
             };
         }
@@ -599,6 +600,10 @@ async function remoteClient() {
             }
             if (data.action === 'game_ended_memory')
                 endGameMemory(data.winner);
+            roomSocket.onclose = function() {
+                endGameMemory(namePlayer[1]);
+                console.log("Game room connection closed.");
+            };
         };
     }
 }

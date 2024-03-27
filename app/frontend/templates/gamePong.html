@@ -434,6 +434,7 @@ async function remoteHost() {
         }
     }
     gameRoomSocket.onclose = function() {
+        endGame(namePlayer[0]);
         console.log("Game room connection closed.");
     };
 }
@@ -493,12 +494,12 @@ async function remoteClient() {
         roomSocket.onmessage = function(event) {
             const data = JSON.parse(event.data);
             if (data.action === 'game_countdown_pong')
-            updateCountdownDisplay(data.message);
-        if (data.action === 'start_game_pong') {
-            console.log('Game is starting...');
-            let countdownElement = document.getElementById('countdown');
-            if (countdownElement) {
-                countdownElement.remove();
+                updateCountdownDisplay(data.message);
+            if (data.action === 'start_game_pong') {
+                console.log('Game is starting...');
+                let countdownElement = document.getElementById('countdown');
+                if (countdownElement) {
+                    countdownElement.remove();
             }
             startTheGamePong();
         }
@@ -536,7 +537,13 @@ async function remoteClient() {
         if (data.type === 'player_left') {
 				console.log('Player left the game');
 			}
-            
+            if (data.type === 'notify_winner') {
+                console.log('The winner is:', data.winner);
+            }
+            roomSocket.onclose = function() {
+                endGame(namePlayer[1]);
+                console.log("Game room connection closed.");
+            };
         };
     }
 }
@@ -727,108 +734,114 @@ function handleResize() {
 
 function update() {
     if (gameEnded === true)
-    return;
-requestAnimationFrame(update);
-context.clearRect(0, 0, board.width, board.height);
-context.fillStyle = "skyblue";
-let newYPosition = player1.y + player1.velocityY;
-if (!outOfBounds(newYPosition))
-player1.y = newYPosition;
-context.fillRect(player1.x, player1.y, player1.width, player1.height);
-let newYPosition2 = player2.y + player2.velocityY;
-if (!outOfBounds(newYPosition2))
-player2.y = newYPosition2;
-context.fillRect(player2.x, player2.y, player2.width, player2.height);
-//ball
-context.beginPath();
-context.arc(ball.x + ball.radius, ball.y + ball.radius, ball.radius, 0, Math.PI * 2);
-context.fillStyle = "white";
-context.fill();
-if (isHost && remote === true){
-    ball.x += ball.velocityX;
-    ball.y += ball.velocityY;
-    gameRoomSocket.send(JSON.stringify({ action: 'update_ball_position_pong', ball_x: ball.x, ball_y: ball.y }));
-    console.log("ball position sent");
-}
-else if (remote === true) {
-    ball.x = newBall.x;
-    ball.y = newBall.y;
-}
-else if (local === true) {
-    ball.x += ball.velocityX;
-    ball.y += ball.velocityY;
-}
-if (ball.y <= 0 || ball.y + ball.height >= board.height) {
-    ball.velocityY *= -1;
-}
-checkCollision(ball.y, ball.x);
-if (isHost && remote == true)
-{
-    if (ball.x < 0) {
-        player2Score++;
-        if (player2Score >= scoreToDo){
-            endGame(player2.name);
-            gameRoomSocket.send(JSON.stringify({ action: 'game_ended_pong', winner: player2.name}));
-        }
-        else
-        resetGame(1);
-} 
-else if (ball.x + ball.width > board.width) {
-    player1Score++;
-    if (player1Score >= scoreToDo){
-        endGame(player1.name);
-        gameRoomSocket.send(JSON.stringify({ action: 'game_ended_pong', winner: player1.name}));
+        return;
+    requestAnimationFrame(update);
+    context.clearRect(0, 0, board.width, board.height);
+    context.fillStyle = "skyblue";
+    let newYPosition = player1.y + player1.velocityY;
+    if (!outOfBounds(newYPosition))
+        player1.y = newYPosition;
+    context.fillRect(player1.x, player1.y, player1.width, player1.height);
+    let newYPosition2 = player2.y + player2.velocityY;
+    if (!outOfBounds(newYPosition2))
+        player2.y = newYPosition2;
+    context.fillRect(player2.x, player2.y, player2.width, player2.height);
+    //ball
+    context.beginPath();
+    context.arc(ball.x + ball.radius, ball.y + ball.radius, ball.radius, 0, Math.PI * 2);
+    context.fillStyle = "white";
+    context.fill();
+    if (isHost && remote === true){
+        ball.x += ball.velocityX;
+        ball.y += ball.velocityY;
+        gameRoomSocket.send(JSON.stringify({ action: 'update_ball_position_pong', ball_x: ball.x, ball_y: ball.y }));
+        // console.log("ball position sent");
     }
-    else
-    resetGame(-1);
-}
-gameRoomSocket.send(JSON.stringify({ action: 'update_player_scores_pong', player1: player1Score, player2: player2Score }));
-console.log("player scores sent");
-}
-else if (remote === true) {
-    player1Score = newPlayer1Score;
-    player2Score = newPlayer2Score;
-}
-else if (local === true)
-{
-    if (ball.x < 0) {
-        player2Score++;
-        if (player2Score >= scoreToDo)
-        endGame(player2.name);
-    else
-    resetGame(1);
-} 
-else if (ball.x + ball.width > board.width) {
-    player1Score++;
-    if (player1Score >= scoreToDo)
-    endGame(player1.name);
-else
-resetGame(-1);
-}
-}
-context.font = "45px sans-serif";
-context.fillText(player1Score, boardWidth / 5, 45);
-context.fillText(player2Score, boardWidth * 4/5 -45, 45);
-for (let i = 0; i < board.height; i += 25) {
-    context.fillRect(board.width / 2 - 10, i, 5, 5);
-}
+    else if (remote === true) {
+        ball.x = newBall.x;
+        ball.y = newBall.y;
+    }
+    else if (local === true) {
+        ball.x += ball.velocityX;
+        ball.y += ball.velocityY;
+    }
+    if (ball.y <= 0 || ball.y + ball.height >= board.height) {
+        ball.velocityY *= -1;
+    }
+    checkCollision(ball.y, ball.x);
+    if (isHost && remote == true)
+    {
+        if (ball.x < 0) {
+            player2Score++;
+            if (player2Score >= scoreToDo){
+                endGame(player2.name);
+                gameRoomSocket.send(JSON.stringify({ action: 'game_ended_pong', winner: player2.name}));
+            }
+            else
+                resetGame(1);
+        } 
+        else if (ball.x + ball.width > board.width) {
+            player1Score++;
+            if (player1Score >= scoreToDo){
+                endGame(player1.name);
+                gameRoomSocket.send(JSON.stringify({ action: 'game_ended_pong', winner: player1.name}));
+            }
+            else
+                resetGame(-1);
+        }
+        gameRoomSocket.send(JSON.stringify({ action: 'update_player_scores_pong', player1: player1Score, player2: player2Score }));
+        // console.log("player scores sent");
+    }
+    else if (remote === true) {
+        player1Score = newPlayer1Score;
+        player2Score = newPlayer2Score;
+    }
+    else if (local === true)
+    {
+        if (ball.x < 0) {
+            player2Score++;
+            if (player2Score >= scoreToDo)
+                endGame(player2.name);
+            else
+                resetGame(1);
+            } 
+        else if (ball.x + ball.width > board.width) {
+            player1Score++;
+            if (player1Score >= scoreToDo)
+                endGame(player1.name);
+            else
+                resetGame(-1);
+        }
+    }
+    context.font = "45px sans-serif";
+    context.fillText(player1Score, boardWidth / 5, 45);
+    context.fillText(player2Score, boardWidth * 4/5 -45, 45);
+    for (let i = 0; i < board.height; i += 25) {
+        context.fillRect(board.width / 2 - 10, i, 5, 5);
+    }
 }
 
 function checkCollision(ballY, ballX) {
-    ballX -= 5;
+    // ballX -= 5;
     let LoclPad1XPos = player1.x + player1.width / 2;
     let distance1 = Math.abs(ballX - LoclPad1XPos);
     
     if (distance1 < 5 && ballY > (player1.y - playerWidth) && player1.y + player1.height + playerWidth > ballY) {
         ball.velocityX *= -1; // Reverse the x velocity
+		if (ballY <= player1.y || ballY >= player1.y + player1.height) {
+            ball.velocityY *= -1; // Reverse the y velocity
+        }
     }
     
-    ballX += 10;
-    let LoclPad2XPos = player2.x;
+    ballX += 5;
+    let LoclPad2XPos = player2.x - player2.width / 2;
     let distance2 = Math.abs(ballX - LoclPad2XPos);
     
     if (distance2 < 5 && ballY > (player2.y - playerWidth) && player2.y + player2.height + playerWidth > ballY) {
         ball.velocityX *= -1; // Reverse the x velocity
+		if (ballY <= player2.y || ballY >= player2.y + player2.height) {
+            ball.velocityY *= -1; // Reverse the y velocity
+        }
     }
 }
 

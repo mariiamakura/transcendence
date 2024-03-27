@@ -1,7 +1,9 @@
 # In your app's views.py file
-
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model, login, logout, authenticate
+from django.contrib.auth.hashers import make_password, check_password, is_password_usable
 from django.core.files.storage import FileSystemStorage
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
@@ -35,8 +37,13 @@ def signUp(request):
         email = request.POST.get('email', '')
         password1 = request.POST.get('password1', '')
         password2 = request.POST.get('password2', '')
-        if password1 != password2:
+        if password1 != password2 or password1 == '' or password2 == '':
             messages.error(request, 'Passwords do not match')
+            return render(request=request, template_name="signUp.html", context={})
+        try:
+            validate_password(password1)
+        except ValidationError as e:
+            messages.error(request, e.messages)
             return render(request=request, template_name="signUp.html", context={})
         try:
             user = User.objects.create_user(username=username, email=email, password=password1, display_name=display_name)
@@ -50,6 +57,40 @@ def signUp(request):
             messages.error(request, 'Failed to create user: User or Email already exists')
             return render(request=request, template_name="signUp.html", context={})
     return render(request=request, template_name="signUp.html", context={})
+# def signUp(request):
+#     User = get_user_model()
+#     ph = PasswordHasher()
+
+#     if request.user.is_authenticated:
+#         return render(request=request, template_name="home.html")
+
+#     if request.method == 'POST':
+#         username = request.POST.get('username', '')
+#         display_name = request.POST.get('username', '')
+#         email = request.POST.get('email', '')
+#         password1 = request.POST.get('password1', '')
+#         password2 = request.POST.get('password2', '')
+#         if password1 != password2 or password1 == '' or password2 == '':
+#             messages.error(request, 'Passwords do not match')
+#             return render(request=request, template_name="signUp.html", context={})
+#         try:
+#             validate_password(password1)
+#         except ValidationError as e:
+#             messages.error(request, e.messages)
+#             return render(request=request, template_name="signUp.html", context={})
+#         try:
+#             hashed_password = ph.hash(password1)
+#             user = User.objects.create_user(username=username, email=email, password=hashed_password, display_name=display_name)
+#             user = authenticate(username=username, password=password1)
+#             if user is not None:
+#                 login(request, user)
+#                 request.user.online = True
+#                 request.user.save()
+#             return redirect("/")
+#         except Exception:
+#             messages.error(request, 'Failed to create user: User or Email already exists')
+#             return render(request=request, template_name="signUp.html", context={})
+#     return render(request=request, template_name="signUp.html", context={})
 
 
 def signIn(request):
@@ -488,7 +529,8 @@ def callback(request):
             print(user_info)
 
             username = user_info['login']
-            password1 = user_info['login']
+            # password1 = user_info['login']
+            password1 = User.objects.make_random_password(length=20)
             email = user_info['email']
             avatar_url = user_info['image']['link']
             surename = user_info['last_name']
