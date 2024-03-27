@@ -18,7 +18,7 @@ from faker import Faker
 import random
 from django.utils.translation import gettext, activate, get_language
 from django.utils import translation
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 
 
 def signUp(request):
@@ -65,38 +65,23 @@ def signIn(request):
 
             login(request, user)
             request.user.online = True
+            print(user.language)
+            request.session['user_language'] = user.language
+            translation.override(user.language)
             translation.activate(user.language)
+            response = HttpResponseRedirect("/")
+            user_language = user.language
+            response.set_cookie(settings.LANGUAGE_COOKIE_NAME, user_language)
             request.user.save()
 
-            # user_ = User.objects.get(username=request.user)
-            # user_.online = True
-            # user_.save()
+            return response
+            # return redirect("/")
 
-            return redirect("/")
         else:
             message = gettext('Sign in failed. Please check your Intraname and password.')
             messages.error(request, message)
             return render(request=request, template_name="signIn.html", context={})
     return render(request=request, template_name="signIn.html", context={})
-
-
-# @csrf_exempt
-# def switch_language(request):
-#     if request.method == 'POST':
-#         # data = json.loads(request.body)
-#         # lang_code = data.get('langCode')  # Default to English if no language is provided
-#         # request.session['django_language'] = lang_code
-
-#         activate('ko')
-#         context = {'language_code': 'ko'}  # Add language code to context
-#         print(get_language())
-#         return render(request, 'home.html', context)
-#         # Redirect the user back to the page where the language switch occurred
-#         # return HttpResponse(status=204)
-#         # return redirect(request.META.get('HTTP_REFERER'))
-#     else:
-#         # Handle potential errors or invalid requests (optional)
-#         return HttpResponseBadRequest()
 
 
 def update_game_result_pong(request):
@@ -192,8 +177,10 @@ def editProfile(request):
                 user.email = request.POST.get('email')
             if request.POST.get('language') != "":
                 user.language = request.POST.get('language')
+                request.session['user_language'] = user.language
                 user.save()
                 # Activate the selected language for the current session
+                translation.override(user.language)
                 translation.activate(user.language)
 
             user.save()
