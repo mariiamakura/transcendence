@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils.translation import gettext
 import secrets
 
 # Create your models here.
@@ -13,6 +14,13 @@ class User(AbstractUser):
     name = models.CharField(max_length=50, default='Name')
     surname = models.CharField(max_length=50, default='Surname')
     email = models.EmailField(max_length=100, unique=True)
+    LANGUAGES = (
+        ('en', gettext('English')),
+        ('ko', gettext('Korean')),
+        ('fr', gettext('French')),
+        ('uk', gettext('Ukrainian')),
+    )
+    language = models.CharField(max_length=10, choices=LANGUAGES, default='en')
     # birthdate = models.DateField(default='2000-01-01')
     # password_hash = models.CharField(max_length=255)
     pong_games_played = models.IntegerField(default=0)

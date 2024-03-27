@@ -17,6 +17,7 @@ from database.models import User
 from faker import Faker
 import random
 from django.utils.translation import gettext, activate, get_language
+from django.utils import translation
 from django.http import HttpResponse, HttpResponseBadRequest
 
 
@@ -64,6 +65,7 @@ def signIn(request):
 
             login(request, user)
             request.user.online = True
+            translation.activate(user.language)
             request.user.save()
 
             # user_ = User.objects.get(username=request.user)
@@ -78,23 +80,23 @@ def signIn(request):
     return render(request=request, template_name="signIn.html", context={})
 
 
-@csrf_exempt
-def switch_language(request):
-    if request.method == 'POST':
-        # data = json.loads(request.body)
-        # lang_code = data.get('langCode')  # Default to English if no language is provided
-        # request.session['django_language'] = lang_code
+# @csrf_exempt
+# def switch_language(request):
+#     if request.method == 'POST':
+#         # data = json.loads(request.body)
+#         # lang_code = data.get('langCode')  # Default to English if no language is provided
+#         # request.session['django_language'] = lang_code
 
-        activate('ko')
-        context = {'language_code': 'ko'}  # Add language code to context
-        print(get_language())
-        return render(request, 'home.html', context)
-        # Redirect the user back to the page where the language switch occurred
-        # return HttpResponse(status=204)
-        # return redirect(request.META.get('HTTP_REFERER'))
-    else:
-        # Handle potential errors or invalid requests (optional)
-        return HttpResponseBadRequest()
+#         activate('ko')
+#         context = {'language_code': 'ko'}  # Add language code to context
+#         print(get_language())
+#         return render(request, 'home.html', context)
+#         # Redirect the user back to the page where the language switch occurred
+#         # return HttpResponse(status=204)
+#         # return redirect(request.META.get('HTTP_REFERER'))
+#     else:
+#         # Handle potential errors or invalid requests (optional)
+#         return HttpResponseBadRequest()
 
 
 def update_game_result_pong(request):
@@ -188,9 +190,11 @@ def editProfile(request):
                 user.surname = request.POST.get('surname')
             if request.POST.get('email') != "":
                 user.email = request.POST.get('email')
-
-            if request.POST.get('birthdate') != "":
-                user.birthdate = request.POST.get('birthdate')
+            if request.POST.get('language') != "":
+                user.language = request.POST.get('language')
+                user.save()
+                # Activate the selected language for the current session
+                translation.activate(user.language)
 
             user.save()
             return render(request=request, template_name="profile.html", context={"user": user})

@@ -23,6 +23,19 @@
             <label for="inputEmail">{% trans "Email address" %}</label>
             <input type="email" class="form-control" id="inputEmail" placeholder="{% trans 'Enter email' %}" name="email" />
           </div>
+          <div class="form-group">
+            <label for="language-select">{% trans "Language" %}</label>
+            <select name="language" id="language-select" class="form-control">
+              {% get_current_language as LANGUAGE_CODE %}
+              {% get_available_languages as LANGUAGES %}
+              {% get_language_info_list for LANGUAGES as languages %}
+              {% for language in languages %}
+                <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %} selected {% endif %}>
+                  {{ language.name_translated }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
           <!-- <div class="form-group">
             <label for="inputBirthDate">Birth Date</label>
             <input type="date" class="form-control" id="inputBirthDate" placeholder="Enter your birth date" name="birthdate" />

@@ -15,7 +15,6 @@
     <script src="{% static "setMemoryGames.js" %}" defer></script>
 	<script src="{% static "profile.js" %}" defer></script>
     <script src="{% static "score.js" %}" defer></script>
-    <script src="{% static "language_switch.js" %}" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
@@ -35,19 +34,18 @@
             <form action="{% url 'set_language' %}" method="post">
                 {% csrf_token %}
                 <div class="dropdown">
-                  <select name="language" class="dropbtn">
+                  <select name="language" class="dropbtn" onchange="this.form.submit()">
                     {% get_current_language as LANGUAGE_CODE %}
                     {% get_available_languages as LANGUAGES %}
                     {% get_language_info_list for LANGUAGES as languages %}
                     {% for language in languages %}
                       <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %} selected {% endif %}>
-                        {{ language.name_local }} ({{ language.code }})
+                        {{ language.name_local }}
                       </option>
                     {% endfor %}
                   </select>
                 </div>
-                <input type="submit" value="Go" class="submit-btn">
-            </form>
+              </form>
             <!-- <script src="{% static '../statics/language_switch.js' %}"></script> -->
             <li><a class="nav-link" href="showHome">{% trans "Home" %}</a></li>
                     <li>
