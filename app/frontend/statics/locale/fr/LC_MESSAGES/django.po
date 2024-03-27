@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-25 20:30+0100\n"
+"POT-Creation-Date: 2024-03-27 16:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,23 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: database/models.py:18
+msgid "English"
+msgstr "Anglais"
+
+#: database/models.py:19
+msgid "Korean"
+msgstr "Coréen"
+
+#: database/models.py:20
+msgid "French"
+msgstr "Français"
+
+#: database/models.py:21
+msgid "Ukrainian"
+msgstr "Ukrainien"
+
 #: frontend/templates/changeAvatar.html:12
 msgid "Avatar URL:"
 msgstr "URL de l'avatar :"
@@ -41,15 +58,15 @@ msgstr "Changer d'avatar"
 msgid "PongChat, the best chat in the world"
 msgstr "PongChat, le meilleur chat du monde"
 
-#: frontend/templates/chat.html:53 frontend/templates/home.html:42
-#: frontend/templates/index.html:54 frontend/templates/profile.html:50
+#: frontend/templates/chat.html:53 frontend/templates/home.html:43
+#: frontend/templates/index.html:70 frontend/templates/profile.html:51
 #: frontend/templates/signIn.html:7 frontend/templates/signIn.html:27
 #: frontend/templates/signUp.html:36
 msgid "Sign In"
 msgstr "Se connecter"
 
-#: frontend/templates/chat.html:56 frontend/templates/home.html:43
-#: frontend/templates/index.html:57 frontend/templates/profile.html:53
+#: frontend/templates/chat.html:56 frontend/templates/home.html:44
+#: frontend/templates/index.html:73 frontend/templates/profile.html:54
 #: frontend/templates/signIn.html:48 frontend/templates/signUp.html:7
 #: frontend/templates/signUp.html:33
 msgid "Sign Up"
@@ -91,7 +108,11 @@ msgstr "Adresse e-mail"
 msgid "Enter email"
 msgstr "Entrez votre adresse e-mail"
 
-#: frontend/templates/editProfile.html:30
+#: frontend/templates/editProfile.html:27
+msgid "Language"
+msgstr "Langue"
+
+#: frontend/templates/editProfile.html:43
 msgid "Save Profile"
 msgstr "Enregistrer le profil"
 
@@ -99,35 +120,64 @@ msgstr "Enregistrer le profil"
 msgid "Memoryyyyyyyy"
 msgstr "Mémoire"
 
-#: frontend/templates/gameMemory.html:14 frontend/templates/index.html:40
+#: frontend/templates/gameMemory.html:14 frontend/templates/index.html:56
 msgid "Memory"
 msgstr "Mémoire"
+
+#: frontend/templates/gameMemory.html:30 frontend/templates/gamePong.html:27
+#: frontend/templates/gamePong.html:57
+msgid "Which type of game do you wanna play"
+msgstr "Quel type de jeu voulez-vous jouer"
+
+#: frontend/templates/gameMemory.html:33 frontend/templates/gamePong.html:60
+msgid "Create New Game"
+msgstr "Créer un nouveau jeu"
+
+#: frontend/templates/gameMemory.html:34
+msgid "Join Existing Game"
+msgstr "Rejoindre un jeu existant"
 
 #: frontend/templates/gamePong.html:8
 msgid "Games like back in the 80's"
 msgstr "Jeux comme dans les années 80"
 
-#: frontend/templates/home.html:13
+#: frontend/templates/gamePong.html:30
+msgid "Play local Game"
+msgstr "Jouer en local"
+
+#: frontend/templates/gamePong.html:31
+msgid "Play remote Game"
+msgstr "Jouer à distance"
+
+#: frontend/templates/gamePong.html:84
+msgid "How many players do you want to be"
+msgstr "Combien de joueurs souhaitez-vous être"
+
+#: frontend/templates/gamePong.html:87
+msgid "players"
+msgstr "joueurs"
+
+#: frontend/templates/home.html:14
 msgid "Welcome"
 msgstr "Bienvenue"
 
-#: frontend/templates/home.html:14
+#: frontend/templates/home.html:15
 msgid "You are now logged in."
 msgstr "Vous êtes maintenant connecté."
 
-#: frontend/templates/home.html:21
+#: frontend/templates/home.html:22
 msgid "Ranking"
 msgstr "Classement"
 
-#: frontend/templates/home.html:39
+#: frontend/templates/home.html:40
 msgid "Welcome!"
 msgstr "Bienvenue !"
 
-#: frontend/templates/home.html:40
+#: frontend/templates/home.html:41
 msgid "Please sign in or sign up to continue..."
 msgstr "Veuillez vous connecter ou vous inscrire pour continuer..."
 
-#: frontend/templates/home.html:53 frontend/templates/signIn.html:45
+#: frontend/templates/home.html:54 frontend/templates/signIn.html:45
 msgid "SignIn with 42"
 msgstr "Connexion avec 42"
 
@@ -139,31 +189,31 @@ msgstr "Pong - Le tournoi ultime"
 msgid "42 Pong"
 msgstr "42 Pong"
 
-#: frontend/templates/index.html:34
+#: frontend/templates/index.html:50
 msgid "Home"
 msgstr "Accueil"
 
-#: frontend/templates/index.html:37
+#: frontend/templates/index.html:53
 msgid "Games"
 msgstr "Jeux"
 
-#: frontend/templates/index.html:39
+#: frontend/templates/index.html:55
 msgid "Pong"
 msgstr "Pong"
 
-#: frontend/templates/index.html:44
+#: frontend/templates/index.html:60
 msgid "Scoreboard"
 msgstr "Classement"
 
-#: frontend/templates/index.html:47 frontend/templates/profile.html:8
+#: frontend/templates/index.html:63 frontend/templates/profile.html:8
 msgid "Profile"
 msgstr "Profil"
 
-#: frontend/templates/index.html:50
+#: frontend/templates/index.html:66
 msgid "Sign Out"
 msgstr "Déconnexion"
 
-#: frontend/templates/index.html:74
+#: frontend/templates/index.html:90
 msgid "This website has been created for the last project of 42 by:"
 msgstr "Ce site web a été créé pour le dernier projet de 42 par :"
 
@@ -207,7 +257,11 @@ msgstr "Nom de famille :"
 msgid "Birthdate:"
 msgstr "Date de naissance :"
 
-#: frontend/templates/profile.html:43
+#: frontend/templates/profile.html:36
+msgid "Language:"
+msgstr "Langue:"
+
+#: frontend/templates/profile.html:44
 msgid "Edit Profile"
 msgstr "Modifier le profil"
 
@@ -296,46 +350,46 @@ msgstr "Confirmez le mot de passe"
 msgid "Already have an account?"
 msgstr "Vous avez déjà un compte ?"
 
-#: frontend/views.py:35
+#: frontend/views.py:37
 msgid "Passwords do not match"
 msgstr "Les mots de passe ne correspondent pas"
 
-#: frontend/views.py:47
+#: frontend/views.py:49
 msgid "Failed to create user: User or Email already exists"
 msgstr "Impossible de créer l'utilisateur : l'utilisateur ou l'e-mail existe déjà"
 
-#: frontend/views.py:74
+#: frontend/views.py:80
 msgid "Sign in failed. Please check your Intraname and password."
 msgstr "La connexion a échoué. Veuillez vérifier votre nom interne et votre mot de passe."
 
-#: frontend/views.py:148
+#: frontend/views.py:158
 msgid "Logout successful"
 msgstr "Déconnexion réussie"
 
-#: frontend/views.py:153
+#: frontend/views.py:163
 msgid "Something went wrong! Are you signed in?"
 msgstr "Quelque chose s'est mal passé ! Êtes-vous connecté ?"
 
-#: frontend/views.py:179 frontend/views.py:377
+#: frontend/views.py:193 frontend/views.py:391
 msgid "You are not signed in! Please sign in to edit your profile."
 msgstr "Vous n'êtes pas connecté ! Veuillez vous connecter pour modifier votre profil."
 
-#: frontend/views.py:191
+#: frontend/views.py:205
 msgid "You are not signed in! Please sign in to view your profile."
 msgstr "Vous n'êtes pas connecté ! Veuillez vous connecter pour voir votre profil."
 
-#: frontend/views.py:236
+#: frontend/views.py:250
 msgid "You are not signed in! Please sign in to view the home page."
 msgstr "Vous n'êtes pas connecté ! Veuillez vous connecter pour voir la page d'accueil."
 
-#: frontend/views.py:272
+#: frontend/views.py:286
 msgid "You are not signed in! Please sign in to play the game."
 msgstr "Vous n'êtes pas connecté ! Veuillez vous connecter pour jouer au jeu."
 
-#: frontend/views.py:329
+#: frontend/views.py:343
 msgid "Failed to authenticate user. Please try again."
 msgstr "Échec de l'authentification de l'utilisateur. Veuillez réessayer."
 
-#: frontend/views.py:333
+#: frontend/views.py:347
 msgid "Failed to reach API. Please try again."
 msgstr "Impossible de joindre l'API. Veuillez réessayer."

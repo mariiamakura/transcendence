@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-25 20:30+0100\n"
+"POT-Creation-Date: 2024-03-27 16:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,23 @@ msgstr ""
 "11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
 "100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
 "(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+
+#: database/models.py:18
+msgid "English"
+msgstr "Англійська"
+
+#: database/models.py:19
+msgid "Korean"
+msgstr "Корейська"
+
+#: database/models.py:20
+msgid "French"
+msgstr "Французька"
+
+#: database/models.py:21
+msgid "Ukrainian"
+msgstr "Українська"
+
 #: frontend/templates/changeAvatar.html:12
 msgid "Avatar URL:"
 msgstr "URL аватара:"
@@ -44,15 +61,15 @@ msgstr "Змінити аватар"
 msgid "PongChat, the best chat in the world"
 msgstr "PongChat, найкращий чат у світі"
 
-#: frontend/templates/chat.html:53 frontend/templates/home.html:42
-#: frontend/templates/index.html:54 frontend/templates/profile.html:50
+#: frontend/templates/chat.html:53 frontend/templates/home.html:43
+#: frontend/templates/index.html:70 frontend/templates/profile.html:51
 #: frontend/templates/signIn.html:7 frontend/templates/signIn.html:27
 #: frontend/templates/signUp.html:36
 msgid "Sign In"
 msgstr "Увійти"
 
-#: frontend/templates/chat.html:56 frontend/templates/home.html:43
-#: frontend/templates/index.html:57 frontend/templates/profile.html:53
+#: frontend/templates/chat.html:56 frontend/templates/home.html:44
+#: frontend/templates/index.html:73 frontend/templates/profile.html:54
 #: frontend/templates/signIn.html:48 frontend/templates/signUp.html:7
 #: frontend/templates/signUp.html:33
 msgid "Sign Up"
@@ -94,7 +111,11 @@ msgstr "Електронна адреса"
 msgid "Enter email"
 msgstr "Введіть електронну адресу"
 
-#: frontend/templates/editProfile.html:30
+#: frontend/templates/editProfile.html:27
+msgid "Language"
+msgstr "Мова"
+
+#: frontend/templates/editProfile.html:43
 msgid "Save Profile"
 msgstr "Зберегти профіль"
 
@@ -102,73 +123,102 @@ msgstr "Зберегти профіль"
 msgid "Memoryyyyyyyy"
 msgstr "Пам'ять"
 
-#: frontend/templates/gameMemory.html:14 frontend/templates/index.html:40
+#: frontend/templates/gameMemory.html:14 frontend/templates/index.html:56
 msgid "Memory"
 msgstr "Пам'ять"
 
+#: frontend/templates/gameMemory.html:30 frontend/templates/gamePong.html:27
+#: frontend/templates/gamePong.html:57
+msgid "Which type of game do you wanna play"
+msgstr "Який тип гри ви хочете грати"
+
+#: frontend/templates/gameMemory.html:33 frontend/templates/gamePong.html:60
+msgid "Create New Game"
+msgstr "Створити нову гру"
+
+#: frontend/templates/gameMemory.html:34
+msgid "Join Existing Game"
+msgstr "Приєднатися до існуючої гри"
+
 #: frontend/templates/gamePong.html:8
 msgid "Games like back in the 80's"
-msgstr ""
+msgstr "Ігри, схожі на ті, що були в 80-х роках"
 
-#: frontend/templates/home.html:13
+#: frontend/templates/gamePong.html:30
+msgid "Play local Game"
+msgstr "Грати в місцеву гру"
+
+#: frontend/templates/gamePong.html:31
+msgid "Play remote Game"
+msgstr "Грати віддалену гру"
+
+#: frontend/templates/gamePong.html:84
+msgid "How many players do you want to be"
+msgstr "Скільки гравців ви хочете бути"
+
+#: frontend/templates/gamePong.html:87
+msgid "players"
+msgstr "гравців"
+
+#: frontend/templates/home.html:14
 msgid "Welcome"
 msgstr "Ласкаво просимо"
 
-#: frontend/templates/home.html:14
+#: frontend/templates/home.html:15
 msgid "You are now logged in."
 msgstr "Ви увійшли в систему."
 
-#: frontend/templates/home.html:21
+#: frontend/templates/home.html:22
 msgid "Ranking"
 msgstr "Рейтинг"
 
-#: frontend/templates/home.html:39
+#: frontend/templates/home.html:40
 msgid "Welcome!"
 msgstr "Ласкаво просимо!"
 
-#: frontend/templates/home.html:40
+#: frontend/templates/home.html:41
 msgid "Please sign in or sign up to continue..."
 msgstr "Будь ласка, увійдіть або зареєструйтесь, щоб продовжити..."
 
-#: frontend/templates/home.html:53 frontend/templates/signIn.html:45
+#: frontend/templates/home.html:54 frontend/templates/signIn.html:45
 msgid "SignIn with 42"
-msgstr ""
+msgstr "Увійти з 42"
 
 #: frontend/templates/index.html:8
 msgid "Pong - The ultimate tournament"
-msgstr ""
+msgstr "Понг - останній турнір"
 
 #: frontend/templates/index.html:30
 msgid "42 Pong"
-msgstr ""
+msgstr "42 Понг"
 
-#: frontend/templates/index.html:34
+#: frontend/templates/index.html:50
 msgid "Home"
-msgstr ""
+msgstr "Головна"
 
-#: frontend/templates/index.html:37
+#: frontend/templates/index.html:53
 msgid "Games"
 msgstr "Ігри"
 
-#: frontend/templates/index.html:39
+#: frontend/templates/index.html:55
 msgid "Pong"
-msgstr ""
+msgstr "Понг"
 
-#: frontend/templates/index.html:44
+#: frontend/templates/index.html:60
 msgid "Scoreboard"
 msgstr "Таблиця"
 
-#: frontend/templates/index.html:47 frontend/templates/profile.html:8
+#: frontend/templates/index.html:63 frontend/templates/profile.html:8
 msgid "Profile"
 msgstr "Профіль"
 
-#: frontend/templates/index.html:50
+#: frontend/templates/index.html:66
 msgid "Sign Out"
 msgstr "Вийти"
 
-#: frontend/templates/index.html:74
+#: frontend/templates/index.html:90
 msgid "This website has been created for the last project of 42 by:"
-msgstr ""
+msgstr "Цей вебсайт був створений для останнього проекту 42:"
 
 #: frontend/templates/profile.html:10
 msgid "Show Friendlist"
@@ -210,7 +260,11 @@ msgstr "Прізвище:"
 msgid "Birthdate:"
 msgstr "Дата народження:"
 
-#: frontend/templates/profile.html:43
+#: frontend/templates/profile.html:36
+msgid "Language:"
+msgstr "Мова:"
+
+#: frontend/templates/profile.html:44
 msgid "Edit Profile"
 msgstr "Редагувати профіль"
 
@@ -244,101 +298,101 @@ msgstr "Пам'ять:"
 
 #: frontend/templates/showFriends.html:8
 msgid "Friendlist"
-msgstr ""
+msgstr "Список друзів"
 
 #: frontend/templates/showFriends.html:25
 msgid "Online"
-msgstr ""
+msgstr "Онлайн"
 
 #: frontend/templates/showFriends.html:27
 msgid "Offline"
-msgstr ""
+msgstr "Офлайн"
 
 #: frontend/templates/showFriends.html:34
 msgid "Remove Selected Friends"
-msgstr ""
+msgstr "Видалити обраних друзів"
 
 #: frontend/templates/showFriends.html:37
 msgid "You have no friends yet."
-msgstr ""
+msgstr "Ви ще не маєте друзів."
 
 #: frontend/templates/showFriends.html:42
 msgid "Search for users..."
-msgstr ""
+msgstr "Шукати користувачів..."
 
 #: frontend/templates/showFriends.html:43
 msgid "Search"
-msgstr ""
+msgstr "Пошук"
 
 #: frontend/templates/signIn.html:18 frontend/templates/signUp.html:18
 msgid "Intraname"
-msgstr ""
+msgstr "Ім'я користувача"
 
 #: frontend/templates/signIn.html:19 frontend/templates/signUp.html:19
 msgid "Enter Intraname"
-msgstr ""
+msgstr "Введіть ім'я користувача"
 
 #: frontend/templates/signIn.html:23 frontend/templates/signIn.html:24
 #: frontend/templates/signUp.html:22 frontend/templates/signUp.html:23
 msgid "Password"
-msgstr ""
+msgstr "Пароль"
 
 #: frontend/templates/signIn.html:48
 msgid "Don't have an account?"
-msgstr ""
+msgstr "Не маєте облікового запису?"
 
 #: frontend/templates/signUp.html:26
 msgid "Confirm Password"
-msgstr ""
+msgstr "Підтвердіть пароль"
 
 #: frontend/templates/signUp.html:27
 msgid "Confirm password"
-msgstr ""
+msgstr "Підтвердіть пароль"
 
 #: frontend/templates/signUp.html:36
 msgid "Already have an account?"
-msgstr ""
+msgstr "Вже маєте обліковий запис?"
 
-#: frontend/views.py:35
+#: frontend/views.py:37
 msgid "Passwords do not match"
-msgstr ""
+msgstr "Паролі не співпадають"
 
-#: frontend/views.py:47
+#: frontend/views.py:49
 msgid "Failed to create user: User or Email already exists"
-msgstr ""
+msgstr "Не вдалося створити користувача: користувач або електронна пошта вже існує"
 
-#: frontend/views.py:74
+#: frontend/views.py:80
 msgid "Sign in failed. Please check your Intraname and password."
-msgstr ""
+msgstr "Не вдалося увійти. Будь ласка, перевірте своє ім'я користувача та пароль."
 
-#: frontend/views.py:148
+#: frontend/views.py:158
 msgid "Logout successful"
-msgstr ""
+msgstr "Вихід виконано успішно"
 
-#: frontend/views.py:153
+#: frontend/views.py:163
 msgid "Something went wrong! Are you signed in?"
-msgstr ""
+msgstr "Виникла помилка! Ви увійшли?"
 
-#: frontend/views.py:179 frontend/views.py:377
+#: frontend/views.py:193 frontend/views.py:391
 msgid "You are not signed in! Please sign in to edit your profile."
-msgstr ""
+msgstr "Ви не увійшли! Будь ласка, увійдіть, щоб редагувати свій профіль."
 
-#: frontend/views.py:191
+#: frontend/views.py:205
 msgid "You are not signed in! Please sign in to view your profile."
-msgstr ""
+msgstr "Ви не увійшли! Будь ласка, увійдіть, щоб переглянути свій профіль."
 
-#: frontend/views.py:236
+#: frontend/views.py:250
 msgid "You are not signed in! Please sign in to view the home page."
-msgstr ""
+msgstr "Ви не увійшли! Будь ласка, увійдіть, щоб переглянути домашню сторінку."
 
-#: frontend/views.py:272
+#: frontend/views.py:286
 msgid "You are not signed in! Please sign in to play the game."
-msgstr ""
+msgstr "Ви не увійшли! Будь ласка, увійдіть, щоб почати гру."
 
-#: frontend/views.py:329
+#: frontend/views.py:343
 msgid "Failed to authenticate user. Please try again."
-msgstr ""
+msgstr "Не вдалося автентифікувати користувача. Будь ласка, спробуйте ще раз."
 
-#: frontend/views.py:333
+#: frontend/views.py:347
 msgid "Failed to reach API. Please try again."
-msgstr ""
+msgstr "Не вдалося з'єднатися з API. Будь ласка, спробуйте ще раз."

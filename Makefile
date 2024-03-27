@@ -31,7 +31,7 @@ compile_messages:
 
 messages:
 	docker compose -f docker-compose.yml up --build -d 
-	docker compose -f docker-compose.yml exec web python manage.py makemessages -l en -l es -l ko -l ru -l fr -l uk
+	docker compose -f docker-compose.yml exec web python manage.py makemessages -l ko -l fr -l uk
 	docker compose -f docker-compose.yml exec web python manage.py collectstatic --no-input --clear
 	docker compose -f docker-compose.yml exec web python manage.py makemigrations
 	docker compose -f docker-compose.yml exec web python manage.py migrate --noinput

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-25 20:30+0100\n"
+"POT-Creation-Date: 2024-03-27 16:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,23 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+
+#: database/models.py:18
+msgid "English"
+msgstr "영어"
+
+#: database/models.py:19
+msgid "Korean"
+msgstr "한국어"
+
+#: database/models.py:20
+msgid "French"
+msgstr "프랑스어"
+
+#: database/models.py:21
+msgid "Ukrainian"
+msgstr "우크라이나어"
+
 #: frontend/templates/changeAvatar.html:12
 msgid "Avatar URL:"
 msgstr "아바타 URL:"
@@ -41,15 +58,15 @@ msgstr "아바타 변경"
 msgid "PongChat, the best chat in the world"
 msgstr "PongChat, 세계 최고의 채팅"
 
-#: frontend/templates/chat.html:53 frontend/templates/home.html:42
-#: frontend/templates/index.html:54 frontend/templates/profile.html:50
+#: frontend/templates/chat.html:53 frontend/templates/home.html:43
+#: frontend/templates/index.html:70 frontend/templates/profile.html:51
 #: frontend/templates/signIn.html:7 frontend/templates/signIn.html:27
 #: frontend/templates/signUp.html:36
 msgid "Sign In"
 msgstr "로그인"
 
-#: frontend/templates/chat.html:56 frontend/templates/home.html:43
-#: frontend/templates/index.html:57 frontend/templates/profile.html:53
+#: frontend/templates/chat.html:56 frontend/templates/home.html:44
+#: frontend/templates/index.html:73 frontend/templates/profile.html:54
 #: frontend/templates/signIn.html:48 frontend/templates/signUp.html:7
 #: frontend/templates/signUp.html:33
 msgid "Sign Up"
@@ -91,7 +108,11 @@ msgstr "이메일 주소"
 msgid "Enter email"
 msgstr "이메일을 입력하세요"
 
-#: frontend/templates/editProfile.html:30
+#: frontend/templates/editProfile.html:27
+msgid "Language"
+msgstr "언어"
+
+#: frontend/templates/editProfile.html:43
 msgid "Save Profile"
 msgstr "프로필 저장"
 
@@ -99,35 +120,64 @@ msgstr "프로필 저장"
 msgid "Memoryyyyyyyy"
 msgstr "기억력 테스트"
 
-#: frontend/templates/gameMemory.html:14 frontend/templates/index.html:40
+#: frontend/templates/gameMemory.html:14 frontend/templates/index.html:56
 msgid "Memory"
 msgstr "기억력"
+
+#: frontend/templates/gameMemory.html:30 frontend/templates/gamePong.html:27
+#: frontend/templates/gamePong.html:57
+msgid "Which type of game do you wanna play"
+msgstr "어떤 종류의 게임을 하시겠습니까"
+
+#: frontend/templates/gameMemory.html:33 frontend/templates/gamePong.html:60
+msgid "Create New Game"
+msgstr "새로운 게임 만들기"
+
+#: frontend/templates/gameMemory.html:34
+msgid "Join Existing Game"
+msgstr "기존 게임에 참가하기"
 
 #: frontend/templates/gamePong.html:8
 msgid "Games like back in the 80's"
 msgstr "80년대처럼 게임을 즐겨보세요"
 
-#: frontend/templates/home.html:13
+#: frontend/templates/gamePong.html:30
+msgid "Play local Game"
+msgstr "로컬 게임 플레이"
+
+#: frontend/templates/gamePong.html:31
+msgid "Play remote Game"
+msgstr "원격 게임 플레이"
+
+#: frontend/templates/gamePong.html:84
+msgid "How many players do you want to be"
+msgstr "플레이어 수를 선택하세요"
+
+#: frontend/templates/gamePong.html:87
+msgid "players"
+msgstr "플레이어"
+
+#: frontend/templates/home.html:14
 msgid "Welcome"
 msgstr "환영합니다"
 
-#: frontend/templates/home.html:14
+#: frontend/templates/home.html:15
 msgid "You are now logged in."
 msgstr "이제 로그인되었습니다."
 
-#: frontend/templates/home.html:21
+#: frontend/templates/home.html:22
 msgid "Ranking"
 msgstr "랭킹"
 
-#: frontend/templates/home.html:39
+#: frontend/templates/home.html:40
 msgid "Welcome!"
 msgstr "환영합니다!"
 
-#: frontend/templates/home.html:40
+#: frontend/templates/home.html:41
 msgid "Please sign in or sign up to continue..."
 msgstr "계속하려면 로그인 또는 가입하세요..."
 
-#: frontend/templates/home.html:53 frontend/templates/signIn.html:45
+#: frontend/templates/home.html:54 frontend/templates/signIn.html:45
 msgid "SignIn with 42"
 msgstr "42로 로그인"
 
@@ -139,31 +189,31 @@ msgstr "퐁 - 궁극의 토너먼트"
 msgid "42 Pong"
 msgstr "42 퐁"
 
-#: frontend/templates/index.html:34
+#: frontend/templates/index.html:50
 msgid "Home"
 msgstr "홈"
 
-#: frontend/templates/index.html:37
+#: frontend/templates/index.html:53
 msgid "Games"
 msgstr "게임"
 
-#: frontend/templates/index.html:39
+#: frontend/templates/index.html:55
 msgid "Pong"
 msgstr "퐁"
 
-#: frontend/templates/index.html:44
+#: frontend/templates/index.html:60
 msgid "Scoreboard"
 msgstr "점수표"
 
-#: frontend/templates/index.html:47 frontend/templates/profile.html:8
+#: frontend/templates/index.html:63 frontend/templates/profile.html:8
 msgid "Profile"
 msgstr "프로필"
 
-#: frontend/templates/index.html:50
+#: frontend/templates/index.html:66
 msgid "Sign Out"
 msgstr "로그아웃"
 
-#: frontend/templates/index.html:74
+#: frontend/templates/index.html:90
 msgid "This website has been created for the last project of 42 by:"
 msgstr "이 웹사이트는 42의 마지막 프로젝트를 위해 만들어졌습니다. 작성자:"
 
@@ -207,7 +257,13 @@ msgstr "성:"
 msgid "Birthdate:"
 msgstr "생년월일:"
 
-#: frontend/templates/profile.html:43
+#: frontend/templates/profile.html:36
+#, fuzzy
+#| msgid "Language"
+msgid "Language:"
+msgstr "언어"
+
+#: frontend/templates/profile.html:44
 msgid "Edit Profile"
 msgstr "프로필 편집"
 
@@ -296,66 +352,46 @@ msgstr "비밀번호 확인"
 msgid "Already have an account?"
 msgstr "계정이 이미 있으신가요?"
 
-#: frontend/views.py:35
+#: frontend/views.py:37
 msgid "Passwords do not match"
 msgstr "비밀번호가 일치하지 않습니다"
 
-#: frontend/views.py:47
+#: frontend/views.py:49
 msgid "Failed to create user: User or Email already exists"
 msgstr "사용자 생성 실패: 사용자 또는 이메일이 이미 존재합니다"
 
-#: frontend/views.py:74
+#: frontend/views.py:80
 msgid "Sign in failed. Please check your Intraname and password."
 msgstr "로그인에 실패했습니다. 인트라네임과 비밀번호를 확인해주세요."
 
-#: frontend/views.py:148
+#: frontend/views.py:158
 msgid "Logout successful"
 msgstr "로그아웃 성공"
 
-#: frontend/views.py:153
+#: frontend/views.py:163
 msgid "Something went wrong! Are you signed in?"
 msgstr "문제가 발생했습니다! 로그인되어 있나요?"
 
-#: frontend/views.py:179 frontend/views.py:377
+#: frontend/views.py:193 frontend/views.py:391
 msgid "You are not signed in! Please sign in to edit your profile."
 msgstr "로그인되어 있지 않습니다! 프로필을 편집하려면 로그인하세요."
 
-#: frontend/views.py:191
+#: frontend/views.py:205
 msgid "You are not signed in! Please sign in to view your profile."
 msgstr "로그인되어 있지 않습니다! 프로필을 보려면 로그인하세요."
 
-#: frontend/views.py:236
+#: frontend/views.py:250
 msgid "You are not signed in! Please sign in to view the home page."
 msgstr "로그인되어 있지 않습니다! 홈 페이지를 보려면 로그인하세요."
 
-#: frontend/views.py:272
+#: frontend/views.py:286
 msgid "You are not signed in! Please sign in to play the game."
 msgstr "로그인되어 있지 않습니다! 게임을 하려면 로그인하세요."
 
-#: frontend/views.py:329
+#: frontend/views.py:343
 msgid "Failed to authenticate user. Please try again."
 msgstr "사용자 인증에 실패했습니다. 다시 시도하세요."
 
-#: frontend/views.py:333
+#: frontend/views.py:347
 msgid "Failed to reach API. Please try again."
 msgstr "API에 접근할 수 없습니다. 다시 시도하세요."
-
-#: frontend/index.py:35
-msgid "Language"
-msgstr "언어"
-
-#: frontend/index.py:37
-msgid "English"
-msgstr "영어"
-
-#: frontend/index.py:38
-msgid "French"
-msgstr "프랑스어"
-
-#: frontend/index.py:39
-msgid "Korean"
-msgstr "한국어"
-
-#: frontend/index.py:40
-msgid "Ukrainian"
-msgstr "우크라이나어"

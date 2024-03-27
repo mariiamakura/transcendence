@@ -22,13 +22,12 @@ let local;
 let remote;
 
 function showButton() {
-
     var main = document.getElementById('content');
-    main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> Which type of game do you wanna play ? </p></div>';
+    main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> {% trans "Which type of game do you wanna play" %}? </p></div>';
     var buttonRemote = document.createElement("button");
     var buttonLocal = document.createElement("button"); 
-    buttonLocal.textContent = "Play local Game";
-    buttonRemote.textContent = "Play remote Game";
+    buttonLocal.textContent = "{% trans 'Play local Game' %}";
+    buttonRemote.textContent = "{% trans 'Play remote Game' %}";
 	// buttonSingle.textContent = "1 vs 1";
     // buttonTournament.textContent = "Tournament";
     buttonLocal.classList.add("styled-button")
@@ -54,11 +53,11 @@ function decideHost() {
 	let host;
 	let client;
     var main = document.getElementById('content');
-    main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> Which type of game do you wanna play ? </p></div>';
+    main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> {% trans "Which type of game do you wanna play" %} ? </p></div>';
     var buttonHost = document.createElement("button");
     var buttonClient= document.createElement("button"); 
-    buttonHost.textContent = "Create New Game";
-    buttonClient.textContent = "Join Existing Game";
+    buttonHost.textContent = "{% trans 'Create New Game' %}";
+    buttonClient.textContent = "{% trans 'Join Existing Game' %}";
 	// buttonSingle.textContent = "1 vs 1";
     // buttonTournament.textContent = "Tournament";
     buttonHost.classList.add("styled-button")
@@ -81,11 +80,14 @@ function decideHost() {
 
 function numPlayers() {
     var main = document.getElementById('content');
-    main.innerHTML += '<div id="choice"><p style="padding-top: 2em; display: flex; " > How many players do you want to be ? </p></div>';
+    main.innerHTML += '<div id="choice"><p style="padding-top: 2em; display: flex; " > {% trans "How many players do you want to be" %} ? </p></div>';
     var buttonTwo = document.createElement("button");
     var buttonFour = document.createElement("button");
-    buttonTwo.textContent = "2 players";
-    buttonFour.textContent = "4 players";
+    let players = "{% trans 'players' %}";
+    buttonTwo.textContent = "2 ";
+    buttonTwo.textContent += players;
+    buttonFour.textContent = "4 ";
+    buttonFour.textContent += players;
     buttonTwo.classList.add("styled-button")
     buttonFour.classList.add("styled-button");
     document.getElementById('choice').appendChild(buttonTwo);
@@ -93,8 +95,10 @@ function numPlayers() {
     if (tournament) {
         var buttonEight = document.createElement("button");
         var buttonSixteen= document.createElement("button");
-        buttonEight.textContent = "8 players";
-        buttonSixteen.textContent = "16 players";
+        buttonEight.textContent = "8 ";
+        buttonEight.textContent += players;
+        buttonSixteen.textContent = "16 ";
+        buttonSixteen.textContent += players;
         buttonEight.classList.add("styled-button");
         buttonSixteen.classList.add("styled-button");
         document.getElementById('choice').appendChild(buttonEight);

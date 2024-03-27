@@ -65,7 +65,6 @@ def signIn(request):
 
             login(request, user)
             request.user.online = True
-            print(user.language)
             request.session['user_language'] = user.language
             translation.override(user.language)
             translation.activate(user.language)
@@ -152,6 +151,10 @@ def signOut(request):
         request.user.online = False
         request.user.save()
         logout(request)
+        # Create a response
+        response = HttpResponseRedirect('/')
+        # Clear the language cookie
+        response.delete_cookie(settings.LANGUAGE_COOKIE_NAME)
         message = gettext('Logout successful')
         messages.error(request, message)
         return render(request=request, template_name="signIn.html", context={})

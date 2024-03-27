@@ -27,11 +27,11 @@ function decideHost() {
 	let host;
 	let client;
 	var main = document.getElementById('content');
-	main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> Which type of game do you wanna play ? </p></div>';
+	main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> {% trans "Which type of game do you wanna play" %} ? </p></div>';
 	var buttonHost = document.createElement("button");
 	var buttonClient= document.createElement("button"); 
-	buttonHost.textContent = "Create New Game";
-	buttonClient.textContent = "Join Existing Game";
+	buttonHost.textContent = "{% trans 'Create New Game' %}";
+	buttonClient.textContent = "{% trans 'Join Existing Game' %}";
 	// buttonSingle.textContent = "1 vs 1";
 	// buttonTournament.textContent = "Tournament";
 	buttonHost.classList.add("styled-button")
