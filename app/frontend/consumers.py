@@ -65,8 +65,8 @@ class KeepAliveConsumer(AsyncWebsocketConsumer):
         super().__init__(*args, **kwargs)
         self.user = None
         self.last_alive_time = datetime.now()
-        self.alive_timeout = 120  # seconds
-        self.check_interval = 10  # seconds
+        self.alive_timeout = 5  # seconds
+        self.check_interval = 1  # seconds
 
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
@@ -91,7 +91,7 @@ class KeepAliveConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
         await self.set_user_online(False)
-
+        await asyncio.sleep(1)
         # Check if the disconnecting user is the host of a room and close the room if so
         if self.user == GameRoomManagerPong.rooms[self.room_name]["host"]:
             await self.close_room_pong(self.room_name)
@@ -120,7 +120,7 @@ class KeepAliveConsumer(AsyncWebsocketConsumer):
 
         if action == 'alive':
             self.last_alive_time = datetime.now()
-            await asyncio.sleep(5)
+            await asyncio.sleep(1)
             await self.send(text_data=json.dumps({'action': 'keep_alive'}))
 
     async def keep_alive(self, event):
