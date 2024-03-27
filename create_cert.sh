@@ -66,7 +66,4 @@ chmod 777 ${PROM_CERTS}/prometheus.key
 chmod 777 ${PROM_CERTS}/prometheus.crt
 
 
-
-
-
 echo -e "${GREEN}SSL certificates created!${NC}"

@@ -15,7 +15,10 @@ prepare: create_cert install_cert
 create_cert:
 	@chmod +x ./create_cert.sh
 	@./create_cert.sh
-	@cp -r ${HOME}/certs ./nginx/
+	@mkdir ./nginx/certs
+	@chmod -R 777 ./nginx/certs
+	@cp -r ${HOME}/certs/nginx.crt ./nginx/certs
+	@cp -r ${HOME}/certs/nginx.key ./nginx/certs
 	@cp -r ${HOME}/certs/certs_prometheus ./prometheus
 
 install_cert:
