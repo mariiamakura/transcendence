@@ -333,7 +333,8 @@ class GameConsumer(AsyncWebsocketConsumer):
                 self.room_group_name,
                 {
                     'type': 'game_ended_pong',
-                    'winner': data['winner']
+                    'winner': data['winner'],
+                    'scoreUpdate': data['scoreUpdate']
                 }
             )
 
@@ -488,7 +489,8 @@ class GameConsumer(AsyncWebsocketConsumer):
     async def game_ended_pong(self, event):
         await self.send(text_data=json.dumps({
             'action': 'game_ended_pong',
-            'winner': event['winner']
+            'winner': event['winner'],
+            'scoreUpdate': event['scoreUpdate']
         }))
 
     async def player_scores_pong(self, event):

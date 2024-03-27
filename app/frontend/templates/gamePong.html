@@ -446,6 +446,7 @@ socket.onerror = function(error) {
 
 // clientsocket
 let roomSocket = null;
+let scoreUpdate = false;
 
 async function remoteClient() {
     let socket = new WebSocket(`wss://${window.location.host}/wss/socket-server/lobby/`);
@@ -514,6 +515,7 @@ async function remoteClient() {
             console.log("player scores received");
         }
         if (data.action === 'game_ended_pong') {
+            scoreUpdate = data.scoreUpdate;
             endGame(data.winner);
             console.log("game ended");
         }
@@ -775,7 +777,7 @@ function update() {
             player2Score++;
             if (player2Score >= scoreToDo){
                 endGame(player2.name);
-                gameRoomSocket.send(JSON.stringify({ action: 'game_ended_pong', winner: player2.name}));
+                gameRoomSocket.send(JSON.stringify({ action: 'game_ended_pong', winner: player2.name, scoreUpdate: true}));
             }
             else
                 resetGame(1);
@@ -784,7 +786,7 @@ function update() {
             player1Score++;
             if (player1Score >= scoreToDo){
                 endGame(player1.name);
-                gameRoomSocket.send(JSON.stringify({ action: 'game_ended_pong', winner: player1.name}));
+                gameRoomSocket.send(JSON.stringify({ action: 'game_ended_pong', winner: player1.name, scoreUpdate: true}));
             }
             else
                 resetGame(-1);
@@ -1029,7 +1031,9 @@ function endGame(winner) {
     let scoreWinner = player1Score > player2Score ? player1Score : player2Score;
     let scoreLoser = player1Score < player2Score ? player1Score : player2Score;
     let namePlayerPlaying = [player1.name, player2.name];
-    updateGameResultPong(winner, namePlayerPlaying, scoreToDo, scoreWinner, scoreLoser, tournament, tournament_id);
+    console.log("SCORE UPDATE: " + scoreUpdate);
+    if (scoreUpdate === false)
+        updateGameResultPong(winner, namePlayerPlaying, scoreToDo, scoreWinner, scoreLoser, tournament, tournament_id);
     var mainElement = document.getElementById('content');
     mainElement.innerHTML = '';
     let getUserDisplay = "{{ user.display_name }}";
