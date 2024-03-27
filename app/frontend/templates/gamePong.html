@@ -11,7 +11,22 @@
 </div>
 <script>
 
-{% comment %} gameMenu.js {% endcomment %}
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrfToken = getCookie('csrftoken');
 
 let startGame;
 let singleGame;
@@ -148,24 +163,26 @@ async function getNamePlayer() {
 
         for (let i = 2; i <= numberPlayers; i++) {
             main.innerHTML += '<div id="choice">' +
-                '<form style="display: flex; flex-direction: column; align-items: center;">' +
+                '<form id="form' + i + '" style="display: flex; flex-direction: column; align-items: center;">' +
                 '<p style="padding-top: 2em; display: flex; align-items:center; justify-content:center;" > Name of player ' + i + ' : </p>' +
-                '<input type="text" id="name' + i + '">' +
+                '<input type="text" id="name' + i + '" required>' + // Add 'required' attribute for validation
                 '<button type="submit" class="styled-button" style="margin-top: 1em;">Submit</button>' +
                 '</form>' +
                 '</div>';
 
-            const submitButton = main.querySelector('#choice:last-child button');
-            const input = main.querySelector('#choice:last-child input');
+            const form = main.querySelector('#form' + i);
+            const input = main.querySelector('#name' + i);
 
-            // Wait for the submit button click event
+            // Wait for the form submission
             await new Promise(resolve => {
-                submitButton.addEventListener("click", function(event) {
+                form.addEventListener("submit", async function(event) {
                     event.preventDefault(); // Prevent the default form submission
-                    if (input.value !== "") {
+                    if (input.checkValidity()) { // Check if the input is valid
                         namePlayer.push(input.value);
-                        main.querySelector('#choice:last-child').remove();
+                        form.remove();
                         resolve(); // Resolve the promise to continue the loop
+                    } else {
+                        input.reportValidity(); // Display validation message if input is invalid
                     }
                 });
             });
@@ -907,13 +924,11 @@ function resetGame(direction)
 
 function updateGameResultPong(winner, namePlayerPlaying, scoreToDo, scoreWinner, scoreLoser, tournament, tournament_id)
 {
-    console.log('Updating game result...');
-    console.log("tournament " + tournament);
-
     fetch('/update_game_result_pong/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
         },
         body: JSON.stringify({ winner: winner, players : namePlayerPlaying, scoreToDo: scoreToDo, scoreW: scoreWinner, scoreL: scoreLoser, is_tournament: tournament, tournament_id: tournament_id }),
     })
@@ -931,11 +946,11 @@ function updateGameResultPong(winner, namePlayerPlaying, scoreToDo, scoreWinner,
 
 function updateEndTournamentPong(tournament_id, winner)
 {
-    console.log("END FUNCTION tournament_id: " + tournament_id);
     fetch('/update_end_tournament/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
         },
         body: JSON.stringify({tournament_id: tournament_id, winner: winner}),
     })
@@ -957,6 +972,7 @@ function updateStartTournamentPong(namePlayer)
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
         },
         body: JSON.stringify({ players : namePlayer, pong_tournament: true, memory_tournament: false}),
     })

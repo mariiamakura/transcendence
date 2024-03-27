@@ -1,5 +1,6 @@
 {% extends 'index.html' %}
 {% block content %}
+{% load static %}
 {% if request.user.is_authenticated %}
 <div class="container">
 	<div class="row">
@@ -11,12 +12,27 @@
 </div>
 <div class="button d-flex justify-content-center align-items-center">
 	<a href="#" onclick="showGameMemory()" class="btn btn-primary" style="margin-left: 1em;">Memory</a>
+
 </div>
 
 <script>
-	// Define the showGameMemory function
-	// let gameSettings.numberOfCards;
-// let set;
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrfToken = getCookie('csrftoken');
+
 let gameSettings = {
 	numberOfCards: 0,
 	chosenSet: ""
@@ -821,6 +837,7 @@ function updateGameResultMemory(winner, namePlayer, chosenSet, numberOfCards, sc
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
         },
         body: JSON.stringify({ winner: winner, players : namePlayer, chosenSet: setName, numberOfCards: numberOfCards, scoreW: scoreWinner, scoreL: scoreLoser, tournament: tournament, tournament_id: tournament_id }),
     })
@@ -843,6 +860,7 @@ function updateEndTournamentMemory(tournament_id, winner)
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
         },
         body: JSON.stringify({tournament_id: tournament_id, winner: winner}),
     })
@@ -864,6 +882,7 @@ function updateStartTournamentMemory()
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
         },
         body: JSON.stringify({ players : namePlayer, pong_tournament: false, memory_tournament: true}),
     })
@@ -909,8 +928,7 @@ function endGameMemory(winner)
     mainElement.innerHTML = ''; // Remove all inner HTML content  
     mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
     '<p style="text-align: center; font-size:4em;">' + winner + ' won ! </p>' +
-    '<p><img src="img/gif_robot.gif" alt="Victory logo" style = "width: 50vh; height: 50vh;"></p>' +
-    // '<p style="text-align: center;"> If you want to play again with the same settings, press the button below.</p>' +
+    '<p><img src="{% static 'img/gif_robot.gif' %}" alt="Victory logo" style="width: 50vh; height: 50vh;"></p>' + 
     '</div>';
     reinitializeGame();
     if (tournament === false)

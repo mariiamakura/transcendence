@@ -25,9 +25,9 @@
                   Memory
                 {% endif %}
                 - Type:
-                {% if game.is_tournament == true %}
+                {% if game.is_tournament %}
                   Tournament
-                {% elif game.is_tournament == false %}
+                {% else %}
                   1vs1
                 {% endif %}
                 - Players:
