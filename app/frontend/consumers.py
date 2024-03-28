@@ -161,20 +161,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 
         await self.accept()
 
-    # async def disconnect(self, close_code):
-    #     # Leave room group
-    #     await self.channel_layer.group_send(
-    #         self.room_group_name,
-    #         {
-    #             'type': 'player_left',
-    #             'channel_name': self.channel_name
-    #         }
-    #     )
-    #     await self.channel_layer.group_discard(
-    #         self.room_group_name,
-    #         self.channel_name
-    #     )
-
     async def disconnect(self, close_code):
         await self.channel_layer.group_send(
             self.room_group_name,
@@ -420,6 +406,12 @@ class GameConsumer(AsyncWebsocketConsumer):
                 }
             )
 
+        elif action == 'player_left':
+            host_name = data.get('host_name')
+            self.disconnect(close_code=None)
+            await self.close_room_pong(self.room_name)
+            await self.send(text_data=json.dumps({'action': 'disconnect', 'room_id': room_id}))
+
     async def notify_winner(self, event):
         winner = event['winner']
         # Assuming `winner` is something you can use to send a message directly to them.
@@ -428,6 +420,13 @@ class GameConsumer(AsyncWebsocketConsumer):
             'action': 'game_over',
             'winner': winner,
             'message': 'Congratulations! The other player has disconnected, you win!'
+        }))
+
+    async def player_left(self, event):
+        await self.disconnect(close_code=None)
+        await self.send(text_data=json.dumps({
+            'action': 'player_left',
+            'message': 'player left!'
         }))
 
     async def game_ended_memory(self, event):

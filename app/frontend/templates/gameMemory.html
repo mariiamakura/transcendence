@@ -1127,6 +1127,33 @@ function turnUpdate(mode)
     updatePlayerScore(2);
 }
   
+window.addEventListener('beforeunload', function(event) {
+    // Check if the WebSocket connection is already established
+    console.error("disconnecting");
+    let name = "{{ user.username }}";
+    if (gameRoomSocket && gameRoomSocket.readyState === WebSocket.OPEN) {
+        // Send a message to trigger host disconnection
+        console.error("disconnecting host");
+        gameRoomSocket.send(JSON.stringify({ action: 'player_left', host_name: name }));
+        // Close the WebSocket connection
+        gameRoomSocket.close();
+        console.log("Game room connection closed. because leaving page");
+    }
+    if (roomSocket && roomSocket.readyState === WebSocket.OPEN) {
+        // Send a message to trigger host disconnection
+        console.error("disconnecting host");
+        roomSocket.send(JSON.stringify({ action: 'player_left', host_name: name }));
+        // Close the WebSocket connection
+        roomSocket.close();
+        console.log("Game room connection closed. because leaving page");
+    }
+
+    // Prevent the browser from showing the default dialog
+    event.preventDefault();
+
+    // You might want to return something here to customize the message shown in the dialog
+    return null;
+});
 </script>
 
 {% endblock %}
