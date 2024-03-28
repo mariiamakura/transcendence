@@ -17,7 +17,8 @@ class User(AbstractUser):
     avatar_url = models.URLField(default='https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png')
     avatar = models.FileField(upload_to='avatars/', null=True, blank=True)
     online = models.BooleanField(default=False)
-    friends = models.JSONField(default=list)
+    # friends = models.JSONField(default=list)
+    friends = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='my_friends')
 
     def __str__(self):
         return self.username

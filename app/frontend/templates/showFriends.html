@@ -46,35 +46,41 @@
                 <div id="searchResults" class="mt-4"></div>
                 
             <script>
-                document.getElementById('searchUserForm').addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    var username = this.elements['username'].value;
+                window.addEventListener('DOMContentLoaded', function() {
+					var searchUserForm = document.getElementById('searchUserForm');
+					if (searchUserForm) {
+						searchUserForm.addEventListener('submit', function(e) {
+							e.preventDefault();
+							var username = this.elements['username'].value;
+				
+							fetch(`/searchUsers/?username=${username}`)
+								.then(response => response.json())
+								.then(data => {
+									if (data.error) {
+										displayMessage(data.error, false);
+									} else {
+										let addUserHtml = `
+											<div class="card mt-3">
+												<div class="card-body">
+													<p>${data.username} (${data.online ? 'Online' : 'Offline'})</p>
+													<button onclick="addFriend('${data.username}')" class="btn btn-success">Add Friend</button>
+												</div>
+											</div>
+										`;
+										document.getElementById('searchResults').innerHTML = addUserHtml;
+									}
+								})
+								.catch(error => {
+									console.error('Error during fetch:', error);
+									displayMessage(`An error occurred: ${error.message}`, false);
+								});
+						});
+					}
+				
                 
-                    fetch(`/searchUsers/?username=${username}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            if(data.error) {
-                                displayMessage(data.error, false);
-                            } else {
-                                let addUserHtml = `
-                                    <div class="card mt-3">
-                                        <div class="card-body">
-                                            <p>${data.username} (${data.online ? 'Online' : 'Offline'})</p>
-                                            <button onclick="addFriend('${data.username}')" class="btn btn-success">Add Friend</button>
-                                        </div>
-                                    </div>
-                                `;
-                                document.getElementById('searchResults').innerHTML = addUserHtml;
-
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error during fetch:', error);
-                            displayMessage(`An error occurred: ${error.message}`, false);
-                        });
-                });
-                
-                document.getElementById('removeFriendsForm').addEventListener('submit', function(e) {
+					var removeFriendsForm = document.getElementById('removeFriendsForm');
+					if (removeFriendsForm) {
+						removeFriendsForm.addEventListener('submit', function(e) {
                     e.preventDefault(); 
                     var formData = new FormData(this);
                     var friendIdsToRemove = formData.getAll('friend_ids'); 
@@ -104,7 +110,9 @@
                     });
                 });
                 
-
+			};
+		});
+		
                 function addFriend(username) {
                     fetch('/addFriend/', {
                         method: 'POST',

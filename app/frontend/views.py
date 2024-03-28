@@ -640,27 +640,34 @@ def addFriend(request):
 
         try:
             friend = User.objects.get(username=friend_username)
+            request.user.friends.add(friend)  # Using ManyToManyField's add() method
+            return JsonResponse({"success": True, "message": "Friend added successfully.", "friend_username": friend_username, "online": friend.online})
         except User.DoesNotExist:
             return JsonResponse({"error": "User not found."}, status=404)
+    #     try:
+    #         friend = User.objects.get(username=friend_username)
+    #     except User.DoesNotExist:
+    #         return JsonResponse({"error": "User not found."}, status=404)
 
-        current_friends = request.user.friends
-        if friend.pk in current_friends:
-            return JsonResponse({"error": "This user is already your friend."}, status=400)
+    #     current_friends = request.user.friends
+    #     if friend.pk in current_friends:
+    #         return JsonResponse({"error": "This user is already your friend."}, status=400)
 
-        current_friends.append(friend.pk)
-        request.user.friends = current_friends
-        request.user.save()
+    #     current_friends.append(friend.pk)
+    #     request.user.friends = current_friends
+    #     request.user.save()
 
-        return JsonResponse({"success": True, "message": "Friend added successfully.", "friend_username": friend_username, "online": friend.online})
-    else:
-        return JsonResponse({"error": "Invalid request method."}, status=405)
+    #     return JsonResponse({"success": True, "message": "Friend added successfully.", "friend_username": friend_username, "online": friend.online})
+    # else:
+    #     return JsonResponse({"error": "Invalid request method."}, status=405)
 
 
 def showFriends(request):
-    User = get_user_model()
+    # User = get_user_model()
     if request.user.is_authenticated:
-        friend_ids = request.user.friends
-        friends = User.objects.filter(pk__in=friend_ids)
+        # friend_ids = request.user.friends
+        # friends = User.objects.filter(pk__in=friend_ids)
+        friends = request.user.friends.all()
         return render(request, 'showFriends.html', {'friends': friends})
     else:
         messages.error(request, 'You are not signed in! Please sign in to view your friends.')
@@ -672,14 +679,24 @@ def removeFriends(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         friend_ids_to_remove = data.get('friend_ids', [])
-        current_friends = request.user.friends
 
-        request.user.friends = [friend_id for friend_id in current_friends if str(friend_id) not in friend_ids_to_remove]
-        request.user.save()
+        for friend_id in friend_ids_to_remove:
+            try:
+                friend = User.objects.get(user_id=friend_id)
+                request.user.friends.remove(friend)  # Using ManyToManyField's remove() method
+            except User.DoesNotExist:
+                pass  # Handle error or ignore if friend not found
 
         return JsonResponse({"success": True, "message": "Selected friends removed successfully."})
-    else:
-        return JsonResponse({"error": "Invalid request method"}, status=405)
+
+    #     current_friends = request.user.friends
+
+    #     request.user.friends = [friend_id for friend_id in current_friends if str(friend_id) not in friend_ids_to_remove]
+    #     request.user.save()
+
+    #     return JsonResponse({"success": True, "message": "Selected friends removed successfully."})
+    # else:
+    #     return JsonResponse({"error": "Invalid request method"}, status=405)
 
 
 def gameMemory(request):
