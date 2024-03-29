@@ -15,34 +15,5 @@ datasources:
       tlsAuthWithCACert: true
     secureJsonData:
       tlsCACert: |
-        -----BEGIN CERTIFICATE-----
-        MIIFBDCCA2ygAwIBAgIRAOq3dP8MYYIC4hvpXyjGJ3wwDQYJKoZIhvcNAQELBQAw
-        gZkxHjAcBgNVBAoTFW1rY2VydCBkZXZlbG9wbWVudCBDQTE3MDUGA1UECwwubXBh
-        cmFza3VAYzRiMTJjMy40MmJlcmxpbi5kZSAoTWFyaWlhIFBhcmFza3VuKTE+MDwG
-        A1UEAww1bWtjZXJ0IG1wYXJhc2t1QGM0YjEyYzMuNDJiZXJsaW4uZGUgKE1hcmlp
-        YSBQYXJhc2t1bikwHhcNMjQwMzE0MTIxNTAxWhcNMzQwMzE0MTIxNTAxWjCBmTEe
-        MBwGA1UEChMVbWtjZXJ0IGRldmVsb3BtZW50IENBMTcwNQYDVQQLDC5tcGFyYXNr
-        dUBjNGIxMmMzLjQyYmVybGluLmRlIChNYXJpaWEgUGFyYXNrdW4pMT4wPAYDVQQD
-        DDVta2NlcnQgbXBhcmFza3VAYzRiMTJjMy40MmJlcmxpbi5kZSAoTWFyaWlhIFBh
-        cmFza3VuKTCCAaIwDQYJKoZIhvcNAQEBBQADggGPADCCAYoCggGBALypRxQcH/ux
-        Ph3w9mcyoA5szZ8xsunMqbb4ryoWci2r+rNInblDE/l2pAFftPJFsBoe80yAosw6
-        XV4heU6yQUn1UtCAiZpkg4JEESrfqWTDrMGdxUUeye17dLgQQ9IFL3VVQolIjo9M
-        2L9/J5KlCnogZgjx+XDmYmE+S/Ca22Bt97acPq2mmuPQQNz/TcQcdGhxjS/xuOGD
-        c1PPEwJGkUXKAt0emagvRUhjaLrXUBFiKiyhkJCbRQvcBwXLZa66oFr9nERkYwB9
-        aIRWYiMls9FkS7PYkDoZEkza6uEpywqixF78/8chO374b0ukvs/Jl79Ub+0NO0ym
-        6/5Lun/pEIjIDI6KjAScoSkrGXtaFO48kpSZvn5C6Skb8qMcId/o84vlaQVqqhAk
-        l/DQ0EieG1V6wqe6GQdcQDPMXPiRkBI+P/6Hm9uN98flhN1QcnY49m3TyVvR9+Z0
-        xmAmj2uRnqRzmWYqLTWqBFVHJNJA24wE/IxJhbSSnrsrQAKH+0ZdSQIDAQABo0Uw
-        QzAOBgNVHQ8BAf8EBAMCAgQwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQU
-        tN3WvQf2AE3eB8EdIF6uYZ1gsBIwDQYJKoZIhvcNAQELBQADggGBAFs2OPlS11L/
-        h1TGF276Em/ldBSqgWFQPxxCpAHcjAtMxjXUZGVLHNCdPE3ap72ltw8nLGy1HlQ7
-        Q8/pkPSPDavb2k07/PiA+fYRT0pDbLLiK5hFh2z1wY0u7HXBlSuxOra9d3JmHWB4
-        JIP1gS2gqPUPTBpUQA7Im9x07yOuuR04pF0JNEm878x8mwcN4Gd5djIuZMFc/Pyr
-        GRRgI5DJfQbsd8IvqGai8s7ny8A67MD3USxo9agMmzL2LmpW96vHCL0QZ+zIKUJo
-        zm81RwkcOrO+oWW40k63zoOBCMbvEW9qpJexvrX2kaHTdvIAj9eOfpzTwgO4t6S9
-        3dZB2EFyVlgno3kIjAP7cssO33OZpaP7eMlU8CYzNk8yYbjE+E1ud6B6tnFjdKSo
-        q+zLSQsic785s/syiIFYXXpEWU9N5nD3JDhFx0+pP++rehq1NK0tU2v+vinMbbE3
-        8NrqNihnZ5Ud3pMKxVpQqWD4Vz8rSGkPm1LShgtgHnpsHyw+E/4OuQ==
-        -----END CERTIFICATE-----
-      basicAuthPassword: password
+      basicAuthPassword: random
     editable: true

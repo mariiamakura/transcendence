@@ -35,6 +35,21 @@ for folder in "${FIREFOX_DIR}"*; do
         fi
     fi
 done
-rm -f /home/${USER}/sgoinfre/homebrew/etc/ddclient.conf
-brew uninstall ddclient
+
+
+ddclient_conf="/home/${USER}/sgoinfre/homebrew/etc/ddclient.conf"
+
+# Check if the file exists
+if [ -f "$ddclient_conf" ]; then
+    # If the file exists, remove it
+    rm -f "$ddclient_conf"
+    echo "File $ddclient_conf removed."
+
+    # Uninstall ddclient using brew
+    brew uninstall ddclient
+else
+    # If the file does not exist, print a message
+    echo "File $ddclient_conf not found. Nothing to do."
+fi
+
 echo "Process completed."

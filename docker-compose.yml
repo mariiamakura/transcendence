@@ -71,6 +71,9 @@ services:
   prometheus:
     build:
       context: ./prometheus
+      args:
+        - PROMETHEUS_USER=${PROMETHEUS_USER}
+        - PROMETHEUS_PASSWORD=${PROMETHEUS_PASSWORD}
     container_name: prometheus
     ports:
       - 9090:9090
@@ -118,17 +121,17 @@ services:
       - 9100
 
   grafana:
-    image: grafana/grafana:latest
+    build:
+      context: ./grafana
+      args:
+        - PROMETHEUS_PASSWORD=${PROMETHEUS_PASSWORD}
     container_name: grafana
     ports:
       - 3000:3000
     volumes:
       - grafana-data:/var/lib/grafana
-      - ./grafana/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
       - ./grafana/dashboards:/var/lib/grafana/dashboards
       - ./grafana/dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml
-
-  
     env_file:
       .env
     networks:

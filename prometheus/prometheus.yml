@@ -17,8 +17,8 @@ scrape_configs:
     tls_config:
       ca_file: 'rootCA.pem'
     basic_auth:
-      username: admin
-      password: password
+      username: random
+      password: random
     static_configs:
     - targets: ['prometheus:9090']
 

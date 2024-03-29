@@ -5,8 +5,7 @@ BLUE="\033[0;38;5;44m"
 GREEN="\033[0;32m"
 NC="\033[0m" # No Color
 
-cd /home/${USER}/sgoinfre #change for your machine!!!
-# cd /home/fhassoun
+cd /home/${USER}/sgoinfre
 
 
 if ! command -v brew &>/dev/null; then
