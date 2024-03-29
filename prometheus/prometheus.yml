@@ -27,5 +27,11 @@ scrape_configs:
     - targets: ['nginx-prometheus-exporter:9113']
 
   - job_name: 'node'
+    scheme: https
+    tls_config:
+      ca_file: 'rootCA.pem'
+    basic_auth:
+      username: random
+      password: random
     static_configs:
       - targets: ['prometheus-node-exporter:9100']

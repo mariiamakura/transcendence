@@ -29,6 +29,7 @@ echo "Copying certificates to ./nginx/certs directory..."
 cp -r ${HOME}/certs/nginx.crt ./nginx/certs
 cp -r ${HOME}/certs/nginx.key ./nginx/certs
 cp -r ${HOME}/certs/certs_prometheus ./prometheus
+cp -r ${HOME}/certs/certs_node ./node_export
 cp -r ${HOME}/.local/share/mkcert/rootCA.pem ./prometheus
 cp -r ${HOME}/.local/share/mkcert/rootCA.pem ./grafana
 

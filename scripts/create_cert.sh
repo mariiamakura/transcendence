@@ -64,5 +64,14 @@ mkcert -key-file "${PROM_CERTS}/prometheus.key" -cert-file "${PROM_CERTS}/promet
 chmod 777 ${PROM_CERTS}/prometheus.key
 chmod 777 ${PROM_CERTS}/prometheus.crt
 
+NODE_CERTS="${HOME}/certs/certs_node"
+rm -rf "${NODE_CERTS}"
+mkdir -p "${NODE_CERTS}"
+
+echo -e "${BLUE}Setting up SSL certificates for node...${NC}"
+mkcert -key-file "${NODE_CERTS}/node.key" -cert-file "${NODE_CERTS}/node.crt" localhost "${CURRENT_IP}" prometheus-node-exporter &>/dev/null
+chmod 777 ${NODE_CERTS}/node.key
+chmod 777 ${NODE_CERTS}/node.crt
+
 
 echo -e "${GREEN}SSL certificates created!${NC}"
