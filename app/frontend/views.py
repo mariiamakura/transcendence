@@ -396,9 +396,11 @@ def editProfile(request):
                 # Activate the selected language for the current session
                 translation.override(user.language)
                 translation.activate(user.language)
+                response = render(request=request, template_name="profile.html", context={"user": user})
+                response.set_cookie('user_language', user.language)  # Set cookie with language code
 
             user.save()
-            return render(request=request, template_name="profile.html", context={"user": user})
+            return response
         return render(request=request, template_name="editProfile.html", context={"user": user})
     else:
         message = gettext('You are not signed in! Please sign in to edit your profile.')
