@@ -26,9 +26,11 @@ urlpatterns = [
     path('scoreboard', views.scoreboard, name='scoreboard'),
     path('home', views.home, name='home'),
     path('gameMemory', views.gameMemory, name='gameMemory'),
+    path('update_start_tournament/', views.start_tournament, name='start_tournament'),
     path('update_game_result_pong/', views.update_game_result_pong, name='update_game_result_pong'),
     path('update_game_result_memory/', views.update_game_result_memory, name='update_game_result_memory'),
-    path('get_username/', views.get_username, name='get_username'),
+    path('get_display_name/', views.get_display_name, name='get_display_name'),
+    path('update_end_tournament/', views.end_tournament, name='update_end_tournament'),
 ]
 
 
