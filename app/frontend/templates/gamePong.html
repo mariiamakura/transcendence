@@ -559,11 +559,13 @@ async function remoteHost() {
                 }
                 if (data.type === 'player_left') {
                     console.log(data.message);
-                    console.log('host Player left the game');
+                    console.log(data.who + ' left the game');
+                    endGame(namePlayer[0]);
+                    gameRoomSocket.close();
                 }
             }
             gameRoomSocket.onclose = function () {
-                endGame(namePlayer[0]);
+                endGame(namePlayer[1]);
                 console.log("Game room connection closed.");
             };
         }
@@ -665,15 +667,16 @@ async function remoteClient() {
             if (data.action === 'get_host_player') {
                 namePlayer[0] = data.name;
             }
-            if (data.type === 'player_left') {
-                console.log(data.message);
-                console.log('Player left the game');
+            if (data.action === 'player_left' || data.type === 'player_left') {
+                console.log('other player left the game');
+                endGame(namePlayer[1]);
+                roomSocket.close();
             }
             if (data.type === 'notify_winner') {
                 console.log('The winner is:', data.winner);
             }
             roomSocket.onclose = function () {
-                endGame(namePlayer[1]);
+                endGame(namePlayer[0]);
                 console.log("Game room connection closed.");
             };
         };
@@ -1292,34 +1295,93 @@ function endGame(winner) {
     }
 }
 
-window.addEventListener('beforeunload', function (event) {
-    // Check if the WebSocket connection is already established
-    console.error("disconnecting");
-    let name = "{{ user.username }}";
+let roomClosed = false;
+
+// Function to handle the closing of the room after the player left message is received
+function closeRoom() {
     if (gameRoomSocket && gameRoomSocket.readyState === WebSocket.OPEN) {
-        // Send a message to trigger host disconnection
-        console.error("disconnecting host");
-        gameRoomSocket.send(JSON.stringify({ action: 'player_left', host_name: name }));
-        // Close the WebSocket connection
-        gameRoomSocket.close();
-        console.log("Game room connection closed. because leaving page");
+        console.log("Host is open: ");
     }
     if (roomSocket && roomSocket.readyState === WebSocket.OPEN) {
-        // Send a message to trigger host disconnection
-        console.error("disconnecting host");
-        roomSocket.send(JSON.stringify({ action: 'player_left', host_name: name }));
-        // Close the WebSocket connection
-        roomSocket.close();
-        console.log("Game room connection closed. because leaving page");
+        console.log("Client is open: ");
     }
+    // Close the WebSocket connections
+    if (gameRoomSocket && gameRoomSocket.readyState === WebSocket.OPEN) {
+        console.error("Disconnecting host");
+        gameRoomSocket.send(JSON.stringify({ action: 'player_left' }));
+        console.log("Game room connection closed because of leaving the page");
+        roomClosed = true;
+    }
+    if (roomSocket && roomSocket.readyState === WebSocket.OPEN) {
+        console.error("Disconnecting client");
+        roomSocket.send(JSON.stringify({ action: 'player_left' }));
+        console.log("Game room connection closed because of leaving the page");
+        roomClosed = true;
+    }
+}
 
-    // Prevent the browser from showing the default dialog
-    event.preventDefault();
 
-    // You might want to return something here to customize the message shown in the dialog
-    return null;
+window.addEventListener('beforeunload', function (event) {
+    // Check if the room is still open before leaving the page
+    if (!roomClosed) {
+        // Call closeRoom to ensure the room is closed before leaving
+        closeRoom();
+
+        // Prevent the browser from showing the default dialog
+        event.preventDefault();
+
+        // You might want to return something here to customize the message shown in the dialog
+        return '';
+    }
 });
+// window.addEventListener('beforeunload', function (event) {
+//     // Check if the WebSocket connection is already established
+//     console.error("disconnecting");
+//     let name = "{{ user.username }}";
+//     let roomClosed = false;
 
+//     // Function to handle the closing of the room after the player left message is received
+//     function closeRoom() {
+//         console.log("Host is open : " + gameRoomSocket.readyState);
+//         console.log("Client is open : " + roomSocket.readyState);
+//         // Close the WebSocket connections
+//         if (gameRoomSocket && gameRoomSocket.readyState === WebSocket.OPEN) {
+//             console.error("disconnecting host");
+//             gameRoomSocket.send(JSON.stringify({ action: 'player_left' }));
+//             console.log("Game room connection closed. because leaving page");
+//             roomClosed = true;
+//         }
+//         if (roomSocket && roomSocket.readyState === WebSocket.OPEN) {
+//             console.error("disconnecting host");
+//             roomSocket.send(JSON.stringify({ action: 'player_left'}));
+//             console.log("Game room connection closed. because leaving page");
+//             roomClosed = true;
+//         }
+//     }
+
+//     // Set up event listener to close the room when player left message is received
+//     gameRoomSocket.addEventListener('message', function (event) {
+//         const message = JSON.parse(event.data);
+//         if (message.type === 'player_left' && !roomClosed) {
+//             closeRoom();
+//         }
+//     });
+
+//     // Prevent the browser from showing the default dialog
+//     event.preventDefault();
+
+//     if (gameRoomSocket && gameRoomSocket.readyState === WebSocket.OPEN) {
+//         console.log("host socket is still open");
+//     }
+//     if (roomSocket && roomSocket.readyState === WebSocket.OPEN) {
+//         console.log("client socket is still open");
+//     }
+//     // Check if the room is still open before leaving the page
+//     if (!roomClosed) {
+//         // You might want to return something here to customize the message shown in the dialog
+//         return '';
+//     }
+// });
 
 </script>
 
