@@ -116,6 +116,7 @@ def signIn(request):
             response = HttpResponseRedirect("/")
             user_language = user.language
             response.set_cookie(settings.LANGUAGE_COOKIE_NAME, user_language)
+            user.save()
             request.user.save()
 
             return response
@@ -566,8 +567,15 @@ def callback(request):
                 if user is not None:
                     login(request, user)
                     user.online = True
+                    request.session['user_language'] = user.language
+                    translation.override(user.language)
+                    translation.activate(user.language)
+                    response = HttpResponseRedirect("/")
+                    user_language = user.language
+                    response.set_cookie(settings.LANGUAGE_COOKIE_NAME, user_language)
+                    request.user.save()
                     user.save()
-                return redirect("/")
+                return (response)
             else:
                 user = User.objects.create_user(username=username, email=email, password=password1, avatar_url=avatar_url, name=name, surname=surename, display_name=display_name)
 
