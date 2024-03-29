@@ -2,9 +2,9 @@
 all:
 # builds and runs the containers
 	docker compose -f docker-compose.yml up --build -d 
-	docker compose -f docker-compose.yml exec web python manage.py collectstatic --no-input --clear
-	docker compose -f docker-compose.yml exec web python manage.py makemigrations
-	docker compose -f docker-compose.yml exec web python manage.py migrate --noinput
+	# docker compose -f docker-compose.yml exec web python manage.py collectstatic --no-input --clear
+	# docker compose -f docker-compose.yml exec web python manage.py makemigrations
+	# docker compose -f docker-compose.yml exec web python manage.py migrate --noinput
 
 #start the watchdog - wuff!
 watch:
@@ -47,7 +47,7 @@ restart:
 	docker compose -f docker-compose.yml down
 	docker compose -f docker-compose.yml up -d
 
-fclean: clean delete_container_certs
+fclean: clean #delete_container_certs
 # removes all the images
 	@docker system prune -a
 

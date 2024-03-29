@@ -73,5 +73,14 @@ mkcert -key-file "${NODE_CERTS}/node.key" -cert-file "${NODE_CERTS}/node.crt" lo
 chmod 777 ${NODE_CERTS}/node.key
 chmod 777 ${NODE_CERTS}/node.crt
 
+ALERT_CERTS="${HOME}/certs/certs_alert"
+rm -rf "${ALERT_CERTS}"
+mkdir -p "${ALERT_CERTS}"
+
+echo -e "${BLUE}Setting up SSL certificates for alert...${NC}"
+mkcert -key-file "${ALERT_CERTS}/alert.key" -cert-file "${ALERT_CERTS}/alert.crt" localhost "${CURRENT_IP}" alertmanager &>/dev/null
+chmod 777 ${ALERT_CERTS}/alert.key
+chmod 777 ${ALERT_CERTS}/alert.crt
+
 
 echo -e "${GREEN}SSL certificates created!${NC}"
