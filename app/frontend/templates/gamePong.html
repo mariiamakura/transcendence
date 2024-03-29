@@ -910,7 +910,7 @@ function update() {
     if (ball.y <= 0 || ball.y + ball.height >= board.height) {
         ball.velocityY *= -1;
     }
-    checkCollision(ball.y, ball.x);
+    checkCollision(ball.y, ball.x, ball.velocityX, ball.velocityY);
     if (isHost && remote == true) {
         if (ball.x < 0) {
             player2Score++;
@@ -961,7 +961,41 @@ function update() {
     }
 }
 
-function checkCollision(ballY, ballX) {
+
+function checkCollision(ballY, ballX, ballVelocityX, ballVelocityY) {
+    // Predict the ball's next position
+    let nextBallX = ballX + ballVelocityX ;
+    let nextBallY = ballY + ballVelocityY;
+
+    let localPaddle1XCenter = player1.x + player1.width / 2;
+    let distanceToPaddle1 = Math.abs(nextBallX - localPaddle1XCenter);
+
+    if (distanceToPaddle1 < ball.radius + (player1.width / 2) && nextBallY > (player1.y - playerWidth) && nextBallY < (player1.y + player1.height + playerWidth)) {
+        ball.velocityX *= -1; // Reverse the ball's X velocity
+
+        // Optionally adjust the ball's position to be outside the collision area
+        ball.x -= ballVelocityX; // Move the ball back to its previous position to prevent "trapping"
+        
+        if (nextBallY <= player1.y || nextBallY >= player1.y + player1.height) {
+            ball.velocityY *= -1; // Also reverse the Y velocity if hitting top/bottom of the paddle
+        }
+    }
+	
+    let localPaddle2XCenter = player2.x - player2.width / 2;
+    let distanceToPaddle2 = Math.abs(nextBallX - localPaddle2XCenter);
+
+    if (distanceToPaddle2 < ball.radius + (player2.width / 2) && nextBallY > (player2.y - playerWidth) && nextBallY < (player2.y + player2.height + playerWidth)) {
+        ball.velocityX *= -1; // Reverse the ball's X velocity
+
+        // Optionally adjust the ball's position to be outside the collision area
+        ball.x -= ballVelocityX; // Move the ball back to its previous position to prevent "trapping"
+        
+        if (nextBallY <= player2.y || nextBallY >= player2.y + player2.height) {
+            ball.velocityY *= -1; // Also reverse the Y velocity if hitting top/bottom of the paddle
+        }
+    }
+}
+{% comment %} function checkCollision(ballY, ballX) {
     // ballX -= 5;
     let LoclPad1XPos = player1.x + player1.width / 2;
     let distance1 = Math.abs(ballX - LoclPad1XPos);
@@ -983,7 +1017,7 @@ function checkCollision(ballY, ballX) {
             ball.velocityY *= -1; // Reverse the y velocity
         }
     }
-}
+} {% endcomment %}
 
 function outOfBounds(yPosition) {
     return (yPosition < 0 || yPosition > boardHeight - playerHeight);
