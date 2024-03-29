@@ -526,19 +526,14 @@ def callback(request):
 
             user_info_response = requests.get('https://api.intra.42.fr/v2/me', headers={'Authorization': f'Bearer {access_token}'})
             user_info = user_info_response.json()
-            print(user_info)
-
+            # print(user_info)
             username = user_info['login']
-            # password1 = user_info['login']
-            password1 = User.objects.make_random_password(length=20)
             email = user_info['email']
             avatar_url = user_info['image']['link']
             surename = user_info['last_name']
             name = user_info['first_name']
+            password1 = user_info['login'] + "@secretpw1#"
             display_name = user_info['login']
-            # # campus = user_info['campus']
-            # # level = user_info['cursus_users'][0]['level']
-
             user = User.objects.filter(username=username).first()
             if user:
                 user = authenticate(username=username, password=password1)
