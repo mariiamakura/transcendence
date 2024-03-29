@@ -2,7 +2,6 @@
 {% load i18n %}
 {% block content %}
 {% load static %}
-{% if request.user.is_authenticated %}
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
@@ -1152,7 +1151,4 @@ window.addEventListener('beforeunload', function(event) {
     return null;
 });
 </script>
-{% else %}
-    {% include '_login_signup.html' %}
-{% endif %}
 {% endblock %}
