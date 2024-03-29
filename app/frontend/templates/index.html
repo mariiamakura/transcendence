@@ -5,23 +5,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% trans "Pong - The ultimate tournament" %}</title>
-	<link href="{% static "style.css" %}" rel="stylesheet">
-    <link rel="stylesheet" href="{% static "pong.css" %}">
-    <link rel="stylesheet" href="{% static "memory.css" %}">
-    <script src="{% static "gamePong.js" %}" defer></script>
-    <script src="{% static "gameMenu.js" %}" defer></script>
-    <script src="{% static "gameMemory.js" %}" defer></script>
-    <script src="{% static "setMemoryGames.js" %}" defer></script>
-	<script src="{% static "profile.js" %}" defer></script>
-    <script src="{% static "score.js" %}" defer></script>
+    <title>{% trans "Pong - The ultimate tournament" %}</title> 
+	<link href="{% static 'style.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'pong.css' %}">
+    <link rel="stylesheet" href="{% static 'memory.css' %}">
+    <script src="{% static 'setMemoryGames.js' %}" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
-	<!-- CSS -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
-
 
 </head>
 <body>
@@ -141,6 +133,69 @@
     </div>
     
 </body>
+<script>
+    
+    {% if request.user.is_authenticated %}
+    let khostName = "{{ user.username }}"; 
+    let ksanitizedRoomName = encodeURIComponent(`${khostName}`).replace(/'/g, ""); // Sanitize and remove special characters
+    let ksocket = new WebSocket(`wss://${window.location.host}/wss/keep-alive/${ksanitizedRoomName}/`); 
+
+
+    ksocket.onopen = function() {
+        console.log("[open] Connection established");
+        ksocket.send(JSON.stringify({
+            'action': 'alive'
+        }));
+    };
+
+    ksocket.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+                if (data.action === 'keep_alive') {
+                    console.log('Keep alive');
+                    ksocket.send(JSON.stringify({
+
+                        'action': 'alive'
+                    }));
+                  
+                }
+    };
+
+
+
+
+
+
+
+    {% endif %}
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
 <!-- JS, Popper.js, and jQuery -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>

@@ -45,9 +45,9 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'database.apps.DatabaseConfig',
     'channels',
     'daphne',
-    'database.apps.DatabaseConfig',
     'frontend',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -125,6 +125,13 @@ DATABASES = {
     }
 }
 
+PASSWORD_HASHERS = [
+    "django.contrib.auth.hashers.Argon2PasswordHasher",
+    "django.contrib.auth.hashers.PBKDF2PasswordHasher",
+    "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
+    "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
+    "django.contrib.auth.hashers.ScryptPasswordHasher",
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -143,6 +150,49 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+# UNCOMMENT WHEN FINISHED TESTING !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# AUTH_PASSWORD_VALIDATORS = [
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+#         'OPTIONS': {
+#             'user_attributes': ['username', 'email'],
+#         },
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+#         'OPTIONS': {
+#             'min_length': 8,
+#         },
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+#         'OPTIONS': {
+#             'min_digits': 1,
+#         },
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.MinimumUpperCaseValidator',
+#         'OPTIONS': {
+#             'min_uppercase': 1,
+#         },
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.MinimumLowerCaseValidator',
+#         'OPTIONS': {
+#             'min_lowercase': 1,
+#         },
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.MinimumSpecialCharacterValidator',
+#         'OPTIONS': {
+#             'min_special_characters': 1,
+#         },
+#     },
+# ]
 
 AUTH_USER_MODEL = 'database.User'
 
@@ -173,10 +223,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-# STATIC_URL = 'static/'
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-# STATICFILES_DIRS = [BASE_DIR / "static"]
 STATICFILES_DIRS = [BASE_DIR / "frontend" / "statics"]
 
 MEDIA_URL = "/media/"

@@ -1,5 +1,4 @@
 #board {
-    background-color: #2f3542 ;
     display : flex;
     justify-content: center;
     align-items: center;
@@ -7,8 +6,8 @@
     font-size: 16px;
     border: none;
     cursor: pointer;
-    border-top : 1em solid skyblue;
-    border-bottom: 1em solid skyblue;
+    border-top : 1em solid;
+    border-bottom: 1em solid;
 }
 
 #board-container {

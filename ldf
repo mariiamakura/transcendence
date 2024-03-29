@@ -1,0 +1,1224 @@
+[33mcommit 52925fad59ddd3d9cca81ca9e7489a555b70796c[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: 416aeaa c36d683
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Wed Mar 27 15:47:40 2024 +0100
+
+    Merge branch 'Emilie_4_all'
+
+[33mcommit 416aeaaab3cf39899fce3b690f462828814a08db[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Wed Mar 27 15:47:02 2024 +0100
+
+    main:
+
+[33mcommit c36d6837ec4f6bd16ef1890f4bc54d7c40f847f2[m[33m ([m[1;31morigin/Emilie_4_all[m[33m, [m[1;32mEmilie_4_all[m[33m)[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Wed Mar 27 15:11:57 2024 +0100
+
+    new try
+
+[33mcommit d22b8bd9d941c95a21b408c4abb6b8d8ee2339f3[m[33m ([m[1;31morigin/new_main_to_merge[m[33m, [m[1;32mnew_main_to_merge[m[33m, [m[1;32mEmilie_merging[m[33m)[m
+Merge: 494506f e5dafb3
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Wed Mar 27 14:43:19 2024 +0100
+
+    Merge pull request #17 from EmilieD8/revert-16-Emilie_4_all
+    
+    Revert "Scoreboard + frontend fix"
+
+[33mcommit e5dafb3c69e3ed0f95cb7d95a35cdcb76a2b05c2[m[33m ([m[1;31morigin/revert-16-Emilie_4_all[m[33m)[m
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Wed Mar 27 14:42:31 2024 +0100
+
+    Revert "Scoreboard + frontend fix"
+
+[33mcommit 494506fa598d252e2623c9bd9d0c373019584d1e[m
+Merge: 9b06d97 bb43329
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Wed Mar 27 14:22:58 2024 +0100
+
+    Merge pull request #16 from EmilieD8/Emilie_4_all
+    
+    Scoreboard + frontend fix
+
+[33mcommit bb4332992d083e1f1fed3169c932014306413501[m[33m ([m[1;31morigin/Emilie_merging[m[33m)[m
+Merge: 88c375f 9b06d97
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Wed Mar 27 14:22:38 2024 +0100
+
+    Merge branch 'main' into Emilie_4_all
+
+[33mcommit 88c375f762f16c7ef749de8e9b6a5456892c29e8[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Wed Mar 27 13:46:29 2024 +0100
+
+    prepare for merge
+
+[33mcommit 9b06d97e9b7a2740d892426df9e4535ce2718c4e[m
+Merge: 3e4a66b 135fe97
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Wed Mar 27 13:45:34 2024 +0100
+
+    Merge pull request #15 from EmilieD8/feras_disconnect
+    
+    Feras disconnect
+
+[33mcommit 135fe972a9991bae37002f2c60feda89bbd31cf8[m[33m ([m[1;31morigin/feras_disconnect[m[33m)[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Wed Mar 27 13:12:55 2024 +0100
+
+    a lot of fixes
+
+[33mcommit b3aebd5903298e0c06bdc08a43d57d0da0922f26[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Wed Mar 27 10:45:24 2024 +0100
+
+    scoreboard done
+
+[33mcommit f908b043fec70b73cf7770c39078d223de30c134[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Tue Mar 26 17:57:49 2024 +0100
+
+    scoreboard almost done, tournament is not added correctly as true
+
+[33mcommit 846af9ed6fcd5445e9896cdb405fbe4762b4b84d[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Tue Mar 26 14:37:41 2024 +0100
+
+    added to memory
+
+[33mcommit 64d8d68b5aad59328ef14b8c19154abc8b863b0a[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Tue Mar 26 13:13:06 2024 +0100
+
+    db pong connected
+
+[33mcommit 554abd6a279b82f3b0bcff09cb4402380a904c1c[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Tue Mar 26 12:50:54 2024 +0100
+
+    adding tournament in scoreboard
+
+[33mcommit 35ced1b6d9549d697711c147026930ad10624089[m[33m ([m[1;32mferas_disconnect[m[33m)[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Tue Mar 26 12:42:03 2024 +0100
+
+    disconnecting players fix 2
+
+[33mcommit 298850690f5e8f7729d7c0a87a917dc5835a693b[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Tue Mar 26 12:41:02 2024 +0100
+
+    disconnecting players fixed
+
+[33mcommit f54a84dd180227959a174a1875c5d0d5e8d28281[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Tue Mar 26 11:40:50 2024 +0100
+
+    db connected and configured
+
+[33mcommit 8f668f72fd6df1504e66faeb0c62e572c68e2bdb[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Tue Mar 26 11:08:44 2024 +0100
+
+    removed not needed console.logs
+
+[33mcommit 3e4a66b6f19176d7624abd3b64837ef948c1dd33[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Tue Mar 26 10:54:41 2024 +0100
+
+    adding crsf exempt
+
+[33mcommit c311ee2ebe414813b06d09ad4a4c109399196ce3[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Tue Mar 26 04:26:30 2024 +0100
+
+    delete empty rooms fix
+
+[33mcommit 3d459fd235e26a0279d5d7683656a0a88730271f[m
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Mon Mar 25 22:31:12 2024 +0100
+
+    scores
+
+[33mcommit 44998b136a4c5d59fbeb96ec9b18bdad35a36720[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Mon Mar 25 15:30:12 2024 +0100
+
+    fixed vertical bounce and paddle collision
+
+[33mcommit 8a8c8195db24f63069077a7b0131fbb56ca4daf9[m
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Mon Mar 25 12:32:06 2024 +0100
+
+     updated from main
+
+[33mcommit 70bde5a0825a4c4b9e805467148645c6c0997807[m
+Merge: eb7dc57 e6dd46b
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Mon Mar 25 12:31:31 2024 +0100
+
+    Merge branch 'main' of https://github.com/EmilieD8/Transcendence
+
+[33mcommit eb7dc574539d8402f6f7f0c5e75a576478025599[m
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Mon Mar 25 12:30:42 2024 +0100
+
+    main updated
+
+[33mcommit e6dd46b82d430694d330bbc0490cce8f7ee4850f[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Mon Mar 25 09:49:44 2024 +0100
+
+    another fix for webpage error handling
+
+[33mcommit afe96da0110ca1b778615b916a234a826fa21324[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Mon Mar 25 09:46:21 2024 +0100
+
+    another fix
+
+[33mcommit e4ae7cbf9b7b243a721c202525922cfbe92e6d70[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Mon Mar 25 09:44:32 2024 +0100
+
+    small fix when sign out and go back in browser error
+
+[33mcommit 7ffbaa17ede8ef4debaea6877881f1453c239874[m
+Merge: 79db7d0 3dd1277
+Author: Feras Hassouneh <36226489+fhassoun@users.noreply.github.com>
+Date:   Mon Mar 25 09:23:44 2024 +0100
+
+    Merge pull request #14 from EmilieD8/feras_finishline
+    
+    keepalive and online/offline display fixed
+
+[33mcommit 79db7d0c79541eb05e9a0a519ad71b37532aa8a2[m
+Merge: 4a5b3ed fcef937
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Mon Mar 25 08:54:35 2024 +0100
+
+    Merge pull request #13 from EmilieD8/Emilie_4_all
+    
+    Local tournament
+
+[33mcommit fcef93798425a1defa8d74b5b6021b5c42523056[m
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Mon Mar 25 08:34:46 2024 +0100
+
+    local tournament done
+
+[33mcommit 582be9752516b48cc5c4e9d00eb29c94af34bb65[m
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Sun Mar 24 15:09:38 2024 +0100
+
+    local pong tournament done
+
+[33mcommit 4a5b3ed389a1549e9ff362ae1df61f7ccb01ab72[m
+Author: Sung-Hyan Lee <sung-hle@student.42berlin.de>
+Date:   Sat Mar 23 17:06:44 2024 +0100
+
+    oauth-fix and social_links
+
+[33mcommit 8b02ca60fd0ef20af9612ff1534b009b5309db7f[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Sat Mar 23 14:41:04 2024 +0100
+
+    tournament local
+
+[33mcommit 1977f6c9c9016316177a09e0cc0d7f907d352d88[m
+Merge: d7973b5 7589009
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Sat Mar 23 13:38:38 2024 +0100
+
+    Merge branch 'main' of https://github.com/EmilieD8/Transcendence into Emilie_4_all
+
+[33mcommit 7589009e4968fe2a75c5002839058e42450354a2[m
+Merge: aa70228 717f38d
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Sat Mar 23 13:31:11 2024 +0100
+
+    Merge branch 'main' of https://github.com/EmilieD8/Transcendence
+
+[33mcommit 3dd1277d457977a5ca382c30719a2361973de6db[m[33m ([m[1;31morigin/feras_finishline[m[33m)[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Sat Mar 23 10:49:57 2024 +0100
+
+    keepalive and online/offline display fixed
+
+[33mcommit 717f38df0eb9add1b89372c84f8468fddec1c504[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Sat Mar 23 07:52:42 2024 +0100
+
+    fixed the merge
+
+[33mcommit d7973b5810a6d0469ae49343f910456fb646a696[m[33m ([m[1;32mEmilie_5[m[33m)[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Fri Mar 22 13:57:47 2024 +0100
+
+    countdown
+
+[33mcommit fc9e1edd545cde8f8b72872e34c387472fca880e[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Fri Mar 22 13:13:49 2024 +0100
+
+    corrected countdown
+
+[33mcommit 06f7d5c5629efc57b2b4dbd6d85c9dd8d42aceef[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Thu Mar 21 16:36:41 2024 +0100
+
+    another fix for add_user
+
+[33mcommit af2ce2e696969c60c1d72cea9ffc5c3198aa25b5[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Thu Mar 21 15:27:27 2024 +0100
+
+    fixed add_user
+
+[33mcommit 7464d4d200f3b3bcf028f14397bcc921a2ea6898[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Thu Mar 21 15:09:35 2024 +0100
+
+    fix flake
+
+[33mcommit bdb87ef3757637d85fa944b4cb7d7c495b962649[m
+Merge: 8757468 fb28a72
+Author: Feras Hassouneh <36226489+fhassoun@users.noreply.github.com>
+Date:   Thu Mar 21 15:04:53 2024 +0100
+
+    Merge pull request #12 from EmilieD8/feras_usermanagement
+    
+    Feras usermanagement
+
+[33mcommit fb28a72dacfcc7beae216b8a09a17289c93a9798[m[33m ([m[1;31morigin/feras_usermanagement[m[33m)[m
+Merge: 5736d0b 8757468
+Author: Feras Hassouneh <36226489+fhassoun@users.noreply.github.com>
+Date:   Thu Mar 21 14:59:44 2024 +0100
+
+    Merge branch 'main' into feras_usermanagement
+
+[33mcommit 5736d0bcec90930e54945a9615174596f9e3ab7d[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Thu Mar 21 14:40:47 2024 +0100
+
+    fixed importing env variables to templates
+
+[33mcommit 2b11c7b330b5c1e87e6d86cbb4b61097c7eb16ae[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Thu Mar 21 10:32:58 2024 +0100
+
+    fix for add friend function
+
+[33mcommit ab20d757e72ef93f36a24614d932cdf2e04575b9[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Wed Mar 20 17:12:33 2024 +0100
+
+    dynamic-dns added
+
+[33mcommit 136e050e4c1cacbd90226815fa35009f1f277915[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Wed Mar 20 13:05:25 2024 +0100
+
+    save before tournament
+
+[33mcommit f29cccb3e374c0f9cdbd0987cc9a189c2cca5401[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Tue Mar 19 20:38:34 2024 +0100
+
+    added more fixes to usermanagement
+
+[33mcommit e058ba324f7285344a53bd32697a1594726687ab[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Tue Mar 19 18:48:46 2024 +0100
+
+    Adding settings in the name of the memory room
+
+[33mcommit e0b0ac79361e0cb5a9302b144f0cdaa564246ca4[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Tue Mar 19 14:58:31 2024 +0100
+
+    some cleanup
+
+[33mcommit 526015b6bdfe478f8700390325be26d4f88fb51d[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Tue Mar 19 14:55:05 2024 +0100
+
+    add friend fixed
+
+[33mcommit 42b80bbe7c8a191293264a9889fe01e28c272909[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Tue Mar 19 13:23:59 2024 +0100
+
+    commit before changes
+
+[33mcommit 3b7a552d163ff41301cfda3c80a66e2581a66886[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Tue Mar 19 13:07:48 2024 +0100
+
+    fix create_cert.sh
+
+[33mcommit 85b909e1569e237a4d35a37266740040a196d4df[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Tue Mar 19 13:00:49 2024 +0100
+
+    a lot if fixes, too much to list here
+
+[33mcommit aa70228f4b6f04e6a21cd4891bc1d8a96b639c00[m
+Merge: 8757468 64d4b31
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Tue Mar 19 11:52:52 2024 +0100
+
+    local games
+
+[33mcommit 64d4b31893f33d3f8ed91b3d103bb831d2e1e02a[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Tue Mar 19 11:51:13 2024 +0100
+
+    games corrected
+
+[33mcommit 87574688a1202d9fabac733c912124446966894b[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Tue Mar 19 11:09:17 2024 +0100
+
+    main updated?
+
+[33mcommit ea0611ba7cbf85ce709533953dea467fa7064b4f[m
+Merge: fe11283 0af7e42
+Author: Feras Hassouneh <36226489+fhassoun@users.noreply.github.com>
+Date:   Tue Mar 19 10:34:28 2024 +0100
+
+    Merge pull request #11 from EmilieD8/feras_bugfixing
+    
+    Feras bugfixing
+
+[33mcommit 0af7e427de746001ca2c2aa363867a30472825a9[m
+Merge: 1d43bd1 fe11283
+Author: Feras Hassouneh <36226489+fhassoun@users.noreply.github.com>
+Date:   Tue Mar 19 10:31:32 2024 +0100
+
+    Merge branch 'main' into feras_bugfixing
+
+[33mcommit fe1128333ac54439c1ec971b8773daf12970db19[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Mon Mar 18 17:40:17 2024 +0100
+
+    local games
+
+[33mcommit 934ed6117676518605f23e35398ff335313a34d0[m
+Merge: 920791c bf9c695
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Mon Mar 18 17:02:00 2024 +0100
+
+    Merge branch 'main' of https://github.com/EmilieD8/Transcendence
+
+[33mcommit 920791c6395d3388901561a1627af82c99f7e381[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Mon Mar 18 17:01:21 2024 +0100
+
+    Local games put back
+
+[33mcommit bf9c69542bc1079cab8f7cd6f0d0c7bb741ce33b[m
+Merge: 7f6c8c2 d1e52f0
+Author: Mariia Paraskun <119864822+mariiamakura@users.noreply.github.com>
+Date:   Mon Mar 18 16:46:13 2024 +0100
+
+    Merge pull request #10 from EmilieD8/mariia_https_fix
+    
+    Mariia https fix
+
+[33mcommit d1e52f0087c1b2bda417d2e20da6ba0f8d8f643e[m
+Author: mariia paraskun <mariiaparaskun@gmail.com>
+Date:   Mon Mar 18 16:40:01 2024 +0100
+
+    metrics work with https
+
+[33mcommit aab097e277539eb7bede375311d37baf8f6169dc[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Mon Mar 18 16:38:52 2024 +0100
+
+    local memory game
+
+[33mcommit 49bdfc9cbecc88d5992e0501e86e2dc80fc33077[m
+Merge: 2d87b75 7f6c8c2
+Author: mariia paraskun <mariiaparaskun@gmail.com>
+Date:   Mon Mar 18 16:11:53 2024 +0100
+
+    updated
+
+[33mcommit 5aeaebf4b909d3487ab8f26c1c6ded58c653bc12[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Mon Mar 18 16:07:00 2024 +0100
+
+    usermanagement additions and other things :)
+
+[33mcommit 7f6c8c23ed951fbaf845b43a93898e7b94b0f87d[m
+Author: mariia paraskun <mariiaparaskun@gmail.com>
+Date:   Mon Mar 18 15:57:07 2024 +0100
+
+    test changes to https port 9999
+
+[33mcommit 91179c0217f2d0f97ada6c6c0c09e580d1d95f40[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Mon Mar 18 15:47:22 2024 +0100
+
+     merged
+
+[33mcommit 39fafb6c5fc397c97bbba88b31f7bad3b2adcd6a[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Mon Mar 18 15:36:33 2024 +0100
+
+    .
+
+[33mcommit 8b2d34a7ebfc84f7c420eec37a3f43149d01acb2[m
+Merge: abb54ec 4f784f0
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Mon Mar 18 12:12:21 2024 +0100
+
+    Merge pull request #7 from EmilieD8/Emilie_3_remote
+    
+    Merging remote memory
+
+[33mcommit 4f784f0c2be0b82820a9ed811407b9e903034d15[m
+Merge: 6f41b8c abb54ec
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Mon Mar 18 12:04:58 2024 +0100
+
+    Merge branch 'main' into Emilie_3_remote
+
+[33mcommit 6f41b8cfdff7c874b05ec3a805322f5bee8c0e83[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Mon Mar 18 11:52:49 2024 +0100
+
+    memory game fully remote
+
+[33mcommit 08719fdff4ca43f13976061d6f614de335d05f96[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Sun Mar 17 16:28:12 2024 +0100
+
+    bug fixing
+
+[33mcommit 8029a965d0019f0cd7a7dc44d78b6589d90cf290[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Sun Mar 17 16:15:58 2024 +0100
+
+    memory game fully remote
+
+[33mcommit 50fe4c7e7c30853e1ad182e6ce689dca0d4453e9[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Sun Mar 17 14:12:40 2024 +0100
+
+    memory game remote 90% done
+
+[33mcommit d252171a363e11612c18779f9bedf88f9e85b97f[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Sat Mar 16 17:40:41 2024 +0100
+
+    memory game
+
+[33mcommit 1bcfc07a7f4f5891a3eeabacb13213a2106dafe4[m
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Fri Mar 15 17:49:45 2024 +0100
+
+    test remote memory
+
+[33mcommit 1d43bd1a4f1c67ed89e140a183a31615d83421eb[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Fri Mar 15 17:45:18 2024 +0100
+
+    minor fixes
+
+[33mcommit 328c83d6b108f3c8bc5011155ba9b144b445a8ed[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Fri Mar 15 16:53:06 2024 +0100
+
+    certificate issues fixed, should work now.... hopefully
+
+[33mcommit 8a8f4139f7301828b5b901ddd9f102fed08a2560[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Fri Mar 15 15:02:33 2024 +0100
+
+    certificate creation-script split into separate creation and install scripts
+
+[33mcommit 3b76ff1fa69bb978832c850d53818430a8224808[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Fri Mar 15 11:55:07 2024 +0100
+
+    cleanup of certificate script
+
+[33mcommit 539a699c5b16d4b6d11f4915b512c65f7b75afd2[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Fri Mar 15 11:10:07 2024 +0100
+
+    test for certificates, code needs cleanup
+
+[33mcommit adcd0a756debbc9f09087e95ee9105920adff36a[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Fri Mar 15 09:35:41 2024 +0100
+
+    fixed some flake issues
+
+[33mcommit 7b5a42c1325d5db92502fe4ae9213b0cec3ea3ef[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Fri Mar 15 09:33:50 2024 +0100
+
+    possible fix feor certificates and some fixes in views
+
+[33mcommit 7c2745e6cac747af1a304ca978a13713747b6e21[m
+Merge: da4e0d3 2e52f42
+Author: Feras Hassouneh <36226489+fhassoun@users.noreply.github.com>
+Date:   Thu Mar 14 14:40:17 2024 +0100
+
+    Merge pull request #6 from EmilieD8/mariia_feras_edit
+    
+    mariia changes
+
+[33mcommit 2e52f424a8b7996ab3aeceea00e83571ca830efa[m
+Author: mariia paraskun <mariiaparaskun@gmail.com>
+Date:   Thu Mar 14 14:36:19 2024 +0100
+
+    removed unused variables from compose and docker file
+
+[33mcommit 432a3fc24fc1b75f70200552430ba54246585a58[m
+Author: mariia paraskun <mariiaparaskun@gmail.com>
+Date:   Thu Mar 14 14:29:54 2024 +0100
+
+    mariia changes
+
+[33mcommit 2d87b75e0790f550037899d1d529ebad50c4f80e[m
+Author: mariia paraskun <mariiaparaskun@gmail.com>
+Date:   Thu Mar 14 12:23:58 2024 +0100
+
+    flake fixed
+
+[33mcommit da4e0d33b359a43da90ee9f182784ecfb3c8285d[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Thu Mar 14 12:22:39 2024 +0100
+
+    fixes for certificates
+
+[33mcommit abb54ec30e3bcbddd24b62742f33641d4697cbe4[m
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Thu Mar 14 12:22:36 2024 +0100
+
+    Update urls.py
+
+[33mcommit afd10852291d286017b9fc9d45b1f2464c04955a[m
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Thu Mar 14 12:22:01 2024 +0100
+
+    Update urls.py
+
+[33mcommit 9dc0b21145994dd10ef9a1694f0c68cac18975b1[m
+Author: mariia paraskun <mariiaparaskun@gmail.com>
+Date:   Thu Mar 14 12:15:31 2024 +0100
+
+    prom work added
+
+[33mcommit d7a4aff22a96bb3194270487b355099f909665cb[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Thu Mar 14 11:41:18 2024 +0100
+
+    possible fix for ssl certificates
+
+[33mcommit 458a23353c097da39d75114e4956e340c82a4e43[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Thu Mar 14 07:12:04 2024 +0100
+
+    password check at signup fixed
+
+[33mcommit 45870443e057f0be6b466ff1f48892719e03a770[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Wed Mar 13 17:55:09 2024 +0100
+
+    remote memory
+
+[33mcommit a3fffa1d8f493c04d76bc86d74ebc9958b48e846[m
+Merge: 2d7cb48 1180a9a
+Author: Mariia Paraskun <119864822+mariiamakura@users.noreply.github.com>
+Date:   Wed Mar 13 13:54:22 2024 +0100
+
+    Merge pull request #5 from EmilieD8/feras_remotePlayers
+    
+    Flake problem in Docker
+
+[33mcommit 1180a9ad8b3aff67a97934b5bfaa502017a9b0d1[m
+Merge: 0aa56b8 2d7cb48
+Author: Mariia Paraskun <119864822+mariiamakura@users.noreply.github.com>
+Date:   Wed Mar 13 13:52:12 2024 +0100
+
+    Merge branch 'main' into feras_remotePlayers
+
+[33mcommit 2d7cb48bf113a5bf9358418b1234a5b569e37d3b[m
+Merge: c8a8e49 43d6804
+Author: Mariia Paraskun <119864822+mariiamakura@users.noreply.github.com>
+Date:   Wed Mar 13 13:45:55 2024 +0100
+
+    Merge pull request #4 from EmilieD8/mariia
+    
+    monitoring services added
+
+[33mcommit 43d68046f5cef136a691296036f4833147f15e3b[m
+Author: mariia paraskun <mariiaparaskun@gmail.com>
+Date:   Wed Mar 13 12:46:33 2024 +0100
+
+    works on school machines
+
+[33mcommit 0aa56b833623d26337156212b42640c498378b40[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Wed Mar 13 08:26:18 2024 +0100
+
+    some display fix and added some game status message
+
+[33mcommit 09452d55229c4837d8c071cc24722f3c689824fb[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Tue Mar 12 22:02:08 2024 +0100
+
+    fixed countdown before gamestart
+
+[33mcommit 1dc9f7eeffbc055def5566f50b70b4a4dc9bf4c0[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Tue Mar 12 17:10:44 2024 +0100
+
+    memory remote
+
+[33mcommit 1a019b91a9051ac2ce2327a46483e67b8f1423e6[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Tue Mar 12 15:24:11 2024 +0100
+
+    pong game remote : added different names for the function
+
+[33mcommit 7fd441600142eb6016f056b3c512e62096bcf059[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Tue Mar 12 14:05:06 2024 +0100
+
+    fixed
+
+[33mcommit 7c07de5fdcdf54cc3352535260cb69cd1028a20a[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Tue Mar 12 13:43:06 2024 +0100
+
+    pong remote
+
+[33mcommit 5b1a85fa53923c552d8fe73802e895d7e43e989e[m
+Merge: 7d93401 4e63acb
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Tue Mar 12 11:56:16 2024 +0100
+
+    Merge branch 'feras_remotePlayers' into Emilie_3_remote
+
+[33mcommit 7d93401061fd50838166512cdedb357b9c150270[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Tue Mar 12 11:51:07 2024 +0100
+
+    tests
+
+[33mcommit 4e63acb0bf4e69d969bb70a064089d0f57643c84[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Tue Mar 12 07:14:24 2024 +0100
+
+    fixed playernames correctly shown on game
+
+[33mcommit 686fdfb3b6711e4111a944749a840b3f6a16ea55[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Mon Mar 11 18:22:22 2024 +0100
+
+    remote for memory
+
+[33mcommit 1f1378669497bdb09a21dd779a52f5a9a5e99ffa[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Mon Mar 11 16:43:42 2024 +0100
+
+    player movement fixed and some code cleanup
+
+[33mcommit 16cf8ead1b2bdb0bab9e36633219659500d2646d[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Mon Mar 11 16:09:50 2024 +0100
+
+    some fixes and paddle movement added
+
+[33mcommit 3916f2d0645020cd9c9a0945b2b23d024d740f02[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Mon Mar 11 15:21:07 2024 +0100
+
+    tests
+
+[33mcommit e0505c9ed72667acf25fd546dc3116451ac90291[m
+Merge: e6445b2 385b7ca
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Mon Mar 11 14:32:46 2024 +0100
+
+    Merge branch
+    'feras_remotePlayers' of https://github.com/EmilieD8/Transcendence into Emilie_3_remote
+
+[33mcommit 385b7ca4f20466ebf678388faef18e32b9d97f67[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Mon Mar 11 12:24:58 2024 +0100
+
+    ball and score synchronization implemented
+
+[33mcommit dcb689036351d6ad772d93ac924173885d51d61c[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Fri Mar 8 16:42:46 2024 +0100
+
+    some improvements, still work in progerss
+
+[33mcommit e6445b22e1c69689a57e8e4711fc8dc16c435ffd[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Fri Mar 8 14:25:23 2024 +0100
+
+    some improvements
+
+[33mcommit 6b37128f811fa39fc2c8b24320f227eeefc91259[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Fri Mar 8 13:21:28 2024 +0100
+
+    websockets fixed
+
+[33mcommit 3ef8d498cc07d187d16b6a037d0adace24d64b01[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Fri Mar 8 10:56:01 2024 +0100
+
+    added redis server
+
+[33mcommit e331ba4900907db7facf92b9cf30d616ff848b82[m
+Author: mariiamakura <mariiaparaskun@gmail.com>
+Date:   Thu Mar 7 17:22:14 2024 +0100
+
+    curl test edited
+
+[33mcommit abe2af06f7da7d737d15022040a25f0f397a03c8[m
+Author: mariiamakura <mariiaparaskun@gmail.com>
+Date:   Thu Mar 7 17:10:08 2024 +0100
+
+    test on endpoints
+
+[33mcommit 58fbe3a222d2358c136d615329491043d20d6bf2[m
+Author: mariiamakura <mariiaparaskun@gmail.com>
+Date:   Thu Mar 7 14:25:22 2024 +0100
+
+    compose file edited to pass test
+
+[33mcommit 48d8b0b66eb77503e999901a40e15a5dfa0dbe06[m
+Author: mariiamakura <mariiaparaskun@gmail.com>
+Date:   Thu Mar 7 14:23:01 2024 +0100
+
+    compose file edited to pass test
+
+[33mcommit 03fd5e6a0de8c70b5dcb21200c5155d3497e238e[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Thu Mar 7 12:25:16 2024 +0100
+
+    merged gunicorn/daphne containers into one and some small fix for remote players
+
+[33mcommit 20eedf9e851928543ec160844a4e0e3bacb570d5[m
+Author: mariiamakura <mariiaparaskun@gmail.com>
+Date:   Wed Mar 6 18:29:10 2024 +0100
+
+    test commented out
+
+[33mcommit ecc4d934055f5b69085765997c8e952944bd2959[m
+Author: mariiamakura <mariiaparaskun@gmail.com>
+Date:   Wed Mar 6 18:25:29 2024 +0100
+
+    docker compose added
+
+[33mcommit 851289470d5a00946b59de6cbfa44f3a80b07a51[m
+Author: mariiamakura <mariiaparaskun@gmail.com>
+Date:   Wed Mar 6 18:12:54 2024 +0100
+
+    alerts configured
+
+[33mcommit 2e0e62dfcdf50b28394a86f3d17928e0ff217c59[m
+Author: mariiamakura <mariiaparaskun@gmail.com>
+Date:   Tue Mar 5 15:40:31 2024 +0100
+
+    test branches added
+
+[33mcommit 2893f0a593a45f4887e32cafb5038c7a6b427950[m
+Author: mariiamakura <mariiaparaskun@gmail.com>
+Date:   Tue Mar 5 15:37:42 2024 +0100
+
+    nginx and node monit work
+
+[33mcommit 7aa1917cbe06598112dca46b858105fae3c1fad3[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Tue Mar 5 13:45:14 2024 +0100
+
+    changes in frontend, started to create new functions. WIP
+
+[33mcommit 53ce11dac69432af5ff82d5ba2b7749e4ff851f8[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Tue Mar 5 09:06:16 2024 +0100
+
+    small ssl fix for websockets
+
+[33mcommit 996a1648e1cd657eed448103a35c3582b0f44b7f[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Mon Mar 4 15:09:46 2024 +0100
+
+    implemented ssl and small changes to frontend
+
+[33mcommit 433ce9eea1272995da0a2f2fc0762ce9eff9817a[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Mon Mar 4 08:06:55 2024 +0100
+
+    small fix for signUp
+
+[33mcommit 777ee0f8bf439dade26398ffe87c1358470a7008[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Sat Mar 2 10:22:18 2024 +0100
+
+    websockets implemented + cleanup
+
+[33mcommit 610a7fd1667b8233937f49b58210e7ce56fd2860[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Sat Mar 2 10:21:32 2024 +0100
+
+    websockets implemented
+
+[33mcommit ac14337938bce7c66b9e43d50ad453a23dc24716[m
+Author: mariiamakura <mariiaparaskun@gmail.com>
+Date:   Fri Mar 1 19:55:00 2024 +0100
+
+    monitoring system added
+
+[33mcommit a89eb728474ad8efcc8f111b2af6ae6685114ac8[m
+Author: mariiamakura <mariiaparaskun@gmail.com>
+Date:   Fri Mar 1 17:21:31 2024 +0100
+
+    prometheus and grafana added
+
+[33mcommit 9735bc9bd619b41f84f60c97a31c39e843c52b1b[m
+Author: mariiamakura <mariiaparaskun@gmail.com>
+Date:   Fri Mar 1 14:28:35 2024 +0100
+
+    gitflow added
+
+[33mcommit 2b6efe199b4b5bb9cd3b3707942a2673034ccf9d[m
+Author: mariiamakura <mariiaparaskun@gmail.com>
+Date:   Fri Mar 1 14:25:30 2024 +0100
+
+    gitflow added
+
+[33mcommit a7bb2932af8d00501788c61e18ed63a686a1bc36[m
+Author: mariiamakura <mariiaparaskun@gmail.com>
+Date:   Fri Mar 1 14:20:01 2024 +0100
+
+    gitflow added
+
+[33mcommit b3d91274cb3c5a23e016c9317191bf4ffa310a7c[m
+Author: mariiamakura <mariiaparaskun@gmail.com>
+Date:   Fri Mar 1 14:17:55 2024 +0100
+
+    gitflow added
+
+[33mcommit ae8f2c510ed46677715cac3430b145d77c64146d[m
+Author: mariiamakura <mariiaparaskun@gmail.com>
+Date:   Fri Mar 1 14:16:02 2024 +0100
+
+    gitflow added
+
+[33mcommit c8a8e495428aab5cd0ec89d87d1eb597a891ca54[m
+Merge: 2d91989 66bee77
+Author: Feras Hassouneh <36226489+fhassoun@users.noreply.github.com>
+Date:   Fri Mar 1 07:50:23 2024 +0100
+
+    Merge pull request #3 from EmilieD8/feras_20240221
+    
+    Feras 20240221
+
+[33mcommit 66bee7725f23faa3e367114b151eb9b342ab9f9d[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Thu Feb 29 15:03:50 2024 +0100
+
+    more code cleanup
+
+[33mcommit 3606c235e1ffd5f2cd0add50a32cae458764ef3a[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Thu Feb 29 15:02:31 2024 +0100
+
+    more code cleanup
+
+[33mcommit 93d2b78c68fc9a7478c09900002e2edf018ecffa[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Thu Feb 29 14:56:47 2024 +0100
+
+    another fix
+
+[33mcommit d5373d703de126ae1df8edd4a4db3479f2c35b9c[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Thu Feb 29 14:49:44 2024 +0100
+
+    added watch and small fixes
+
+[33mcommit 4fa594d0c137c60ad95139809e8bce3f7dae0b40[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Wed Feb 28 15:57:48 2024 +0100
+
+    code cleanup and small profile edit fix
+
+[33mcommit 5fe701dd988bdaf3b32bdd6b7e2beb39e129a680[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Wed Feb 28 14:19:45 2024 +0100
+
+    profile edit fixed
+
+[33mcommit 44deee8bf0ccd49e6111add825638473f5ead293[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Tue Feb 27 10:02:36 2024 +0100
+
+    another db fix
+
+[33mcommit 0584dd5282983844b2b70960c5e97a158d92e81a[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Tue Feb 27 09:47:31 2024 +0100
+
+    db and some visual fixes, added bootstrap to index.html
+
+[33mcommit a1d98b3294c18aaab665af555fb3b2cfd3ba57b6[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Mon Feb 26 17:29:07 2024 +0100
+
+    implemented templates and connection to db works
+
+[33mcommit d89ecfa36c8133a986d8c29ba1571cf73aebf1b6[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Mon Feb 26 08:25:37 2024 +0100
+
+    nothing important
+
+[33mcommit 9156f3f3842dcade321f8938300ff867c6a28e75[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Fri Feb 23 16:21:39 2024 +0100
+
+    added some functionality to store and retrieve data, still WIP
+
+[33mcommit 5521ac193ec4cd9a7ee18a625c0fc094fcebcdc6[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Fri Feb 23 07:09:42 2024 +0100
+
+    database fixed
+
+[33mcommit 808cb8b2a09bfa433ee4e1fe94e029263bf61610[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Wed Feb 21 12:58:51 2024 +0100
+
+    added some rules to makefile
+
+[33mcommit aca5132d2d42a964b73c8eb5d277f23ad874727a[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Wed Feb 21 12:54:09 2024 +0100
+
+    rewrote everything from scratch
+
+[33mcommit 2d91989c31a36528ded04e52121c08589e99a513[m
+Merge: 37e68fc f7d2bef
+Author: Feras Hassouneh <36226489+fhassoun@users.noreply.github.com>
+Date:   Fri Feb 16 12:08:54 2024 +0100
+
+    Merge pull request #2 from EmilieD8/nginx-update
+    
+    Nginx update
+
+[33mcommit f7d2befd80d59523c6f45c05ee0743d980bbbf63[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Thu Feb 15 13:23:19 2024 +0100
+
+    nginx dockerfile update
+
+[33mcommit 37e68fcaa4778910d43b423e52f5bdf0dea88a69[m
+Merge: b46f0eb e843409
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Wed Feb 14 14:06:31 2024 +0100
+
+    Merge pull request #1 from EmilieD8/Emilie
+    
+    Emilie
+
+[33mcommit e8434091952a3deeb53889016103016a3e0c2e48[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Wed Feb 14 14:01:42 2024 +0100
+
+    Memory game done
+
+[33mcommit ee1c61783bc9b57f4f560bbb12e1c1bd7133ca8c[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Sun Feb 11 17:19:54 2024 +0100
+
+    Progress bar added and turns added for Memory
+
+[33mcommit 99de7b53363f4456e0b1aa047b0c348777284163[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Fri Feb 9 18:13:35 2024 +0100
+
+    Robot game
+
+[33mcommit f1ad817fff9cfc811b2eb05bbe4d8168cf31e93f[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Thu Feb 8 17:23:30 2024 +0100
+
+    memory done
+
+[33mcommit c69d8d6849f12cd1c9a2d1c3b95af12cc2505fa4[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Wed Feb 7 19:16:43 2024 +0100
+
+    memory game coded
+
+[33mcommit 54355a7a3e28dec16906b0fbab46e28b622338f8[m
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Tue Feb 6 21:21:19 2024 +0100
+
+    game almost done
+
+[33mcommit 23d63298b958f7d353b1defcdf58adbb9387e2a7[m
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Mon Feb 5 22:39:37 2024 +0100
+
+    Issue with the ball fixed, added names next to the board
+
+[33mcommit b4c2a54a875e2e0ace8033c65d4a97232f9fbd94[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Sun Feb 4 12:28:43 2024 +0100
+
+    added sql file to create db, updated documentation
+
+[33mcommit f846cb7688b0bbdca9666605302658d5cc6135de[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Sat Feb 3 16:25:39 2024 +0100
+
+     Buttons finished + better pong
+
+[33mcommit b46f0ebbfd9bbf89a9b761991efd157da26c70e6[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Sat Feb 3 10:54:47 2024 +0100
+
+    changed port
+
+[33mcommit 34346cbe901a691f9cb07844a4cce9057dafd36f[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Sat Feb 3 09:30:11 2024 +0100
+
+    small fixes and added simple documentation
+
+[33mcommit 18c164234ff022fe8b97cc0b1041ee226a6b81ce[m
+Author: fhassoun <fhassoun@student.42berlin.de>
+Date:   Fri Feb 2 11:28:03 2024 +0100
+
+    basic nginx and postgres images with pong-website integrated
+
+[33mcommit 4170fe2d9bad4b3254b0e3c2afd6583640f391c3[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Thu Feb 1 17:55:05 2024 +0100
+
+    Commit message describing your changes
+
+[33mcommit 3524c60bce421755bc3571e693d871aeb9ad8927[m
+Merge: 76ed89f d374df8
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Thu Feb 1 17:49:12 2024 +0100
+
+    buttons added
+
+[33mcommit 76ed89f7038f200a2fc3116442759b889d639962[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Thu Feb 1 17:45:40 2024 +0100
+
+    adding ball direction and button for the menu
+
+[33mcommit d88be4bcf5ccbd78268b8fc3235932dcdeb2638d[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Thu Feb 1 10:58:11 2024 +0100
+
+    added buttons
+
+[33mcommit d374df8101def72b4c7dbf5f9b4bff4830305588[m
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Wed Jan 31 21:50:29 2024 +0100
+
+    added buttons
+
+[33mcommit 8f329a2c428693527e1fbffc2707f33597dd443c[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Mon Jan 29 17:22:32 2024 +0100
+
+    front
+
+[33mcommit f31e0446e78c1648809fc2f6043f38c6c5823f6a[m
+Author: mars12161 <108153152+mars12161@users.noreply.github.com>
+Date:   Mon Jan 29 15:50:41 2024 +0100
+
+    added a super basic database config
+
+[33mcommit fd047704a43bd8ea10421f16df51fe39ac0f98e2[m
+Author: mars12161 <108153152+mars12161@users.noreply.github.com>
+Date:   Mon Jan 29 14:32:33 2024 +0100
+
+    restructured the project
+
+[33mcommit f032e32c13afc44e0ae5db80f4f543039ce14dff[m
+Merge: 0b9b695 eb1cc7d
+Author: mars12161 <108153152+mars12161@users.noreply.github.com>
+Date:   Mon Jan 29 13:28:31 2024 +0100
+
+    Merge branch 'mimi'
+    
+    # Conflicts:
+    #       backend/game/apps.py
+    #       backend/manage.py
+    #       backend/transcendence_backend/asgi.py
+    #       backend/transcendence_backend/settings.py
+    #       backend/transcendence_backend/urls.py
+    #       backend/transcendence_backend/wsgi.py
+    #       backend/user_management/admin.py
+    #       backend/user_management/models.py
+    #       backend/user_management/tests.py
+
+[33mcommit eb1cc7d255508b7088fac53a3929c18f4dcdfa27[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Mon Jan 29 13:26:08 2024 +0100
+
+    backend deleted
+
+[33mcommit bd48792984207498631f4faaad3d533939864afb[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Mon Jan 29 11:42:20 2024 +0100
+
+    game done
+
+[33mcommit ca4d05a3880ae7ef592b43da184b2f2041dc91d8[m
+Author: edrouot <emilie.drouot8@gmail.com>
+Date:   Sun Jan 28 19:30:10 2024 +0100
+
+    Home Page and Pong table
+
+[33mcommit 0b9b6952894369772890dd5b2fecad35a074ca2b[m
+Author: mars12161 <108153152+mars12161@users.noreply.github.com>
+Date:   Sat Jan 27 15:49:36 2024 +0100
+
+    added empty frontend directory
+
+[33mcommit 9a2d3e8d5bc58b01079841f29048c9c4584c8a69[m
+Author: mars12161 <108153152+mars12161@users.noreply.github.com>
+Date:   Sat Jan 27 15:48:58 2024 +0100
+
+    put backend files into backend directory
+
+[33mcommit f6fd256a53f172f919e9e6153ab2a88b4431a35b[m
+Author: mars12161 <108153152+mars12161@users.noreply.github.com>
+Date:   Sat Jan 27 15:47:13 2024 +0100
+
+    separated files for front and backend, created basic structure for microservices game logic and user management
+
+[33mcommit ab516da02d4fec7417a8b251bd61cbf2e73e4e6b[m
+Author: mars12161 <108153152+mars12161@users.noreply.github.com>
+Date:   Sat Jan 27 14:44:55 2024 +0100
+
+    Basic backend structure
+
+[33mcommit b1f834d12ac209e222005bfcefb0f3f2662d64c5[m
+Author: EmilieD8 <103639810+EmilieD8@users.noreply.github.com>
+Date:   Sat Jan 27 14:24:44 2024 +0100
+
+    Initial commit
