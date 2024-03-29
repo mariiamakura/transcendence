@@ -10,6 +10,7 @@ services:
     volumes:
       - static_volume:/home/app/web/staticfiles
       - media_volume:/home/app/web/media
+      # - locale_volume:/home/app/locale
     expose:
       - 8000
       - 8001
@@ -146,8 +147,9 @@ services:
 
 volumes:
   postgres_data:
-  static_volume:
+  static_volume: 
   media_volume:
+      
   # prometheus-data:
   #   # driver_opts:
   #   #   o: bind

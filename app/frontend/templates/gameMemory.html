@@ -1,22 +1,19 @@
 {% extends 'index.html' %}
+{% load i18n %}
 {% block content %}
 {% load static %}
 {% if request.user.is_authenticated %}
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
-        </div>
-    </div>
+			<h1 class="page-header">{% trans "Memoryyyyyyyy" %}</h1>
+			<hr>
+		</div>
+	</div>
 </div>
-{% else %}
-<li class="nav-item">
-    <a class="nav-link" href="signIn">Sign In</a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="signUp">Sign Up</a>
-</li>
-{% endif %}
- 
+<div class="button d-flex justify-content-center align-items-center">
+	<a href="#" onclick="showGameMemory()" class="btn btn-primary" style="margin-left: 1em;">{% trans "Memory" %}</a>
+</div>
 <script>
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -98,11 +95,11 @@ function decideHost() {
 	let host;
 	let client;
 	var main = document.getElementById('content');
-	main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> Which type of game do you wanna play ? </p></div>';
+	main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> {% trans "Which type of game do you wanna play" %} ? </p></div>';
 	var buttonHost = document.createElement("button");
 	var buttonClient= document.createElement("button"); 
-	buttonHost.textContent = "Create New Game";
-	buttonClient.textContent = "Join Existing Game";
+	buttonHost.textContent = "{% trans 'Create New Game' %}";
+	buttonClient.textContent = "{% trans 'Join Existing Game' %}";
 	buttonHost.classList.add("styled-button")
 	buttonClient.classList.add("styled-button");
 	document.getElementById('choice').appendChild(buttonHost);
@@ -1155,5 +1152,7 @@ window.addEventListener('beforeunload', function(event) {
     return null;
 });
 </script>
-
+{% else %}
+    {% include '_login_signup.html' %}
+{% endif %}
 {% endblock %}

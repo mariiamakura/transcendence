@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils.translation import gettext
+import secrets
 
 # Create your models here.
 
@@ -12,6 +14,13 @@ class User(AbstractUser):
     name = models.CharField(max_length=50, default='Name')
     surname = models.CharField(max_length=50, default='Surname')
     email = models.EmailField(max_length=100, unique=True)
+    LANGUAGES = (
+        ('en', gettext('English')),
+        ('ko', gettext('Korean')),
+        ('fr', gettext('French')),
+        ('uk', gettext('Ukrainian')),
+    )
+    language = models.CharField(max_length=10, choices=LANGUAGES, default='en')
     date_of_creation = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
     avatar_url = models.URLField(default='https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png')

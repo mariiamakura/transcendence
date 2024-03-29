@@ -1,10 +1,11 @@
 {% extends "index.html" %}
+{% load i18n %}
 {% block content %}
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6">
             {% if request.user.is_authenticated %}
-                <h2 class="text-center mb-4">Friendlist</h2>
+                <h2 class="text-center mb-4">{% trans "Friendlist" %}</h2>
                 <div id="messages">
                     {% for message in messages %}
                     <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
@@ -21,25 +22,25 @@
                                 <label class="form-check-label">
                                     {{ friend.username }}
                                     {% if friend.online %}
-                                    <span class="text-success">● Online</span>
+                                    <span class="text-success">● {% trans "Online" %}</span>
                                     {% else %}
-                                    <span class="text-danger">● Offline</span>
+                                    <span class="text-danger">● {% trans "Offline" %}</span>
                                     {% endif %}
                                 </label>
                             </div>
                         </li>
                         {% endfor %}
                     </ul>
-                    <button type="submit" class="btn btn-danger mt-3">Remove Selected Friends</button>
+                    <button type="submit" class="btn btn-danger mt-3">{% trans "Remove Selected Friends" %}</button>
                 </form>
                 {% else %}
-					<p id="noFriends">You have no friends yet. 😢</p>
+					<p id="noFriends">{% trans "You have no friends yet." %} 😢</p>
                 {% endif %}
 
                 <form id="searchUserForm" class="mt-4">
                     <div class="input-group">
-                        <input type="text" name="username" class="form-control" placeholder="Search for users..." autocomplete="username"> 
-                        <button type="submit" class="btn btn-primary">Search</button>
+                        <input type="text" name="username" class="form-control" placeholder="{% trans 'Search for users...' %}" autocomplete="username"> 
+                        <button type="submit" class="btn btn-primary">{% trans "Search" %}</button>
                     </div>
                 </form>
                 
@@ -200,12 +201,7 @@
 </div>
 
 {% else %}
-<li class="nav-item">
-	<a class="nav-link" href="signIn">Sign In</a>
-</li>
-<li class="nav-item">
-	<a class="nav-link" href="signUp">Sign Up</a>
-</li>
+    {% include '_login_signup.html' %}
 {% endif %}
 
 {% endblock  %}

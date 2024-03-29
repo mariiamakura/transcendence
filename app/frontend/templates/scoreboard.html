@@ -1,5 +1,5 @@
 {% extends "index.html" %}
-
+{% load i18n %}
 {% block content %}
   {% if request.user.is_authenticated %}
     <div class="container mt-4">
@@ -8,13 +8,13 @@
         <div class="col-md-6 offset-md-3">
           <ul class="list-group" id="game-list">
             <p style="padding-top: 1em">Pong:</p>
-            <li class="list-group-item">Games played: {{ games_played_pong}}</li>
-            <li class="list-group-item">Games won: {{ games_won_pong }}</li>
-            <li class="list-group-item">Longest win streak: {{ pong_max_win_streak }}</li>
-            <p style="padding-top: 1em">Memory:</p>
-            <li class="list-group-item">Games played: {{games_played_memory}}</li>
-            <li class="list-group-item">Games won: {{games_won_memory}}</li>
-            <li class="list-group-item">Longest win streak: {{memory_max_win_streak}}</li>
+            <li class="list-group-item">{% trans "Games Played:" %} {{ games_played_pong}}</li>
+            <li class="list-group-item">{% trans "Games Won:" %} {{ games_won_pong }}</li>
+            <li class="list-group-item">{% trans "Win Streak:" %} {{ pong_max_win_streak }}</li>
+            <p style="padding-top: 1em">{% trans "Memory:" %}:</p>
+            <li class="list-group-item">{% trans "Games Played:" %} {{games_played_memory}}</li>
+            <li class="list-group-item">{% trans "Games Won:" %} {{games_won_memory}}</li>
+            <li class="list-group-item">{% trans "Win Streak:" %} {{memory_max_win_streak}}</li>
             <p style="padding-top: 1em">Historic:</p>
             {% for game in all_games %}
               <li class="list-group-item game-item" style="display: none;">
@@ -45,6 +45,9 @@
         </div>
       </div>
     </div>
+    {% else %}
+      {% include '_login_signup.html' %}
+
     <script>
       document.addEventListener("DOMContentLoaded", function() {
         console.log("DOM fully loaded and parsed");

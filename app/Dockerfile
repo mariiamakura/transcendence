@@ -14,11 +14,12 @@ ENV PYTHONUNBUFFERED 1
 
 # install system dependencies
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends gcc
+    apt-get install -y --no-install-recommends gcc gettext
 
 # lint
 RUN pip install --upgrade pip
 RUN pip install flake8==6.0.0
+RUN pip install Django
 COPY . /usr/src/app/
 RUN flake8 --ignore=E501,F401,W391 .
 
@@ -49,9 +50,9 @@ WORKDIR $APP_HOME
 
 
 # Install Redis
-RUN apt-get update && apt-get install -y --no-install-recommends redis-server
+RUN apt-get update && apt-get install -y --no-install-recommends redis-server nano
 # install dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends netcat
+RUN apt-get update && apt-get install -y --no-install-recommends netcat gettext
 COPY --from=builder /usr/src/app/wheels /wheels
 COPY --from=builder /usr/src/app/requirements.txt .
 RUN pip install --upgrade pip
@@ -60,6 +61,7 @@ RUN pip install --no-cache /wheels/*
 # copy entrypoint.prod.sh
 COPY ./entrypoint.sh .
 COPY ./frontend/statics $APP_HOME/static
+COPY ./frontend/statics/locale $APP_HOME/locale
 RUN sed -i 's/\r$//g'  $APP_HOME/entrypoint.sh
 RUN chmod +x  $APP_HOME/entrypoint.sh
 
