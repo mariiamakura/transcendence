@@ -232,20 +232,28 @@ class GameConsumer(AsyncWebsocketConsumer):
         logger.debug("self.room_name: " + self.room_name)
         self.user = await self.get_user(self.room_name)
         logger.debug("self.room_name: " + self.room_name)
+        if self.user is not None:
+            logger.debug("self.user: " + self.user.username)
+        else:
+            logger.debug("self.user is None")
 
         # Send player_left message to update other players
-        who = None
-        if self.user is not None:
-            if self.user == GameRoomManagerPong.rooms[self.room_name]["host"]:
-                who = 'host'
-            else:
-                who = 'guest'
+        # who = None
+        # if self.user is not None:
+        #     if self.user == GameRoomManagerPong.rooms[self.room_name]["host"]:
+        #         who = 'host'
+        #     elif self.user == GameRoomManagerPong.rooms[self.room_name]["guest"]:
+        #         who = 'guest'
+        #     elif self.user == GameRoomManagerMemory.rooms[self.room_name]["host"]:
+        #         who = 'host'
+        #     elif self.user == GameRoomManagerMemory.rooms[self.room_name]["guest"]:
+        #         who = 'guest'
 
         await self.channel_layer.group_send(
             self.room_group_name,
             {
                 'type': 'player_left',
-                'who': who,
+                # 'who': who,
                 'channel_name': self.channel_name
             }
         )
@@ -263,8 +271,13 @@ class GameConsumer(AsyncWebsocketConsumer):
             if self.room_name in GameRoomManagerPong.rooms:
                 room = GameRoomManagerPong.rooms[self.room_name]
                 if room is not None:
-                    logger.debug("room closing ")
+                    logger.debug("room closing Pong")
                     del GameRoomManagerPong.rooms[self.room_name]
+            if self.room_name in GameRoomManagerMemory.rooms:
+                room = GameRoomManagerMemory.rooms[self.room_name]
+                if room is not None:
+                    logger.debug("room closing Memory ")
+                    del GameRoomManagerMemory.rooms[self.room_name]
 
         # await self.disconnect(close_code=None)
 
