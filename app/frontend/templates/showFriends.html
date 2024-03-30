@@ -153,9 +153,9 @@
 						const searchUserForm = document.getElementById('searchUserForm');
 						formContainer.insertBefore(friendList, searchUserForm);
 					}
-					if (noFriends) {
+					{% comment %} if (noFriends) {
 						noFriends.remove();
-					}
+					} {% endcomment %}
 					const newFriend = document.createElement('li');
 					newFriend.id = `friend-${data.user_id}`;
 					newFriend.className = "list-group-item";

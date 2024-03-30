@@ -421,9 +421,10 @@ let gameRoomSocket = null;
 
 async function remoteHost() {
     let hostName = "{{ user.display_name }}"; // This should be sanitized to ensure URL-friendliness
-    let nameRoom = encodeURIComponent(`${hostName}_Game`).replace(/'/g, ""); // Sanitize and remove special characters
+	hostName = hostName.replace(/-/g,"");
+	let nameRoom = encodeURIComponent(`${hostName}_Game`).replace(/'/g, "").replace(/-/g, ""); // Sanitize and remove special characters and hyphens
     let setName = gameSettings.chosenSet === 1 ? "{% trans 'Nature' %}" : "{% trans 'Robot' %}";
-    let sanitizedRoomName = encodeURIComponent(`room_of_${hostName}_with_${gameSettings.numberOfCards}_cards_and_set_of_${setName}`).replace(/'/g, ""); // Sanitize and remove special characters
+    let sanitizedRoomName = encodeURIComponent(`room_of_${hostName}_with_${gameSettings.numberOfCards}_cards_and_set_of_${setName}`).replace(/'/g, "").replace(/-/g, ""); // Sanitize and remove special characters
     let socket = new WebSocket(`wss://${window.location.host}/wss/socket-server/lobby/`); // Connect to the lobby
 
     socket.onopen = function(event) {
@@ -1188,7 +1189,7 @@ window.addEventListener('beforeunload', function (event) {
         closeRoom();
 
         // Prevent the browser from showing the default dialog
-        event.preventDefault();
+        {% comment %} event.preventDefault(); {% endcomment %}
 
         // You might want to return something here to customize the message shown in the dialog
         return '';

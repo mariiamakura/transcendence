@@ -137,12 +137,14 @@
     </div>
     
 </body>
-<!-- <script>
+ <script>
     
     {% if request.user.is_authenticated %}
-    let khostName = "{{ user.username }}"; 
-    let ksanitizedRoomName = encodeURIComponent(`${khostName}`).replace(/'/g, ""); // Sanitize and remove special characters
-    let ksocket = new WebSocket(`wss://${window.location.host}/wss/keep-alive/${ksanitizedRoomName}/`); 
+    let khostName = "{{ user.display_name }}"; 
+	khostName = khostName.replace(/-/g,"");
+    let ksanitizedRoomName = encodeURIComponent(`${khostName}`).replace(/'/g, "").replace(/-/g, ""); // Sanitize and remove special characters
+    console.log(ksanitizedRoomName);
+	let ksocket = new WebSocket(`wss://${window.location.host}/wss/keep-alive/${ksanitizedRoomName}/`); 
 
 
     ksocket.onopen = function() {
@@ -164,13 +166,18 @@
                 }
     };
 
+	ksocket.onclose = function() {
+		
+                  
+
+	};
+
+	
+
+</script>
 
 
-
-
-
-
-    {% endif %} -->
+    {% endif %} 
     
 
 

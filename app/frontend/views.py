@@ -37,6 +37,8 @@ def signUp(request):
     if request.method == 'POST':
         username = request.POST.get('username', '')
         display_name = request.POST.get('username', '')
+        display_name = display_name.replace('-', '')
+        print("at signuo: " + display_name)
         email = request.POST.get('email', '')
         password1 = request.POST.get('password1', '')
         password2 = request.POST.get('password2', '')
@@ -107,7 +109,7 @@ def signIn(request):
 
         user = authenticate(username=username, password=password)
         if user is not None:
-
+            print(request.user.display_name)
             login(request, user)
             request.user.online = True
             request.session['user_language'] = user.language
@@ -589,6 +591,7 @@ def callback(request):
             name = user_info['first_name']
             password1 = user_info['login'] + "@secretpw1#"
             display_name = user_info['login']
+            display_name = display_name.replace('-', '')
             user = User.objects.filter(username=username).first()
             if user:
                 user = authenticate(username=username, password=password1)

@@ -1374,7 +1374,7 @@ window.addEventListener('beforeunload', function (event) {
         closeRoom();
 
         // Prevent the browser from showing the default dialog
-        event.preventDefault();
+        {% comment %} event.preventDefault(); {% endcomment %}
 
         // You might want to return something here to customize the message shown in the dialog
         return '';
