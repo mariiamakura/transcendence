@@ -751,7 +751,7 @@ let newPlayer2Score;
 //ball variables
 let ballWidth = 10;
 let ballHeight = 10;
-let ballRadiusFactor = 2;
+let ballRadiusFactor = 1;
 let ball = {
     x: null,
     y: null,
@@ -793,7 +793,7 @@ function initVariables() {
     let maxDimension = Math.max(ball.width, ball.height);
 
 // Calculate the radius based on the maximum dimension and radius factor
-    ball.radius = maxDimension * ballRadiusFactor;
+    ball.radius = (maxDimension * ballRadiusFactor) ;
     player1.height = playerHeight;
     player2.height = playerHeight;
 }
@@ -915,7 +915,8 @@ function update() {
     if (ball.y <= 0 || ball.y + ball.height >= board.height) {
         ball.velocityY *= -1;
     }
-    checkCollision(ball.y, ball.x, ball.velocityX, ball.velocityY);
+    // checkCollision(ball.y, ball.x, ball.velocityX, ball.velocityY); 
+	checkCollision();
     if (isHost && remote == true) {
         if (ball.x < 0) {
             player2Score++;
@@ -966,13 +967,43 @@ function update() {
     }
 }
 
-function checkCollision(ballY, ballX, ballVelocityX, ballVelocityY) {
+function checkCollision() {
+    let nextX = ball.x + ball.velocityX;
+    let nextY = ball.y + ball.velocityY;
+
+    let speed = Math.sqrt(ball.velocityX * ball.velocityX + ball.velocityY * ball.velocityY);
+
+    if (nextX - ball.radius < player1.x + player1.width - 10 && nextX + ball.radius > player1.x - 10 && nextY + ball.radius > player1.y && nextY - ball.radius < player1.y + player1.height) {
+        ball.velocityX = Math.abs(ball.velocityX);
+        adjustBallSpeed(speed);
+        ball.x = player1.x + player1.width + ball.radius - 10;
+    }
+
+    if (nextX + ball.radius > player2.x - 10 && nextX - ball.radius < player2.x + player2.width + 10 && nextY + ball.radius > player2.y && nextY - ball.radius < player2.y + player2.height) {
+        ball.velocityX = -Math.abs(ball.velocityX);
+        adjustBallSpeed(speed);
+        ball.x = player2.x - ball.radius - 10;
+    }
+
+   
+    if (nextY - ball.radius < (0 - ball.height) || nextY + ball.radius > (boardHeight - ball.height)) {
+        ball.velocityY = -ball.velocityY; 
+    }
+}
+
+function adjustBallSpeed(originalSpeed) {
+    let currentSpeed = Math.sqrt(ball.velocityX * ball.velocityX + ball.velocityY * ball.velocityY);
+    ball.velocityX *= originalSpeed / currentSpeed;
+    ball.velocityY *= originalSpeed / currentSpeed;
+}
+
+function checkCollision2(ballY, ballX, ballVelocityX, ballVelocityY) {
     // Predict the ball's next position
     let nextBallX = ballX + ballVelocityX ;
     let nextBallY = ballY + ballVelocityY;
 
     let localPaddle1XCenter = player1.x + player1.width / 2;
-    let distanceToPaddle1 = Math.abs(nextBallX - localPaddle1XCenter);
+    let distanceToPaddle1 = Math.abs(nextBallX - (localPaddle1XCenter ));
 
     if (distanceToPaddle1 < ball.radius + (player1.width / 2) && nextBallY > (player1.y - playerWidth) && nextBallY < (player1.y + player1.height + playerWidth)) {
         ball.velocityX *= -1; // Reverse the ball's X velocity
@@ -986,7 +1017,7 @@ function checkCollision(ballY, ballX, ballVelocityX, ballVelocityY) {
     }
 	
     let localPaddle2XCenter = player2.x - player2.width / 2;
-    let distanceToPaddle2 = Math.abs(nextBallX - localPaddle2XCenter);
+    let distanceToPaddle2 = Math.abs(nextBallX - (localPaddle2XCenter - 5));
 
     if (distanceToPaddle2 < ball.radius + (player2.width / 2) && nextBallY > (player2.y - playerWidth) && nextBallY < (player2.y + player2.height + playerWidth)) {
         ball.velocityX *= -1; // Reverse the ball's X velocity
