@@ -751,7 +751,7 @@ let newPlayer2Score;
 //ball variables
 let ballWidth = 10;
 let ballHeight = 10;
-let ballRadiusFactor = 10;
+let ballRadiusFactor = 2;
 let ball = {
     x: null,
     y: null,
@@ -783,12 +783,17 @@ function initVariables() {
     //boardHeight = window.innerHeight / 1.618;
     boardWidth = 600;
     boardHeight = 400;
-    ball.velocityX = Math.cos(generateRandomAngle()) * boardWidth / 200 * velocity;
-    ball.velocityY = Math.sin(generateRandomAngle()) * boardHeight / 100 * generateRandomNumber() * velocity;
-    if (boardHeight >= boardWidth / 1.618)
-        boardHeight = boardWidth / 1.618;
+    var angle = generateRandomAngle();
+    ball.velocityX = Math.cos(angle) * boardWidth / 200 * velocity;
+    ball.velocityY = Math.sin(angle) * boardHeight / 100 * velocity;
+    // if (boardHeight >= boardWidth / 1.618)
+    //     boardHeight = boardWidth / 1.618;
     playerHeight = boardHeight / 5;
-    ball.radius = playerHeight / ballRadiusFactor;
+    // ball.radius = playerHeight / ballRadiusFactor;
+    let maxDimension = Math.max(ball.width, ball.height);
+
+// Calculate the radius based on the maximum dimension and radius factor
+    ball.radius = maxDimension * ballRadiusFactor;
     player1.height = playerHeight;
     player2.height = playerHeight;
 }
@@ -961,7 +966,6 @@ function update() {
     }
 }
 
-
 function checkCollision(ballY, ballX, ballVelocityX, ballVelocityY) {
     // Predict the ball's next position
     let nextBallX = ballX + ballVelocityX ;
@@ -995,29 +999,29 @@ function checkCollision(ballY, ballX, ballVelocityX, ballVelocityY) {
         }
     }
 }
-{% comment %} function checkCollision(ballY, ballX) {
-    // ballX -= 5;
-    let LoclPad1XPos = player1.x + player1.width / 2;
-    let distance1 = Math.abs(ballX - LoclPad1XPos);
+// {% comment %} function checkCollision(ballY, ballX) {
+//     // ballX -= 5;
+//     let LoclPad1XPos = player1.x + player1.width / 2;
+//     let distance1 = Math.abs(ballX - LoclPad1XPos);
 
-    if (distance1 < 5 && ballY > (player1.y - playerWidth) && player1.y + player1.height + playerWidth > ballY) {
-        ball.velocityX *= -1; // Reverse the x velocity
-        if (ballY <= player1.y || ballY >= player1.y + player1.height) {
-            ball.velocityY *= -1; // Reverse the y velocity
-        }
-    }
+//     if (distance1 < 5 && ballY > (player1.y - playerWidth) && player1.y + player1.height + playerWidth > ballY) {
+//         ball.velocityX *= -1; // Reverse the x velocity
+//         if (ballY <= player1.y || ballY >= player1.y + player1.height) {
+//             ball.velocityY *= -1; // Reverse the y velocity
+//         }
+//     }
 
-    ballX += 5;
-    let LoclPad2XPos = player2.x - player2.width / 2;
-    let distance2 = Math.abs(ballX - LoclPad2XPos);
+//     ballX += 5;
+//     let LoclPad2XPos = player2.x - player2.width / 2;
+//     let distance2 = Math.abs(ballX - LoclPad2XPos);
 
-    if (distance2 < 5 && ballY > (player2.y - playerWidth) && player2.y + player2.height + playerWidth > ballY) {
-        ball.velocityX *= -1; // Reverse the x velocity
-        if (ballY <= player2.y || ballY >= player2.y + player2.height) {
-            ball.velocityY *= -1; // Reverse the y velocity
-        }
-    }
-} {% endcomment %}
+//     if (distance2 < 5 && ballY > (player2.y - playerWidth) && player2.y + player2.height + playerWidth > ballY) {
+//         ball.velocityX *= -1; // Reverse the x velocity
+//         if (ballY <= player2.y || ballY >= player2.y + player2.height) {
+//             ball.velocityY *= -1; // Reverse the y velocity
+//         }
+//     }
+// } {% endcomment %}
 
 function outOfBounds(yPosition) {
     return (yPosition < 0 || yPosition > boardHeight - playerHeight);
@@ -1117,9 +1121,9 @@ function resetGame(direction) {
     ball.x = board.width / 2 - ballWidth / 2;
     ball.y = Math.random() * (board.height - 10);
     // Reset ball velocity
-
-    ball.velocityX = Math.cos(generateRandomAngle()) * board.width / 200 * direction * velocity;
-    ball.velocityY = Math.sin(generateRandomAngle()) * board.height / 100 * generateRandomNumber() * velocity;
+    var angle = generateRandomAngle();
+    ball.velocityX = Math.cos(angle) * board.width / 200 * direction * velocity;
+    ball.velocityY = Math.sin(angle) * board.height / 100 * velocity;
 }
 
 function updateGameResultPong(winner, namePlayerPlaying, scoreToDo, scoreWinner, scoreLoser, tournament, tournament_id) {
