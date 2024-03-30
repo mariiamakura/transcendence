@@ -873,8 +873,9 @@ function handleResize() {
     ball.radius = playerHeight / ballRadiusFactor;
     ball.x = board.width / 2;
     ball.y = board.height / 2;
-    ball.velocityX = Math.cos(generateRandomAngle()) * boardWidth / 200 * velocity;
-    ball.velocityY = Math.sin(generateRandomAngle()) * boardHeight / 100 * generateRandomNumber() * velocity;
+    var angle;
+    ball.velocityX = Math.cos(angle) * boardWidth / 200 * velocity;
+    ball.velocityY = Math.sin(angle) * boardHeight / 100 * velocity;
 }
 
 function update() {
@@ -1139,14 +1140,6 @@ function generateRandomAngle() {
     return randomAngle;
 }
 
-function generateRandomNumber() {
-    var random = Math.random();
-    if (random > 0.5)
-        random = 1;
-    else
-        random = -1;
-    return random;
-}
 
 function resetGame(direction) {
     ball.x = board.width / 2 - ballWidth / 2;
