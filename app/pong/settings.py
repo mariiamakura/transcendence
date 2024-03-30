@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
 from pathlib import Path
-from django.utils.translation import gettext_lazy as _import logging
+from django.utils.translation import gettext_lazy as _
+import logging
 
 # from channels.layers import get_channel_layer
 

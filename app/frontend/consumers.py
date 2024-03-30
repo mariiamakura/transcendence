@@ -72,10 +72,10 @@ class KeepAliveConsumer(AsyncWebsocketConsumer):
         self.last_alive_time = datetime.now()
         self.alive_timeout = 5  # seconds
         self.check_interval = 1  # seconds
+        self.keep_alive_task = None
 
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
-        logger.debug(f"Room name: {self.room_name}")
         self.room_group_name = f'{self.room_name}'
         self.user = await self.get_user(self.room_name)
         await self.channel_layer.group_add(
@@ -84,12 +84,13 @@ class KeepAliveConsumer(AsyncWebsocketConsumer):
         )
         await self.set_user_online(True)
         await self.accept()
+        self.keep_alive_task = asyncio.create_task(self.check_alive())
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_send(
             self.room_group_name,
             {
-                'action': 'player_left',
+                'type': 'player_left',
                 'channel_name': self.channel_name
             }
         )
@@ -99,14 +100,25 @@ class KeepAliveConsumer(AsyncWebsocketConsumer):
         )
         # await self.set_user_online(False)
         await asyncio.sleep(1)
+        # Check if the disconnecting user is the host of a room and close the room if so
+        if self.user == GameRoomManagerPong.rooms[self.room_name]["host"]:
+            await self.close_room_pong(self.room_name)
+        elif self.user == GameRoomManagerPong.rooms[self.room_name]["guest"]:
+            await self.close_room_pong(self.room_name)
+        elif self.user == GameRoomManagerMemory.rooms[self.room_name]["host"]:
+            await self.close_room_memory(self.room_name)
+        elif self.user == GameRoomManagerMemory.rooms[self.room_name]["guest"]:
+            await self.close_room_memory(self.room_name)
 
     @database_sync_to_async
     def close_room_pong(self, room_name):
+        # Logic to close the Pong room
         if room_name in GameRoomManagerPong.rooms:
             del GameRoomManagerPong.rooms[room_name]
 
     @database_sync_to_async
     def close_room_memory(self, room_name):
+        # Logic to close the Memory room
         if room_name in GameRoomManagerMemory.rooms:
             del GameRoomManagerMemory.rooms[room_name]
 
@@ -119,11 +131,6 @@ class KeepAliveConsumer(AsyncWebsocketConsumer):
             await asyncio.sleep(1)
             await self.send(text_data=json.dumps({'action': 'keep_alive'}))
 
-        elif action == 'player_left':
-            # host_name = data.get('host_name')
-            logger.debug("enters Player left KEEP ALIVE")
-            # self.disconnect(close_code=None)
-
     async def keep_alive(self, event):
         await self.send(text_data=json.dumps({
             'action': 'keep_alive'
@@ -134,6 +141,8 @@ class KeepAliveConsumer(AsyncWebsocketConsumer):
             await asyncio.sleep(self.check_interval)
             if (datetime.now() - self.last_alive_time).total_seconds() > self.alive_timeout:
                 await self.set_user_online(False)
+                if self.keep_alive_task:
+                    self.keep_alive_task.cancel()
                 await self.close()
                 break
 
@@ -174,6 +183,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_send(
             self.room_group_name,
             {
+                'type': 'player_left',
                 'action': 'player_left',
                 # 'who': who,
                 'channel_name': self.channel_name
@@ -441,6 +451,7 @@ class GameConsumer(AsyncWebsocketConsumer):
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
+                    'type': 'player_left',
                     'action': 'player_left'
                 }
             )
@@ -460,6 +471,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
     async def player_left(self, event):
         await self.send(text_data=json.dumps({
+            'type': 'player_left',
             'action': 'player_left',
             'message': 'player left!'
         }))
