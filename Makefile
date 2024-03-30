@@ -20,8 +20,8 @@ create_cert:
 	@./scripts/copy_certs.sh
 
 install_browser_cert:
-	@chmod +x ./install_browser_cert.sh
-	@./install_browser_cert.sh
+	@chmod +x scripts/install_browser_cert.sh
+	@./scripts/install_browser_cert.sh
 
 delete_browser_cert:
 	@chmod +x scripts/delete_browser_cert.sh

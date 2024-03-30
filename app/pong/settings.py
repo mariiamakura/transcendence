@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 import logging
+import ipaddress
 
 # from channels.layers import get_channel_layer
 
@@ -239,7 +240,8 @@ MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-CSRF_TRUSTED_ORIGINS = ["https://localhost:9999/*", "http://localhost:9999/*", "https://42pong.ddns.net:9999/*", "http://42pong.ddns.net:9999/*"]
+# CSRF_TRUSTED_ORIGINS = ["https://localhost:9999/*", "http://localhost:9999/*", "https://42pong.ddns.net:9999/*", "http://42pong.ddns.net:9999/*" ,"https://10.15.1.8:9999/*" ,"https://10.15.1.10:9999/*"]
+CSRF_TRUSTED_ORIGINS = [f'https://10.15.{b}.{c}:9999/*' for b in range(256) for c in range(256)]
 
 # Allow all domains during development
 CORS_ALLOW_ALL_ORIGINS = True
