@@ -548,7 +548,8 @@ async function remoteHost() {
                 if (data.action === 'player_left') {
                     // console.log(data.message);
                     // console.log(data.who + ' left the game');
-                    endGame(namePlayer[0]);
+                    if (scoreUpdate === false)
+                        endGame(namePlayer[0]);
                     gameRoomSocket.close();
                 }
             }
@@ -657,7 +658,8 @@ async function remoteClient() {
             }
             if (data.action === 'player_left') {
                 console.log('other player left the game');
-                endGame(namePlayer[1]);
+                if (scoreUpdate === false)
+                    endGame(namePlayer[1]);
                 roomSocket.close();
             }
             if (data.type === 'notify_winner') {
@@ -665,7 +667,6 @@ async function remoteClient() {
             }
             roomSocket.onclose = function () {
                 roomSocket.send(JSON.stringify({ action: 'player_left' }));
-                // endGame(namePlayer[0]);
                 console.log("Game room connection closed.");
             };
         };
@@ -1143,6 +1144,7 @@ function resetGame(direction) {
 }
 
 function updateGameResultPong(winner, namePlayerPlaying, scoreToDo, scoreWinner, scoreLoser, tournament, tournament_id) {
+    scoreUpdate = true;
     fetch('/update_game_result_pong/', {
         method: 'POST',
         headers: {
@@ -1217,7 +1219,6 @@ function endGame(winner) {
     let scoreWinner = player1Score > player2Score ? player1Score : player2Score;
     let scoreLoser = player1Score < player2Score ? player1Score : player2Score;
     let namePlayerPlaying = [player1.name, player2.name];
-    console.log("SCORE UPDATE: " + scoreUpdate);
     if (scoreUpdate === false)
         updateGameResultPong(winner, namePlayerPlaying, scoreToDo, scoreWinner, scoreLoser, tournament, tournament_id);
     var mainElement = document.getElementById('content');

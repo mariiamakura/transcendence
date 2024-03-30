@@ -40,6 +40,8 @@ let gameSettings = {
 	chosenSet: ""
 };
 
+let scoreUpdate = false;
+
 function TwoOrTournament() {
     var main = document.getElementById('content');
     main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> Do you want to play a 1vs1 game or a tournament ? </p></div>';
@@ -368,6 +370,7 @@ async function showGameMemory() {
 	mainElement.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em; padding-top:3em;">Memory game</p>';    
 	debug = 0;
 	startGame = false;
+    scoreUpdate = false;
 	tournament = false;
 	singleGame = false;
 	numberPlayers = 0;
@@ -485,18 +488,21 @@ async function remoteHost() {
                     scorePlayer2 = data.score2;
                 }
                 if (data.action === 'game_ended_memory') {
+                    scoreUpdate = data.scoreUpdate;
                     endGameMemory(data.winner);
                 }
                 if (data.action === 'player_left') {
                     // console.log(data.message);
                     // console.log(data.who + ' left the game');
-                    endGameMemory(namePlayer[0]);
+                    if (scoreUpdate === false)
+                        endGameMemory(namePlayer[0]);
                     gameRoomSocket.close();
                 }
             }
             gameRoomSocket.onclose = function() {
                 // gameRoomSocket.send(JSON.stringify({ action: 'player_left' }));
-                endGameMemory(namePlayer[0]);
+                if (scoreUpdate === false)
+                    endGameMemory(namePlayer[0]);
                 console.log("Game room Memory in onclose function : connection closed.");
             };
         }
@@ -610,7 +616,8 @@ async function remoteClient() {
 
             if (data.action === 'player_left') {
                 console.log('other player left the game');
-                endGameMemory(namePlayer[1]);
+                if (scoreUpdate === false)
+                    endGameMemory(namePlayer[1]);
                 roomSocket.close();
             }
             roomSocket.onclose = function() {
@@ -671,6 +678,7 @@ let secondPlayer = 1;
 let cardInfo = [];
 
 function launchGameMemory(cards_info) {
+    gameUpdated = false;
     var mainElement = document.getElementById('content');
     PlayerToPlay = namePlayer[firstPlayer];
     let sets = [natureFirstSet14, natureSecondSet14, natureFirstSet18, natureSecondSet18, natureFirstSet26, natureSecondSet26, natureFirstSet30, natureSecondSet30, 
@@ -842,9 +850,9 @@ function playTime() {
                     }
                     if (scorePlayer1 + scorePlayer2 === gameSettings.numberOfCards / 2) {
                         if (isHost && remote === true)
-                            gameRoomSocket.send(JSON.stringify({action: 'game_ended_memory', winner: scorePlayer1 > scorePlayer2 ? namePlayer[firstPlayer] : namePlayer[secondPlayer]}));
+                            gameRoomSocket.send(JSON.stringify({action: 'game_ended_memory', winner: scorePlayer1 > scorePlayer2 ? namePlayer[firstPlayer] : namePlayer[secondPlayer], scoreUpdate: true}));
                         else if (remote === true)
-                            roomSocket.send(JSON.stringify({action: 'game_ended_memory', winner: scorePlayer1 > scorePlayer2 ? namePlayer[firstPlayer] : namePlayer[secondPlayer]}));
+                            roomSocket.send(JSON.stringify({action: 'game_ended_memory', winner: scorePlayer1 > scorePlayer2 ? namePlayer[firstPlayer] : namePlayer[secondPlayer], scoreUpdate: true}));
                         else if (local === true)
                             endGameMemory(scorePlayer1 > scorePlayer2 ? namePlayer[firstPlayer] : namePlayer[secondPlayer]);
                     }
@@ -857,6 +865,7 @@ function playTime() {
 
 function updateGameResultMemory(winner, namePlayer, chosenSet, numberOfCards, scoreWinner, scoreLoser, tournament, tournament_id)
 {
+    scoreUpdate = true;
     console.log('Updating game result...');
     if (chosenSet === 1)
         setName = 'Nature';
@@ -954,7 +963,9 @@ function endGameMemory(winner)
     //     winner = "Exaequo";
     let scoreWinner = scorePlayer1 > scorePlayer2 ? scorePlayer1 : scorePlayer2;
     let scoreLoser = scorePlayer1 < scorePlayer2 ? scorePlayer1 : scorePlayer2;
-    updateGameResultMemory(winner, namePlayer, gameSettings.chosenSet, gameSettings.numberOfCards, scoreWinner, scoreLoser, tournament, tournament_id);
+    console.log("scoreUpdate : " + scoreUpdate)
+    if (scoreUpdate === false)
+        updateGameResultMemory(winner, namePlayer, gameSettings.chosenSet, gameSettings.numberOfCards, scoreWinner, scoreLoser, tournament, tournament_id);
     var mainElement = document.getElementById('content');
     mainElement.innerHTML = ''; // Remove all inner HTML content  
     // if (winner !== "Exaequo")
