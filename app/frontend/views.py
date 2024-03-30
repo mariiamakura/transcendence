@@ -428,7 +428,7 @@ def add_users(request):
 
     # Generate 50 users with random data
     users_data = []
-    for _ in range(50):
+    for _ in range(3):
         user_data = {
             "username": fake.user_name(),
             "email": fake.email(),

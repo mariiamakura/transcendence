@@ -546,13 +546,16 @@ async function remoteHost() {
                         player2.velocityY = 0;
                     }
                 }
-                if (data.type === 'player_left') {
-                    console.log(data.message);
-                    console.log('host Player left the game');
+                if (data.action === 'player_left') {
+                    // console.log(data.message);
+                    // console.log(data.who + ' left the game');
+                    if (scoreUpdate === false)
+                        endGame(namePlayer[0]);
+                    gameRoomSocket.close();
                 }
             }
             gameRoomSocket.onclose = function () {
-                endGame(namePlayer[0]);
+                // endGame(namePlayer[1]);
                 console.log("Game room connection closed.");
             };
         }
@@ -654,15 +657,17 @@ async function remoteClient() {
             if (data.action === 'get_host_player') {
                 namePlayer[0] = data.name;
             }
-            if (data.type === 'player_left') {
-                console.log(data.message);
-                console.log('Player left the game');
+            if (data.action === 'player_left') {
+                console.log('other player left the game');
+                if (scoreUpdate === false)
+                    endGame(namePlayer[1]);
+                roomSocket.close();
             }
             if (data.type === 'notify_winner') {
                 console.log('The winner is:', data.winner);
             }
             roomSocket.onclose = function () {
-                endGame(namePlayer[1]);
+                roomSocket.send(JSON.stringify({ action: 'player_left' }));
                 console.log("Game room connection closed.");
             };
         };
@@ -740,7 +745,7 @@ let newPlayer2Score;
 //ball variables
 let ballWidth = 10;
 let ballHeight = 10;
-let ballRadiusFactor = 10;
+let ballRadiusFactor = 1;
 let ball = {
     x: null,
     y: null,
@@ -772,12 +777,17 @@ function initVariables() {
     //boardHeight = window.innerHeight / 1.618;
     boardWidth = 600;
     boardHeight = 400;
-    ball.velocityX = Math.cos(generateRandomAngle()) * boardWidth / 200 * velocity;
-    ball.velocityY = Math.sin(generateRandomAngle()) * boardHeight / 100 * generateRandomNumber() * velocity;
-    if (boardHeight >= boardWidth / 1.618)
-        boardHeight = boardWidth / 1.618;
+    var angle = generateRandomAngle();
+    ball.velocityX = Math.cos(angle) * boardWidth / 200 * velocity;
+    ball.velocityY = Math.sin(angle) * boardHeight / 100 * velocity;
+    // if (boardHeight >= boardWidth / 1.618)
+    //     boardHeight = boardWidth / 1.618;
     playerHeight = boardHeight / 5;
-    ball.radius = playerHeight / ballRadiusFactor;
+    // ball.radius = playerHeight / ballRadiusFactor;
+    let maxDimension = Math.max(ball.width, ball.height);
+
+// Calculate the radius based on the maximum dimension and radius factor
+    ball.radius = (maxDimension * ballRadiusFactor) ;
     player1.height = playerHeight;
     player2.height = playerHeight;
 }
@@ -857,8 +867,9 @@ function handleResize() {
     ball.radius = playerHeight / ballRadiusFactor;
     ball.x = board.width / 2;
     ball.y = board.height / 2;
-    ball.velocityX = Math.cos(generateRandomAngle()) * boardWidth / 200 * velocity;
-    ball.velocityY = Math.sin(generateRandomAngle()) * boardHeight / 100 * generateRandomNumber() * velocity;
+    var angle;
+    ball.velocityX = Math.cos(angle) * boardWidth / 200 * velocity;
+    ball.velocityY = Math.sin(angle) * boardHeight / 100 * velocity;
 }
 
 function update() {
@@ -899,7 +910,8 @@ function update() {
     if (ball.y <= 0 || ball.y + ball.height >= board.height) {
         ball.velocityY *= -1;
     }
-    checkCollision(ball.y, ball.x);
+    // checkCollision(ball.y, ball.x, ball.velocityX, ball.velocityY); 
+	checkCollision();
     if (isHost && remote == true) {
         if (ball.x < 0) {
             player2Score++;
@@ -950,29 +962,92 @@ function update() {
     }
 }
 
-function checkCollision(ballY, ballX) {
-    // ballX -= 5;
-    let LoclPad1XPos = player1.x + player1.width / 2;
-    let distance1 = Math.abs(ballX - LoclPad1XPos);
+function checkCollision() {
+    let nextX = ball.x + ball.velocityX;
+    let nextY = ball.y + ball.velocityY;
 
-    if (distance1 < 5 && ballY > (player1.y - playerWidth) && player1.y + player1.height + playerWidth > ballY) {
-        ball.velocityX *= -1; // Reverse the x velocity
-        if (ballY <= player1.y || ballY >= player1.y + player1.height) {
-            ball.velocityY *= -1; // Reverse the y velocity
-        }
+    let speed = Math.sqrt(ball.velocityX * ball.velocityX + ball.velocityY * ball.velocityY);
+
+    if (nextX - ball.radius < player1.x + player1.width - 10 && nextX + ball.radius > player1.x - 10 && nextY + ball.radius > player1.y && nextY - ball.radius < player1.y + player1.height) {
+        ball.velocityX = Math.abs(ball.velocityX);
+        adjustBallSpeed(speed);
+        ball.x = player1.x + player1.width + ball.radius - 10;
     }
 
-    ballX += 5;
-    let LoclPad2XPos = player2.x - player2.width / 2;
-    let distance2 = Math.abs(ballX - LoclPad2XPos);
+    if (nextX + ball.radius > player2.x - 10 && nextX - ball.radius < player2.x + player2.width + 10 && nextY + ball.radius > player2.y && nextY - ball.radius < player2.y + player2.height) {
+        ball.velocityX = -Math.abs(ball.velocityX);
+        adjustBallSpeed(speed);
+        ball.x = player2.x - ball.radius - 10;
+    }
 
-    if (distance2 < 5 && ballY > (player2.y - playerWidth) && player2.y + player2.height + playerWidth > ballY) {
-        ball.velocityX *= -1; // Reverse the x velocity
-        if (ballY <= player2.y || ballY >= player2.y + player2.height) {
-            ball.velocityY *= -1; // Reverse the y velocity
+   
+    if (nextY - ball.radius < (0 - ball.height) || nextY + ball.radius > (boardHeight - ball.height)) {
+        ball.velocityY = -ball.velocityY; 
+    }
+}
+
+function adjustBallSpeed(originalSpeed) {
+    let currentSpeed = Math.sqrt(ball.velocityX * ball.velocityX + ball.velocityY * ball.velocityY);
+    ball.velocityX *= originalSpeed / currentSpeed;
+    ball.velocityY *= originalSpeed / currentSpeed;
+}
+
+function checkCollision2(ballY, ballX, ballVelocityX, ballVelocityY) {
+    // Predict the ball's next position
+    let nextBallX = ballX + ballVelocityX ;
+    let nextBallY = ballY + ballVelocityY;
+
+    let localPaddle1XCenter = player1.x + player1.width / 2;
+    let distanceToPaddle1 = Math.abs(nextBallX - (localPaddle1XCenter ));
+
+    if (distanceToPaddle1 < ball.radius + (player1.width / 2) && nextBallY > (player1.y - playerWidth) && nextBallY < (player1.y + player1.height + playerWidth)) {
+        ball.velocityX *= -1; // Reverse the ball's X velocity
+
+        // Optionally adjust the ball's position to be outside the collision area
+        ball.x -= ballVelocityX; // Move the ball back to its previous position to prevent "trapping"
+        
+        if (nextBallY <= player1.y || nextBallY >= player1.y + player1.height) {
+            ball.velocityY *= -1; // Also reverse the Y velocity if hitting top/bottom of the paddle
+        }
+    }
+	
+    let localPaddle2XCenter = player2.x - player2.width / 2;
+    let distanceToPaddle2 = Math.abs(nextBallX - (localPaddle2XCenter - 5));
+
+    if (distanceToPaddle2 < ball.radius + (player2.width / 2) && nextBallY > (player2.y - playerWidth) && nextBallY < (player2.y + player2.height + playerWidth)) {
+        ball.velocityX *= -1; // Reverse the ball's X velocity
+
+        // Optionally adjust the ball's position to be outside the collision area
+        ball.x -= ballVelocityX; // Move the ball back to its previous position to prevent "trapping"
+        
+        if (nextBallY <= player2.y || nextBallY >= player2.y + player2.height) {
+            ball.velocityY *= -1; // Also reverse the Y velocity if hitting top/bottom of the paddle
         }
     }
 }
+// {% comment %} function checkCollision(ballY, ballX) {
+//     // ballX -= 5;
+//     let LoclPad1XPos = player1.x + player1.width / 2;
+//     let distance1 = Math.abs(ballX - LoclPad1XPos);
+
+//     if (distance1 < 5 && ballY > (player1.y - playerWidth) && player1.y + player1.height + playerWidth > ballY) {
+//         ball.velocityX *= -1; // Reverse the x velocity
+//         if (ballY <= player1.y || ballY >= player1.y + player1.height) {
+//             ball.velocityY *= -1; // Reverse the y velocity
+//         }
+//     }
+
+//     ballX += 5;
+//     let LoclPad2XPos = player2.x - player2.width / 2;
+//     let distance2 = Math.abs(ballX - LoclPad2XPos);
+
+//     if (distance2 < 5 && ballY > (player2.y - playerWidth) && player2.y + player2.height + playerWidth > ballY) {
+//         ball.velocityX *= -1; // Reverse the x velocity
+//         if (ballY <= player2.y || ballY >= player2.y + player2.height) {
+//             ball.velocityY *= -1; // Reverse the y velocity
+//         }
+//     }
+// } {% endcomment %}
 
 function outOfBounds(yPosition) {
     return (yPosition < 0 || yPosition > boardHeight - playerHeight);
@@ -1059,25 +1134,18 @@ function generateRandomAngle() {
     return randomAngle;
 }
 
-function generateRandomNumber() {
-    var random = Math.random();
-    if (random > 0.5)
-        random = 1;
-    else
-        random = -1;
-    return random;
-}
 
 function resetGame(direction) {
     ball.x = board.width / 2 - ballWidth / 2;
     ball.y = Math.random() * (board.height - 10);
     // Reset ball velocity
-
-    ball.velocityX = Math.cos(generateRandomAngle()) * board.width / 200 * direction * velocity;
-    ball.velocityY = Math.sin(generateRandomAngle()) * board.height / 100 * generateRandomNumber() * velocity;
+    var angle = generateRandomAngle();
+    ball.velocityX = Math.cos(angle) * board.width / 200 * direction * velocity;
+    ball.velocityY = Math.sin(angle) * board.height / 100 * velocity;
 }
 
 function updateGameResultPong(winner, namePlayerPlaying, scoreToDo, scoreWinner, scoreLoser, tournament, tournament_id) {
+    scoreUpdate = true;
     fetch('/update_game_result_pong/', {
         method: 'POST',
         headers: {
@@ -1152,7 +1220,6 @@ function endGame(winner) {
     let scoreWinner = player1Score > player2Score ? player1Score : player2Score;
     let scoreLoser = player1Score < player2Score ? player1Score : player2Score;
     let namePlayerPlaying = [player1.name, player2.name];
-    console.log("SCORE UPDATE: " + scoreUpdate);
     if (scoreUpdate === false)
         updateGameResultPong(winner, namePlayerPlaying, scoreToDo, scoreWinner, scoreLoser, tournament, tournament_id);
     var mainElement = document.getElementById('content');
@@ -1176,7 +1243,7 @@ function endGame(winner) {
     }
     if (tournament === false && local === true) {
         var startAgain = document.createElement("button");
-        startAgain.textContent = "Start again";
+        startAgain.textContent = "Start again with the same players";
         startAgain.classList.add("styled-button")
         document.getElementById('endGame').appendChild(startAgain);
         startAgain.addEventListener("click", function () {
@@ -1281,34 +1348,45 @@ function endGame(winner) {
     }
 }
 
-window.addEventListener('beforeunload', function (event) {
-    // Check if the WebSocket connection is already established
-    console.error("disconnecting");
-    let name = "{{ user.username }}";
+let roomClosed = false;
+
+// Function to handle the closing of the room after the player left message is received
+function closeRoom() {
     if (gameRoomSocket && gameRoomSocket.readyState === WebSocket.OPEN) {
-        // Send a message to trigger host disconnection
-        console.error("disconnecting host");
-        gameRoomSocket.send(JSON.stringify({ action: 'player_left', host_name: name }));
-        // Close the WebSocket connection
-        gameRoomSocket.close();
-        console.log("Game room connection closed. because leaving page");
+        console.log("Host is open: ");
     }
     if (roomSocket && roomSocket.readyState === WebSocket.OPEN) {
-        // Send a message to trigger host disconnection
-        console.error("disconnecting host");
-        roomSocket.send(JSON.stringify({ action: 'player_left', host_name: name }));
-        // Close the WebSocket connection
-        roomSocket.close();
-        console.log("Game room connection closed. because leaving page");
+        console.log("Client is open: ");
     }
+    // Close the WebSocket connections
+    if (gameRoomSocket && gameRoomSocket.readyState === WebSocket.OPEN) {
+        console.error("Disconnecting host");
+        gameRoomSocket.send(JSON.stringify({ action: 'player_left' }));
+        console.log("Game room connection closed because of leaving the page");
+        roomClosed = true;
+    }
+    if (roomSocket && roomSocket.readyState === WebSocket.OPEN) {
+        console.error("Disconnecting client");
+        roomSocket.send(JSON.stringify({ action: 'player_left' }));
+        console.log("Game room connection closed because of leaving the page");
+        roomClosed = true;
+    }
+}
 
-    // Prevent the browser from showing the default dialog
-    event.preventDefault();
 
-    // You might want to return something here to customize the message shown in the dialog
-    return null;
+window.addEventListener('beforeunload', function (event) {
+    // Check if the room is still open before leaving the page
+    if (!roomClosed) {
+        // Call closeRoom to ensure the room is closed before leaving
+        closeRoom();
+
+        // Prevent the browser from showing the default dialog
+        event.preventDefault();
+
+        // You might want to return something here to customize the message shown in the dialog
+        return '';
+    }
 });
-
 
 </script>
 

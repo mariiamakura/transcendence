@@ -10,7 +10,9 @@
                     <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
                     {% endfor %}
                 </div>
-                {% if friends %}
+				{% if not friends %}
+					<p id="noFriends">You have no friends yet. 😢</p>
+				{% endif %}
                 <form id="removeFriendsForm" method="POST" action="removeFriends">
                     {% csrf_token %}
                     <ul id="friendsList" class="list-group">
@@ -32,10 +34,6 @@
                     </ul>
                     <button type="submit" class="btn btn-danger mt-3">{% trans "Remove Selected Friends" %}</button>
                 </form>
-                {% else %}
-					<p id="noFriends">{% trans "You have no friends yet." %} 😢'  %}</p>
-                {% endif %}
-
                 <form id="searchUserForm" class="mt-4">
                     <div class="input-group">
                         <input type="text" name="username" class="form-control" placeholder="{% trans 'Search for users...' %}" autocomplete="username"> 
@@ -84,7 +82,11 @@
                     e.preventDefault(); 
                     var formData = new FormData(this);
                     var friendIdsToRemove = formData.getAll('friend_ids'); 
-                
+					if (friendIdsToRemove.length === 0) {
+						displayMessage('Please select at least one friend to remove.', false);
+						return;
+					}
+					
                     fetch('/removeFriends/', { 
                         method: 'POST',
                         headers: {
@@ -108,6 +110,7 @@
                         console.error('Error:', error);
                         displayMessage('An error occurred. Please try again.', false);
                     });
+					refreshPage()
                 });
                 
 			};
@@ -136,6 +139,7 @@
                         console.error('Error:', error);
                         displayMessage('An error occurred while attempting to add a friend. Please try again.', false); 
                     });
+					refreshPage();
                 }
                 
 				function updateFriendList(username, data) {
@@ -166,20 +170,15 @@
 					`;
 					friendList.appendChild(newFriend);
 				}
-                
-                
+
                 function displayMessage(message, isSuccess) {
                     var messageArea = document.getElementById('messages'); 
-                    var newMessage = document.createElement('div');
-                    
+                    var newMessage = document.createElement('div');          
                     newMessage.innerHTML = `<div class="alert ${isSuccess ? 'alert-success' : 'alert-danger'}">${message}</div>`; // Display message in an alert box
                     messageArea.prepend(newMessage); 
-                
-                    
                     setTimeout(() => newMessage.remove(), 5000);
                 }
-                
-                
+
                 function getCookie(name) {
                     let cookieValue = null;
                     if (document.cookie && document.cookie !== '') {
@@ -194,6 +193,11 @@
                     }
                     return cookieValue;
                 }
+				function refreshPage() {
+					setTimeout(() => {
+						location.reload();
+					}, 1000);
+				}
             </script>
         </div>
     </div>
