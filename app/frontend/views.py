@@ -353,7 +353,31 @@ def get_user_statistics(request):
             'username': request.user.username,
             'date_joined': request.user.date_joined.strftime('%Y-%m-%d %H:%M:%S'),
         }
-        return JsonResponse(user_statistics)
+
+        # Fetch all games associated with the user
+        user_games = Game.objects.filter(participants=request.user)
+        games_data = []
+        for game in user_games:
+            games_data.append({
+                'game_date': game.game_date.strftime('%Y-%m-%d %H:%M:%S'),
+                'pong_game': game.pong_game,
+                'memory_game': game.memory_game,
+                'is_tournament': game.is_tournament,
+                'winner': game.winner.username,
+                'score_winner': game.score_winner,
+                'score_loser': game.score_loser,
+                'tournament_id': game.tournament_id,
+                'participants': [participant.username for participant in game.participants.all()]
+                # Add more fields as needed
+            })
+
+        # Combine user statistics and games data
+        user_data = {
+            'user_statistics': user_statistics,
+            'games_data': games_data,
+        }
+
+        return JsonResponse(user_data)
     else:
         return JsonResponse({'error': 'User is not authenticated'}, status=401)
 
