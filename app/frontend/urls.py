@@ -32,6 +32,7 @@ urlpatterns = [
     # path('switch_language/', views.switch_language, name='switch_language'),
     path('get_display_name/', views.get_display_name, name='get_display_name'),
     path('update_end_tournament/', views.end_tournament, name='update_end_tournament'),
+    path('get_user_statistics/', views.get_user_statistics, name='get_user_statistics'),
 ]
 
 
