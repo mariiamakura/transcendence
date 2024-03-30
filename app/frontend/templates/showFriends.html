@@ -13,7 +13,6 @@
 				{% if not friends %}
 					<p id="noFriends">You have no friends yet. 😢</p>
 				{% endif %}
-                
                 <form id="removeFriendsForm" method="POST" action="removeFriends">
                     {% csrf_token %}
                     <ul id="friendsList" class="list-group">
