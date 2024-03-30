@@ -493,11 +493,12 @@ async function remoteHost() {
                 if (data.type === 'player_left') {
                     console.log(data.message);
                     console.log(data.who + ' left the game');
-                    endGame(namePlayer[0]);
+                    endGameMemory(namePlayer[0]);
                     gameRoomSocket.close();
                 }
             }
             gameRoomSocket.onclose = function() {
+                gameRoomSocket.send(JSON.stringify({ action: 'player_left' }));
                 endGameMemory(namePlayer[0]);
                 console.log("Game room connection closed.");
             };
@@ -612,10 +613,11 @@ async function remoteClient() {
 
             if (data.action === 'player_left' || data.type === 'player_left') {
                 console.log('other player left the game');
-                endGame(namePlayer[1]);
+                endGameMemory(namePlayer[1]);
                 roomSocket.close();
             }
             roomSocket.onclose = function() {
+                roomSocket.send(JSON.stringify({ action: 'player_left' }));
                 endGameMemory(namePlayer[1]);
                 console.log("Game room connection closed.");
             };
