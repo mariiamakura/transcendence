@@ -393,11 +393,13 @@ def editProfile(request):
                 user.language = request.POST.get('language')
                 request.session['user_language'] = user.language
                 user.save()
-                # Activate the selected language for the current session
+                request.session['user_language'] = user.language
                 translation.override(user.language)
                 translation.activate(user.language)
-                response = render(request=request, template_name="profile.html", context={"user": user})
-                response.set_cookie('user_language', user.language)  # Set cookie with language code
+                response = HttpResponseRedirect("/")
+                user_language = user.language
+                response.set_cookie(settings.LANGUAGE_COOKIE_NAME, user_language)
+                request.user.save()
 
             user.save()
             return response
