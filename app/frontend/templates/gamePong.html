@@ -44,7 +44,7 @@ let isHost = false;
 
 async function showGamePong() {
     var mainElement = document.getElementById('content');
-    mainElement.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em; padding-top:3em;">Pong</p>';
+    mainElement.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em; padding-top:3em;">{% trans 'Pong'  %}</p>';
     gameEnded = true;
     startGame = false;
     tournament = false;
@@ -95,7 +95,7 @@ async function showGamePong() {
 
 function remoteOrLocal() {
     var main = document.getElementById('content');
-    main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> {% trans "Which type of game do you wanna play" %}? </p></div>';
+    main.innerHTML += '<div id="choice"><p style="padding-top: 2em;">{% trans "Which type of game do you wanna play" %}? </p></div>';
     var buttonRemote = document.createElement("button");
     var buttonLocal = document.createElement("button"); 
     buttonLocal.textContent = "{% trans 'Play local Game' %}";
@@ -121,7 +121,7 @@ function remoteOrLocal() {
 
 function decideHost() {
     var main = document.getElementById('content');
-    main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> {% trans "Which type of game do you wanna play" %} ? </p></div>';
+    main.innerHTML += '<div id="choice"><p style="padding-top: 2em;">{% trans "Which type of game do you wanna play" %} ?</p></div>';
     var buttonHost = document.createElement("button");
     var buttonClient= document.createElement("button"); 
     buttonHost.textContent = "{% trans 'Create New Game' %}";
@@ -144,7 +144,7 @@ function decideHost() {
 
 function scoreChoice() {
     var main = document.getElementById('content');
-    main.innerHTML = `<div id="choice"><p class="text-center" style="padding-top: 5em; display: flex; " > Chose how many points wins: </p></div>`;
+    main.innerHTML = `<div id="choice"><p class="text-center" style="padding-top: 5em; display: flex; " >{% trans ' Choose how many points wins: '  %}</p></div>`;
     if (tournament === false) {
         var unlimited = document.createElement("button");
         unlimited.textContent = "Unlimited";
@@ -192,12 +192,12 @@ function scoreChoice() {
 function TwoOrTournament() {
 
     var main = document.getElementById('content');
-    main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> Do you want to play a 1vs1 game or a tournament ? </p></div>';
+    main.innerHTML += '<div id="choice"><p style="padding-top: 2em;">{% trans ' Do you want to play a 1vs1 game or a tournament ? '  %}</p></div>';
     
     var button1vs1 = document.createElement("button");
     var buttonTournament = document.createElement("button");
-    buttonTournament.textContent = "Play tournament";
-    button1vs1.textContent = "Play 1vs1";
+    buttonTournament.textContent = "{% trans 'Play tournament' %}";
+    button1vs1.textContent = "{% trans 'Play 1vs1' %}";
     buttonTournament.classList.add("styled-button")
     button1vs1.classList.add("styled-button");
     document.getElementById('choice').appendChild(button1vs1);
@@ -218,7 +218,7 @@ function TwoOrTournament() {
 
 function numPlayers() {
     var main = document.getElementById('content');
-    main.innerHTML += '<div id="choice"><p style="padding-top: 2em; display: flex; " > {% trans "How many players do you want to be" %} ? </p></div>';
+    main.innerHTML += '<div id="choice"><p style="padding-top: 2em; display: flex; " >{% trans "How many players do you want to be" %} ?</p></div>';
     var buttonFour = document.createElement("button");
     let players = "{% trans 'players' %}";
     buttonFour.textContent = "4 ";
@@ -262,7 +262,7 @@ async function getNamePlayer() {
     try {
         const response = await fetch('/get_display_name/');
         const data = await response.json();
-        main.innerHTML += `<p style="padding-top: 2em; display: flex; align-items:center; justify-content:center;">First player is: ${data.display_name}</p>`;
+        main.innerHTML += `<p style="padding-top: 2em; display: flex; align-items:center; justify-content:center;">{% trans 'First player is'  %}: ${data.display_name}</p>`;
         namePlayer.push(data.display_name);
 
         for (let i = 2; i <= numberPlayers; i++) {
@@ -288,7 +288,8 @@ async function getNamePlayer() {
                             form.remove();
                             resolve(); // Resolve the promise to continue the loop
                         } else {
-                            alert('Name already exists! Please choose a different name.'); // Alert user if name already exists
+                            let text = "{% trans 'Name already exists! Please choose a different name.' %}";
+                            alert(text); // Alert user if name already exists
                         }
                     } else {
                         input.reportValidity(); // Display validation message if input is invalid
@@ -312,7 +313,7 @@ function settingsChoice() {
     if (isHost || local === true) {
         // Choose difficulty section
         var difficultySection = document.createElement("div");
-        difficultySection.innerHTML = '<p style="padding-top: 2em;"> Choose the difficulty: </p>';
+        difficultySection.innerHTML = '<p style="padding-top: 2em;">{% trans ' Choose the difficulty: '  %}</p>';
         choiceDiv.appendChild(difficultySection);
 
         // Create a container for the toggle bar
@@ -366,7 +367,7 @@ function settingsChoice() {
 
        // Choose theme 
         var colorSection = document.createElement("div");
-        colorSection.innerHTML = '<p style="padding-top: 2em;"> Which theme do you want for your game: </p>';
+        colorSection.innerHTML = '<p style="padding-top: 2em;">{% trans ' Which theme do you want for your game: '  %}</p>';
         choiceDiv.appendChild(colorSection);
 
         // Create color buttons container
@@ -374,7 +375,7 @@ function settingsChoice() {
         colorButtonsContainer.classList.add("color-buttons-container");
 
         // Create color buttons
-        var colors = ["Team mode: Dark blue background, white ball and skyblue paddles", "Chinese New Year: Red background, golden ball and white paddles", "Dirty dalmatians: Black background, white ball, gray paddles"];
+        var colors = ["{% trans 'Team mode: Dark blue background, white ball and skyblue paddles'  %}", "{% trans 'Chinese New Year: Red background, golden ball and white paddles'  %}", "{% trans 'Dirty dalmatians: Black background, white ball, gray paddles'  %}"];
         colors.forEach(function(color) {
             var colorButton = document.createElement("button");
             colorButton.textContent = color;
@@ -390,15 +391,15 @@ function settingsChoice() {
                     btn.classList.remove("selected");
                 });
                 button.classList.add("selected");
-                if (button.textContent === "Team mode: Dark blue background, white ball and skyblue paddles") {
+                if (button.textContent === "{% trans 'Team mode: Dark blue background, white ball and skyblue paddles'  %}") {
                     boardbackgroundColor = "#2f3542";
                     ballColor = "white";
                     paddleColor = "skyblue";
-                } else if (button.textContent === "Chinese New Year: Red background, golden ball and white paddles") {
+                } else if (button.textContent === "{% trans 'Chinese New Year: Red background, golden ball and white paddles'  %}") {
                     boardbackgroundColor = "red";
                     ballColor = "gold";
                     paddleColor = "white";
-                } else if (button.textContent === "Dirty dalmatians: Black background, white ball, gray paddles") {
+                } else if (button.textContent === "{% trans 'Dirty dalmatians: Black background, white ball, gray paddles'  %}") {
                     boardbackgroundColor = "black";
                     ballColor = "white";
                     paddleColor = "gray";
@@ -408,7 +409,7 @@ function settingsChoice() {
 
     // Add start button
     var startButton = document.createElement("button");
-    startButton.textContent = "Start !";
+    startButton.textContent = "{% trans 'Start'  %} !";
     startButton.classList.add("styled-button");
     choiceDiv.appendChild(startButton);
     // Append the choice div to main
@@ -431,7 +432,7 @@ function startButtonTournament() {
     choiceDiv.id = "choice";
     
     var welcomeParagraph = document.createElement("p");
-    welcomeParagraph.textContent = "Welcome to the pong tournament !\n\nThe rounds are the following:";
+    welcomeParagraph.textContent = "{% trans 'Welcome to the pong tournament'  %} !\n\n{% trans 'The rounds are the following'  %}:";
     choiceDiv.appendChild(welcomeParagraph);
 
     for (let i = 0; i < numberPlayers - 1; i++) {
@@ -465,13 +466,13 @@ function startButtonTournament() {
 
 function startButton() {
     var main = document.getElementById('content');
-    main.innerHTML += '<h1>Instructions</h1>';
+    main.innerHTML += '<h1>{% trans 'Instructions'  %}</h1>';
     if (remote === true)
-        main.innerHTML += '<p class="text-center" style="text-align: center; padding-top:5em;"> You can control your paddle with W (up) and S(down) or with the Up arrow and Down Arrow.</p>';
+        main.innerHTML += '<p class="text-center" style="text-align: center; padding-top:5em;">{% trans 'You can control your paddle with W (up) and S(down) or with the Up arrow and Down Arrow.'  %}</p>';
     else if (local === true)
         main.innerHTML += '<p class="text-center" style="text-align: center; padding-top:5em;">' + namePlayer[firstPlayer]+ ' controls: W (up) and S (down)</p>' +
                         '<p class="text-center" style="text-align: center; padding-top:1em;">' + namePlayer[secondPlayer] + ' controls: Up arrow (up) and Down arrow (down)</p>';
-    main.innerHTML += '<div id="choice"><p style="text-align: center; padding-top:5em;"> Ready to start ? <br> <br> Let\'s go !</p></div>';
+    main.innerHTML += '<div id="choice"><p style="text-align: center; padding-top:5em;"> Ready to start ? <br><br>{% trans ' Go !'  %}</p></div>';
     var startButton = document.createElement("button");
     startButton.textContent = "Start !";
     startButton.classList.add("styled-button");
@@ -493,8 +494,8 @@ async function remoteHost() {
     
     console.log("enters");
     var mainElement = document.getElementById('content');
-    // mainElement.innerHTML +=  '<p style="text-align: center;  font-size:2em;>Waiting for Players...</p>';
-    mainElement.innerHTML += '<p class="text-center" style="font-size: 1.5em;">Waiting for Players...</p>';
+    // mainElement.innerHTML +=  '<p style="text-align: center;  font-size:2em;>{% trans 'Waiting for Players...'  %}</p>';
+    mainElement.innerHTML += '<p class="text-center" style="font-size: 1.5em;">{% trans 'Waiting for Players...'  %}</p>';
     let hostName = "{{ user.display_name }}";
     let sanitizedRoomName = encodeURIComponent(`${hostName}_Game`).replace(/'/g, ""); // Sanitize and remove special characters
     let socket = new WebSocket(`wss://${window.location.host}/wss/socket-server/lobby/`);
@@ -595,7 +596,7 @@ async function remoteClient() {
                     gameList.appendChild(button);
                 });
             } else
-                gameList.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em;">No active games</p>';
+                gameList.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em;">{% trans 'No active games'  %}</p>';
         } else if (data.action === 'joined_room_pong')
             console.log('Joined room:', data.room_id);
 
@@ -682,9 +683,9 @@ function startTheGamePong() {
 function updateCountdownDisplay(message) {
     let mainElement = document.getElementById('content');
     if (isHost)
-        mainElement.innerHTML = '<p class="text"-center" style="padding-top: 5em;"> You will play with W(up) and S(down) </p>';
+        mainElement.innerHTML = '<p class="text"-center" style="padding-top: 5em;">{% trans ' You will play with W(up) and S(down) '  %}</p>';
     else
-        mainElement.innerHTML = '<p class="text"-center" style="padding-top: 5em;"> You will play with the Up arrow(up) and Down arrow(down) </p>';
+        mainElement.innerHTML = '<p class="text"-center" style="padding-top: 5em;">{% trans ' You will play with the Up arrow(up) and Down arrow(down) '  %}</p>';
     let countdownElement = document.getElementById('countdown');
     if (!countdownElement) {
         countdownElement = document.getElementById('content');
@@ -961,26 +962,39 @@ function update() {
     }
 }
 
+
 function checkCollision() {
     let nextX = ball.x + ball.velocityX;
     let nextY = ball.y + ball.velocityY;
 
     let speed = Math.sqrt(ball.velocityX * ball.velocityX + ball.velocityY * ball.velocityY);
 
-    if (nextX - ball.radius < player1.x + player1.width - 10 && nextX + ball.radius > player1.x - 10 && nextY + ball.radius > player1.y && nextY - ball.radius < player1.y + player1.height) {
+    // Reduce the effective collision height of the paddle to avoid visual collision
+    let effectiveHeightReduction = 12; // Amount to reduce the paddle's effective collision area height by
+
+    if (nextX - ball.radius < player1.x + player1.width - 10 && 
+        nextX + ball.radius > player1.x - 10 && 
+        nextY + ball.radius > (player1.y + effectiveHeightReduction) && 
+        nextY - ball.radius < (player1.y + player1.height - effectiveHeightReduction)) {
         ball.velocityX = Math.abs(ball.velocityX);
         adjustBallSpeed(speed);
         ball.x = player1.x + player1.width + ball.radius - 10;
     }
 
-    if (nextX + ball.radius > player2.x - 10 && nextX - ball.radius < player2.x + player2.width + 10 && nextY + ball.radius > player2.y && nextY - ball.radius < player2.y + player2.height) {
+    if (nextX + ball.radius > player2.x - 10 && 
+        nextX - ball.radius < player2.x + player2.width + 10 && 
+        nextY + ball.radius > (player2.y + effectiveHeightReduction) && 
+        nextY - ball.radius < (player2.y + player2.height - effectiveHeightReduction)) {
         ball.velocityX = -Math.abs(ball.velocityX);
         adjustBallSpeed(speed);
         ball.x = player2.x - ball.radius - 10;
     }
 
-   
-    if (nextY - ball.radius < (0 - ball.height) || nextY + ball.radius > (boardHeight - ball.height)) {
+    // Adjust for the top and bottom boundaries with ball's height considered
+    // if (nextY - ball.radius < 0 || nextY + ball.radius > boardHeight) {
+    //    ball.velocityY = -ball.velocityY;
+    // }
+	if (nextY - ball.radius < (0 - ball.height) || nextY + ball.radius > (boardHeight - ball.height)) {
         ball.velocityY = -ball.velocityY; 
     }
 }
@@ -991,39 +1005,8 @@ function adjustBallSpeed(originalSpeed) {
     ball.velocityY *= originalSpeed / currentSpeed;
 }
 
-function checkCollision2(ballY, ballX, ballVelocityX, ballVelocityY) {
-    // Predict the ball's next position
-    let nextBallX = ballX + ballVelocityX ;
-    let nextBallY = ballY + ballVelocityY;
 
-    let localPaddle1XCenter = player1.x + player1.width / 2;
-    let distanceToPaddle1 = Math.abs(nextBallX - (localPaddle1XCenter ));
 
-    if (distanceToPaddle1 < ball.radius + (player1.width / 2) && nextBallY > (player1.y - playerWidth) && nextBallY < (player1.y + player1.height + playerWidth)) {
-        ball.velocityX *= -1; // Reverse the ball's X velocity
-
-        // Optionally adjust the ball's position to be outside the collision area
-        ball.x -= ballVelocityX; // Move the ball back to its previous position to prevent "trapping"
-        
-        if (nextBallY <= player1.y || nextBallY >= player1.y + player1.height) {
-            ball.velocityY *= -1; // Also reverse the Y velocity if hitting top/bottom of the paddle
-        }
-    }
-	
-    let localPaddle2XCenter = player2.x - player2.width / 2;
-    let distanceToPaddle2 = Math.abs(nextBallX - (localPaddle2XCenter - 5));
-
-    if (distanceToPaddle2 < ball.radius + (player2.width / 2) && nextBallY > (player2.y - playerWidth) && nextBallY < (player2.y + player2.height + playerWidth)) {
-        ball.velocityX *= -1; // Reverse the ball's X velocity
-
-        // Optionally adjust the ball's position to be outside the collision area
-        ball.x -= ballVelocityX; // Move the ball back to its previous position to prevent "trapping"
-        
-        if (nextBallY <= player2.y || nextBallY >= player2.y + player2.height) {
-            ball.velocityY *= -1; // Also reverse the Y velocity if hitting top/bottom of the paddle
-        }
-    }
-}
 // {% comment %} function checkCollision(ballY, ballX) {
 //     // ballX -= 5;
 //     let LoclPad1XPos = player1.x + player1.width / 2;
@@ -1125,8 +1108,26 @@ function movePlayer() {
 }
 
 function generateRandomAngle() {
-    var minAngle = 30 * Math.PI / 180; // Convert degrees to radians
-    var maxAngle = 150 * Math.PI / 180; // Convert degrees to radians
+    var angles = [20, 160]; // Angles in degrees pointing more horizontally
+    var angle = angles[Math.floor(Math.random() * angles.length)]; // Randomly select an angle
+
+    // Convert angle to radians and adjust to create a slight diagonal movement
+    var radians = angle * Math.PI / 180;
+    var adjustment = (Math.random() * Math.PI / 6) - Math.PI / 12; // Adjust between -15 to +15 degrees
+
+    // Apply adjustment based on the initial direction
+    if (angle === 0) {
+        radians += adjustment; // Adjust rightward trajectory
+    } else {
+        radians -= adjustment; // Adjust leftward trajectory
+    }
+
+    return radians;
+}
+
+function generateRandomAngle2() {
+    var minAngle = 60 * Math.PI / 180; // Convert degrees to radians
+    var maxAngle = 120 * Math.PI / 180; // Convert degrees to radians
     var randomAngle = Math.random() * (maxAngle - minAngle) + minAngle;
     if (randomAngle > 1.2 && randomAngle < 1.8)
         randomAngle += 1;

@@ -34,8 +34,6 @@
                     </ul>
                     <button type="submit" class="btn btn-danger mt-3">{% trans "Remove Selected Friends" %}</button>
                 </form>
-
-
                 <form id="searchUserForm" class="mt-4">
                     <div class="input-group">
                         <input type="text" name="username" class="form-control" placeholder="{% trans 'Search for users...' %}" autocomplete="username"> 
@@ -62,8 +60,8 @@
 										let addUserHtml = `
 											<div class="card mt-3">
 												<div class="card-body">
-													<p>${data.username} (${data.online ? 'Online' : 'Offline'})</p>
-													<button onclick="addFriend('${data.username}')" class="btn btn-success">Add Friend</button>
+													<p>${data.username} (${data.online ? '{% trans "Online" %}' : '{% trans "Offline" %}'})'  %}</p>
+													<button onclick="addFriend('${data.username}')" class="btn btn-success">{% trans 'Add Friend'  %}</button>
 												</div>
 											</div>
 										`;
@@ -166,7 +164,7 @@
 							<input class="form-check-input" type="checkbox" name="friend_ids" value="${data.user_id}">
 							<label class="form-check-label">
 								${username} 
-								<span class="text-${data.online ? 'success' : 'danger'}">● ${data.online ? 'Online' : 'Offline'}</span>
+								<span class="text-${data.online ? 'success' : 'danger'}">● ${data.online ? "Online" : "Offline"}</span>
 							</label>
 						</div>
 					`;
