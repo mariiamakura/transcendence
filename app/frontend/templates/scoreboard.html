@@ -41,44 +41,161 @@
             <button id="prev-page" class="btn btn-primary" style="margin-top: 10px;">{% trans 'Previous'  %}</button>
             <button id="next-page" class="btn btn-primary" style="margin-top: 10px;">{% trans 'Next'  %}</button>
           </div>
-        </div>
-      </div>
     </div>
-    
+  </div>
+</div>
 
+<script>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        console.log("DOM fully loaded and parsed");
-        const gameItems = document.querySelectorAll('.game-item');
-        let currentPage = 0;
-        const itemsPerPage = 5;
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+  const csrfToken = getCookie('csrftoken');
 
-        function showPage(page) {
-          for (let i = 0; i < gameItems.length; i++) {
-            if (i >= page * itemsPerPage && i < (page + 1) * itemsPerPage) {
-              gameItems[i].style.display = 'block';
-            } else {
-              gameItems[i].style.display = 'none';
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("DOM fully loaded and parsed");
+    const gameItems = document.querySelectorAll('.game-item');
+    let currentPage = 0;
+    const itemsPerPage = 5;
+    let type = undefined;
+
+    function showPage(page, type) {
+      for (let i = 0; i < gameItems.length; i++) {
+        if (i >= page * itemsPerPage && i < (page + 1) * itemsPerPage && (type === undefined || gameItems[i].innerText.includes(type))) {
+          gameItems[i].style.display = 'block';
+        } else {
+          gameItems[i].style.display = 'none';
+        }
+      }
+    }
+
+    document.getElementById('next-page').addEventListener('click', function () {
+      if ((currentPage + 1) * itemsPerPage < gameItems.length) {
+        currentPage++;
+        showPage(currentPage, type);
+      }
+    });
+
+    document.getElementById('prev-page').addEventListener('click', function () {
+      if (currentPage > 0) {
+        currentPage--;
+        showPage(currentPage, type);
+      }
+    });
+
+    document.getElementById('filter-pong').addEventListener('click', function () {
+      currentPage = 0;
+      type = 'Pong';
+      showPage(currentPage, type);
+    });
+
+    document.getElementById('filter-memory').addEventListener('click', function () {
+      currentPage = 0;
+      type = 'Memory';
+      showPage(currentPage, type);
+    });
+
+    document.getElementById('filter-all').addEventListener('click', function () {
+      currentPage = 0;
+      type = undefined;
+      showPage(currentPage, type);
+    });
+
+    document.getElementById('graphs-button').addEventListener('click', function () {
+      // Add functionality to navigate to the graphs page or show graphs here
+      console.log("Graphs button clicked");
+    });
+
+    document.getElementById('graphs-button').addEventListener('click', function () {
+      // Fetch games data asynchronously
+      fetch('/get_users_statistics/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken
+        }
+      })
+        .then(response => response.json())
+        .then(data => {
+          // Process the data and generate the chart
+          generateChart(data);
+        })
+        .catch(error => {
+          console.error('Error fetching games data:', error);
+        });
+    });
+
+    function generateChart(data) {
+      const canvas = document.getElementById('gamesChart');
+      const ctx = canvas.getContext('2d');
+
+      // Extract relevant data for the chart
+      const dates = data.map(game => game.game_date);
+      const gamesWon = data.map(game => game.games_won);
+      const gamesLost = data.map(game => game.games_lost);
+
+      // Draw chart
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: dates,
+          datasets: [{
+            label: 'Games Won',
+            data: gamesWon,
+            borderColor: 'green',
+            backgroundColor: 'rgba(0, 255, 0, 0.2)',
+          }, {
+            label: 'Games Lost',
+            data: gamesLost,
+            borderColor: 'red',
+            backgroundColor: 'rgba(255, 0, 0, 0.2)',
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: 'Date'
+              }
+            },
+            y: {
+              title: {
+                display: true,
+                text: 'Number of Games'
+              }
             }
           }
         }
-
-        document.getElementById('next-page').addEventListener('click', function() {
-          if ((currentPage + 1) * itemsPerPage < gameItems.length) {
-            currentPage++;
-            showPage(currentPage);
-          }
-        });
-
-        document.getElementById('prev-page').addEventListener('click', function() {
-          if (currentPage > 0) {
-            currentPage--;
-            showPage(currentPage);
-          }
-        });
-
-        showPage(currentPage);
       });
-    </script>
+    }
+    showPage(currentPage, type);
+  });
+</script>
+{% else %}
+<div class="login-prompt">
+  <div class="text-center">
+    <h2>Welcome!</h2>
+    <p>Please sign in or sign up to continue.</p>
+    <div class="mt-4">
+      <a href="signIn" class="btn btn-primary mr-2">Sign In</a>
+      <a href="signUp" class="btn btn-success">Sign Up</a>
+    </div>
+  </div>
+</div>
+{% endif %}
 {% endblock %}
