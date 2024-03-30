@@ -76,6 +76,7 @@ class KeepAliveConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
+        await self.set_user_online(True)
         await self.accept()
 
     async def disconnect(self, close_code):
@@ -90,7 +91,7 @@ class KeepAliveConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
-        await self.set_user_online(False)
+        # await self.set_user_online(False)
         await asyncio.sleep(1)
         # Check if the disconnecting user is the host of a room and close the room if so
         if self.user == GameRoomManagerPong.rooms[self.room_name]["host"]:
@@ -135,9 +136,6 @@ class KeepAliveConsumer(AsyncWebsocketConsumer):
                 await self.set_user_online(False)
                 await self.close()
                 break
-            else:
-                if self.user.online is False:
-                    await self.set_user_online(True)
 
     @database_sync_to_async
     def get_user(self, username):
