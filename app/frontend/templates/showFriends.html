@@ -172,20 +172,15 @@
 					`;
 					friendList.appendChild(newFriend);
 				}
-                
-                
+
                 function displayMessage(message, isSuccess) {
                     var messageArea = document.getElementById('messages'); 
-                    var newMessage = document.createElement('div');
-                    
+                    var newMessage = document.createElement('div');          
                     newMessage.innerHTML = `<div class="alert ${isSuccess ? 'alert-success' : 'alert-danger'}">${message}</div>`; // Display message in an alert box
                     messageArea.prepend(newMessage); 
-                
-                    
                     setTimeout(() => newMessage.remove(), 5000);
                 }
-                
-                
+
                 function getCookie(name) {
                     let cookieValue = null;
                     if (document.cookie && document.cookie !== '') {

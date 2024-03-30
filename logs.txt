@@ -1,0 +1,1216 @@
+docker compose -f docker-compose.yml logs -f
+redis  | 1:C 30 Mar 2024 11:08:35.446 # WARNING Memory overcommit must be enabled! Without it, a background save or replication may fail under low memory condition. Being disabled, it can also cause failures without low memory condition, see https://github.com/jemalloc/jemalloc/issues/1328. To fix this issue add 'vm.overcommit_memory = 1' to /etc/sysctl.conf and then reboot or run the command 'sysctl vm.overcommit_memory=1' for this to take effect.
+redis  | 1:C 30 Mar 2024 11:08:35.446 * oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+redis  | 1:C 30 Mar 2024 11:08:35.446 * Redis version=7.2.4, bits=64, commit=00000000, modified=0, pid=1, just started
+redis  | 1:C 30 Mar 2024 11:08:35.446 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+redis  | 1:M 30 Mar 2024 11:08:35.447 * monotonic clock: POSIX clock_gettime
+redis  | 1:M 30 Mar 2024 11:08:35.447 * Running mode=standalone, port=6379.
+redis  | 1:M 30 Mar 2024 11:08:35.447 * Server initialized
+redis  | 1:M 30 Mar 2024 11:08:35.447 * Ready to accept connections tcp
+db-1   | 
+db-1   | PostgreSQL Database directory appears to contain a database; Skipping initialization
+db-1   | 
+db-1   | 2024-03-30 11:08:35.451 UTC [1] LOG:  starting PostgreSQL 15.6 (Debian 15.6-1.pgdg120+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit
+db-1   | 2024-03-30 11:08:35.451 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+db-1   | 2024-03-30 11:08:35.451 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+db-1   | 2024-03-30 11:08:35.453 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+db-1   | 2024-03-30 11:08:35.456 UTC [29] LOG:  database system was shut down at 2024-03-30 11:08:27 UTC
+db-1   | 2024-03-30 11:08:35.459 UTC [1] LOG:  database system is ready to accept connections
+web-1  | Waiting for postgres...
+web-1  | PostgreSQL started
+web-1  | Waiting for Redis...
+web-1  | Redis started
+web-1  | [2024-03-30 11:08:35 +0000] [9] [INFO] Starting gunicorn 21.2.0
+web-1  | [2024-03-30 11:08:35 +0000] [9] [INFO] Listening at: http://0.0.0.0:8000 (9)
+web-1  | [2024-03-30 11:08:35 +0000] [9] [INFO] Using worker: sync
+web-1  | [2024-03-30 11:08:35 +0000] [11] [INFO] Booting worker with pid: 11
+web-1  | Using selector: EpollSelector
+web-1  | Starting server at tcp:port=8001:interface=0.0.0.0
+web-1  | HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+web-1  | Configuring endpoint tcp:port=8001:interface=0.0.0.0
+web-1  | Listening on TCP address 0.0.0.0:8001
+web-1  | Not in REPL -> leaving logger event level as is.
+web-1  | Upgraded connection ['172.24.0.5', 36436] to WebSocket
+web-1  | Room name in connect: lobby
+web-1  | WebSocket ['172.24.0.5', 36436] open and established
+web-1  | WebSocket ['172.24.0.5', 36436] accepted by application
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36436]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36436]
+web-1  | WebSocket closed for ['172.24.0.5', 36436]
+web-1  | Enters disconnect
+web-1  | self.room_name: lobby
+web-1  | Enters get_user
+web-1  | username: lobby
+web-1  | self.room_name: lobby
+web-1  | self.user is None
+web-1  | Upgraded connection ['172.24.0.5', 36440] to WebSocket
+web-1  | Room name in connect: user11_Game
+web-1  | WebSocket ['172.24.0.5', 36440] open and established
+web-1  | WebSocket ['172.24.0.5', 36440] accepted by application
+web-1  | Upgraded connection ['172.24.0.5', 36454] to WebSocket
+web-1  | Room name in connect: lobby
+web-1  | WebSocket ['172.24.0.5', 36454] open and established
+web-1  | WebSocket ['172.24.0.5', 36454] accepted by application
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36454]
+web-1  | Enters list_rooms_pong
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36454]
+web-1  | WebSocket closed for ['172.24.0.5', 36454]
+web-1  | Enters disconnect
+web-1  | self.room_name: lobby
+web-1  | Enters get_user
+web-1  | username: lobby
+web-1  | self.room_name: lobby
+web-1  | self.user is None
+web-1  | Upgraded connection ['172.24.0.5', 36458] to WebSocket
+web-1  | Room name in connect: user11_Game
+web-1  | WebSocket ['172.24.0.5', 36458] open and established
+web-1  | WebSocket ['172.24.0.5', 36458] accepted by application
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36458]
+web-1  | enters Player left in action elif 
+web-1  | Enters disconnect
+web-1  | self.room_name: user11_Game
+web-1  | Enters get_user
+web-1  | username: user11_Game
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36440]
+web-1  | Message send and now in HOST, disconnecting...
+web-1  | Enters disconnect
+web-1  | self.room_name: user11_Game
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 36440]
+web-1  | WebSocket closed for ['172.24.0.5', 36440]
+web-1  | Enters get_user
+web-1  | username: user11_Game
+web-1  | self.room_name: user11_Game
+web-1  | self.user: user11
+web-1  | self.user found user11
+web-1  | room closing Pong
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Message send and now in HOST, disconnecting...
+web-1  | Enters disconnect
+web-1  | self.room_name: user11_Game
+web-1  | Enters get_user
+web-1  | self.room_name: user11_Game
+web-1  | username: user11_Game
+web-1  | self.user: user11
+web-1  | self.user found user11
+web-1  | Message send and now in HOST, disconnecting...
+web-1  | Enters disconnect
+web-1  | self.room_name: user11_Game
+web-1  | Enters get_user
+web-1  | username: user11_Game
+web-1  | self.room_name: user11_Game
+web-1  | self.user: user11
+web-1  | self.user found user11
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 36458]
+web-1  | Message send and now in HOST, disconnecting...
+web-1  | Enters disconnect
+web-1  | self.room_name: user11_Game
+web-1  | Enters get_user
+web-1  | self.room_name: user11_Game
+web-1  | username: user11_Game
+web-1  | self.user: user11
+web-1  | self.user found user11
+web-1  | Enters disconnect
+web-1  | self.room_name: user11_Game
+web-1  | Enters get_user
+web-1  | username: user11_Game
+web-1  | self.room_name: user11_Game
+web-1  | self.user: user11
+web-1  | self.user found user11
+web-1  | self.room_name: user11_Game
+web-1  | self.user: user11
+web-1  | self.user found user11
+web-1  | Internal Server Error: /update_game_result_pong/
+web-1  | Traceback (most recent call last):
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+web-1  |     response = get_response(request)
+web-1  |                ^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+web-1  |     response = wrapped_callback(request, *callback_args, **callback_kwargs)
+web-1  |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/views/decorators/http.py", line 64, in inner
+web-1  |     return func(request, *args, **kwargs)
+web-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/home/app/web/frontend/views.py", line 146, in update_game_result_pong
+web-1  |     username = data.get('winner') + '_guest'
+web-1  |                ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
+web-1  | TypeError: unsupported operand type(s) for +: 'NoneType' and 'str'
+web-1  | Internal Server Error: /update_game_result_pong/
+web-1  | Traceback (most recent call last):
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+web-1  |     response = get_response(request)
+web-1  |                ^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+web-1  |     response = wrapped_callback(request, *callback_args, **callback_kwargs)
+web-1  |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/views/decorators/http.py", line 64, in inner
+web-1  |     return func(request, *args, **kwargs)
+web-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/home/app/web/frontend/views.py", line 146, in update_game_result_pong
+web-1  |     username = data.get('winner') + '_guest'
+web-1  |                ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
+web-1  | TypeError: unsupported operand type(s) for +: 'NoneType' and 'str'
+web-1  | WebSocket closed for ['172.24.0.5', 36458]
+web-1  | Enters disconnect
+web-1  | self.room_name: user11_Game
+web-1  | Enters get_user
+web-1  | username: user11_Game
+web-1  | self.room_name: user11_Game
+web-1  | self.user: user11
+web-1  | self.user found user11
+web-1  | Upgraded connection ['172.24.0.5', 55732] to WebSocket
+web-1  | Room name in connect: lobby
+web-1  | WebSocket ['172.24.0.5', 55732] open and established
+web-1  | WebSocket ['172.24.0.5', 55732] accepted by application
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55732]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55732]
+web-1  | WebSocket closed for ['172.24.0.5', 55732]
+web-1  | Enters disconnect
+web-1  | self.room_name: lobby
+web-1  | Enters get_user
+web-1  | username: lobby
+web-1  | self.room_name: lobby
+web-1  | self.user is None
+web-1  | Upgraded connection ['172.24.0.5', 55746] to WebSocket
+web-1  | Room name in connect: user11_Game
+web-1  | WebSocket ['172.24.0.5', 55746] open and established
+web-1  | WebSocket ['172.24.0.5', 55746] accepted by application
+web-1  | Upgraded connection ['172.24.0.5', 55754] to WebSocket
+web-1  | Room name in connect: lobby
+web-1  | WebSocket ['172.24.0.5', 55754] open and established
+web-1  | WebSocket ['172.24.0.5', 55754] accepted by application
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55754]
+web-1  | Enters list_rooms_pong
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55754]
+web-1  | WebSocket closed for ['172.24.0.5', 55754]
+web-1  | Enters disconnect
+web-1  | self.room_name: lobby
+web-1  | Enters get_user
+web-1  | username: lobby
+web-1  | self.room_name: lobby
+web-1  | self.user is None
+web-1  | Upgraded connection ['172.24.0.5', 55770] to WebSocket
+web-1  | Room name in connect: user11_Game
+web-1  | WebSocket ['172.24.0.5', 55770] open and established
+web-1  | WebSocket ['172.24.0.5', 55770] accepted by application
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | enters Player left in action elif 
+web-1  | Enters disconnect
+web-1  | self.room_name: user11_Game
+web-1  | Enters get_user
+web-1  | username: user11_Game
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55770]
+web-1  | Message send and now in HOST, disconnecting...
+web-1  | Enters disconnect
+web-1  | self.room_name: user11_Game
+web-1  | WebSocket closed for ['172.24.0.5', 55770]
+web-1  | Enters get_user
+web-1  | username: user11_Game
+web-1  | self.room_name: user11_Game
+web-1  | self.user: user11
+web-1  | self.user found user11
+web-1  | room closing Pong
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Message send and now in HOST, disconnecting...
+web-1  | Enters disconnect
+web-1  | self.room_name: user11_Game
+web-1  | Enters get_user
+web-1  | username: user11_Game
+web-1  | self.room_name: user11_Game
+web-1  | self.user: user11
+web-1  | self.user found user11
+web-1  | Enters disconnect
+web-1  | self.room_name: user11_Game
+web-1  | Enters get_user
+web-1  | self.room_name: user11_Game
+web-1  | username: user11_Game
+web-1  | self.user: user11
+web-1  | self.user found user11
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 55746]
+web-1  | Message send and now in HOST, disconnecting...
+web-1  | Enters disconnect
+web-1  | self.room_name: user11_Game
+web-1  | Enters get_user
+web-1  | self.room_name: user11_Game
+web-1  | username: user11_Game
+web-1  | self.user: user11
+web-1  | self.user found user11
+web-1  | self.room_name: user11_Game
+web-1  | self.user: user11
+web-1  | self.user found user11
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 55746]
+web-1  | WebSocket closed for ['172.24.0.5', 55746]
+web-1  | Enters disconnect
+web-1  | self.room_name: user11_Game
+web-1  | Enters get_user
+web-1  | username: user11_Game
+web-1  | self.room_name: user11_Game
+web-1  | self.user: user11
+web-1  | self.user found user11
+web-1  | Internal Server Error: /update_game_result_pong/
+web-1  | Traceback (most recent call last):
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+web-1  |     response = get_response(request)
+web-1  |                ^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+web-1  |     response = wrapped_callback(request, *callback_args, **callback_kwargs)
+web-1  |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/views/decorators/http.py", line 64, in inner
+web-1  |     return func(request, *args, **kwargs)
+web-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/home/app/web/frontend/views.py", line 146, in update_game_result_pong
+web-1  |     username = data.get('winner') + '_guest'
+web-1  |                ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
+web-1  | TypeError: unsupported operand type(s) for +: 'NoneType' and 'str'
+web-1  | Internal Server Error: /update_game_result_pong/
+web-1  | Traceback (most recent call last):
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+web-1  |     response = get_response(request)
+web-1  |                ^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+web-1  |     response = wrapped_callback(request, *callback_args, **callback_kwargs)
+web-1  |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/views/decorators/http.py", line 64, in inner
+web-1  |     return func(request, *args, **kwargs)
+web-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/home/app/web/frontend/views.py", line 146, in update_game_result_pong
+web-1  |     username = data.get('winner') + '_guest'
+web-1  |                ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
+web-1  | TypeError: unsupported operand type(s) for +: 'NoneType' and 'str'
+web-1  | Upgraded connection ['172.24.0.5', 50852] to WebSocket
+web-1  | Room name in connect: lobby
+web-1  | WebSocket ['172.24.0.5', 50852] open and established
+web-1  | WebSocket ['172.24.0.5', 50852] accepted by application
+web-1  | WebSocket incoming frame on ['172.24.0.5', 50852]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 50852]
+web-1  | WebSocket closed for ['172.24.0.5', 50852]
+web-1  | Enters disconnect
+web-1  | self.room_name: lobby
+web-1  | Enters get_user
+web-1  | username: lobby
+web-1  | self.room_name: lobby
+web-1  | self.user is None
+web-1  | Upgraded connection ['172.24.0.5', 50866] to WebSocket
+web-1  | Room name in connect: edrouot_Game
+web-1  | WebSocket ['172.24.0.5', 50866] open and established
+web-1  | WebSocket ['172.24.0.5', 50866] accepted by application
+web-1  | Upgraded connection ['172.24.0.5', 42538] to WebSocket
+web-1  | Room name in connect: lobby
+web-1  | WebSocket ['172.24.0.5', 42538] open and established
+web-1  | WebSocket ['172.24.0.5', 42538] accepted by application
+web-1  | WebSocket incoming frame on ['172.24.0.5', 42538]
+web-1  | Enters list_rooms_pong
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 42538]
+web-1  | WebSocket closed for ['172.24.0.5', 42538]
+web-1  | Enters disconnect
+web-1  | self.room_name: lobby
+web-1  | Enters get_user
+web-1  | username: lobby
+web-1  | self.room_name: lobby
+web-1  | self.user is None
+web-1  | Upgraded connection ['172.24.0.5', 42552] to WebSocket
+web-1  | Room name in connect: edrouot_Game
+web-1  | WebSocket ['172.24.0.5', 42552] open and established
+web-1  | WebSocket ['172.24.0.5', 42552] accepted by application
+web-1  | WebSocket incoming frame on ['172.24.0.5', 42552]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 42552]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 50866]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 50866]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 42552]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 42552]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 50866]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 42552]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 50866]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 50866]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 42552]
+web-1  | WebSocket closed for ['172.24.0.5', 50866]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 42552]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 42552]
+web-1  | enters Player left in action elif 
+web-1  | Enters disconnect
+web-1  | self.room_name: edrouot_Game
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 42552]
+web-1  | Enters get_user
+web-1  | username: edrouot_Game
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 42552]
+web-1  | Message send and now in HOST, disconnecting...
+web-1  | Enters disconnect
+web-1  | self.room_name: edrouot_Game
+web-1  | WebSocket closed for ['172.24.0.5', 42552]
+web-1  | Enters get_user
+web-1  | username: edrouot_Game
+web-1  | self.room_name: edrouot_Game
+web-1  | self.user: edrouot
+web-1  | self.user found edrouot
+web-1  | room closing Pong
+web-1  | Enters disconnect
+web-1  | self.room_name: edrouot_Game
+web-1  | Enters get_user
+web-1  | username: edrouot_Game
+web-1  | self.room_name: edrouot_Game
+web-1  | self.user: edrouot
+web-1  | self.user found edrouot
+web-1  | Enters disconnect
+web-1  | self.room_name: edrouot_Game
+web-1  | Enters get_user
+web-1  | self.room_name: edrouot_Game
+web-1  | username: edrouot_Game
+web-1  | self.user: edrouot
+web-1  | self.user found edrouot
+web-1  | self.room_name: edrouot_Game
+web-1  | self.user: edrouot
+web-1  | self.user found edrouot
+web-1  | Upgraded connection ['172.24.0.5', 56990] to WebSocket
+web-1  | Room name in connect: lobby
+web-1  | WebSocket ['172.24.0.5', 56990] open and established
+web-1  | WebSocket ['172.24.0.5', 56990] accepted by application
+web-1  | WebSocket incoming frame on ['172.24.0.5', 56990]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 56990]
+web-1  | WebSocket closed for ['172.24.0.5', 56990]
+web-1  | Enters disconnect
+web-1  | self.room_name: lobby
+web-1  | Enters get_user
+web-1  | username: lobby
+web-1  | self.room_name: lobby
+web-1  | self.user is None
+web-1  | Upgraded connection ['172.24.0.5', 56998] to WebSocket
+web-1  | Room name in connect: edrouot_Game
+web-1  | WebSocket ['172.24.0.5', 56998] open and established
+web-1  | WebSocket ['172.24.0.5', 56998] accepted by application
+web-1  | Upgraded connection ['172.24.0.5', 49138] to WebSocket
+web-1  | Room name in connect: lobby
+web-1  | WebSocket ['172.24.0.5', 49138] open and established
+web-1  | WebSocket ['172.24.0.5', 49138] accepted by application
+web-1  | WebSocket incoming frame on ['172.24.0.5', 49138]
+web-1  | Enters list_rooms_pong
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 49138]
+web-1  | WebSocket closed for ['172.24.0.5', 49138]
+web-1  | Enters disconnect
+web-1  | self.room_name: lobby
+web-1  | Enters get_user
+web-1  | username: lobby
+web-1  | self.room_name: lobby
+web-1  | self.user is None
+web-1  | Upgraded connection ['172.24.0.5', 53000] to WebSocket
+web-1  | Room name in connect: edrouot_Game
+web-1  | WebSocket ['172.24.0.5', 53000] open and established
+web-1  | WebSocket ['172.24.0.5', 53000] accepted by application
+web-1  | WebSocket incoming frame on ['172.24.0.5', 53000]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 53000]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 56998]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 56998]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 53000]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 53000]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 56998]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 53000]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 56998]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 53000]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 53000]
+web-1  | WebSocket closed for ['172.24.0.5', 53000]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 56998]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 56998]
+web-1  | enters Player left in action elif 
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 56998]
+web-1  | Enters disconnect
+web-1  | self.room_name: edrouot_Game
+web-1  | Enters get_user
+web-1  | username: edrouot_Game
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 56998]
+web-1  | Message send and now in HOST, disconnecting...
+web-1  | Enters disconnect
+web-1  | self.room_name: edrouot_Game
+web-1  | WebSocket closed for ['172.24.0.5', 56998]
+web-1  | Enters get_user
+web-1  | self.room_name: edrouot_Game
+web-1  | username: edrouot_Game
+web-1  | self.user: edrouot
+web-1  | self.user found edrouot
+web-1  | room closing Pong
+web-1  | Enters disconnect
+web-1  | self.room_name: edrouot_Game
+web-1  | Enters get_user
+web-1  | username: edrouot_Game
+web-1  | self.room_name: edrouot_Game
+web-1  | self.user: edrouot
+web-1  | self.user found edrouot
+web-1  | Enters disconnect
+web-1  | self.room_name: edrouot_Game
+web-1  | Enters get_user
+web-1  | username: edrouot_Game
+web-1  | self.room_name: edrouot_Game
+web-1  | self.user: edrouot
+web-1  | self.user found edrouot
+web-1  | self.room_name: edrouot_Game
+web-1  | self.user: edrouot
+web-1  | self.user found edrouot
+web-1  | Internal Server Error: /update_game_result_pong/
+web-1  | Traceback (most recent call last):
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+web-1  |     response = get_response(request)
+web-1  |                ^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+web-1  |     response = wrapped_callback(request, *callback_args, **callback_kwargs)
+web-1  |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/views/decorators/http.py", line 64, in inner
+web-1  |     return func(request, *args, **kwargs)
+web-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/home/app/web/frontend/views.py", line 146, in update_game_result_pong
+web-1  |     username = data.get('winner') + '_guest'
+web-1  |                ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
+web-1  | TypeError: unsupported operand type(s) for +: 'NoneType' and 'str'
+web-1  | Internal Server Error: /update_game_result_pong/
+web-1  | Traceback (most recent call last):
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+web-1  |     response = get_response(request)
+web-1  |                ^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+web-1  |     response = wrapped_callback(request, *callback_args, **callback_kwargs)
+web-1  |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/views/decorators/http.py", line 64, in inner
+web-1  |     return func(request, *args, **kwargs)
+web-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/home/app/web/frontend/views.py", line 146, in update_game_result_pong
+web-1  |     username = data.get('winner') + '_guest'
+web-1  |                ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
+web-1  | TypeError: unsupported operand type(s) for +: 'NoneType' and 'str'
+web-1  | Upgraded connection ['172.24.0.5', 60590] to WebSocket
+web-1  | Room name in connect: lobby
+web-1  | WebSocket ['172.24.0.5', 60590] open and established
+web-1  | WebSocket ['172.24.0.5', 60590] accepted by application
+web-1  | WebSocket incoming frame on ['172.24.0.5', 60590]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 60590]
+web-1  | WebSocket closed for ['172.24.0.5', 60590]
+web-1  | Enters disconnect
+web-1  | self.room_name: lobby
+web-1  | Enters get_user
+web-1  | username: lobby
+web-1  | self.room_name: lobby
+web-1  | self.user is None
+web-1  | Upgraded connection ['172.24.0.5', 60596] to WebSocket
+web-1  | Room name in connect: user11_Game
+web-1  | WebSocket ['172.24.0.5', 60596] open and established
+web-1  | WebSocket ['172.24.0.5', 60596] accepted by application
+web-1  | Upgraded connection ['172.24.0.5', 60610] to WebSocket
+web-1  | Room name in connect: lobby
+web-1  | WebSocket ['172.24.0.5', 60610] open and established
+web-1  | WebSocket ['172.24.0.5', 60610] accepted by application
+web-1  | WebSocket incoming frame on ['172.24.0.5', 60610]
+web-1  | Enters list_rooms_pong
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 60610]
+web-1  | WebSocket closed for ['172.24.0.5', 60610]
+web-1  | Enters disconnect
+web-1  | self.room_name: lobby
+web-1  | Enters get_user
+web-1  | username: lobby
+web-1  | self.room_name: lobby
+web-1  | self.user is None
+web-1  | WebSocket incoming frame on ['172.24.0.5', 60596]
+web-1  | enters Player left in action elif 
+web-1  | Enters disconnect
+web-1  | self.room_name: user11_Game
+web-1  | Enters get_user
+web-1  | username: user11_Game
+web-1  | self.room_name: user11_Game
+web-1  | self.user: user11
+web-1  | self.user found user11
+web-1  | room closing Pong
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 60596]
+web-1  | Message send and now in HOST, disconnecting...
+web-1  | Enters disconnect
+web-1  | self.room_name: user11_Game
+web-1  | Enters get_user
+web-1  | username: user11_Game
+web-1  | self.room_name: user11_Game
+web-1  | self.user: user11
+web-1  | self.user found user11
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 60596]
+web-1  | Message send and now in HOST, disconnecting...
+web-1  | Enters disconnect
+web-1  | self.room_name: user11_Game
+web-1  | Enters get_user
+web-1  | username: user11_Game
+web-1  | self.room_name: user11_Game
+web-1  | self.user: user11
+web-1  | self.user found user11
+web-1  | WebSocket closed for ['172.24.0.5', 60596]
+web-1  | Enters disconnect
+web-1  | self.room_name: user11_Game
+web-1  | Enters get_user
+web-1  | username: user11_Game
+web-1  | self.room_name: user11_Game
+web-1  | self.user: user11
+web-1  | self.user found user11
+web-1  | Internal Server Error: /update_game_result_pong/
+web-1  | Traceback (most recent call last):
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+web-1  |     response = get_response(request)
+web-1  |                ^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+web-1  |     response = wrapped_callback(request, *callback_args, **callback_kwargs)
+web-1  |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/views/decorators/http.py", line 64, in inner
+web-1  |     return func(request, *args, **kwargs)
+web-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/home/app/web/frontend/views.py", line 131, in update_game_result_pong
+web-1  |     username = player + '_guest'
+web-1  |                ~~~~~~~^~~~~~~~~~
+web-1  | TypeError: unsupported operand type(s) for +: 'NoneType' and 'str'
+web-1  | Internal Server Error: /update_game_result_pong/
+web-1  | Traceback (most recent call last):
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+web-1  |     response = get_response(request)
+web-1  |                ^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+web-1  |     response = wrapped_callback(request, *callback_args, **callback_kwargs)
+web-1  |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/views/decorators/http.py", line 64, in inner
+web-1  |     return func(request, *args, **kwargs)
+web-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/home/app/web/frontend/views.py", line 131, in update_game_result_pong
+web-1  |     username = player + '_guest'
+web-1  |                ~~~~~~~^~~~~~~~~~
+web-1  | TypeError: unsupported operand type(s) for +: 'NoneType' and 'str'
+web-1  | Internal Server Error: /update_game_result_pong/
+web-1  | Traceback (most recent call last):
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+web-1  |     response = get_response(request)
+web-1  |                ^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+web-1  |     response = wrapped_callback(request, *callback_args, **callback_kwargs)
+web-1  |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/views/decorators/http.py", line 64, in inner
+web-1  |     return func(request, *args, **kwargs)
+web-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/home/app/web/frontend/views.py", line 131, in update_game_result_pong
+web-1  |     username = player + '_guest'
+web-1  |                ~~~~~~~^~~~~~~~~~
+web-1  | TypeError: unsupported operand type(s) for +: 'NoneType' and 'str'
+web-1  | Internal Server Error: /update_game_result_pong/
+web-1  | Traceback (most recent call last):
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+web-1  |     response = get_response(request)
+web-1  |                ^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+web-1  |     response = wrapped_callback(request, *callback_args, **callback_kwargs)
+web-1  |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/views/decorators/http.py", line 64, in inner
+web-1  |     return func(request, *args, **kwargs)
+web-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/home/app/web/frontend/views.py", line 131, in update_game_result_pong
+web-1  |     username = player + '_guest'
+web-1  |                ~~~~~~~^~~~~~~~~~
+web-1  | TypeError: unsupported operand type(s) for +: 'NoneType' and 'str'
+web-1  | Upgraded connection ['172.24.0.5', 35064] to WebSocket
+web-1  | Room name in connect: lobby
+web-1  | WebSocket ['172.24.0.5', 35064] open and established
+web-1  | WebSocket ['172.24.0.5', 35064] accepted by application
+web-1  | WebSocket incoming frame on ['172.24.0.5', 35064]
+web-1  | Enters list_rooms_pong
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 35064]
+web-1  | Upgraded connection ['172.24.0.5', 35080] to WebSocket
+web-1  | Room name in connect: lobby
+web-1  | WebSocket ['172.24.0.5', 35080] open and established
+web-1  | WebSocket ['172.24.0.5', 35080] accepted by application
+web-1  | WebSocket incoming frame on ['172.24.0.5', 35080]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 35080]
+web-1  | WebSocket closed for ['172.24.0.5', 35080]
+web-1  | Enters disconnect
+web-1  | self.room_name: lobby
+web-1  | Enters get_user
+web-1  | username: lobby
+web-1  | self.room_name: lobby
+web-1  | self.user is None
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 35064]
+web-1  | Message send and now in HOST, disconnecting...
+web-1  | Enters disconnect
+web-1  | self.room_name: lobby
+web-1  | Enters get_user
+web-1  | username: lobby
+web-1  | self.room_name: lobby
+web-1  | self.user is None
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 35064]
+web-1  | Message send and now in HOST, disconnecting...
+web-1  | Enters disconnect
+web-1  | self.room_name: lobby
+web-1  | Enters get_user
+web-1  | username: lobby
+web-1  | self.room_name: lobby
+web-1  | self.user is None
+web-1  | Upgraded connection ['172.24.0.5', 35092] to WebSocket
+web-1  | Room name in connect: user11_Game
+web-1  | WebSocket ['172.24.0.5', 35092] open and established
+web-1  | WebSocket ['172.24.0.5', 35092] accepted by application
+web-1  | WebSocket closed for ['172.24.0.5', 35064]
+web-1  | Enters disconnect
+web-1  | self.room_name: lobby
+web-1  | Enters get_user
+web-1  | username: lobby
+web-1  | self.room_name: lobby
+web-1  | self.user is None
+web-1  | Upgraded connection ['172.24.0.5', 35106] to WebSocket
+web-1  | Room name in connect: lobby
+web-1  | WebSocket ['172.24.0.5', 35106] open and established
+web-1  | WebSocket ['172.24.0.5', 35106] accepted by application
+web-1  | WebSocket incoming frame on ['172.24.0.5', 35106]
+web-1  | Enters list_rooms_pong
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 35106]
+web-1  | WebSocket closed for ['172.24.0.5', 35106]
+web-1  | Enters disconnect
+web-1  | self.room_name: lobby
+web-1  | Enters get_user
+web-1  | username: lobby
+web-1  | self.room_name: lobby
+web-1  | self.user is None
+web-1  | Upgraded connection ['172.24.0.5', 34210] to WebSocket
+web-1  | Room name in connect: user11_Game
+web-1  | WebSocket ['172.24.0.5', 34210] open and established
+web-1  | WebSocket ['172.24.0.5', 34210] accepted by application
+web-1  | WebSocket incoming frame on ['172.24.0.5', 34210]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 34210]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 35092]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 35092]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 34210]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 34210]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 35092]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 34210]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 35092]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 35092]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 34210]
+web-1  | WebSocket closed for ['172.24.0.5', 35092]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 34210]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 34210]
+web-1  | enters Player left in action elif 
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 34210]
+web-1  | Enters disconnect
+web-1  | self.room_name: user11_Game
+web-1  | Enters get_user
+web-1  | username: user11_Game
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 34210]
+web-1  | Message send and now in HOST, disconnecting...
+web-1  | Enters disconnect
+web-1  | self.room_name: user11_Game
+web-1  | WebSocket closed for ['172.24.0.5', 34210]
+web-1  | Enters get_user
+web-1  | username: user11_Game
+web-1  | self.room_name: user11_Game
+web-1  | self.user: user11
+web-1  | self.user found user11
+web-1  | room closing Pong
+web-1  | Enters disconnect
+web-1  | self.room_name: user11_Game
+web-1  | Enters get_user
+web-1  | self.room_name: user11_Game
+web-1  | username: user11_Game
+web-1  | self.user: user11
+web-1  | self.user found user11
+web-1  | Enters disconnect
+web-1  | self.room_name: user11_Game
+web-1  | Enters get_user
+web-1  | username: user11_Game
+web-1  | self.room_name: user11_Game
+web-1  | self.user: user11
+web-1  | self.user found user11
+web-1  | self.room_name: user11_Game
+web-1  | self.user: user11
+web-1  | self.user found user11
+web-1  | Looking for locale `en_US` in provider `faker.providers.address`.
+web-1  | Provider `faker.providers.address` has been localized to `en_US`.
+web-1  | Looking for locale `en_US` in provider `faker.providers.automotive`.
+web-1  | Provider `faker.providers.automotive` has been localized to `en_US`.
+web-1  | Looking for locale `en_US` in provider `faker.providers.bank`.
+web-1  | Specified locale `en_US` is not available for provider `faker.providers.bank`. Locale reset to `en_GB` for this provider.
+web-1  | Looking for locale `en_US` in provider `faker.providers.barcode`.
+web-1  | Provider `faker.providers.barcode` has been localized to `en_US`.
+web-1  | Looking for locale `en_US` in provider `faker.providers.color`.
+web-1  | Provider `faker.providers.color` has been localized to `en_US`.
+web-1  | Looking for locale `en_US` in provider `faker.providers.company`.
+web-1  | Provider `faker.providers.company` has been localized to `en_US`.
+web-1  | Looking for locale `en_US` in provider `faker.providers.credit_card`.
+web-1  | Provider `faker.providers.credit_card` has been localized to `en_US`.
+web-1  | Looking for locale `en_US` in provider `faker.providers.currency`.
+web-1  | Provider `faker.providers.currency` has been localized to `en_US`.
+web-1  | Looking for locale `en_US` in provider `faker.providers.date_time`.
+web-1  | Provider `faker.providers.date_time` has been localized to `en_US`.
+web-1  | Provider `faker.providers.emoji` does not feature localization. Specified locale `en_US` is not utilized for this provider.
+web-1  | Provider `faker.providers.file` does not feature localization. Specified locale `en_US` is not utilized for this provider.
+web-1  | Looking for locale `en_US` in provider `faker.providers.geo`.
+web-1  | Provider `faker.providers.geo` has been localized to `en_US`.
+web-1  | Looking for locale `en_US` in provider `faker.providers.internet`.
+web-1  | Provider `faker.providers.internet` has been localized to `en_US`.
+web-1  | Provider `faker.providers.isbn` does not feature localization. Specified locale `en_US` is not utilized for this provider.
+web-1  | Looking for locale `en_US` in provider `faker.providers.job`.
+web-1  | Provider `faker.providers.job` has been localized to `en_US`.
+web-1  | Looking for locale `en_US` in provider `faker.providers.lorem`.
+web-1  | Provider `faker.providers.lorem` has been localized to `en_US`.
+web-1  | Looking for locale `en_US` in provider `faker.providers.misc`.
+web-1  | Provider `faker.providers.misc` has been localized to `en_US`.
+web-1  | Looking for locale `en_US` in provider `faker.providers.passport`.
+web-1  | Provider `faker.providers.passport` has been localized to `en_US`.
+web-1  | Looking for locale `en_US` in provider `faker.providers.person`.
+web-1  | Provider `faker.providers.person` has been localized to `en_US`.
+web-1  | Looking for locale `en_US` in provider `faker.providers.phone_number`.
+web-1  | Provider `faker.providers.phone_number` has been localized to `en_US`.
+web-1  | Provider `faker.providers.profile` does not feature localization. Specified locale `en_US` is not utilized for this provider.
+web-1  | Provider `faker.providers.python` does not feature localization. Specified locale `en_US` is not utilized for this provider.
+web-1  | Provider `faker.providers.sbn` does not feature localization. Specified locale `en_US` is not utilized for this provider.
+web-1  | Looking for locale `en_US` in provider `faker.providers.ssn`.
+web-1  | Provider `faker.providers.ssn` has been localized to `en_US`.
+web-1  | Provider `faker.providers.user_agent` does not feature localization. Specified locale `en_US` is not utilized for this provider.
+web-1  | Looking for locale `en_US` in provider `faker.providers.address`.
+web-1  | Provider `faker.providers.address` has been localized to `en_US`.
+web-1  | Looking for locale `en_US` in provider `faker.providers.automotive`.
+web-1  | Provider `faker.providers.automotive` has been localized to `en_US`.
+web-1  | Looking for locale `en_US` in provider `faker.providers.bank`.
+web-1  | Specified locale `en_US` is not available for provider `faker.providers.bank`. Locale reset to `en_GB` for this provider.
+web-1  | Looking for locale `en_US` in provider `faker.providers.barcode`.
+web-1  | Provider `faker.providers.barcode` has been localized to `en_US`.
+web-1  | Looking for locale `en_US` in provider `faker.providers.color`.
+web-1  | Provider `faker.providers.color` has been localized to `en_US`.
+web-1  | Looking for locale `en_US` in provider `faker.providers.company`.
+web-1  | Provider `faker.providers.company` has been localized to `en_US`.
+web-1  | Looking for locale `en_US` in provider `faker.providers.credit_card`.
+web-1  | Provider `faker.providers.credit_card` has been localized to `en_US`.
+web-1  | Looking for locale `en_US` in provider `faker.providers.currency`.
+web-1  | Provider `faker.providers.currency` has been localized to `en_US`.
+web-1  | Looking for locale `en_US` in provider `faker.providers.date_time`.
+web-1  | Provider `faker.providers.date_time` has been localized to `en_US`.
+web-1  | Provider `faker.providers.emoji` does not feature localization. Specified locale `en_US` is not utilized for this provider.
+web-1  | Provider `faker.providers.file` does not feature localization. Specified locale `en_US` is not utilized for this provider.
+web-1  | Looking for locale `en_US` in provider `faker.providers.geo`.
+web-1  | Provider `faker.providers.geo` has been localized to `en_US`.
+web-1  | Looking for locale `en_US` in provider `faker.providers.internet`.
+web-1  | Provider `faker.providers.internet` has been localized to `en_US`.
+web-1  | Provider `faker.providers.isbn` does not feature localization. Specified locale `en_US` is not utilized for this provider.
+web-1  | Looking for locale `en_US` in provider `faker.providers.job`.
+web-1  | Provider `faker.providers.job` has been localized to `en_US`.
+web-1  | Looking for locale `en_US` in provider `faker.providers.lorem`.
+web-1  | Provider `faker.providers.lorem` has been localized to `en_US`.
+web-1  | Looking for locale `en_US` in provider `faker.providers.misc`.
+web-1  | Provider `faker.providers.misc` has been localized to `en_US`.
+web-1  | Looking for locale `en_US` in provider `faker.providers.passport`.
+web-1  | Provider `faker.providers.passport` has been localized to `en_US`.
+web-1  | Looking for locale `en_US` in provider `faker.providers.person`.
+web-1  | Provider `faker.providers.person` has been localized to `en_US`.
+web-1  | Looking for locale `en_US` in provider `faker.providers.phone_number`.
+web-1  | Provider `faker.providers.phone_number` has been localized to `en_US`.
+web-1  | Provider `faker.providers.profile` does not feature localization. Specified locale `en_US` is not utilized for this provider.
+web-1  | Provider `faker.providers.python` does not feature localization. Specified locale `en_US` is not utilized for this provider.
+web-1  | Provider `faker.providers.sbn` does not feature localization. Specified locale `en_US` is not utilized for this provider.
+web-1  | Looking for locale `en_US` in provider `faker.providers.ssn`.
+web-1  | Provider `faker.providers.ssn` has been localized to `en_US`.
+web-1  | Provider `faker.providers.user_agent` does not feature localization. Specified locale `en_US` is not utilized for this provider.
+web-1  | Upgraded connection ['172.24.0.5', 54110] to WebSocket
+web-1  | Room name in connect: lobby
+web-1  | WebSocket ['172.24.0.5', 54110] open and established
+web-1  | WebSocket ['172.24.0.5', 54110] accepted by application
+web-1  | WebSocket incoming frame on ['172.24.0.5', 54110]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 54110]
+web-1  | WebSocket closed for ['172.24.0.5', 54110]
+web-1  | Enters disconnect
+web-1  | self.room_name: lobby
+web-1  | Enters get_user
+web-1  | username: lobby
+web-1  | self.room_name: lobby
+web-1  | self.user is None
+web-1  | Upgraded connection ['172.24.0.5', 54120] to WebSocket
+web-1  | Room name in connect: user11_Game
+web-1  | WebSocket ['172.24.0.5', 54120] open and established
+web-1  | WebSocket ['172.24.0.5', 54120] accepted by application
+web-1  | Upgraded connection ['172.24.0.5', 54128] to WebSocket
+web-1  | Room name in connect: lobby
+web-1  | WebSocket ['172.24.0.5', 54128] open and established
+web-1  | WebSocket ['172.24.0.5', 54128] accepted by application
+web-1  | WebSocket incoming frame on ['172.24.0.5', 54128]
+web-1  | Enters list_rooms_pong
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 54128]
+web-1  | WebSocket closed for ['172.24.0.5', 54128]
+web-1  | Enters disconnect
+web-1  | self.room_name: lobby
+web-1  | Enters get_user
+web-1  | username: lobby
+web-1  | self.room_name: lobby
+web-1  | self.user is None
+web-1  | Upgraded connection ['172.24.0.5', 54144] to WebSocket
+web-1  | Room name in connect: user11_Game
+web-1  | WebSocket ['172.24.0.5', 54144] open and established
+web-1  | WebSocket ['172.24.0.5', 54144] accepted by application
+web-1  | WebSocket incoming frame on ['172.24.0.5', 54144]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 54144]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 54120]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 54120]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 54144]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 54144]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 54120]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 54144]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 54144]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 54120]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 54144]
+web-1  | WebSocket closed for ['172.24.0.5', 54144]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 54120]
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 54120]
+web-1  | enters Player left in action elif 
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 54120]
+web-1  | Enters disconnect
+web-1  | self.room_name: user11_Game
+web-1  | Enters get_user
+web-1  | username: user11_Game
+web-1  | Sent WebSocket packet to client for ['172.24.0.5', 54120]
+web-1  | Message send and now in HOST, disconnecting...
+web-1  | Enters disconnect
+web-1  | self.room_name: user11_Game
+web-1  | WebSocket incoming frame on ['172.24.0.5', 54120]
+web-1  | WebSocket incoming frame on ['172.24.0.5', 54120]
+web-1  | WebSocket closed for ['172.24.0.5', 54120]
+web-1  | Enters get_user
+web-1  | self.room_name: user11_Game
+web-1  | username: user11_Game
+web-1  | self.user: user11
+web-1  | self.user found user11
+web-1  | room closing Pong
+web-1  | Enters disconnect
+web-1  | self.room_name: user11_Game
+web-1  | Enters get_user
+web-1  | self.room_name: user11_Game
+web-1  | username: user11_Game
+web-1  | self.user: user11
+web-1  | self.user found user11
+web-1  | Message send and now in HOST, disconnecting...
+web-1  | Enters disconnect
+web-1  | self.room_name: user11_Game
+web-1  | Enters get_user
+web-1  | username: user11_Game
+web-1  | self.room_name: user11_Game
+web-1  | self.user: user11
+web-1  | self.user found user11
+web-1  | self.room_name: user11_Game
+web-1  | self.user: user11
+web-1  | self.user found user11
+web-1  | Enters disconnect
+web-1  | self.room_name: user11_Game
+web-1  | Enters get_user
+web-1  | username: user11_Game
+web-1  | self.room_name: user11_Game
+web-1  | self.user: user11
+web-1  | self.user found user11
+web-1  | Internal Server Error: /update_game_result_pong/
+web-1  | Traceback (most recent call last):
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+web-1  |     response = get_response(request)
+web-1  |                ^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+web-1  |     response = wrapped_callback(request, *callback_args, **callback_kwargs)
+web-1  |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/views/decorators/http.py", line 64, in inner
+web-1  |     return func(request, *args, **kwargs)
+web-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/home/app/web/frontend/views.py", line 146, in update_game_result_pong
+web-1  |     username = data.get('winner') + '_guest'
+web-1  |                ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
+web-1  | TypeError: unsupported operand type(s) for +: 'NoneType' and 'str'
+web-1  | Internal Server Error: /update_game_result_pong/
+web-1  | Traceback (most recent call last):
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+web-1  |     response = get_response(request)
+web-1  |                ^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+web-1  |     response = wrapped_callback(request, *callback_args, **callback_kwargs)
+web-1  |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/views/decorators/http.py", line 64, in inner
+web-1  |     return func(request, *args, **kwargs)
+web-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/home/app/web/frontend/views.py", line 146, in update_game_result_pong
+web-1  |     username = data.get('winner') + '_guest'
+web-1  |                ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
+web-1  | TypeError: unsupported operand type(s) for +: 'NoneType' and 'str'
+db-1   | 2024-03-30 11:13:35.556 UTC [27] LOG:  checkpoint starting: time
+redis  | 1:M 30 Mar 2024 11:13:36.097 * 100 changes in 300 seconds. Saving...
+redis  | 1:M 30 Mar 2024 11:13:36.097 * Background saving started by pid 20
+redis  | 20:C 30 Mar 2024 11:13:36.100 * DB saved on disk
+redis  | 20:C 30 Mar 2024 11:13:36.100 * Fork CoW for RDB: current 0 MB, peak 0 MB, average 0 MB
+redis  | 1:M 30 Mar 2024 11:13:36.197 * Background saving terminated with success
+db-1   | 2024-03-30 11:13:37.989 UTC [27] LOG:  checkpoint complete: wrote 27 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=2.417 s, sync=0.004 s, total=2.434 s; sync files=26, longest=0.002 s, average=0.001 s; distance=37 kB, estimate=37 kB
