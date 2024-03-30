@@ -28,6 +28,7 @@ from django.utils import timezone
 from itertools import groupby
 
 
+@csrf_exempt
 def signUp(request):
     User = get_user_model()
 
@@ -381,6 +382,7 @@ def get_user_statistics(request):
         return JsonResponse({'error': 'User is not authenticated'}, status=401)
 
 
+@csrf_exempt
 def signOut(request):
     if request.user.is_authenticated:
         request.user.online = False
@@ -400,6 +402,7 @@ def signOut(request):
         return render(request=request, template_name="signIn.html", context={})
 
 
+@csrf_exempt
 def editProfile(request):
     User = get_user_model()
     if request.user.is_authenticated:
@@ -434,6 +437,7 @@ def editProfile(request):
         return render(request=request, template_name="signIn.html", context={})
 
 
+@csrf_exempt
 def showProfile(request):
     User = get_user_model()
     if request.user.is_authenticated:
@@ -446,6 +450,7 @@ def showProfile(request):
         return render(request=request, template_name="signIn.html", context={})
 
 
+@csrf_exempt
 def add_users(request):
     User = get_user_model()
     fake = Faker()
@@ -474,6 +479,7 @@ def add_users(request):
                     User.objects.create_user(**user_data)
 
 
+@csrf_exempt
 def showHome(request):
     if request.user.is_authenticated:
         return render(request=request, template_name="home.html", context={})
@@ -483,10 +489,12 @@ def showHome(request):
         return render(request=request, template_name="signIn.html", context={})
 
 
+@csrf_exempt
 def showChat(request):
     return render(request, 'chat.html')
 
 
+@csrf_exempt
 def scoreboard(request):
     User = get_user_model()
     if request.user.is_authenticated:
@@ -540,6 +548,7 @@ def get_display_name(request):
         return JsonResponse({'display_name': display_name})
 
 
+@csrf_exempt
 def home(request):
     # Retrieve the top three users based on games won
     # top_three_users = User.objects.order_by('-pong_games_won')[:3]
@@ -550,6 +559,7 @@ def home(request):
     return render(request, 'home.html', context)
 
 
+@csrf_exempt
 def gamePong(request):
     # User = get_user_model()
     if request.user.is_authenticated:
@@ -560,6 +570,7 @@ def gamePong(request):
         return render(request=request, template_name="signIn.html", context={})
 
 
+@csrf_exempt
 def callback(request):
     User = get_user_model()
 
@@ -624,6 +635,7 @@ def callback(request):
         return render(request=request, template_name="signIn.html", context={})
 
 
+@csrf_exempt
 def changeAvatar(request):
     User = get_user_model()
     if request.user.is_authenticated:
@@ -668,6 +680,7 @@ def changeAvatar(request):
         return redirect('signIn')
 
 
+@csrf_exempt
 def searchUsers(request):
     User = get_user_model()
     if request.user.is_authenticated:
@@ -686,6 +699,7 @@ def searchUsers(request):
 
 
 @login_required
+@csrf_exempt
 def addFriend(request):
     User = get_user_model()
     if request.method == 'POST':
@@ -722,6 +736,7 @@ def addFriend(request):
     #     return JsonResponse({"error": "Invalid request method."}, status=405)
 
 
+@csrf_exempt
 def showFriends(request):
     # User = get_user_model()
     if request.user.is_authenticated:
@@ -735,6 +750,7 @@ def showFriends(request):
 
 
 @login_required
+@csrf_exempt
 def removeFriends(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -759,6 +775,7 @@ def removeFriends(request):
     #     return JsonResponse({"error": "Invalid request method"}, status=405)
 
 
+@csrf_exempt
 def gameMemory(request):
     if request.user.is_authenticated:
         return render(request, 'gameMemory.html', context={})

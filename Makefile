@@ -11,20 +11,25 @@ all:
 watch:
 	docker compose watch --no-up
 
-prepare: create_cert install_cert
+prepare: create_cert #install_browser_cert
 
 create_cert:
-	@chmod +x ./create_cert.sh
-	@./create_cert.sh
-	@cp -r ${HOME}/certs ./nginx/
+	@chmod +x scripts/create_cert.sh
+	@./scripts/create_cert.sh
+	@chmod +x scripts/copy_certs.sh
+	@./scripts/copy_certs.sh
 
-install_cert:
-	@chmod +x ./install_cert.sh
-	@./install_cert.sh
+install_browser_cert:
+	@chmod +x ./install_browser_cert.sh
+	@./install_browser_cert.sh
 
-delete_cert:
-	@chmod +x ./delete_cert.sh
-	@./delete_cert.sh
+delete_browser_cert:
+	@chmod +x scripts/delete_browser_cert.sh
+	@./scripts/delete_browser_cert.sh
+
+delete_container_certs:
+	@chmod +x scripts/delete_container_certs.sh
+	@./scripts/delete_container_certs.sh
 
 compile_messages:
 	docker compose -f docker-compose.yml exec web python manage.py compilemessages
@@ -49,7 +54,7 @@ restart:
 	docker compose -f docker-compose.yml down
 	docker compose -f docker-compose.yml up -d
 
-fclean: clean
+fclean: clean #delete_container_certs
 # removes all the images
 	@docker system prune -a
 

@@ -1,0 +1,6 @@
+tls_server_config:
+  cert_file: alert.crt
+  key_file: alert.key
+
+basic_auth_users:
+  admin: $2y$10$8ALvplrCJS1ZwMlN8oGPq.oVui2nMOyoBPFG5Frlw6Tz99kR302Nu

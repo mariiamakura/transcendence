@@ -1,0 +1,19 @@
+# #place it to /etc/grafana/provisioning/datasources
+
+# Configuration file version
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    orgId: 1
+    url: https://prometheus:9090
+    basicAuth: true
+    basicAuthUser: admin
+    jsonData:
+      tlsAuthWithCACert: true
+    secureJsonData:
+      tlsCACert: |
+      basicAuthPassword: random
+    editable: true

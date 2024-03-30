@@ -47,7 +47,6 @@ services:
       - localhost
    
 
-
   nginx:
     container_name: nginx
     build: 
@@ -69,103 +68,99 @@ services:
       - localhost
 
 
-#################monitoring##########################
-  # prometheus:
-  #   image: prom/prometheus:latest
-  #   container_name: prometheus
-  #   ports:
-  #     - 9090:9090
-  #   command:
-  #     - --config.file=/etc/prometheus/prometheus.yml
-  #   volumes:
-  #     - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-  #     - ./prometheus/rules.yml:/etc/prometheus/rules.yml:ro
-  #     - prometheus-data:/prometheus
-  #   networks:
-  #     - localhost
+# #################monitoring##########################
+  prometheus:
+    build:
+      context: ./prometheus
+      args:
+        - PROMETHEUS_USER=${PROMETHEUS_USER}
+        - PROMETHEUS_PASSWORD=${PROMETHEUS_PASSWORD}
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    env_file:
+      .env
+    volumes:
+      - prometheus-data:/prometheus
+    networks:
+      - localhost
 
- 
-#   nginx-prometheus-exporter:
-#     image: nginx/nginx-prometheus-exporter:1.0
-#     container_name: prometheus-nginx-exporter
-#     env_file:
-#       .env
-#     command:
-#       --nginx.scrape-uri=https://nginx:80/metrics
-#       --web.telemetry-path=/metrics
-#     expose: 
-#       - 9113
-#     depends_on:
-#       - prometheus
-#     networks:
-#       - localhost
+  nginx-prometheus-exporter:
+    image: nginx/nginx-prometheus-exporter:1.0
+    container_name: prometheus-nginx-exporter
+    env_file:
+      .env
+    command:
+      --nginx.scrape-uri=https://nginx:443/metrics
+      --web.telemetry-path=/metrics
+    expose: 
+      - 9113
+    depends_on:
+      - prometheus
+    networks:
+      - localhost
+
+  prometheus-node-exporter:
+    image: prom/node-exporter:latest
+    container_name: prometheus-node-exporter
+    restart: always
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+      - ./node_export/certs_node/node.crt:/node.crt
+      - ./node_export/certs_node/node.key:/node.key
+      - ./node_export/web-config.yml:/web-config.yml
+    command: 
+      - '--path.procfs=/host/proc' 
+      - '--path.sysfs=/host/sys'
+      - --collector.filesystem.ignored-mount-points
+      - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+      - '--web.config.file=/web-config.yml'
+    networks:
+      - localhost
+    privileged: true
+    depends_on:
+      - prometheus
+    expose:
+      - 9100
 
 
-  # prometheus-node-exporter:
-  #   image: prom/node-exporter:latest
-  #   container_name: prometheus-node-exporter
-  #   restart: always
-  #   volumes:
-  #     - /proc:/host/proc:ro
-  #     - /sys:/host/sys:ro
-  #     - /:/rootfs:ro
-  #   command: 
-  #     - '--path.procfs=/host/proc' 
-  #     - '--path.sysfs=/host/sys'
-  #     - --collector.filesystem.ignored-mount-points
-  #     - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
-  #   networks:
-  #     - localhost
-  #   privileged: true
-  #   depends_on:
-  #     - prometheus
-  #   expose:
-  #     - 9100
-
-  # grafana:
-  #   image: grafana/grafana:latest
-  #   container_name: grafana
-  #   ports:
-  #     - 3000:3000
-  #   volumes:
-  #     - grafana-data:/var/lib/grafana
-  #   env_file:
-  #     .env
-  #   networks:
-  #     - localhost
+  grafana:
+    build:
+      context: ./grafana
+      args:
+        - PROMETHEUS_PASSWORD=${PROMETHEUS_PASSWORD}
+    container_name: grafana
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+      - ./grafana/dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml
+    env_file:
+      .env
+    networks:
+      - localhost
   
-  # alertmanager:
-  #   image: quay.io/prometheus/alertmanager:latest
-  #   container_name: alertmanager
-  #   ports:
-  #     - 9093:9093
-  #   volumes: 
-  #     - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
-  #     - alertmanager-data:/data
-  #   networks:
-  #     - localhost
+  alertmanager:
+    build:
+      context: ./alertmanager
+    container_name: alertmanager
+    ports:
+      - 9093:9093
+    volumes: 
+      - alertmanager-data:/data
+    networks:
+      - localhost
 
 volumes:
   postgres_data:
   static_volume: 
   media_volume:
-      
-  # prometheus-data:
-  #   # driver_opts:
-  #   #   o: bind
-  #   #   type: none
-  #   #   device: /home/${USER}/tasks/my_github/transcendence/devops_data/prometheus #change to local env
-  # grafana-data:
-  #   # driver_opts:
-  #   #   o: bind
-  #   #   type: none
-  #   #   device: /home/${USER}/tasks/my_github/transcendence/devops_data/grafana #change to local env
-  # alertmanager-data:
-  #   # driver_opts:
-  #   #   o: bind
-  #   #   type: none
-  #   #   device: /home/${USER}/tasks/my_github/transcendence/alertmanager #change to local env
-
+  prometheus-data:
+  grafana-data:
+  alertmanager-data:
 
 networks:
     localhost:
