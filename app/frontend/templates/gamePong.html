@@ -982,7 +982,7 @@ function checkCollision() {
     }
 
     if (nextX + ball.radius > player2.x - 10 && 
-        nextX - ball.radius < player2.x + player2.width + 10 && 
+        nextX - ball.radius < player2.x + player2.width - 10 && 
         nextY + ball.radius > (player2.y + effectiveHeightReduction) && 
         nextY - ball.radius < (player2.y + player2.height - effectiveHeightReduction)) {
         ball.velocityX = -Math.abs(ball.velocityX);
@@ -994,7 +994,7 @@ function checkCollision() {
     // if (nextY - ball.radius < 0 || nextY + ball.radius > boardHeight) {
     //    ball.velocityY = -ball.velocityY;
     // }
-	if (nextY - ball.radius < (0 - ball.height) || nextY + ball.radius > (boardHeight - ball.height)) {
+	if (nextY - ball.radius < (0 - ball.radius) || nextY + ball.radius > (boardHeight - ball.radius)) {
         ball.velocityY = -ball.velocityY; 
     }
 }
@@ -1125,19 +1125,12 @@ function generateRandomAngle() {
     return radians;
 }
 
-function generateRandomAngle2() {
-    var minAngle = 60 * Math.PI / 180; // Convert degrees to radians
-    var maxAngle = 120 * Math.PI / 180; // Convert degrees to radians
-    var randomAngle = Math.random() * (maxAngle - minAngle) + minAngle;
-    if (randomAngle > 1.2 && randomAngle < 1.8)
-        randomAngle += 1;
-    return randomAngle;
-}
+
 
 
 function resetGame(direction) {
     ball.x = board.width / 2 - ballWidth / 2;
-    ball.y = Math.random() * (board.height - 10);
+    ball.y = Math.random() * (board.height - 200);
     // Reset ball velocity
     var angle = generateRandomAngle();
     ball.velocityX = Math.cos(angle) * board.width / 200 * direction * velocity;
