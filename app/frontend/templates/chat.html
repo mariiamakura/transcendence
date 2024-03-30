@@ -64,8 +64,8 @@
                         {% for message in messages %}
                         <li class="clearfix">
                             <div class="message-data align-right">
-                                <span class="message-data-time" >{{ message.date }}</span> &nbsp; &nbsp;
-                                <span class="message-data-name" >{{ message.user }}</span>
+                                <span class="message-data-time" >{% trans '{{ message.date }}'  %}</span> &nbsp; &nbsp;
+                                <span class="message-data-name" >{% trans '{{ message.user }}'  %}</span>
                             </div>
                             <div class="message other-message float-right">
                                 {{ message.message }}
@@ -76,6 +76,6 @@
                 </div>
                 <div class="chat-message clearfix">
                     <textarea name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="3"></textarea>
-                    <button id="send" class="btn btn-primary">Send</button>
+                    <button id="send" class="btn btn-primary">{% trans 'Send'  %}</button>
                 </div>
             </div> {% endcomment %}
