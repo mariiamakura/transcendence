@@ -88,7 +88,7 @@ class KeepAliveConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_send(
             self.room_group_name,
             {
-                'type': 'player_left',
+                'action': 'player_left',
                 'channel_name': self.channel_name
             }
         )
@@ -98,25 +98,14 @@ class KeepAliveConsumer(AsyncWebsocketConsumer):
         )
         await self.set_user_online(False)
         await asyncio.sleep(1)
-        # Check if the disconnecting user is the host of a room and close the room if so
-        # if self.user == GameRoomManagerPong.rooms[self.room_name]["host"]:
-        #     await self.close_room_pong(self.room_name)
-        # elif self.user == GameRoomManagerPong.rooms[self.room_name]["guest"]:
-        #     await self.close_room_pong(self.room_name)
-        # elif self.user == GameRoomManagerMemory.rooms[self.room_name]["host"]:
-        #     await self.close_room_memory(self.room_name)
-        # elif self.user == GameRoomManagerMemory.rooms[self.room_name]["guest"]:
-        #     await self.close_room_memory(self.room_name)
 
     @database_sync_to_async
     def close_room_pong(self, room_name):
-        # Logic to close the Pong room
         if room_name in GameRoomManagerPong.rooms:
             del GameRoomManagerPong.rooms[room_name]
 
     @database_sync_to_async
     def close_room_memory(self, room_name):
-        # Logic to close the Memory room
         if room_name in GameRoomManagerMemory.rooms:
             del GameRoomManagerMemory.rooms[room_name]
 
@@ -168,65 +157,12 @@ class GameConsumer(AsyncWebsocketConsumer):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         logger.debug(f"Room name in connect: {self.room_name}")
         self.room_group_name = f'game_{self.room_name}'
-
-        # Join room group
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
         )
-
         await self.accept()
 
-    # async def disconnect(self, close_code):
-    #     logger.debug("Enters disconnect")
-    #     logger.debug("self.room_name: " + self.room_name)
-    #     self.user = await self.get_user(self.room_name)
-    #     logger.debug("self.room_name: " + self.room_name)
-    #     await self.channel_layer.group_send(
-    #         self.room_group_name,
-    #         {
-    #             'type': 'player_left',
-    #             'channel_name': self.channel_name
-    #         }
-    #     )
-        # await self.channel_layer.group_discard(
-        #     self.room_group_name,
-        #     self.channel_name
-        # )
-        # await self.set_user_online(False)
-        # if (self.user is not None):
-        #     if self.user == GameRoomManagerPong.rooms[self.room_name]["host"]:
-        #         await self.close_room_pong(self.room_name)
-        #     elif self.user == GameRoomManagerPong.rooms[self.room_name]["guest"]:
-        #         await self.close_room_pong(self.room_name)
-        #     elif self.user == GameRoomManagerMemory.rooms[self.room_name]["host"]:
-        #         await self.close_room_memory(self.room_name)
-        #     elif self.user == GameRoomManagerMemory.rooms[self.room_name]["guest"]:
-        #         await self.close_room_memory(self.room_name)
-
-        # WORKS
-        # if self.user is not None:
-        #     logger.debug("self.user found " + self.user.username)
-        #     room = None
-        #     if self.room_name in GameRoomManagerPong.rooms:
-        #         room = GameRoomManagerPong.rooms[self.room_name]
-        #         if room is not None:
-        #             logger.debug("room closing ")
-        #             del GameRoomManagerPong.rooms[self.room_name]
-
-        # elif self.room_name in GameRoomManagerMemory.rooms:
-        #     room = GameRoomManagerMemory.rooms[self.room_name]
-
-        # if room is not None:
-        #     logger.debug("room found ")
-        #     logger.debug("room host: " + room["host"])
-        #     logger.debug("room guest: " + room["guest"])
-        #     # if self.user == room["host"] or self.user == room.get("guest"):
-        #     #     if room.get("game_type") == "pong":
-        #     #         logger.debut("Enters close_room_pong")
-        #     #         await self.close_room_pong(self.room_name)
-        #     #     elif room.get("game_type") == "memory":
-        #     #         await self.close_room_memory(self.room_name)
     async def disconnect(self, close_code):
         logger.debug("Enters disconnect")
         logger.debug("self.room_name: " + self.room_name)
@@ -237,22 +173,10 @@ class GameConsumer(AsyncWebsocketConsumer):
         else:
             logger.debug("self.user is None")
 
-        # Send player_left message to update other players
-        # who = None
-        # if self.user is not None:
-        #     if self.user == GameRoomManagerPong.rooms[self.room_name]["host"]:
-        #         who = 'host'
-        #     elif self.user == GameRoomManagerPong.rooms[self.room_name]["guest"]:
-        #         who = 'guest'
-        #     elif self.user == GameRoomManagerMemory.rooms[self.room_name]["host"]:
-        #         who = 'host'
-        #     elif self.user == GameRoomManagerMemory.rooms[self.room_name]["guest"]:
-        #         who = 'guest'
-
         await self.channel_layer.group_send(
             self.room_group_name,
             {
-                'type': 'player_left',
+                'action': 'player_left',
                 # 'who': who,
                 'channel_name': self.channel_name
             }
@@ -269,11 +193,13 @@ class GameConsumer(AsyncWebsocketConsumer):
             logger.debug("self.user found " + self.user.username)
             room = None
             if self.room_name in GameRoomManagerPong.rooms:
+                logger.debug("self.room_name in GameRoomManagerPong.rooms")
                 room = GameRoomManagerPong.rooms[self.room_name]
                 if room is not None:
                     logger.debug("room closing Pong")
                     del GameRoomManagerPong.rooms[self.room_name]
             if self.room_name in GameRoomManagerMemory.rooms:
+                logger.debug("self.room_name in GameRoomManagerMemory.rooms")
                 room = GameRoomManagerMemory.rooms[self.room_name]
                 if room is not None:
                     logger.debug("room closing Memory ")
@@ -514,12 +440,12 @@ class GameConsumer(AsyncWebsocketConsumer):
         elif action == 'player_left':
             # host_name = data.get('host_name')
             logger.debug("enters Player left in action elif ")
-            # await self.channel_layer.group_send(
-            #     self.room_group_name,
-            #     {
-            #         'type': 'player_left'
-            #     }
-            # )
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'action': 'player_left'
+                }
+            )
             await self.disconnect(1001)
             # await self.close_room_pong(self.room_name)
             # await self.send(text_data=json.dumps({'action': 'disconnect', 'room_id': room_id}))

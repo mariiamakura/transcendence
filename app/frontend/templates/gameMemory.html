@@ -488,19 +488,20 @@ async function remoteHost() {
                     scorePlayer1 = data.score1;
                     scorePlayer2 = data.score2;
                 }
-                if (data.action === 'game_ended_memory')
+                if (data.action === 'game_ended_memory') {
                     endGameMemory(data.winner);
-                if (data.type === 'player_left') {
-                    console.log(data.message);
-                    console.log(data.who + ' left the game');
+                }
+                if (data.action === 'player_left') {
+                    // console.log(data.message);
+                    // console.log(data.who + ' left the game');
                     endGameMemory(namePlayer[0]);
                     gameRoomSocket.close();
                 }
             }
             gameRoomSocket.onclose = function() {
-                gameRoomSocket.send(JSON.stringify({ action: 'player_left' }));
+                // gameRoomSocket.send(JSON.stringify({ action: 'player_left' }));
                 endGameMemory(namePlayer[0]);
-                console.log("Game room connection closed.");
+                console.log("Game room Memory in onclose function : connection closed.");
             };
         }
         socket.onerror = function(error) {
@@ -527,7 +528,7 @@ async function remoteClient() {
         const data = JSON.parse(event.data);
         // Assuming 'list_rooms' action returns an array of room IDs in 'rooms'
         if (data.action === 'list_rooms_memory') {
-            const games = data.rooms; // This replaces 'games' from 'activeGames' message
+            const games = data.rooms;
             var gameList = document.getElementById('content');
             gameList.innerHTML = ''; // Clear previous content
 
@@ -611,14 +612,14 @@ async function remoteClient() {
             if (data.type === 'notify_winner')
                 console.log('The winner is:', data.winner);
 
-            if (data.action === 'player_left' || data.type === 'player_left') {
+            if (data.action === 'player_left') {
                 console.log('other player left the game');
                 endGameMemory(namePlayer[1]);
                 roomSocket.close();
             }
             roomSocket.onclose = function() {
                 roomSocket.send(JSON.stringify({ action: 'player_left' }));
-                endGameMemory(namePlayer[1]);
+                // endGameMemory(namePlayer[1]);
                 console.log("Game room connection closed.");
             };
         };
@@ -975,10 +976,10 @@ function endGameMemory(winner)
     //     '</div>';
     // }
     reinitializeGame();
-    if (tournament === false)
+    if (tournament === false && local === true)
     {
         var startAgain = document.createElement("button");
-        startAgain.textContent = "Start again";
+        startAgain.textContent = "Start again with the same players";
         startAgain.classList.add("styled-button")
         document.getElementById('endGame').appendChild(startAgain);
         startAgain.addEventListener("click", function() {
