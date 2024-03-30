@@ -570,7 +570,7 @@ def callback(request):
             'client_id': os.environ.get("OAUTH_CLIENT_ID"),
             'client_secret': os.environ.get("OAUTH_CLIENT_SECRET"),
             'code': code,
-            'redirect_uri': 'https://localhost:9999/callback'
+            'redirect_uri': os.environ.get("OAUTH_CALLBACK_URL"),
             # 'redirect_uri': 'https://42pong.ddns.net:9999/callback'
         }
 

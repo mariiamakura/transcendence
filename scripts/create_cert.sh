@@ -4,7 +4,7 @@ RED="\033[0;38;5;199m"
 BLUE="\033[0;38;5;44m"
 GREEN="\033[0;32m"
 NC="\033[0m" # No Color
-
+source ../.env.ddclient
 cd /home/${USER}/sgoinfre
 
 
@@ -20,15 +20,19 @@ else
 fi
 
 # UNCOMMENT FOR EVALUATION!!!!!!!!!!
-# if ! brew list ddclient &>/dev/null; then
-# 	echo -e "${BLUE}Installing ddclient...${NC}"
-# 	brew install ddclient
-# 	cp ddcclient.conf /home/${USER}/sgoinfre/homebrew/etc/ddclient.conf
-#   cp .env.ddclient /home/${USER}/sgoinfre/homebrew/etc/.env.ddclient
-# else
-# 	echo -e "${GREEN}ddclient is already installed.${NC}"
-# fi
-# ddclient
+if ! brew list ddclient &>/dev/null; then
+	echo -e "${BLUE}Installing ddclient...${NC}"
+	brew install ddclient
+	cp ddcclient.conf /home/${USER}/sgoinfre/homebrew/etc/ddclient.conf
+	cp .env.ddclient /home/${USER}/sgoinfre/homebrew/etc/.env.ddclient
+else
+	cp ddcclient.conf /home/${USER}/sgoinfre/homebrew/etc/ddclient.conf
+	cp .env.ddclient /home/${USER}/sgoinfre/homebrew/etc/.env.ddclient
+	echo -e "${GREEN}ddclient is already installed.${NC}"
+fi
+ddclient
+# ddclient -daemon 300 -protocol noip -login $LOGIN -password $PASSWORD 42pong.ddns.net
+
 
 if ! brew list mkcert &>/dev/null; then
     echo -e "${BLUE}Installing mkcert...${NC}"
