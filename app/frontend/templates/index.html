@@ -1,10 +1,11 @@
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pong - The ultimate tournament</title>
+    <title>{% trans "Pong - The ultimate tournament" %}</title> 
 	<link href="{% static 'style.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'pong.css' %}">
     <link rel="stylesheet" href="{% static 'memory.css' %}">
@@ -18,34 +19,50 @@
 <body>
     <div class="header">
             <img class="gif-logo" src="{% static "img/gamer.gif" %}" alt="Our pong logo">
-            <h1 id="title">42 Pong</h1>
+            <h1 id="title">{% trans "42 Pong" %}</h1>
     <nav>
         <ul>
 			{% if request.user.is_authenticated %}
-            <li><a class="nav-link" href="showHome">Home</a></li>
+            <form action="{% url 'set_language' %}" method="post">
+                {% csrf_token %}
+                <div class="dropdown">
+                  <select name="language" class="dropbtn" onchange="this.form.submit()">
+                    {% get_current_language as LANGUAGE_CODE %}
+                    {% get_available_languages as LANGUAGES %}
+                    {% get_language_info_list for LANGUAGES as languages %}
+                    {% for language in languages %}
+                      <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %} selected {% endif %}>
+                        {{ language.name_local }}
+                      </option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </form>
+            <!-- <script src="{% static '../statics/language_switch.js' %}"></script> -->
+            <li><a class="nav-link" href="showHome">{% trans "Home" %}</a></li>
                     <li>
                         <div class="dropdown">
-                        <button class="dropbtn">Games</button>
+                        <button class="dropbtn">{% trans "Games" %}</button>
                         <div class="dropdown-content">
-                            <a class="nav-link" href="gamePong">Pong</a>
-                            <a class="nav-link" href="gameMemory">Memory</a>
+                            <a class="nav-link" href="gamePong">{% trans "Pong" %}</a>
+                            <a class="nav-link" href="gameMemory">{% trans "Memory" %}</a>
                         </div>                
                         </div>  
                     <li>
-                        <a class="nav-link" href="scoreboard">Scoreboard</a>
+                        <a class="nav-link" href="scoreboard">{% trans "Scoreboard" %}</a>
                     </li>
                     <li class="nav-item ">
-                        <a class="nav-link" href="showProfile">Profile</a>
+                        <a class="nav-link" href="showProfile">{% trans "Profile" %}</a>
                     </li>
 			<li class="nav-item ">
-				<a class="nav-link" href="signOut">Sign Out</a>
+				<a class="nav-link" href="signOut">{% trans "Sign Out" %}</a>
 			</li>
 			{% else %}
 			<li class="nav-item">
-				<a class="nav-link" href="signIn">Sign In</a>
+				<a class="nav-link" href="signIn">{% trans "Sign In" %}</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="signUp">Sign Up</a>
+				<a class="nav-link" href="signUp">{% trans "Sign Up" %}</a>
 			</li>
             
 
@@ -62,11 +79,11 @@
     </main>
     <div class="footer">
         <div class="footer-text">
-            <p>This website has been created for the last project of 42 by:</p>
+            <p>{% trans "This website has been created for the last project of 42 by:" %}</p>
         </div>
         <div class="names">
             <div class="name">
-                <p>Mariia Paraskun</p>
+                <p>{% trans 'Mariia Paraskun'  %}</p>
                 <div class="pictures_team">
                     <img src="{% static "img/pictures_team/mariia.png" %}" alt="Mariia">
                 </div>
@@ -77,37 +94,41 @@
                 <div class="circle"></div>
             </div>
             <div class="name">
-                <p>Sung Hyan Lee</p>
+                <p>{% trans 'Sung Hyan Lee'  %}</p>
                 <div class="pictures_team">
                     <img src="{% static "img/pictures_team/sunny.jpeg" %}" alt="Sunny">
-                </div>                <div class="socials">
+                </div>
+                <div class="socials">
                     <a class="social_logo" href="https://www.linkedin.com/in/sung-hyan-lee-a797a227b/" target="_blank"><img class="linkedin" src="{% static "img/linkedin.png" %}" alt="linkedin"></a>
                     <a class="social_logo" href="https://github.com/sunny42B" target="_blank"><img class="github" src="{% static "img/github.png" %}" alt="github"></a>
                 </div>
             </div>
             <div class="name">
-                <p>Max Schaub</p>
+                <p>{% trans 'Max Schaub'  %}</p>
                 <div class="pictures_team">
                     <img src="{% static "img/pictures_team/max.png" %}" alt="Max">
-                </div>                <div class="socials">
+                </div>
+                <div class="socials">
                     <a class="social_logo" href="https://www.linkedin.com/in/max-schaub-579b0b1a0/" target="_blank"><img class="linkedin" src="{% static "img/linkedin.png" %}" alt="linkedin"></a>
                     <a class="social_logo" href="https://www.github.com/mars12161" target="_blank"><img class="github" src="{% static "img/github.png" %}" alt="github"></a>
                 </div>
             </div>
             <div class="name">
-                <p>Feras Hassouneh</p>
+                <p>{% trans 'Feras Hassouneh'  %}</p>
                 <div class="pictures_team">
                     <img src="{% static "img/pictures_team/feras.png" %}" alt="Feras">
-                </div>                <div class="socials">
+                </div>
+                <div class="socials">
                     <a class="social_logo" href="https://www.linkedin.com/in/feras-hassouneh-09b79b25a/" target="_blank"><img class="linkedin" src="{% static "img/linkedin.png" %}" alt="linkedin"></a>
                     <a class="social_logo" href="https://www.github.com/fhassoun" target="_blank"><img class="github" src="{% static "img/github.png" %}" alt="github"></a>
                 </div>
             </div>
             <div class="name">
-                <p>Emilie Drouot</p>
+                <p>{% trans 'Emilie Drouot'  %}</p>
                  <div class="pictures_team">
                     <img src="{% static "img/pictures_team/emilie.png" %}" alt="Emilie">
-                </div>                <div class="socials">
+                </div>
+                <div class="socials">
                     <a class="social_logo" href="https://www.linkedin.com/in/emilie-drouot/" target="_blank"><img class="linkedin" src="{% static "img/linkedin.png" %}" alt="linkedin"></a>
                     <a class="social_logo" href="https://www.github.com/EmilieD8" target="_blank"><img class="github" src="{% static "img/github.png" %}" alt="github"></a>
                 </div>
@@ -116,7 +137,7 @@
     </div>
     
 </body>
-<script>
+<!-- <script>
     
     {% if request.user.is_authenticated %}
     let khostName = "{{ user.username }}"; 
@@ -149,7 +170,7 @@
 
 
 
-    {% endif %}
+    {% endif %} -->
     
 
 

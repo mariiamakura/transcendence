@@ -1,0 +1,639 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-30 15:21+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: database/models.py:18
+msgid "English"
+msgstr "영어"
+
+#: database/models.py:19
+msgid "Korean"
+msgstr "한국어"
+
+#: database/models.py:20
+msgid "French"
+msgstr "프랑스어"
+
+#: database/models.py:21
+msgid "Ukrainian"
+msgstr "우크라이나어"
+
+#: frontend/templates/_login_signup.html:2 frontend/templates/chat.html:53
+#: frontend/templates/home.html:43 frontend/templates/index.html:62
+#: frontend/templates/signIn.html:7 frontend/templates/signIn.html:27
+#: frontend/templates/signUp.html:36
+msgid "Sign In"
+msgstr "로그인"
+
+#: frontend/templates/_login_signup.html:5 frontend/templates/chat.html:56
+#: frontend/templates/home.html:44 frontend/templates/index.html:65
+#: frontend/templates/signIn.html:45 frontend/templates/signUp.html:7
+#: frontend/templates/signUp.html:33
+msgid "Sign Up"
+msgstr "가입"
+
+#: frontend/templates/changeAvatar.html:11
+msgid "Avatar URL:"
+msgstr "아바타 URL:"
+
+#: frontend/templates/changeAvatar.html:16
+msgid " or Upload Avatar:"
+msgstr " 또는 아바타 업로드:"
+
+#: frontend/templates/changeAvatar.html:19
+msgid "Choose file"
+msgstr "파일 선택"
+
+#: frontend/templates/changeAvatar.html:24
+msgid "or Choose an Avatar:"
+msgstr "또는 아바타 선택:"
+
+#: frontend/templates/changeAvatar.html:37 frontend/templates/profile.html:16
+msgid "Change Avatar"
+msgstr "아바타 변경"
+
+#: frontend/templates/chat.html:8
+msgid "PongChat, the best chat in the world"
+msgstr "PongChat, 세계 최고의 채팅"
+
+#: frontend/templates/editProfile.html:7
+msgid "Edit Profile:"
+msgstr "프로필 수정:"
+
+#: frontend/templates/editProfile.html:11
+msgid "Display Name"
+msgstr "표시 이름"
+
+#: frontend/templates/editProfile.html:12
+msgid "Enter your Display Name"
+msgstr "표시 이름을 입력하세요"
+
+#: frontend/templates/editProfile.html:15
+msgid "Firstname"
+msgstr "이름"
+
+#: frontend/templates/editProfile.html:16
+msgid "Enter your Firstame"
+msgstr "이름을 입력하세요"
+
+#: frontend/templates/editProfile.html:19
+msgid "Surname"
+msgstr "성"
+
+#: frontend/templates/editProfile.html:20
+msgid "Enter your Surname"
+msgstr "성을 입력하세요"
+
+#: frontend/templates/editProfile.html:23 frontend/templates/signUp.html:30
+msgid "Email address"
+msgstr "이메일 주소"
+
+#: frontend/templates/editProfile.html:24 frontend/templates/signUp.html:31
+msgid "Enter email"
+msgstr "이메일을 입력하세요"
+
+#: frontend/templates/editProfile.html:27
+msgid "Language"
+msgstr "언어"
+
+#: frontend/templates/editProfile.html:39
+msgid "Save Profile"
+msgstr "프로필 저장"
+
+#: frontend/templates/gameMemory.html:8
+msgid "Memoryyyyyyyy"
+msgstr "기억력 테스트"
+
+#: frontend/templates/gameMemory.html:14 frontend/templates/index.html:48
+#: frontend/templates/scoreboard.html:24
+msgid "Memory"
+msgstr "기억력"
+
+#: frontend/templates/gameMemory.html:45 frontend/templates/gamePong.html:195
+msgid " Do you want to play a 1vs1 game or a tournament ? "
+msgstr "1대1 게임이나 토너먼트를 하시겠습니까?"
+
+#: frontend/templates/gameMemory.html:48 frontend/templates/gamePong.html:199
+#, fuzzy
+#| msgid "Pong - The ultimate tournament"
+msgid "Play tournament"
+msgstr "퐁 - 궁극의 토너먼트"
+
+#: frontend/templates/gameMemory.html:49 frontend/templates/gamePong.html:200
+msgid "Play 1vs1"
+msgstr "1대1 플레이"
+
+#: frontend/templates/gameMemory.html:70 frontend/templates/gameMemory.html:345
+#, fuzzy
+#| msgid "Which type of game do you wanna play"
+msgid " Which type of game do you wanna play ? "
+msgstr "어떤 종류의 게임을 하시겠습니까"
+
+#: frontend/templates/gameMemory.html:73 frontend/templates/gamePong.html:101
+msgid "Play local Game"
+msgstr "로컬 게임 플레이"
+
+#: frontend/templates/gameMemory.html:74 frontend/templates/gamePong.html:102
+msgid "Play remote Game"
+msgstr "원격 게임 플레이"
+
+#: frontend/templates/gameMemory.html:97
+msgid "Which type of game do you wanna play"
+msgstr "어떤 종류의 게임을 하시겠습니까"
+
+#: frontend/templates/gameMemory.html:100 frontend/templates/gamePong.html:127
+msgid "Create New Game"
+msgstr "새로운 게임 만들기"
+
+#: frontend/templates/gameMemory.html:101 frontend/templates/gamePong.html:128
+msgid "Join Existing Game"
+msgstr "기존 게임에 참가하기"
+
+#: frontend/templates/gameMemory.html:122
+#, fuzzy
+#| msgid "Which type of game do you wanna play"
+msgid " Which set do you want to play with ? "
+msgstr "어떤 종류의 게임을 하시겠습니까"
+
+#: frontend/templates/gameMemory.html:124
+msgid "Nature (easy)"
+msgstr "자연 (쉬움)"
+
+#: frontend/templates/gameMemory.html:128
+msgid "Robot (hard)"
+msgstr "로봇 (어려움)"
+
+#: frontend/templates/gameMemory.html:147
+#, fuzzy
+#| msgid "How many players do you want to be"
+msgid " How many cards do you want to play with: "
+msgstr "플레이어 수를 선택하세요"
+
+#: frontend/templates/gameMemory.html:190
+#, fuzzy
+#| msgid "How many players do you want to be"
+msgid " How many players do you want to be ? "
+msgstr "플레이어 수를 선택하세요"
+
+#: frontend/templates/gameMemory.html:192 frontend/templates/gamePong.html:223
+msgid "players"
+msgstr "플레이어"
+
+#: frontend/templates/gameMemory.html:243 frontend/templates/gamePong.html:265
+#, fuzzy
+#| msgid "players"
+msgid "First player is"
+msgstr "플레이어"
+
+#: frontend/templates/gameMemory.html:249 frontend/templates/gamePong.html:271
+msgid " Name of player "
+msgstr "플레이어 이름"
+
+#: frontend/templates/gameMemory.html:251 frontend/templates/gamePong.html:273
+msgid "Submit"
+msgstr "제출하기"
+
+#: frontend/templates/gameMemory.html:268 frontend/templates/gamePong.html:291
+msgid "Name already exists! Please choose a different name."
+msgstr "이름이 이미 존재합니다! 다른 이름을 선택하세요."
+
+#: frontend/templates/gameMemory.html:278
+msgid "Error:"
+msgstr "오류:"
+
+#: frontend/templates/gameMemory.html:293
+msgid "Welcome to the memory tournament !"
+msgstr "메모리 토너먼트에 오신 것을 환영합니다!"
+
+#: frontend/templates/gameMemory.html:293
+msgid "The rounds are the following:"
+msgstr "라운드는 다음과 같습니다:"
+
+#: frontend/templates/gameMemory.html:326
+msgid " Ready to start ? "
+msgstr "시작 준비가 되었나요?"
+
+#: frontend/templates/gameMemory.html:326 frontend/templates/gamePong.html:475
+msgid " Go !"
+msgstr "출발!"
+
+#: frontend/templates/gameMemory.html:328
+msgid "Start !"
+msgstr "시작!"
+
+#: frontend/templates/gameMemory.html:371
+#, fuzzy
+#| msgid "Memory"
+msgid "Memory game"
+msgstr "기억력"
+
+#: frontend/templates/gameMemory.html:422
+msgid "Nature"
+msgstr "자연"
+
+#: frontend/templates/gameMemory.html:422
+msgid "Robot"
+msgstr "로봇"
+
+#: frontend/templates/gameMemory.html:542 frontend/templates/gamePong.html:596
+msgid "No active games"
+msgstr "활성 게임 없음"
+
+#: frontend/templates/gameMemory.html:955
+msgid " It is a tie ! "
+msgstr "비김!"
+
+#: frontend/templates/gameMemory.html:995
+msgid "Second Round ! "
+msgstr "두 번째 라운드!"
+
+#: frontend/templates/gameMemory.html:1018
+msgid "Third Round ! "
+msgstr "세 번째 라운드!"
+
+#: frontend/templates/gamePong.html:47 frontend/templates/index.html:47
+#: frontend/templates/scoreboard.html:22
+msgid "Pong"
+msgstr "퐁"
+
+#: frontend/templates/gamePong.html:147
+msgid " Choose how many points wins: "
+msgstr "몇 점으로 이기시겠습니까:"
+
+#: frontend/templates/gamePong.html:316
+msgid " Choose the difficulty: "
+msgstr "난이도 선택:"
+
+#: frontend/templates/gamePong.html:370
+#, fuzzy
+#| msgid "Which type of game do you wanna play"
+msgid " Which theme do you want for your game: "
+msgstr "어떤 종류의 게임을 하시겠습니까"
+
+#: frontend/templates/gamePong.html:378 frontend/templates/gamePong.html:394
+msgid "Team mode: Dark blue background, white ball and skyblue paddles"
+msgstr "팀 모드: 어두운 파란 배경, 흰색 공 및 하늘색 패들"
+
+#: frontend/templates/gamePong.html:378 frontend/templates/gamePong.html:398
+msgid "Chinese New Year: Red background, golden ball and white paddles"
+msgstr "중국 정월: 빨간 배경, 금색 공 및 흰색 패들"
+
+#: frontend/templates/gamePong.html:378 frontend/templates/gamePong.html:402
+msgid "Dirty dalmatians: Black background, white ball, gray paddles"
+msgstr "더러운 달마시안: 검은 배경, 흰색 공, 회색 패들"
+
+#: frontend/templates/gamePong.html:412
+msgid "Start"
+msgstr "시작"
+
+#: frontend/templates/gamePong.html:435
+msgid "Welcome to the pong tournament"
+msgstr "퐁 토너먼트에 오신 것을 환영합니다"
+
+#: frontend/templates/gamePong.html:435
+msgid "The rounds are the following"
+msgstr "라운드는 다음과 같습니다"
+
+#: frontend/templates/gamePong.html:469
+msgid "Instructions"
+msgstr "설명서"
+
+#: frontend/templates/gamePong.html:471
+msgid "You can control your paddle with W (up) and S(down) or with the Up arrow and Down Arrow."
+msgstr "W(위로)와 S(아래로) 또는 위쪽 화살표와 아래쪽 화살표로 패들을 제어할 수 있습니다."
+
+#: frontend/templates/gamePong.html:497 frontend/templates/gamePong.html:498
+msgid "Waiting for Players..."
+msgstr "플레이어 대기 중..."
+
+#: frontend/templates/gamePong.html:681
+msgid " You will play with W(up) and S(down) "
+msgstr " W(위로)와 S(아래로)로 플레이합니다. "
+
+#: frontend/templates/gamePong.html:683
+msgid " You will play with the Up arrow(up) and Down arrow(down) "
+msgstr " 위쪽 화살표(위로)와 아래쪽 화살표(아래로)로 플레이합니다. "
+
+#: frontend/templates/home.html:14
+msgid "Welcome"
+msgstr "환영합니다"
+
+#: frontend/templates/home.html:15
+msgid "You are now logged in."
+msgstr "이제 로그인되었습니다."
+
+#: frontend/templates/home.html:22
+msgid "Ranking"
+msgstr "랭킹"
+
+#: frontend/templates/home.html:40
+msgid "Welcome!"
+msgstr "환영합니다!"
+
+#: frontend/templates/home.html:41
+msgid "Please sign in or sign up to continue..."
+msgstr "계속하려면 로그인 또는 가입하세요..."
+
+#: frontend/templates/home.html:54 frontend/templates/signIn.html:42
+msgid "SignIn with 42"
+msgstr "42로 로그인"
+
+#: frontend/templates/index.html:8
+msgid "Pong - The ultimate tournament"
+msgstr "퐁 - 궁극의 토너먼트"
+
+#: frontend/templates/index.html:22
+msgid "42 Pong"
+msgstr "42 퐁"
+
+#: frontend/templates/index.html:42
+msgid "Home"
+msgstr "홈"
+
+#: frontend/templates/index.html:45
+msgid "Games"
+msgstr "게임"
+
+#: frontend/templates/index.html:52
+msgid "Scoreboard"
+msgstr "점수표"
+
+#: frontend/templates/index.html:55 frontend/templates/profile.html:7
+msgid "Profile"
+msgstr "프로필"
+
+#: frontend/templates/index.html:58
+msgid "Sign Out"
+msgstr "로그아웃"
+
+#: frontend/templates/index.html:82
+msgid "This website has been created for the last project of 42 by:"
+msgstr "이 웹사이트는 42의 마지막 프로젝트를 위해 만들어졌습니다. 작성자:"
+
+#: frontend/templates/index.html:86
+msgid "Mariia Paraskun"
+msgstr "마리야 파라스쿤"
+
+#: frontend/templates/index.html:97
+msgid "Sung Hyan Lee"
+msgstr "이승환"
+
+#: frontend/templates/index.html:107
+msgid "Max Schaub"
+msgstr "막스 쇼브"
+
+#: frontend/templates/index.html:117
+msgid "Feras Hassouneh"
+msgstr "페라스 하수네"
+
+#: frontend/templates/index.html:127
+msgid "Emilie Drouot"
+msgstr "에밀리 드루오"
+
+#: frontend/templates/profile.html:9
+msgid "Show Friendlist"
+msgstr "친구 목록 표시"
+
+#: frontend/templates/profile.html:22
+msgid "Account Information"
+msgstr "계정 정보"
+
+#: frontend/templates/profile.html:24
+msgid "Intraname:"
+msgstr "인트라네임:"
+
+#: frontend/templates/profile.html:25
+msgid "Display Name:"
+msgstr "표시 이름:"
+
+#: frontend/templates/profile.html:26
+msgid "Email:"
+msgstr "이메일:"
+
+#: frontend/templates/profile.html:27
+msgid "Date of Creation:"
+msgstr "생성 날짜:"
+
+#: frontend/templates/profile.html:30
+msgid "Personal Information"
+msgstr "개인 정보"
+
+#: frontend/templates/profile.html:32
+msgid "Firstname:"
+msgstr "이름:"
+
+#: frontend/templates/profile.html:33
+msgid "Familyname:"
+msgstr "성:"
+
+#: frontend/templates/profile.html:34
+msgid "Birthdate:"
+msgstr "생년월일:"
+
+#: frontend/templates/profile.html:35
+#, fuzzy
+#| msgid "Language"
+msgid "Language:"
+msgstr "언어"
+
+#: frontend/templates/profile.html:43
+msgid "Edit Profile"
+msgstr "프로필 편집"
+
+#: frontend/templates/scoreboard.html:9
+msgid "Pong:"
+msgstr "퐁:"
+
+#: frontend/templates/scoreboard.html:10 frontend/templates/scoreboard.html:14
+msgid "Games Played:"
+msgstr "플레이한 게임:"
+
+#: frontend/templates/scoreboard.html:11 frontend/templates/scoreboard.html:15
+msgid "Games Won:"
+msgstr "이긴 게임:"
+
+#: frontend/templates/scoreboard.html:12 frontend/templates/scoreboard.html:16
+msgid "Win Streak:"
+msgstr "연승:"
+
+#: frontend/templates/scoreboard.html:13
+msgid "Memory:"
+msgstr "메모리:"
+
+#: frontend/templates/scoreboard.html:17
+msgid "Historic:"
+msgstr "역사적인:"
+
+#: frontend/templates/scoreboard.html:26
+msgid "Type"
+msgstr "유형"
+
+#: frontend/templates/scoreboard.html:28
+#, fuzzy
+#| msgid "Surname"
+msgid "Tournament"
+msgstr "성"
+
+#: frontend/templates/scoreboard.html:30
+msgid "1vs1"
+msgstr "1대1"
+
+#: frontend/templates/scoreboard.html:32
+#, fuzzy
+#| msgid "players"
+msgid "Players"
+msgstr "플레이어"
+
+#: frontend/templates/scoreboard.html:36
+msgid "Winner"
+msgstr "승자"
+
+#: frontend/templates/scoreboard.html:36
+#, fuzzy
+#| msgid "Scoreboard"
+msgid "Score"
+msgstr "점수표"
+
+#: frontend/templates/scoreboard.html:41
+msgid "Previous"
+msgstr "이전"
+
+#: frontend/templates/scoreboard.html:42
+msgid "Next"
+msgstr "다음"
+
+#: frontend/templates/showFriends.html:7
+msgid "Friendlist"
+msgstr "친구 목록"
+
+#: frontend/templates/showFriends.html:33
+msgid "Remove Selected Friends"
+msgstr "선택한 친구 삭제"
+
+#: frontend/templates/showFriends.html:36
+msgid "You have no friends yet."
+msgstr "아직 친구가 없습니다."
+
+#: frontend/templates/showFriends.html:41
+msgid "Search for users..."
+msgstr "사용자 검색..."
+
+#: frontend/templates/showFriends.html:42
+msgid "Search"
+msgstr "검색"
+
+#: frontend/templates/showFriends.html:65
+msgid "Online"
+msgstr "온라인"
+
+#: frontend/templates/showFriends.html:65
+#: frontend/templates/showFriends.html:163
+msgid "Offline"
+msgstr "오프라인"
+
+#: frontend/templates/showFriends.html:66
+#, fuzzy
+#| msgid "Friendlist"
+msgid "Add Friend"
+msgstr "친구 목록"
+
+#: frontend/templates/signIn.html:18 frontend/templates/signUp.html:18
+msgid "Intraname"
+msgstr "인트라네임"
+
+#: frontend/templates/signIn.html:19 frontend/templates/signUp.html:19
+msgid "Enter Intraname"
+msgstr "인트라네임 입력"
+
+#: frontend/templates/signIn.html:23 frontend/templates/signIn.html:24
+#: frontend/templates/signUp.html:22 frontend/templates/signUp.html:23
+msgid "Password"
+msgstr "비밀번호"
+
+#: frontend/templates/signIn.html:41
+msgid "or"
+msgstr "또는"
+
+#: frontend/templates/signIn.html:45
+msgid "Don't have an account?"
+msgstr "계정이 없으신가요?"
+
+#: frontend/templates/signUp.html:26
+msgid "Confirm Password"
+msgstr "비밀번호 확인"
+
+#: frontend/templates/signUp.html:27
+msgid "Confirm password"
+msgstr "비밀번호 확인"
+
+#: frontend/templates/signUp.html:36
+msgid "Already have an account?"
+msgstr "계정이 이미 있으신가요?"
+
+#: frontend/views.py:60
+msgid "Failed to create user: User or Email already exists"
+msgstr "사용자 생성 실패: 사용자 또는 이메일이 이미 존재합니다"
+
+#: frontend/views.py:126
+msgid "Sign in failed. Please check your Intraname and password."
+msgstr "로그인에 실패했습니다. 인트라네임과 비밀번호를 확인해주세요."
+
+#: frontend/views.py:369
+msgid "Logout successful"
+msgstr "로그아웃 성공"
+
+#: frontend/views.py:374
+msgid "Something went wrong! Are you signed in?"
+msgstr "문제가 발생했습니다! 로그인되어 있나요?"
+
+#: frontend/views.py:408 frontend/views.py:642
+msgid "You are not signed in! Please sign in to edit your profile."
+msgstr "로그인되어 있지 않습니다! 프로필을 편집하려면 로그인하세요."
+
+#: frontend/views.py:420
+msgid "You are not signed in! Please sign in to view your profile."
+msgstr "로그인되어 있지 않습니다! 프로필을 보려면 로그인하세요."
+
+#: frontend/views.py:457
+msgid "You are not signed in! Please sign in to view the home page."
+msgstr "로그인되어 있지 않습니다! 홈 페이지를 보려면 로그인하세요."
+
+#: frontend/views.py:534
+msgid "You are not signed in! Please sign in to play the game."
+msgstr "로그인되어 있지 않습니다! 게임을 하려면 로그인하세요."
+
+#: frontend/views.py:594
+msgid "Failed to authenticate user. Please try again."
+msgstr "사용자 인증에 실패했습니다. 다시 시도하세요."
+
+#: frontend/views.py:598
+msgid "Failed to reach API. Please try again."
+msgstr "API에 접근할 수 없습니다. 다시 시도하세요."
+
+#~ msgid "Games like back in the 80's"
+#~ msgstr "80년대처럼 게임을 즐겨보세요"
+
+#~ msgid "User Information"
+#~ msgstr "사용자 정보"
+
+#~ msgid "Username:"
+#~ msgstr "사용자 이름:"
+
+#~ msgid "Passwords do not match"
+#~ msgstr "비밀번호가 일치하지 않습니다"

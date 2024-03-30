@@ -20,6 +20,9 @@ from database.models import Game
 from database.models import Tournament
 from faker import Faker
 import random
+from django.utils.translation import gettext, activate, get_language
+from django.utils import translation
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from datetime import datetime
 from django.utils import timezone
 from itertools import groupby
@@ -55,7 +58,8 @@ def signUp(request):
                 request.user.save()
             return redirect("/")
         except Exception:
-            messages.error(request, 'Failed to create user: User or Email already exists')
+            message = gettext('Failed to create user: User or Email already exists')
+            messages.error(request, message)
             return render(request=request, template_name="signUp.html", context={})
     return render(request=request, template_name="signUp.html", context={})
 # def signUp(request):
@@ -94,6 +98,8 @@ def signUp(request):
 #     return render(request=request, template_name="signUp.html", context={})
 
 
+# def twoFactorAuth()
+
 def signIn(request):
     # User = get_user_model()
     if request.method == 'POST':
@@ -102,17 +108,24 @@ def signIn(request):
 
         user = authenticate(username=username, password=password)
         if user is not None:
+
             login(request, user)
             request.user.online = True
+            request.session['user_language'] = user.language
+            translation.override(user.language)
+            translation.activate(user.language)
+            response = HttpResponseRedirect("/")
+            user_language = user.language
+            response.set_cookie(settings.LANGUAGE_COOKIE_NAME, user_language)
+            user.save()
             request.user.save()
 
-            # user_ = User.objects.get(username=request.user)
-            # user_.online = True
-            # user_.save()
+            return response
+            # return redirect("/")
 
-            return redirect("/")
         else:
-            messages.error(request, 'Sign in failed. Please check your Intraname and password.')
+            message = gettext('Sign in failed. Please check your Intraname and password.')
+            messages.error(request, message)
             return render(request=request, template_name="signIn.html", context={})
     return render(request=request, template_name="signIn.html", context={})
 
@@ -351,11 +364,17 @@ def signOut(request):
         request.user.online = False
         request.user.save()
         logout(request)
-        messages.error(request, 'Logout successful')
+        # Create a response
+        response = HttpResponseRedirect('/')
+        # Clear the language cookie
+        response.delete_cookie(settings.LANGUAGE_COOKIE_NAME)
+        message = gettext('Logout successful')
+        messages.error(request, message)
         return render(request=request, template_name="signIn.html", context={})
         # return HttpResponse("<strong>logout successful.<a href='signIn'> Go to Login page</a></strong>")
     else:
-        messages.error(request, 'Something went wrong! Are you signed in?')
+        message = gettext('Something went wrong! Are you signed in?')
+        messages.error(request, message)
         return render(request=request, template_name="signIn.html", context={})
 
 
@@ -373,15 +392,24 @@ def editProfile(request):
                 user.surname = request.POST.get('surname')
             if request.POST.get('email') != "":
                 user.email = request.POST.get('email')
-
-            if request.POST.get('birthdate') != "":
-                user.birthdate = request.POST.get('birthdate')
+            if request.POST.get('language') != "":
+                user.language = request.POST.get('language')
+                request.session['user_language'] = user.language
+                user.save()
+                request.session['user_language'] = user.language
+                translation.override(user.language)
+                translation.activate(user.language)
+                response = HttpResponseRedirect("/")
+                user_language = user.language
+                response.set_cookie(settings.LANGUAGE_COOKIE_NAME, user_language)
+                request.user.save()
 
             user.save()
-            return render(request=request, template_name="profile.html", context={"user": user})
+            return response
         return render(request=request, template_name="editProfile.html", context={"user": user})
     else:
-        messages.error(request, 'You are not signed in! Please sign in to edit your profile.')
+        message = gettext('You are not signed in! Please sign in to edit your profile.')
+        messages.error(request, message)
         return render(request=request, template_name="signIn.html", context={})
 
 
@@ -393,7 +421,8 @@ def showProfile(request):
         user = User.objects.get(username=request.user)
         return render(request=request, template_name="profile.html", context={"user": user, "timestamp": now()})
     else:
-        messages.error(request, 'You are not signed in! Please sign in to view your profile.')
+        message = gettext('You are not signed in! Please sign in to view your profile.')
+        messages.error(request, message)
         return render(request=request, template_name="signIn.html", context={})
 
 
@@ -404,7 +433,7 @@ def add_users(request):
 
     # Generate 50 users with random data
     users_data = []
-    for _ in range(50):
+    for _ in range(3):
         user_data = {
             "username": fake.user_name(),
             "email": fake.email(),
@@ -431,7 +460,8 @@ def showHome(request):
     if request.user.is_authenticated:
         return render(request=request, template_name="home.html", context={})
     else:
-        messages.error(request, 'You are not signed in! Please sign in to view the home page.')
+        message = gettext('You are not signed in! Please sign in to view the home page.')
+        messages.error(request, message)
         return render(request=request, template_name="signIn.html", context={})
 
 
@@ -511,7 +541,8 @@ def gamePong(request):
     if request.user.is_authenticated:
         return render(request, 'gamePong.html', context={})
     else:
-        messages.error(request, 'You are not signed in! Please sign in to play the game.')
+        message = gettext('You are not signed in! Please sign in to play the game.')
+        messages.error(request, message)
         return render(request=request, template_name="signIn.html", context={})
 
 
@@ -537,27 +568,29 @@ def callback(request):
 
             user_info_response = requests.get('https://api.intra.42.fr/v2/me', headers={'Authorization': f'Bearer {access_token}'})
             user_info = user_info_response.json()
-            print(user_info)
-
+            # print(user_info)
             username = user_info['login']
-            # password1 = user_info['login']
-            password1 = User.objects.make_random_password(length=20)
             email = user_info['email']
             avatar_url = user_info['image']['link']
             surename = user_info['last_name']
             name = user_info['first_name']
+            password1 = user_info['login'] + "@secretpw1#"
             display_name = user_info['login']
-            # # campus = user_info['campus']
-            # # level = user_info['cursus_users'][0]['level']
-
             user = User.objects.filter(username=username).first()
             if user:
                 user = authenticate(username=username, password=password1)
                 if user is not None:
                     login(request, user)
                     user.online = True
+                    request.session['user_language'] = user.language
+                    translation.override(user.language)
+                    translation.activate(user.language)
+                    response = HttpResponseRedirect("/")
+                    user_language = user.language
+                    response.set_cookie(settings.LANGUAGE_COOKIE_NAME, user_language)
+                    request.user.save()
                     user.save()
-                return redirect("/")
+                return (response)
             else:
                 user = User.objects.create_user(username=username, email=email, password=password1, avatar_url=avatar_url, name=name, surname=surename, display_name=display_name)
 
@@ -569,10 +602,12 @@ def callback(request):
                 return redirect("/")
 
         except Exception:
-            messages.error(request, 'Failed to authenticate user. Please try again.')
+            message = gettext('Failed to authenticate user. Please try again.')
+            messages.error(request, message)
             return render(request=request, template_name="signIn.html", context={})
     else:
-        messages.error(request, 'Failed to reach API. Please try again.')
+        message = gettext('Failed to reach API. Please try again.')
+        messages.error(request, message)
         return render(request=request, template_name="signIn.html", context={})
 
 
@@ -616,8 +651,9 @@ def changeAvatar(request):
                                  if os.path.isfile(os.path.join(robot_avatars_path, file)) and file.endswith('.png')] if os.path.isdir(robot_avatars_path) else []
             return render(request, 'changeAvatar.html', {'user': user, 'available_avatars': available_avatars})
     else:
-        messages.error(request, 'You are not signed in! Please sign in to edit your profile.')
-        return render(request=request, template_name="signIn.html", context={})
+        message = gettext('You are not signed in! Please sign in to edit your profile.')
+        messages.error(request, message)
+        return redirect('signIn')
 
 
 @csrf_exempt

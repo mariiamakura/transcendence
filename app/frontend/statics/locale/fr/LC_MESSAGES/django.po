@@ -1,0 +1,636 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-30 15:21+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: database/models.py:18
+msgid "English"
+msgstr "Anglais"
+
+#: database/models.py:19
+msgid "Korean"
+msgstr "Coréen"
+
+#: database/models.py:20
+msgid "French"
+msgstr "Français"
+
+#: database/models.py:21
+msgid "Ukrainian"
+msgstr "Ukrainien"
+
+#: frontend/templates/_login_signup.html:2 frontend/templates/chat.html:53
+#: frontend/templates/home.html:43 frontend/templates/index.html:62
+#: frontend/templates/signIn.html:7 frontend/templates/signIn.html:27
+#: frontend/templates/signUp.html:36
+msgid "Sign In"
+msgstr "Se connecter"
+
+#: frontend/templates/_login_signup.html:5 frontend/templates/chat.html:56
+#: frontend/templates/home.html:44 frontend/templates/index.html:65
+#: frontend/templates/signIn.html:45 frontend/templates/signUp.html:7
+#: frontend/templates/signUp.html:33
+msgid "Sign Up"
+msgstr "S'inscrire"
+
+#: frontend/templates/changeAvatar.html:11
+msgid "Avatar URL:"
+msgstr "URL de l'avatar :"
+
+#: frontend/templates/changeAvatar.html:16
+msgid " or Upload Avatar:"
+msgstr " ou télécharger un avatar :"
+
+#: frontend/templates/changeAvatar.html:19
+msgid "Choose file"
+msgstr "Choisir un fichier"
+
+#: frontend/templates/changeAvatar.html:24
+msgid "or Choose an Avatar:"
+msgstr "ou choisir un avatar :"
+
+#: frontend/templates/changeAvatar.html:37 frontend/templates/profile.html:16
+msgid "Change Avatar"
+msgstr "Changer d'avatar"
+
+#: frontend/templates/chat.html:8
+msgid "PongChat, the best chat in the world"
+msgstr "PongChat, le meilleur chat du monde"
+
+#: frontend/templates/editProfile.html:7
+msgid "Edit Profile:"
+msgstr "Modifier le profil :"
+
+#: frontend/templates/editProfile.html:11
+msgid "Display Name"
+msgstr "Nom d'affichage"
+
+#: frontend/templates/editProfile.html:12
+msgid "Enter your Display Name"
+msgstr "Entrez votre nom d'affichage"
+
+#: frontend/templates/editProfile.html:15
+msgid "Firstname"
+msgstr "Prénom"
+
+#: frontend/templates/editProfile.html:16
+msgid "Enter your Firstame"
+msgstr "Entrez votre prénom"
+
+#: frontend/templates/editProfile.html:19
+msgid "Surname"
+msgstr "Nom de famille"
+
+#: frontend/templates/editProfile.html:20
+msgid "Enter your Surname"
+msgstr "Entrez votre nom de famille"
+
+#: frontend/templates/editProfile.html:23 frontend/templates/signUp.html:30
+msgid "Email address"
+msgstr "Adresse e-mail"
+
+#: frontend/templates/editProfile.html:24 frontend/templates/signUp.html:31
+msgid "Enter email"
+msgstr "Entrez votre adresse e-mail"
+
+#: frontend/templates/editProfile.html:27
+msgid "Language"
+msgstr "Langue"
+
+#: frontend/templates/editProfile.html:39
+msgid "Save Profile"
+msgstr "Enregistrer le profil"
+
+#: frontend/templates/gameMemory.html:8
+msgid "Memoryyyyyyyy"
+msgstr "Mémoire"
+
+#: frontend/templates/gameMemory.html:14 frontend/templates/index.html:48
+#: frontend/templates/scoreboard.html:24
+msgid "Memory"
+msgstr "Mémoire"
+
+#: frontend/templates/gameMemory.html:45 frontend/templates/gamePong.html:195
+msgid " Do you want to play a 1vs1 game or a tournament ? "
+msgstr "Voulez-vous jouer à un jeu 1 contre 1 ou à un tournoi ?"
+
+#: frontend/templates/gameMemory.html:48 frontend/templates/gamePong.html:199
+#, fuzzy
+#| msgid "Pong - The ultimate tournament"
+msgid "Play tournament"
+msgstr "Pong - Le tournoi ultime"
+
+#: frontend/templates/gameMemory.html:49 frontend/templates/gamePong.html:200
+msgid "Play 1vs1"
+msgstr "Jouer 1 contre 1"
+
+#: frontend/templates/gameMemory.html:70 frontend/templates/gameMemory.html:345
+#, fuzzy
+#| msgid "Which type of game do you wanna play"
+msgid " Which type of game do you wanna play ? "
+msgstr "Quel type de jeu voulez-vous jouer"
+
+#: frontend/templates/gameMemory.html:73 frontend/templates/gamePong.html:101
+msgid "Play local Game"
+msgstr "Jouer en local"
+
+#: frontend/templates/gameMemory.html:74 frontend/templates/gamePong.html:102
+msgid "Play remote Game"
+msgstr "Jouer à distance"
+
+#: frontend/templates/gameMemory.html:97
+msgid "Which type of game do you wanna play"
+msgstr "Quel type de jeu voulez-vous jouer"
+
+#: frontend/templates/gameMemory.html:100 frontend/templates/gamePong.html:127
+msgid "Create New Game"
+msgstr "Créer un nouveau jeu"
+
+#: frontend/templates/gameMemory.html:101 frontend/templates/gamePong.html:128
+msgid "Join Existing Game"
+msgstr "Rejoindre un jeu existant"
+
+#: frontend/templates/gameMemory.html:122
+#, fuzzy
+#| msgid "Which type of game do you wanna play"
+msgid " Which set do you want to play with ? "
+msgstr "Quel type de jeu voulez-vous jouer"
+
+#: frontend/templates/gameMemory.html:124
+msgid "Nature (easy)"
+msgstr "Nature (facile)"
+
+#: frontend/templates/gameMemory.html:128
+msgid "Robot (hard)"
+msgstr "Robot (difficile)"
+
+#: frontend/templates/gameMemory.html:147
+#, fuzzy
+#| msgid "How many players do you want to be"
+msgid " How many cards do you want to play with: "
+msgstr "Combien de joueurs souhaitez-vous être"
+
+#: frontend/templates/gameMemory.html:190
+#, fuzzy
+#| msgid "How many players do you want to be"
+msgid " How many players do you want to be ? "
+msgstr "Combien de joueurs souhaitez-vous être"
+
+#: frontend/templates/gameMemory.html:192 frontend/templates/gamePong.html:223
+msgid "players"
+msgstr "joueurs"
+
+#: frontend/templates/gameMemory.html:243 frontend/templates/gamePong.html:265
+#, fuzzy
+#| msgid "players"
+msgid "First player is"
+msgstr "joueurs"
+
+#: frontend/templates/gameMemory.html:249 frontend/templates/gamePong.html:271
+msgid " Name of player "
+msgstr "Nom du joueur"
+
+#: frontend/templates/gameMemory.html:251 frontend/templates/gamePong.html:273
+msgid "Submit"
+msgstr "Soumettre"
+
+#: frontend/templates/gameMemory.html:268 frontend/templates/gamePong.html:291
+msgid "Name already exists! Please choose a different name."
+msgstr "Ce nom existe déjà ! Veuillez choisir un nom différent."
+
+#: frontend/templates/gameMemory.html:278
+msgid "Error:"
+msgstr "Erreur :"
+
+#: frontend/templates/gameMemory.html:293
+msgid "Welcome to the memory tournament !"
+msgstr "Bienvenue au tournoi de mémoire !"
+
+#: frontend/templates/gameMemory.html:293
+msgid "The rounds are the following:"
+msgstr "Les rounds sont les suivants :"
+
+#: frontend/templates/gameMemory.html:326
+msgid " Ready to start ? "
+msgstr " Prêt à commencer ? "
+
+#: frontend/templates/gameMemory.html:326 frontend/templates/gamePong.html:475
+msgid " Go !"
+msgstr " Allez !"
+
+#: frontend/templates/gameMemory.html:328
+msgid "Start !"
+msgstr "Commencer !"
+
+#: frontend/templates/gameMemory.html:371
+#, fuzzy
+#| msgid "Memory"
+msgid "Memory game"
+msgstr "Mémoire"
+
+#: frontend/templates/gameMemory.html:422
+msgid "Nature"
+msgstr "Nature"
+
+#: frontend/templates/gameMemory.html:422
+msgid "Robot"
+msgstr "Robot"
+
+#: frontend/templates/gameMemory.html:542 frontend/templates/gamePong.html:596
+msgid "No active games"
+msgstr "Aucun jeu en cours"
+
+#: frontend/templates/gameMemory.html:955
+msgid " It is a tie ! "
+msgstr "C'est une égalité !"
+
+#: frontend/templates/gameMemory.html:995
+msgid "Second Round ! "
+msgstr "Deuxième tour !"
+
+#: frontend/templates/gameMemory.html:1018
+msgid "Third Round ! "
+msgstr "Troisième tour !"
+
+#: frontend/templates/gamePong.html:47 frontend/templates/index.html:47
+#: frontend/templates/scoreboard.html:22
+msgid "Pong"
+msgstr "Pong"
+
+#: frontend/templates/gamePong.html:147
+msgid " Chose how many points wins: "
+msgstr "Choisissez le nombre de points pour gagner :"
+
+#: frontend/templates/gamePong.html:316
+msgid " Choose the difficulty: "
+msgstr "Choisissez la difficulté :"
+
+#: frontend/templates/gamePong.html:370
+#, fuzzy
+#| msgid "Which type of game do you wanna play"
+msgid " Which theme do you want for your game: "
+msgstr "Quel type de jeu voulez-vous jouer"
+
+#: frontend/templates/gamePong.html:378 frontend/templates/gamePong.html:394
+msgid "Team mode: Dark blue background, white ball and skyblue paddles"
+msgstr "Mode équipe : Fond bleu foncé, balle blanche et palettes bleu ciel"
+
+#: frontend/templates/gamePong.html:378 frontend/templates/gamePong.html:398
+msgid "Chinese New Year: Red background, golden ball and white paddles"
+msgstr "Nouvel An chinois : Fond rouge, balle dorée et palettes blanches"
+
+#: frontend/templates/gamePong.html:378 frontend/templates/gamePong.html:402
+msgid "Dirty dalmatians: Black background, white ball, gray paddles"
+msgstr "Dalmatiens sales : Fond noir, balle blanche, palettes grises"
+
+#: frontend/templates/gamePong.html:412
+msgid "Start"
+msgstr "Commencer"
+
+#: frontend/templates/gamePong.html:435
+msgid "Welcome to the pong tournament"
+msgstr "Bienvenue au tournoi de pong"
+
+#: frontend/templates/gamePong.html:435
+msgid "The rounds are the following"
+msgstr "Les rounds sont les suivants"
+
+#: frontend/templates/gamePong.html:469
+msgid "Instructions"
+msgstr "Instructions"
+
+#: frontend/templates/gamePong.html:471
+msgid "You can control your paddle with W (up) and S(down) or with the Up arrow and Down Arrow."
+msgstr "Vous pouvez contrôler votre palette avec W (haut) et S (bas) ou avec les flèches Haut et Bas."
+
+#: frontend/templates/gamePong.html:497 frontend/templates/gamePong.html:498
+msgid "Waiting for Players..."
+msgstr "En attente de joueurs..."
+
+#: frontend/templates/gamePong.html:681
+msgid " You will play with W(up) and S(down) "
+msgstr " Vous jouerez avec W (haut) et S (bas) "
+
+#: frontend/templates/gamePong.html:683
+msgid " You will play with the Up arrow(up) and Down arrow(down) "
+msgstr " Vous jouerez avec les flèches Haut (haut) et Bas (bas) "
+#: frontend/templates/home.html:14
+msgid "Welcome"
+msgstr "Bienvenue"
+
+#: frontend/templates/home.html:15
+msgid "You are now logged in."
+msgstr "Vous êtes maintenant connecté."
+
+#: frontend/templates/home.html:22
+msgid "Ranking"
+msgstr "Classement"
+
+#: frontend/templates/home.html:40
+msgid "Welcome!"
+msgstr "Bienvenue !"
+
+#: frontend/templates/home.html:41
+msgid "Please sign in or sign up to continue..."
+msgstr "Veuillez vous connecter ou vous inscrire pour continuer..."
+
+#: frontend/templates/home.html:54 frontend/templates/signIn.html:42
+msgid "SignIn with 42"
+msgstr "Connexion avec 42"
+
+#: frontend/templates/index.html:8
+msgid "Pong - The ultimate tournament"
+msgstr "Pong - Le tournoi ultime"
+
+#: frontend/templates/index.html:22
+msgid "42 Pong"
+msgstr "42 Pong"
+
+#: frontend/templates/index.html:42
+msgid "Home"
+msgstr "Accueil"
+
+#: frontend/templates/index.html:45
+msgid "Games"
+msgstr "Jeux"
+
+#: frontend/templates/index.html:52
+msgid "Scoreboard"
+msgstr "Classement"
+
+#: frontend/templates/index.html:55 frontend/templates/profile.html:7
+msgid "Profile"
+msgstr "Profil"
+
+#: frontend/templates/index.html:58
+msgid "Sign Out"
+msgstr "Déconnexion"
+
+#: frontend/templates/index.html:82
+msgid "This website has been created for the last project of 42 by:"
+msgstr "Ce site web a été créé pour le dernier projet de 42 par :"
+
+#: frontend/templates/index.html:86
+msgid "Mariia Paraskun"
+msgstr "Mariia Paraskun"
+
+#: frontend/templates/index.html:97
+msgid "Sung Hyan Lee"
+msgstr "Sung Hyan Lee"
+
+#: frontend/templates/index.html:107
+msgid "Max Schaub"
+msgstr "Max Schaub"
+
+#: frontend/templates/index.html:117
+msgid "Feras Hassouneh"
+msgstr "Feras Hassouneh"
+
+#: frontend/templates/index.html:127
+msgid "Emilie Drouot"
+msgstr "Emilie Drouot"
+
+#: frontend/templates/profile.html:9
+msgid "Show Friendlist"
+msgstr "Afficher la liste d'amis"
+
+#: frontend/templates/profile.html:22
+msgid "Account Information"
+msgstr "Informations du compte"
+
+#: frontend/templates/profile.html:24
+msgid "Intraname:"
+msgstr "Nom interne :"
+
+#: frontend/templates/profile.html:25
+msgid "Display Name:"
+msgstr "Nom d'affichage :"
+
+#: frontend/templates/profile.html:26
+msgid "Email:"
+msgstr "E-mail :"
+
+#: frontend/templates/profile.html:27
+msgid "Date of Creation:"
+msgstr "Date de création :"
+
+#: frontend/templates/profile.html:30
+msgid "Personal Information"
+msgstr "Informations personnelles"
+
+#: frontend/templates/profile.html:32
+msgid "Firstname:"
+msgstr "Prénom :"
+
+#: frontend/templates/profile.html:33
+msgid "Familyname:"
+msgstr "Nom de famille :"
+
+#: frontend/templates/profile.html:34
+msgid "Birthdate:"
+msgstr "Date de naissance :"
+
+#: frontend/templates/profile.html:35
+msgid "Language:"
+msgstr "Langue:"
+
+#: frontend/templates/profile.html:43
+msgid "Edit Profile"
+msgstr "Modifier le profil"
+
+#: frontend/templates/scoreboard.html:9
+msgid "Pong:"
+msgstr "Pong :"
+
+#: frontend/templates/scoreboard.html:10 frontend/templates/scoreboard.html:14
+msgid "Games Played:"
+msgstr "Parties jouées :"
+
+#: frontend/templates/scoreboard.html:11 frontend/templates/scoreboard.html:15
+msgid "Games Won:"
+msgstr "Parties gagnées :"
+
+#: frontend/templates/scoreboard.html:12 frontend/templates/scoreboard.html:16
+msgid "Win Streak:"
+msgstr "Série de victoires :"
+
+#: frontend/templates/scoreboard.html:13
+msgid "Memory:"
+msgstr "Mémoire :"
+
+#: frontend/templates/scoreboard.html:17
+msgid "Historic:"
+msgstr "Historique:"
+
+#: frontend/templates/scoreboard.html:26
+msgid "Type"
+msgstr "typ"
+
+#: frontend/templates/scoreboard.html:28
+#, fuzzy
+#| msgid "Surname"
+msgid "Tournament"
+msgstr "Nom de famille"
+
+#: frontend/templates/scoreboard.html:30
+msgid "1vs1"
+msgstr "1 contre 1"
+
+#: frontend/templates/scoreboard.html:32
+#, fuzzy
+#| msgid "players"
+msgid "Players"
+msgstr "joueurs"
+
+#: frontend/templates/scoreboard.html:36
+msgid "Winner"
+msgstr "Gagnant"
+
+#: frontend/templates/scoreboard.html:36
+#, fuzzy
+#| msgid "Scoreboard"
+msgid "Score"
+msgstr "Classement"
+
+#: frontend/templates/scoreboard.html:41
+msgid "Previous"
+msgstr "Précédent"
+
+#: frontend/templates/scoreboard.html:42
+msgid "Next"
+msgstr "Suivant"
+
+#: frontend/templates/showFriends.html:7
+msgid "Friendlist"
+msgstr "Liste d'amis"
+
+#: frontend/templates/showFriends.html:33
+msgid "Remove Selected Friends"
+msgstr "Supprimer les amis sélectionnés"
+
+#: frontend/templates/showFriends.html:36
+msgid "You have no friends yet."
+msgstr "Vous n'avez pas encore d'amis."
+
+#: frontend/templates/showFriends.html:41
+msgid "Search for users..."
+msgstr "Rechercher des utilisateurs..."
+
+#: frontend/templates/showFriends.html:42
+msgid "Search"
+msgstr "Rechercher"
+
+#: frontend/templates/showFriends.html:65
+msgid "Online"
+msgstr "En ligne"
+
+#: frontend/templates/showFriends.html:65
+#: frontend/templates/showFriends.html:163
+msgid "Offline"
+msgstr "Hors ligne"
+
+#: frontend/templates/showFriends.html:66
+#, fuzzy
+#| msgid "Friendlist"
+msgid "Add Friend"
+msgstr "Liste d'amis"
+
+#: frontend/templates/signIn.html:18 frontend/templates/signUp.html:18
+msgid "Intraname"
+msgstr "Nom interne"
+
+#: frontend/templates/signIn.html:19 frontend/templates/signUp.html:19
+msgid "Enter Intraname"
+msgstr "Entrez le nom interne"
+
+#: frontend/templates/signIn.html:23 frontend/templates/signIn.html:24
+#: frontend/templates/signUp.html:22 frontend/templates/signUp.html:23
+msgid "Password"
+msgstr "Mot de passe"
+
+#: frontend/templates/signIn.html:41
+msgid "or"
+msgstr "ou"
+
+#: frontend/templates/signIn.html:45
+msgid "Don't have an account?"
+msgstr "Vous n'avez pas de compte ?"
+
+#: frontend/templates/signUp.html:26
+msgid "Confirm Password"
+msgstr "Confirmez le mot de passe"
+
+#: frontend/templates/signUp.html:27
+msgid "Confirm password"
+msgstr "Confirmez le mot de passe"
+
+#: frontend/templates/signUp.html:36
+msgid "Already have an account?"
+msgstr "Vous avez déjà un compte ?"
+
+#: frontend/views.py:60
+msgid "Failed to create user: User or Email already exists"
+msgstr "Impossible de créer l'utilisateur : l'utilisateur ou l'e-mail existe déjà"
+
+#: frontend/views.py:126
+msgid "Sign in failed. Please check your Intraname and password."
+msgstr "La connexion a échoué. Veuillez vérifier votre nom interne et votre mot de passe."
+
+#: frontend/views.py:369
+msgid "Logout successful"
+msgstr "Déconnexion réussie"
+
+#: frontend/views.py:374
+msgid "Something went wrong! Are you signed in?"
+msgstr "Quelque chose s'est mal passé ! Êtes-vous connecté ?"
+
+#: frontend/views.py:408 frontend/views.py:642
+msgid "You are not signed in! Please sign in to edit your profile."
+msgstr "Vous n'êtes pas connecté ! Veuillez vous connecter pour modifier votre profil."
+
+#: frontend/views.py:420
+msgid "You are not signed in! Please sign in to view your profile."
+msgstr "Vous n'êtes pas connecté ! Veuillez vous connecter pour voir votre profil."
+
+#: frontend/views.py:457
+msgid "You are not signed in! Please sign in to view the home page."
+msgstr "Vous n'êtes pas connecté ! Veuillez vous connecter pour voir la page d'accueil."
+
+#: frontend/views.py:534
+msgid "You are not signed in! Please sign in to play the game."
+msgstr "Vous n'êtes pas connecté ! Veuillez vous connecter pour jouer au jeu."
+
+#: frontend/views.py:594
+msgid "Failed to authenticate user. Please try again."
+msgstr "Échec de l'authentification de l'utilisateur. Veuillez réessayer."
+
+#: frontend/views.py:598
+msgid "Failed to reach API. Please try again."
+msgstr "Impossible de joindre l'API. Veuillez réessayer."
+
+#~ msgid "Games like back in the 80's"
+#~ msgstr "Jeux comme dans les années 80"
+
+#~ msgid "User Information"
+#~ msgstr "Informations de l'utilisateur"
+
+#~ msgid "Username:"
+#~ msgstr "Nom d'utilisateur :"
+
+#~ msgid "Passwords do not match"
+#~ msgstr "Les mots de passe ne correspondent pas"

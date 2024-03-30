@@ -5,6 +5,7 @@ all:
 	docker compose -f docker-compose.yml exec web python manage.py collectstatic --no-input --clear
 	docker compose -f docker-compose.yml exec web python manage.py makemigrations
 	docker compose -f docker-compose.yml exec web python manage.py migrate --noinput
+	docker compose -f docker-compose.yml exec web python manage.py compilemessages
 
 #start the watchdog - wuff!
 watch:
@@ -29,6 +30,12 @@ delete_browser_cert:
 delete_container_certs:
 	@chmod +x scripts/delete_container_certs.sh
 	@./scripts/delete_container_certs.sh
+
+compile_messages:
+	docker compose -f docker-compose.yml exec web python manage.py compilemessages
+
+messages:
+	docker compose -f docker-compose.yml exec web python manage.py makemessages -l ko -l fr -l uk -a
 
 clean:
 # stops and removes the containers
