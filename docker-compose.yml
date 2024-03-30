@@ -1,70 +1,70 @@
 services:
 
-#   web:
-#     build:
-#       context: ./app
-#       dockerfile: Dockerfile
-#     # command: 
-#     #   - "gunicorn pong.wsgi:application --bind 0.0.0.0:8000 &"
-#     #   - "daphne pong.asgi:application -b 0.0.0.0 -p 8001 &"
-#     volumes:
-#       - static_volume:/home/app/web/staticfiles
-#       - media_volume:/home/app/web/media
-#     expose:
-#       - 8000
-#       - 8001
-#     env_file:
-#       - ./.env
-#     depends_on:
-#       - db
-#     develop:
-#       watch:
-#         - path: ./app/
-#           target: /home/app/web/
-#           action: sync+restart
-#           delay: 30
-#     networks:
-#       - localhost
+  web:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    # command: 
+    #   - "gunicorn pong.wsgi:application --bind 0.0.0.0:8000 &"
+    #   - "daphne pong.asgi:application -b 0.0.0.0 -p 8001 &"
+    volumes:
+      - static_volume:/home/app/web/staticfiles
+      - media_volume:/home/app/web/media
+    expose:
+      - 8000
+      - 8001
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+    develop:
+      watch:
+        - path: ./app/
+          target: /home/app/web/
+          action: sync+restart
+          delay: 30
+    networks:
+      - localhost
 
-#   db:
-#     image: postgres:15
-#     volumes:
-#       - postgres_data:/var/lib/postgresql/data/
-#     env_file:
-#       - ./.env.db
-#     ports:
-#       - 5432:5432
-#     networks:
-#       - localhost
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env.db
+    ports:
+      - 5432:5432
+    networks:
+      - localhost
 
-#   redis:
-#     container_name: redis
-#     image: redis:latest
-#     ports:
-#       - 6378:6379
-#     networks:
-#       - localhost
+  redis:
+    container_name: redis
+    image: redis:latest
+    ports:
+      - 6378:6379
+    networks:
+      - localhost
    
 
-#   nginx:
-#     container_name: nginx
-#     build: 
-#       context: ./nginx
-#     ports:
-#       - 9999:443
-#     env_file:
-#       - ./.env
-#     environment:
-#       - SSL_PW=${SSL_PW}
-#     volumes:
-#       - static_volume:/home/app/web/staticfiles
-#       - media_volume:/home/app/web/media
-#     restart: always
-#     init: true  
-#     depends_on:
-#       - web
-#     networks:
-#       - localhost
+  nginx:
+    container_name: nginx
+    build: 
+      context: ./nginx
+    ports:
+      - 9999:443
+    env_file:
+      - ./.env
+    environment:
+      - SSL_PW=${SSL_PW}
+    volumes:
+      - static_volume:/home/app/web/staticfiles
+      - media_volume:/home/app/web/media
+    restart: always
+    init: true  
+    depends_on:
+      - web
+    networks:
+      - localhost
 
 
 # #################monitoring##########################
@@ -84,63 +84,63 @@ services:
     networks:
       - localhost
 
-#   nginx-prometheus-exporter:
-#     image: nginx/nginx-prometheus-exporter:1.0
-#     container_name: prometheus-nginx-exporter
-#     env_file:
-#       .env
-#     command:
-#       --nginx.scrape-uri=https://nginx:443/metrics
-#       --web.telemetry-path=/metrics
-#     expose: 
-#       - 9113
-#     depends_on:
-#       - prometheus
-#     networks:
-#       - localhost
+  nginx-prometheus-exporter:
+    image: nginx/nginx-prometheus-exporter:1.0
+    container_name: prometheus-nginx-exporter
+    env_file:
+      .env
+    command:
+      --nginx.scrape-uri=https://nginx:443/metrics
+      --web.telemetry-path=/metrics
+    expose: 
+      - 9113
+    depends_on:
+      - prometheus
+    networks:
+      - localhost
 
-#   prometheus-node-exporter:
-#     image: prom/node-exporter:latest
-#     container_name: prometheus-node-exporter
-#     restart: always
-#     volumes:
-#       - /proc:/host/proc:ro
-#       - /sys:/host/sys:ro
-#       - /:/rootfs:ro
-#       - ./node_export/certs_node/node.crt:/node.crt
-#       - ./node_export/certs_node/node.key:/node.key
-#       - ./node_export/web-config.yml:/web-config.yml
-#     command: 
-#       - '--path.procfs=/host/proc' 
-#       - '--path.sysfs=/host/sys'
-#       - --collector.filesystem.ignored-mount-points
-#       - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
-#       - '--web.config.file=/web-config.yml'
-#     networks:
-#       - localhost
-#     privileged: true
-#     depends_on:
-#       - prometheus
-#     expose:
-#       - 9100
+  prometheus-node-exporter:
+    image: prom/node-exporter:latest
+    container_name: prometheus-node-exporter
+    restart: always
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+      - ./node_export/certs_node/node.crt:/node.crt
+      - ./node_export/certs_node/node.key:/node.key
+      - ./node_export/web-config.yml:/web-config.yml
+    command: 
+      - '--path.procfs=/host/proc' 
+      - '--path.sysfs=/host/sys'
+      - --collector.filesystem.ignored-mount-points
+      - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+      - '--web.config.file=/web-config.yml'
+    networks:
+      - localhost
+    privileged: true
+    depends_on:
+      - prometheus
+    expose:
+      - 9100
 
 
-#   grafana:
-#     build:
-#       context: ./grafana
-#       args:
-#         - PROMETHEUS_PASSWORD=${PROMETHEUS_PASSWORD}
-#     container_name: grafana
-#     ports:
-#       - 3000:3000
-#     volumes:
-#       - grafana-data:/var/lib/grafana
-#       - ./grafana/dashboards:/var/lib/grafana/dashboards
-#       - ./grafana/dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml
-#     env_file:
-#       .env
-#     networks:
-#       - localhost
+  grafana:
+    build:
+      context: ./grafana
+      args:
+        - PROMETHEUS_PASSWORD=${PROMETHEUS_PASSWORD}
+    container_name: grafana
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+      - ./grafana/dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml
+    env_file:
+      .env
+    networks:
+      - localhost
   
   alertmanager:
     build:

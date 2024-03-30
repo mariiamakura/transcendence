@@ -83,4 +83,14 @@ chmod 777 ${ALERT_CERTS}/alert.key
 chmod 777 ${ALERT_CERTS}/alert.crt
 
 
+GRAFANA_CERTS="${HOME}/certs/certs_grafana"
+rm -rf "${GRAFANA_CERTS}"
+mkdir -p "${GRAFANA_CERTS}"
+
+echo -e "${BLUE}Setting up SSL certificates for grafana...${NC}"
+mkcert -key-file "${GRAFANA_CERTS}/grafana.key" -cert-file "${GRAFANA_CERTS}/grafana.crt" localhost "${CURRENT_IP}" grafana &>/dev/null
+chmod 777 ${GRAFANA_CERTS}/grafana.key
+chmod 777 ${GRAFANA_CERTS}/grafana.crt
+
+
 echo -e "${GREEN}SSL certificates created!${NC}"
