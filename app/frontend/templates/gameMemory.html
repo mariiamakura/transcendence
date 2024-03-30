@@ -5,7 +5,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
-			<h1 class="page-header">{% trans "Memoryyyyyyyy" %}</h1>
+			<h1 class="page-header">{% trans "Memory" %}</h1>
 			<hr>
 		</div>
 	</div>
@@ -44,11 +44,11 @@ let scoreUpdate = false;
 
 function TwoOrTournament() {
     var main = document.getElementById('content');
-    main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> Do you want to play a 1vs1 game or a tournament ? </p></div>';
+    main.innerHTML += '<div id="choice"><p style="padding-top: 2em;">{% trans ' Do you want to play a 1vs1 game or a tournament ? '  %}</p></div>';
     var button1vs1 = document.createElement("button");
     var buttonTournament = document.createElement("button"); 
-    buttonTournament.textContent = "Play tournament";
-    button1vs1.textContent = "Play 1vs1";
+    buttonTournament.textContent = "{% trans 'Play tournament'  %}";
+    button1vs1.textContent = "{% trans 'Play 1vs1'  %}";
     buttonTournament.classList.add("styled-button")
     button1vs1.classList.add("styled-button");
     document.getElementById('choice').appendChild(button1vs1);
@@ -69,11 +69,11 @@ function TwoOrTournament() {
 
 function remoteOrLocal() {
     var main = document.getElementById('content');
-    main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> Which type of game do you wanna play ? </p></div>';
+    main.innerHTML += '<div id="choice"><p style="padding-top: 2em;">Which type of game do you wanna play?</p></div>';
     var buttonRemote = document.createElement("button");
     var buttonLocal = document.createElement("button"); 
-    buttonLocal.textContent = "Play local Game";
-    buttonRemote.textContent = "Play remote Game";
+    buttonLocal.textContent = "{% trans 'Play local Game'  %}";
+    buttonRemote.textContent = "{% trans 'Play remote Game'  %}";
     buttonLocal.classList.add("styled-button")
     buttonRemote.classList.add("styled-button");
     document.getElementById('choice').appendChild(buttonRemote);
@@ -96,7 +96,7 @@ function decideHost() {
 	let host;
 	let client;
 	var main = document.getElementById('content');
-	main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> {% trans "Which type of game do you wanna play" %} ? </p></div>';
+	main.innerHTML += '<div id="choice"><p style="padding-top: 2em;">{% trans "Which type of game do you wanna play" %} ? </p></div>';
 	var buttonHost = document.createElement("button");
 	var buttonClient= document.createElement("button"); 
 	buttonHost.textContent = "{% trans 'Create New Game' %}";
@@ -121,13 +121,13 @@ function decideHost() {
 
 function choiceSet() {
     var main = document.getElementById('content');
-    main.innerHTML = `<div id="choice"><p style="padding-top: 1em; display: flex; " > Which set do you want to play with ? </p></div>`;
+    main.innerHTML = `<div id="choice"><p style="padding-top: 1em; display: flex; " >{% trans ' Which set do you want to play with ? '  %}</p></div>`;
     var Nature = document.createElement("button");
-    Nature.textContent = "Nature (easy)";
+    Nature.textContent = "{% trans 'Nature (easy)'  %}";
     Nature.classList.add("styled-button");
     document.getElementById('choice').appendChild(Nature);
     var Robot = document.createElement("button");
-    Robot.textContent = "Robot (hard)";
+    Robot.textContent = "{% trans 'Robot (hard)'  %}";
     Robot.classList.add("styled-button");
     document.getElementById('choice').appendChild(Robot);
     return new Promise(function (resolve) {
@@ -146,7 +146,7 @@ function choiceSet() {
 
 function choiceCards() {
     var main = document.getElementById('content');
-    main.innerHTML += `<div id="choice"><p style="padding-top: 2em; display: flex; " > How many cards do you want to play with: </p></div>`;
+    main.innerHTML += `<div id="choice"><p style="padding-top: 2em; display: flex; " >{% trans ' How many cards do you want to play with: '  %}</p></div>`;
     var FourteenCards = document.createElement("button");
     FourteenCards.textContent = "14";
     FourteenCards.classList.add("styled-button");
@@ -189,16 +189,17 @@ function choiceCards() {
 
 function numPlayers() {
 	var main = document.getElementById('content');
-	main.innerHTML += '<div id="choice"><p style="padding-top: 2em; display: flex; " > How many players do you want to be ? </p></div>';
+	main.innerHTML += '<div id="choice"><p style="padding-top: 2em; display: flex; " >{% trans ' How many players do you want to be ? '  %}</p></div>';
 	var buttonFour = document.createElement("button");
-	buttonFour.textContent = "4 players";
+    let players = "{% trans 'players' %}"
+	buttonFour.textContent = "4" + players;
 	buttonFour.classList.add("styled-button");
 	document.getElementById('choice').appendChild(buttonFour);
 	if (tournament) {
 		var buttonEight = document.createElement("button");
 		var buttonSixteen= document.createElement("button");
-		buttonEight.textContent = "8 players";
-		buttonSixteen.textContent = "16 players";
+		buttonEight.textContent = "8" + players;
+		buttonSixteen.textContent = "16" + players;
 		buttonEight.classList.add("styled-button");
 		buttonSixteen.classList.add("styled-button");
 		document.getElementById('choice').appendChild(buttonEight);
@@ -241,7 +242,7 @@ async function getNamePlayer() {
     try {
         const response = await fetch('/get_display_name/');
         const data = await response.json();
-        main.innerHTML += `<p style="padding-top: 2em; display: flex; align-items:center; justify-content:center;">First player is: ${data.display_name}</p>`;
+        main.innerHTML += `<p style="padding-top: 2em; display: flex; align-items:center; justify-content:center;">{% trans 'First player is'  %}: ${data.display_name}</p>`;
         namePlayer.push(data.display_name);
 
         for (let i = 2; i <= numberPlayers; i++) {
@@ -266,7 +267,8 @@ async function getNamePlayer() {
                             form.remove();
                             resolve();
                         } else {
-                            alert('Name already exists! Please choose a different name.');
+                            let text = "{% trans 'Name already exists! Please choose a different name.' %}";
+                            alert(text);
                         }
                     } else {
                         input.reportValidity();
@@ -275,7 +277,8 @@ async function getNamePlayer() {
             });
         }
     } catch (error) {
-        console.error('Error:', error);
+        let text = "{% trans 'Error:' %}"
+        console.error(text, error);
     }
     return namePlayer;
 }
@@ -289,7 +292,7 @@ function startButtonTournament() {
     choiceDiv.id = "choice";
     
     var welcomeParagraph = document.createElement("p");
-    welcomeParagraph.textContent = "Welcome to the memory tournament !\n\nThe rounds are the following:";
+    welcomeParagraph.textContent = "{% trans 'Welcome to the memory tournament !' %}\n\n{% trans 'The rounds are the following:' %}";
     choiceDiv.appendChild(welcomeParagraph);
     
     for (let i = 0; i < numberPlayers - 1; i++) {
@@ -322,9 +325,9 @@ function startButtonTournament() {
 
 function startButton() {
 	var main = document.getElementById('content');
-	main.innerHTML += '<div id="choice"><p style="text-align: center; padding-top:5em;"> Ready to start ? <br> <br> Let\'s go !</p></div>';
+	main.innerHTML += '<div id="choice"><p style="text-align: center; padding-top:5em;">{% trans ' Ready to start ? '  %}<br><br>{% trans ' Go !'  %}</p></div>';
 	var startButton = document.createElement("button");
-	startButton.textContent = "Start !";
+	startButton.textContent = "{% trans 'Start !' %}";
 	startButton.classList.add("styled-button");
 	document.getElementById('choice').appendChild(startButton);
 	return new Promise (function (resolve) {
@@ -341,11 +344,11 @@ let remote = false;
 
 async function showButton() {
 	var main = document.getElementById('content');
-	main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> Which type of game do you wanna play ? </p></div>';
+	main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> Which type of game do you wanna play ?</p></div>';
 	var buttonRemote = document.createElement("button");
 	var buttonLocal = document.createElement("button"); 
-	buttonLocal.textContent = "Play local Game";
-	buttonRemote.textContent = "Play remote Game";
+	buttonLocal.textContent = "{% trans 'Play local Game' %}";
+	buttonRemote.textContent = "{% trans 'Play remote Game' %}";
 	buttonLocal.classList.add("styled-button")
 	buttonRemote.classList.add("styled-button");
 	document.getElementById('choice').appendChild(buttonRemote);
@@ -367,7 +370,7 @@ let cards_info = [];
 async function showGameMemory() {
 
 	var mainElement = document.getElementById('content');
-	mainElement.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em; padding-top:3em;">Memory game</p>';    
+	mainElement.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em; padding-top:3em;">{% trans 'Memory game'  %}</p>';    
 	debug = 0;
 	startGame = false;
     scoreUpdate = false;
@@ -419,7 +422,7 @@ let gameRoomSocket = null;
 async function remoteHost() {
     let hostName = "{{ user.display_name }}"; // This should be sanitized to ensure URL-friendliness
     let nameRoom = encodeURIComponent(`${hostName}_Game`).replace(/'/g, ""); // Sanitize and remove special characters
-    let setName = gameSettings.chosenSet === 1 ? "Nature" : "Robot";
+    let setName = gameSettings.chosenSet === 1 ? "{% trans 'Nature' %}" : "{% trans 'Robot' %}";
     let sanitizedRoomName = encodeURIComponent(`room_of_${hostName}_with_${gameSettings.numberOfCards}_cards_and_set_of_${setName}`).replace(/'/g, ""); // Sanitize and remove special characters
     let socket = new WebSocket(`wss://${window.location.host}/wss/socket-server/lobby/`); // Connect to the lobby
 
@@ -550,7 +553,7 @@ async function remoteClient() {
                 });
             } else {
                 // Display message if no active games are available
-                gameList.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em;">No active games</p>';
+                gameList.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em;">{% trans 'No active games'  %}</p>';
             }
         } else if (data.action === 'joined_room_memory') {
             console.log('Joined room:', data.room_id);
@@ -982,6 +985,7 @@ function endGameMemory(winner)
     //     '<p><img src="{% static 'img/gif_robot.gif' %}" alt="Victory logo" style="width: 50vh; height: 50vh;"></p>' + 
     //     '</div>';
     // }
+
     reinitializeGame();
     if (tournament === false && local === true)
     {
@@ -1018,7 +1022,7 @@ function endGameMemory(winner)
         firstPlayer = 0;
         secondPlayer = 1;
         mainElement.innerHTML += '<div id="SecondRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
-                                    '<p style="text-align: center; font-size:4em;">Second Round ! </p>';
+                                    '<p style="text-align: center; font-size:4em;">{% trans 'Second Round ! '  %}</p>';
 
         for (let i = 0; i < namePlayer.length - 1; i++) {
             var matchParagraph = document.createElement("p");
@@ -1041,7 +1045,7 @@ function endGameMemory(winner)
         firstPlayer = 0;
         secondPlayer = 1;
         mainElement.innerHTML += '<div id="ThirdRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
-                                    '<p style="text-align: center; font-size:4em;">Third Round ! </p>';
+                                    '<p style="text-align: center; font-size:4em;">{% trans 'Third Round ! '  %}</p>';
 
         for (let i = 0; i < namePlayer.length - 1; i++) {
             var matchParagraph = document.createElement("p");
