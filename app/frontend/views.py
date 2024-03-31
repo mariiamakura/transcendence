@@ -475,7 +475,7 @@ def add_users(request):
                     User.objects.create_user(**user_data)
 
 
-def showHome(request):
+def home(request):
     if request.user.is_authenticated:
         return render(request=request, template_name="home.html", context={})
     else:
@@ -539,17 +539,6 @@ def get_display_name(request):
         # Assuming the user is authenticated and you want to get the username of the authenticated user
         display_name = request.user.display_name
         return JsonResponse({'display_name': display_name})
-
-
-def home(request):
-    # Retrieve the top three users based on games won
-    # top_three_users = User.objects.order_by('-pong_games_won')[:3]
-    # top_three_users = User.objects.order_by('username')[:3]
-
-    # context = {'top_three_users': top_three_users}
-    # add_users(request)
-    # return render(request, 'home.html', context)
-    return render(request, 'home.html')
 
 
 def gamePong(request):

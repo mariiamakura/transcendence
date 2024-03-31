@@ -496,7 +496,6 @@ async function remoteHost() {
     
     console.log("enters");
     var mainElement = document.getElementById('content');
-    // mainElement.innerHTML +=  '<p style="text-align: center;  font-size:2em;>{% trans 'Waiting for Players...'  %}</p>';
     mainElement.innerHTML += '<p class="text-center" style="font-size: 1.5em;">{% trans 'Waiting for Players...'  %}</p>';
     let hostName = "{{ user.display_name }}";
     let sanitizedRoomName = encodeURIComponent(`${hostName}_Game`).replace(/'/g, ""); // Sanitize and remove special characters
@@ -1221,7 +1220,7 @@ function endGame(winner) {
     let scoreWinner = player1Score > player2Score ? player1Score : player2Score;
     let scoreLoser = player1Score < player2Score ? player1Score : player2Score;
     let namePlayerPlaying = [player1.name, player2.name];
-    if (scoreUpdate === false)
+    if (scoreUpdate === false && player1Score === scoreToDo || player2Score === scoreToDo)
         updateGameResultPong(winner, namePlayerPlaying, scoreToDo, scoreWinner, scoreLoser, tournament, tournament_id);
     var mainElement = document.getElementById('content');
     mainElement.style.backgroundImage = 'none';

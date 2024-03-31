@@ -410,6 +410,8 @@ let isHost = false;
 let gameRoomSocket = null;
 
 async function remoteHost() {
+    var mainElement = document.getElementById('content');
+    mainElement.innerHTML += '<p class="text-center" style="font-size: 1.5em;">{% trans 'Waiting for Players...'  %}</p>';
     let hostName = "{{ user.display_name }}"; // This should be sanitized to ensure URL-friendliness
 	hostName = hostName.replace(/-/g,"");
 	let nameRoom = encodeURIComponent(`${hostName}_Game`).replace(/'/g, "").replace(/-/g, ""); // Sanitize and remove special characters and hyphens
@@ -962,24 +964,24 @@ function endGameMemory(winner)
     let scoreWinner = scorePlayer1 > scorePlayer2 ? scorePlayer1 : scorePlayer2;
     let scoreLoser = scorePlayer1 < scorePlayer2 ? scorePlayer1 : scorePlayer2;
     console.log("scoreUpdate : " + scoreUpdate)
-    if (scoreUpdate === false)
+    if (scoreUpdate === false && scorePlayer1 + scorePlayer2 === gameSettings.numberOfCards / 2)
         updateGameResultMemory(winner, namePlayer, gameSettings.chosenSet, gameSettings.numberOfCards, scoreWinner, scoreLoser, tournament, tournament_id);
     var mainElement = document.getElementById('content');
     mainElement.innerHTML = ''; // Remove all inner HTML content  
-    // if (winner !== "Exaequo")
-    // {
+    let getUserDisplay = "{{ user.display_name }}";
+    if (winner === getUserDisplay) {
+        mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
+        '<p style="text-align: center; font-size:4em;"> You won ! </p>' +
+        '<p><img src="{% static 'img/gif_robot.gif' %}" alt="Victory logo" style="width: 50vh; height: 50vh;"></p>' + 
+        '</div>';
+    }
+    else
+    {
         mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
         '<p style="text-align: center; font-size:4em;">' + winner + ' won ! </p>' +
         '<p><img src="{% static 'img/gif_robot.gif' %}" alt="Victory logo" style="width: 50vh; height: 50vh;"></p>' + 
         '</div>';
-    // }
-    // else
-    // {
-    //     mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
-    //     '<p style="text-align: center; font-size:4em;"> It\'s a tie ! </p>' +
-    //     '<p><img src="{% static 'img/gif_robot.gif' %}" alt="Victory logo" style="width: 50vh; height: 50vh;"></p>' + 
-    //     '</div>';
-    // }
+    }
 
     reinitializeGame();
     if (tournament === false && local === true)
