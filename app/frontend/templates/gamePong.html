@@ -1,5 +1,6 @@
 {% extends 'index.html' %}
 {% load i18n %}
+{% load static %}
 {% block content %}
 
 <script>
@@ -810,6 +811,16 @@ function launchGamePong() {
         '</div>';
 
     document.body.style.overflow = 'padding-bottom : 5em';
+    if (paddleColor === "white")
+    {
+        var imageUrl = "{% static 'img/chinese_new_year.jpg' %}"
+        // var image = new Image();
+        // image.src = imageUrl;
+        content.style.backgroundImage = 'url(' + imageUrl + ')';
+        content.style.backgroundSize = "cover";
+        content.style.backgroundPosition = "center";
+        content.style.backgroundRepeat = "repeat"; 
+    }
     board = document.getElementById('board');
     board.width = boardWidth;
     board.height = boardHeight;
@@ -1125,13 +1136,9 @@ function generateRandomAngle() {
     return radians;
 }
 
-
-
-
 function resetGame(direction) {
     ball.x = board.width / 2 - ballWidth / 2;
-    ball.y = Math.random() * (board.height - 200);
-    // Reset ball velocity
+    ball.y = Math.random() * (board.height - 100) + 50;
     var angle = generateRandomAngle();
     ball.velocityX = Math.cos(angle) * board.width / 200 * direction * velocity;
     ball.velocityY = Math.sin(angle) * board.height / 100 * velocity;
@@ -1216,6 +1223,8 @@ function endGame(winner) {
     if (scoreUpdate === false)
         updateGameResultPong(winner, namePlayerPlaying, scoreToDo, scoreWinner, scoreLoser, tournament, tournament_id);
     var mainElement = document.getElementById('content');
+    mainElement.style.backgroundImage = 'none';
+    mainElement.style.backgroundColor = 'white';
     mainElement.innerHTML = '';
     let getUserDisplay = "{{ user.display_name }}";
     if (winner === getUserDisplay) {
@@ -1382,5 +1391,7 @@ window.addEventListener('beforeunload', function (event) {
 });
 
 </script>
-
+{% block footer %}
+    {# Leave the footer block empty to exclude the footer #}
+{% endblock %}
 {% endblock %}

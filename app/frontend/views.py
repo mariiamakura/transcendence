@@ -38,7 +38,7 @@ def signUp(request):
         username = request.POST.get('username', '')
         display_name = request.POST.get('username', '')
         display_name = display_name.replace('-', '')
-        print("at signuo: " + display_name)
+        # print("at signup: " + display_name)
         email = request.POST.get('email', '')
         password1 = request.POST.get('password1', '')
         password2 = request.POST.get('password2', '')
@@ -109,7 +109,6 @@ def signIn(request):
 
         user = authenticate(username=username, password=password)
         if user is not None:
-            print(request.user.display_name)
             login(request, user)
             request.user.online = True
             request.session['user_language'] = user.language
@@ -545,11 +544,12 @@ def get_display_name(request):
 def home(request):
     # Retrieve the top three users based on games won
     # top_three_users = User.objects.order_by('-pong_games_won')[:3]
-    top_three_users = User.objects.order_by('username')[:3]
+    # top_three_users = User.objects.order_by('username')[:3]
 
-    context = {'top_three_users': top_three_users}
-    add_users(request)
-    return render(request, 'home.html', context)
+    # context = {'top_three_users': top_three_users}
+    # add_users(request)
+    # return render(request, 'home.html', context)
+    return render(request, 'home.html')
 
 
 def gamePong(request):
