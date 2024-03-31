@@ -442,12 +442,8 @@ msgid "Firstname:"
 msgstr "Ім'я:"
 
 #: frontend/templates/profile.html:33
-msgid "Familyname:"
+msgid "Lastname:"
 msgstr "Прізвище:"
-
-#: frontend/templates/profile.html:34
-msgid "Birthdate:"
-msgstr "Дата народження:"
 
 #: frontend/templates/profile.html:35
 msgid "Language:"

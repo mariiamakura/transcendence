@@ -439,12 +439,8 @@ msgid "Firstname:"
 msgstr "이름:"
 
 #: frontend/templates/profile.html:33
-msgid "Familyname:"
+msgid "Lastname:"
 msgstr "성:"
-
-#: frontend/templates/profile.html:34
-msgid "Birthdate:"
-msgstr "생년월일:"
 
 #: frontend/templates/profile.html:35
 #, fuzzy
