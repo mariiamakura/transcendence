@@ -551,6 +551,7 @@ function updateClientSettings(receivedSettings) {
 
 // clientsocket
 let roomSocket = null;
+let intervalId;
 
 async function remoteClient() {
     let socket = new WebSocket(`wss://${window.location.host}/wss/socket-server/lobby/`); // Connect to a 'lobby' room first
@@ -590,7 +591,6 @@ async function remoteClient() {
         }
         
     };
-    
     function joinGameRoomMemory(roomId) {
         // Close the current lobby connection
         socket.close();
@@ -605,57 +605,68 @@ async function remoteClient() {
             const data = JSON.parse(event.data);
             console.log(data);
             if (data.action === 'game_countdown_memory')
-                updateCountdownDisplayMemory(data.message);
-            else if (data.action === 'start_game_memory') {
-                console.log("start game guest side")
-                let countdownElement = document.getElementById('countdown');
-                if (countdownElement) {
-                    countdownElement.remove();
+            updateCountdownDisplayMemory(data.message);
+        else if (data.action === 'start_game_memory') {
+            console.log("start game guest side")
+            let countdownElement = document.getElementById('countdown');
+            if (countdownElement) {
+                countdownElement.remove();
+            }
+            startHeartbeat();
+        }
+        if (data.action === 'card_info') {
+            var cards_infoG = data.cards;
+            console.log("cards received");
+            updateClientSettings(data.settings);
+            launchGameMemory(cards_infoG);
+        }
+        if (data.action === 'player_turn_memory') {
+            console.log("player turn updated");
+            PlayerToPlay = data.player;
+            updatePlayerTurnsDisplay();
+            updatePlayerScore(1);
+            updatePlayerScore(2);
+        }
+        if (data.action === 'card_clicked') {
+            let clickedCard = document.getElementById(data.card_id);
+            if (clickedCard)
+            clickedCard.classList.toggle("show-image");
+        }
+        if (data.action === 'card_returned') {
+            let returnedCard = document.getElementById(data.card_id);
+            if (returnedCard)
+            returnedCard.classList.toggle("show-image");
+        }
+        if (data.action === 'update_score_memory') {
+            scorePlayer1 = data.score1;
+            scorePlayer2 = data.score2;
+        }
+        if (data.action === 'game_ended_memory')
+            endGameMemory(data.winner);
+
+        if (data.type === 'notify_winner')
+        console.log('The winner is:', data.winner);
+
+        if (data.action === 'player_left') {
+            console.log('other player left the game');
+            if (scoreUpdate === false)
+            endGameMemory(namePlayer[1]);
+            roomSocket.close();
+            }
+            function startHeartbeat() {
+                intervalId = setInterval(function() {
+                    if (socket.readyState === WebSocket.OPEN) {
+                        socket.send(JSON.stringify({ action: 'heartbeat' }));
+                    } else {
+                        endGameMemory(namePlayer[1]);
+                        clearInterval(intervalId);
+                    }
+                    }, 1000);
                 }
-            }
-            if (data.action === 'card_info') {
-                var cards_infoG = data.cards;
-                console.log("cards received");
-                updateClientSettings(data.settings);
-                launchGameMemory(cards_infoG);
-            }
-            if (data.action === 'player_turn_memory') {
-                console.log("player turn updated");
-                PlayerToPlay = data.player;
-                updatePlayerTurnsDisplay();
-                updatePlayerScore(1);
-                updatePlayerScore(2);
-            }
-            if (data.action === 'card_clicked') {
-                let clickedCard = document.getElementById(data.card_id);
-                if (clickedCard)
-                    clickedCard.classList.toggle("show-image");
-            }
-            if (data.action === 'card_returned') {
-                let returnedCard = document.getElementById(data.card_id);
-                if (returnedCard)
-                    returnedCard.classList.toggle("show-image");
-            }
-            if (data.action === 'update_score_memory') {
-                scorePlayer1 = data.score1;
-                scorePlayer2 = data.score2;
-            }
-            if (data.action === 'game_ended_memory')
-                endGameMemory(data.winner);
-
-            if (data.type === 'notify_winner')
-                console.log('The winner is:', data.winner);
-
-            if (data.action === 'player_left') {
-                console.log('other player left the game');
-                if (scoreUpdate === false)
-                    endGameMemory(namePlayer[1]);
-                roomSocket.close();
-            }
             roomSocket.onclose = function() {
-                roomSocket.send(JSON.stringify({ action: 'player_left' }));
-                // endGameMemory(namePlayer[1]);
-                console.log("Game room connection closed.");
+            roomSocket.send(JSON.stringify({ action: 'player_left' }));
+            // endGameMemory(namePlayer[1]);
+            console.log("Game room connection closed.");
             };
         };
     }
