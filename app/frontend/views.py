@@ -347,7 +347,10 @@ def start_tournament_memory(request):
 
 
 def get_user_statistics(request):
+    print('entering get user stats')
     if request.user.is_authenticated:
+        print('user is authenticated')
+
         # Fetch the user's statistics from the database
         user_statistics = {
             'username': request.user.username,
@@ -363,7 +366,7 @@ def get_user_statistics(request):
                 'pong_game': game.pong_game,
                 'memory_game': game.memory_game,
                 'is_tournament': game.is_tournament,
-                'winner': game.winner.username,
+                'winner': game.winner.display_name if game.winner else None,
                 'score_winner': game.score_winner,
                 'score_loser': game.score_loser,
                 'tournament_id': game.tournament_id,

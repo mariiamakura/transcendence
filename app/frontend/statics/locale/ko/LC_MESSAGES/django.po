@@ -252,8 +252,8 @@ msgid "Robot"
 msgstr "로봇"
 
 #: frontend/templates/gameMemory.html:542 frontend/templates/gamePong.html:596
-msgid "No active games"
-msgstr "활성 게임 없음"
+msgid "No active games - try later"
+msgstr "활성 게임이 없습니다 - 나중에 다시 시도하세요."
 
 #: frontend/templates/gameMemory.html:955
 msgid " It is a tie ! "

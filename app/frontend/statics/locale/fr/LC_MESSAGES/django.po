@@ -252,8 +252,8 @@ msgid "Robot"
 msgstr "Robot"
 
 #: frontend/templates/gameMemory.html:542 frontend/templates/gamePong.html:596
-msgid "No active games"
-msgstr "Aucun jeu en cours"
+msgid "No active games - try later"
+msgstr "Aucun jeu en cours - Essayez plus tard"
 
 #: frontend/templates/gameMemory.html:955
 msgid " It is a tie ! "

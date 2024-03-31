@@ -34,7 +34,7 @@ let scoreUpdate = false;
 
 function TwoOrTournament() {
     var main = document.getElementById('content');
-    main.innerHTML += '<div id="choice"><p style="padding-top: 2em;">{% trans ' Do you want to play a 1vs1 game or a tournament ? '  %}</p></div>';
+    main.innerHTML += '<div id="choice"><p style="padding-top: 5em;">{% trans ' Do you want to play a 1vs1 game or a tournament? '  %}</p></div>';
     var button1vs1 = document.createElement("button");
     var buttonTournament = document.createElement("button"); 
     buttonTournament.textContent = "{% trans 'Play tournament'  %}";
@@ -59,7 +59,7 @@ function TwoOrTournament() {
 
 function remoteOrLocal() {
     var main = document.getElementById('content');
-    main.innerHTML += '<div id="choice"><p style="padding-top: 2em;">Which type of game do you wanna play?</p></div>';
+    main.innerHTML += '<div id="choice"><p style="padding-top: 5em;">Which type of game do you wanna play?</p></div>';
     var buttonRemote = document.createElement("button");
     var buttonLocal = document.createElement("button"); 
     buttonLocal.textContent = "{% trans 'Play local Game'  %}";
@@ -86,7 +86,7 @@ function decideHost() {
 	let host;
 	let client;
 	var main = document.getElementById('content');
-	main.innerHTML += '<div id="choice"><p style="padding-top: 2em;">{% trans "Which type of game do you wanna play" %} ? </p></div>';
+	main.innerHTML += '<div id="choice"><p style="padding-top: 5em;">{% trans "Which type of game do you wanna play" %}? </p></div>';
 	var buttonHost = document.createElement("button");
 	var buttonClient= document.createElement("button"); 
 	buttonHost.textContent = "{% trans 'Create New Game' %}";
@@ -111,75 +111,102 @@ function decideHost() {
 
 function choiceSet() {
     var main = document.getElementById('content');
-    main.innerHTML = `<div id="choice"><p style="padding-top: 1em; display: flex; " >{% trans ' Which set do you want to play with ? '  %}</p></div>`;
+    var div = document.createElement("div");
+    div.id = "choice";
+    
     var Nature = document.createElement("button");
     Nature.textContent = "{% trans 'Nature (easy)'  %}";
     Nature.classList.add("styled-button");
-    document.getElementById('choice').appendChild(Nature);
+    div.appendChild(Nature);
+    
     var Robot = document.createElement("button");
     Robot.textContent = "{% trans 'Robot (hard)'  %}";
     Robot.classList.add("styled-button");
-    document.getElementById('choice').appendChild(Robot);
+    div.appendChild(Robot);
+
+    main.appendChild(div);
+
+    var question = document.createElement("p");
+    question.textContent = "{% trans 'Which set do you want to play with?' %}";
+    question.style.display = "flex";
+    div.insertBefore(question, div.firstChild);
+
     return new Promise(function (resolve) {
         Nature.addEventListener("click", function() {
             resolve(true);
             gameSettings.chosenSet = 1;
-            document.getElementById('choice').remove();
+            div.remove();
         });
         Robot.addEventListener("click", function() {
             resolve(true);
             gameSettings.chosenSet = 2;
-            document.getElementById('choice').remove();
+            div.remove();
         });
     });
 }
 
+
 function choiceCards() {
     var main = document.getElementById('content');
-    main.innerHTML += `<div id="choice"><p style="padding-top: 2em; display: flex; " >{% trans ' How many cards do you want to play with: '  %}</p></div>`;
+    // main.innerHTML = "";
+
+    var div = document.createElement("div");
+    div.id = "choice";
+    main.appendChild(div);
+
+    var question = document.createElement("p");
+    question.textContent = "{% trans 'How many cards do you want to play with:' %}";
+    question.style.display = "flex";
+    div.appendChild(question);
+
     var FourteenCards = document.createElement("button");
     FourteenCards.textContent = "14";
     FourteenCards.classList.add("styled-button");
-    document.getElementById('choice').appendChild(FourteenCards);
+    div.appendChild(FourteenCards);
+
     var EighteenCards = document.createElement("button");
     EighteenCards.textContent = "18";
     EighteenCards.classList.add("styled-button");
-    document.getElementById('choice').appendChild(EighteenCards);
+    div.appendChild(EighteenCards);
+
     var TwentySixCards = document.createElement("button");
     TwentySixCards.textContent = "26";
     TwentySixCards.classList.add("styled-button");
-    document.getElementById('choice').appendChild(TwentySixCards);
+    div.appendChild(TwentySixCards);
+
     var ThirtyCards = document.createElement("button");
     ThirtyCards.textContent = "30";
     ThirtyCards.classList.add("styled-button");
-    document.getElementById('choice').appendChild(ThirtyCards);
+    div.appendChild(ThirtyCards);
+
     return new Promise(function (resolve) {
         FourteenCards.addEventListener("click", function() {
             resolve(true);
             gameSettings.numberOfCards = 14;
-            document.getElementById('choice').remove();
+            div.remove();
         });
         EighteenCards.addEventListener("click", function() {
             resolve(true);
             gameSettings.numberOfCards = 18;
-            document.getElementById('choice').remove();
+            div.remove();
         });
         TwentySixCards.addEventListener("click", function() {
             resolve(true);
             gameSettings.numberOfCards = 26;
-            document.getElementById('choice').remove();
+            div.remove();
         });
         ThirtyCards.addEventListener("click", function() {
             resolve(true);
             gameSettings.numberOfCards = 30;
-            document.getElementById('choice').remove();
+            div.remove();
         });
     });
 }
 
+
 function numPlayers() {
 	var main = document.getElementById('content');
-	main.innerHTML += '<div id="choice"><p style="padding-top: 2em; display: flex; " >{% trans ' How many players do you want to be ? '  %}</p></div>';
+	main.innerHTML += '<div id="choice"><p style="padding-top: 5em; display: flex; " >{% trans ' How many players do you want to be? '  %}</p></div>';
 	var buttonFour = document.createElement("button");
     let players = "{% trans 'players' %}"
 	buttonFour.textContent = "4" + players;
@@ -238,7 +265,7 @@ async function getNamePlayer() {
         for (let i = 2; i <= numberPlayers; i++) {
             main.innerHTML += '<div id="choice">' +
                 '<form id="form' + i + '" style="display: flex; flex-direction: column; align-items: center;">' +
-                '<p style="padding-top: 2em; display: flex; align-items:center; justify-content:center;" > Name of player ' + i + ' : </p>' +
+                '<p style="padding-top: 5em; display: flex; align-items:center; justify-content:center;" > Name of player ' + i + ' : </p>' +
                 '<input type="text" id="name' + i + '" required>' + 
                 '<button type="submit" class="styled-button" style="margin-top: 1em;">Submit</button>' +
                 '</form>' +
@@ -282,7 +309,7 @@ function startButtonTournament() {
     choiceDiv.id = "choice";
     
     var welcomeParagraph = document.createElement("p");
-    welcomeParagraph.textContent = "{% trans 'Welcome to the memory tournament !' %}\n\n{% trans 'The rounds are the following:' %}";
+    welcomeParagraph.textContent = "{% trans 'Welcome to the memory tournament!' %}\n\n{% trans 'The rounds are the following:' %}";
     choiceDiv.appendChild(welcomeParagraph);
     
     for (let i = 0; i < numberPlayers - 1; i++) {
@@ -296,7 +323,7 @@ function startButtonTournament() {
     var readyParagraph = document.createElement("p");
     readyParagraph.style.textAlign = "center";
     readyParagraph.style.paddingTop = "1em";
-    readyParagraph.textContent = "Ready to start ?\n\nLet's go !";
+    readyParagraph.textContent = "Ready to start?\n\nLet's go !";
     choiceDiv.appendChild(readyParagraph);
     
     var startButton = document.createElement("button");
@@ -315,7 +342,17 @@ function startButtonTournament() {
 
 function startButton() {
 	var main = document.getElementById('content');
-	main.innerHTML += '<div id="choice"><p style="text-align: center; padding-top:5em;">{% trans ' Ready to start ? '  %}<br><br>{% trans ' Go !'  %}</p></div>';
+
+    var div = document.createElement("div");
+    div.id = "choice";
+    main.appendChild(div);
+
+    var question = document.createElement("p");
+    question.textContent = "{% trans ' Ready to start? '  %}<br><br>{% trans ' Go!'  %}";
+    question.style.display = "flex";
+    div.appendChild(question);
+
+	main.innerHTML += '<div id="choice"><p style="text-align: center; padding-top:5em;">{% trans ' Ready to start? '  %}<br><br>{% trans ' Go!'  %}</p></div>';
 	var startButton = document.createElement("button");
 	startButton.textContent = "{% trans 'Start !' %}";
 	startButton.classList.add("styled-button");
@@ -334,7 +371,7 @@ let remote = false;
 
 async function showButton() {
 	var main = document.getElementById('content');
-	main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> Which type of game do you wanna play ?</p></div>';
+	main.innerHTML += '<div id="choice"><p style="padding-top: 2em;"> Which type of game do you wanna play?</p></div>';
 	var buttonRemote = document.createElement("button");
 	var buttonLocal = document.createElement("button"); 
 	buttonLocal.textContent = "{% trans 'Play local Game' %}";
@@ -499,7 +536,7 @@ async function remoteHost() {
                 // gameRoomSocket.send(JSON.stringify({ action: 'player_left' }));
                 if (scoreUpdate === false)
                     endGameMemory(namePlayer[0]);
-                console.log("Game room Memory in onclose function : connection closed.");
+                console.log("Game room Memory in onclose function: connection closed.");
             };
         }
         socket.onerror = function(error) {
@@ -546,7 +583,7 @@ async function remoteClient() {
                 });
             } else {
                 // Display message if no active games are available
-                gameList.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em;">{% trans 'No active games'  %}</p>';
+                gameList.innerHTML = '<p style="display: flex; text-align: center; justify-content:center; font-size: 3em;">{% trans 'No active games - try later'  %}</p>';
             }
         } else if (data.action === 'joined_room_memory') {
             console.log('Joined room:', data.room_id);
@@ -737,7 +774,7 @@ function launchGameMemory(cards_info) {
     else
     {
         // Add cards to the memory game
-        console.log("Client side : receiving cards information from the host");
+        console.log("Client side: receiving cards information from the host");
         for (let j = 0; j < gameSettings.numberOfCards; j++) {
             var cardElement = document.createElement("div");
             cardElement.classList.add("card");
@@ -971,14 +1008,14 @@ function endGameMemory(winner)
     let getUserDisplay = "{{ user.display_name }}";
     if (winner === getUserDisplay) {
         mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
-        '<p style="text-align: center; font-size:4em;"> You won ! </p>' +
+        '<p style="text-align: center; font-size:4em;"> You won! </p>' +
         '<p><img src="{% static 'img/gif_robot.gif' %}" alt="Victory logo" style="width: 50vh; height: 50vh;"></p>' + 
         '</div>';
     }
     else
     {
         mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
-        '<p style="text-align: center; font-size:4em;">' + winner + ' won ! </p>' +
+        '<p style="text-align: center; font-size:4em;">' + winner + ' won! </p>' +
         '<p><img src="{% static 'img/gif_robot.gif' %}" alt="Victory logo" style="width: 50vh; height: 50vh;"></p>' + 
         '</div>';
     }
@@ -1006,7 +1043,7 @@ function endGameMemory(winner)
         firstPlayer++;
         secondPlayer++;
         mainElement.innerHTML += '<div id="nextRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
-        '<p style="text-align: center; font-size:4em;">Next Round ! </p>' +
+        '<p style="text-align: center; font-size:4em;">Next Round! </p>' +
         '<p style="text-align: center; font-size:2em;">' + namePlayer[firstPlayer] + ' against ' + namePlayer[secondPlayer] + '</p>' +
         '<button id="startNextRound" class="styled-button">Start Next Round</button>' +
         '</div>';
@@ -1019,7 +1056,7 @@ function endGameMemory(winner)
         firstPlayer = 0;
         secondPlayer = 1;
         mainElement.innerHTML += '<div id="SecondRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
-                                    '<p style="text-align: center; font-size:4em;">{% trans 'Second Round ! '  %}</p>';
+                                    '<p style="text-align: center; font-size:4em;">{% trans 'Second Round! '  %}</p>';
 
         for (let i = 0; i < namePlayer.length - 1; i++) {
             var matchParagraph = document.createElement("p");
@@ -1029,7 +1066,7 @@ function endGameMemory(winner)
             i++;
         }
         mainElement.innerHTML += '<div id="nextRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
-        '<p style="text-align: center; font-size:4em;">Next Round ! </p>' +
+        '<p style="text-align: center; font-size:4em;">Next Round! </p>' +
         '<p style="text-align: center; font-size:2em;">' + namePlayer[firstPlayer] + ' against ' + namePlayer[secondPlayer] + '</p>' +
         '<button id="startNextRound" class="styled-button">Start Next Round</button>' +
         '</div>';
@@ -1042,7 +1079,7 @@ function endGameMemory(winner)
         firstPlayer = 0;
         secondPlayer = 1;
         mainElement.innerHTML += '<div id="ThirdRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
-                                    '<p style="text-align: center; font-size:4em;">{% trans 'Third Round ! '  %}</p>';
+                                    '<p style="text-align: center; font-size:4em;">{% trans 'Third Round! '  %}</p>';
 
         for (let i = 0; i < namePlayer.length - 1; i++) {
             var matchParagraph = document.createElement("p");
@@ -1052,7 +1089,7 @@ function endGameMemory(winner)
             i++;
         }
         mainElement.innerHTML += '<div id="nextRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
-        '<p style="text-align: center; font-size:4em;">Next Round ! </p>' +
+        '<p style="text-align: center; font-size:4em;">Next Round! </p>' +
         '<p style="text-align: center; font-size:2em;">' + namePlayer[firstPlayer] + ' against ' + namePlayer[secondPlayer] + '</p>' +
         '<button id="startNextRound" class="styled-button">Start Next Round</button>' +
         '</div>';
@@ -1079,8 +1116,8 @@ function endGameMemory(winner)
         firstPlayer = 0;
         secondPlayer = 0;
         mainElement.innerHTML += '<div id="endTournament" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
-        '<p style="text-align: center; font-size:4em;">End of the Tournament ! </p>' +
-        '<p style="text-align: center; font-size:2em;">' + winner + ' won the tournament !</p>' +
+        '<p style="text-align: center; font-size:4em;">End of the Tournament! </p>' +
+        '<p style="text-align: center; font-size:2em;">' + winner + ' won the tournament!</p>' +
         '</div>';
         var startAgain = document.createElement("button");
         startAgain.textContent = "Start again";
@@ -1179,15 +1216,9 @@ function closeRoom() {
 }
 
 window.addEventListener('beforeunload', function (event) {
-    // Check if the room is still open before leaving the page
     if (!roomClosed) {
-        // Call closeRoom to ensure the room is closed before leaving
         closeRoom();
-
-        // Prevent the browser from showing the default dialog
         {% comment %} event.preventDefault(); {% endcomment %}
-
-        // You might want to return something here to customize the message shown in the dialog
         return '';
     }
 });

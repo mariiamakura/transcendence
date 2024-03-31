@@ -445,6 +445,7 @@ msgstr "Ім'я:"
 msgid "Lastname:"
 msgstr "Прізвище:"
 
+
 #: frontend/templates/profile.html:35
 msgid "Language:"
 msgstr "Мова:"

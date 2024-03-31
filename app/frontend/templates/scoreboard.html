@@ -99,18 +99,14 @@
         const itemsPerPage = 5;
         let type = undefined;
         let graph = false;
-        let filteredList = [];
+
         function showPage(page, type) {
           for (let i = 0; i < gameItems.length; i++) {
-              if ((type === undefined || gameItems[i].innerText.includes(type)))
-                filteredList.push(gameItems[i])
-          }
-          for (let i = 0; i < filteredList.length; i++) {
-
-            if (i >= page * itemsPerPage && i < (page + 1) * itemsPerPage)
-              filteredList[i].style.display = 'block';
-            else
-              filteredList[i].style.display = 'none';
+            if (i >= page * itemsPerPage && i < (page + 1) * itemsPerPage && (type === undefined || gameItems[i].innerText.includes(type))) {
+              gameItems[i].style.display = 'block';
+            } else {
+              gameItems[i].style.display = 'none';
+            }
           }
         }
 
