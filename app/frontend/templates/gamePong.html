@@ -194,7 +194,7 @@ function scoreChoice() {
 function TwoOrTournament() {
 
     var main = document.getElementById('content');
-    main.innerHTML += '<div id="choice"><p style="padding-top: 2em;">{% trans ' Do you want to play a 1vs1 game or a tournament? '  %}</p></div>';
+    main.innerHTML += '<div id="choice"><p style="padding-top: 2em;">{% trans " Do you want to play a 1vs1 game or a tournament ? "  %}</p></div>';
     
     var button1vs1 = document.createElement("button");
     var buttonTournament = document.createElement("button");
@@ -270,7 +270,7 @@ async function getNamePlayer() {
         for (let i = 2; i <= numberPlayers; i++) {
             main.innerHTML += '<div id="choice">' +
                 '<form id="form' + i + '" style="display: flex; flex-direction: column; align-items: center;">' +
-                '<p style="padding-top: 2em; display: flex; align-items:center; justify-content:center;" > Name of player ' + i + ' : </p>' +
+                '<p style="padding-top: 2em; display: flex; align-items:center; justify-content:center;" > {% trans "Name of player " %} ' + i + ' : </p>' +
                 '<input type="text" id="name' + i + '" required>' +
                 '<button type="submit" class="styled-button" style="margin-top: 1em;">Submit</button>' +
                 '</form>' +
@@ -325,8 +325,8 @@ function settingsChoice() {
         // Create labels for easy and hard
         var labelEasy = document.createElement("span");
         var labelHard = document.createElement("span");
-        labelEasy.textContent = "Easy   ";
-        labelHard.textContent = "   Hard";
+        labelEasy.textContent = "{% trans 'Easy' %}   ";
+        labelHard.textContent = "   {% trans 'Hard' %}";
 
         // Create the toggle bar
         var toggleBar = document.createElement("div");
