@@ -2,17 +2,7 @@
 {% load i18n %}
 {% block content %}
 {% load static %}
-<div class="container">
-	<div class="row">
-		<div class="col-md-12">
-			<h1 class="page-header">{% trans "Memory" %}</h1>
-			<hr>
-		</div>
-	</div>
-</div>
-<div class="button d-flex justify-content-center align-items-center">
-	<a href="#" onclick="showGameMemory()" class="btn btn-primary" style="margin-left: 1em;">{% trans "Memory" %}</a>
-</div>
+<link rel="stylesheet" href="{% static 'memory.css' %}">
 <script>
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -724,11 +714,15 @@ function launchGameMemory(cards_info) {
             if (i % 2 === 0)
             {
                 randomSet(firstSet, card);
+                card.style.width = 100 + 'px';
+                card.style.height = 100 + 'px';
                 card.style.setProperty("--bg-image", card.ref);
             }
             else
             {
                 randomSet(secondSet, card);
+                card.style.width = 100 + 'px';
+                card.style.height = 100 + 'px';
                 card.style.setProperty("--bg-image", card.ref);
             }        
             document.getElementById('memory-game').appendChild(card);

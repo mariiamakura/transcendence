@@ -12,12 +12,10 @@
     width: 100px;
     height: 100px;
     background-color: skyblue;
-    border: 2px;
-    border-radius: 7px;    
-    border-style: solid;
-    border-color: red;
+    border: 2px solid gray;
+    border-radius: 7px;
     margin: 10px;
-    flex-direction: column;
+    flex-direction: column; /* Assuming you're using flexbox */
 }
 
 .card.show-background {
@@ -27,6 +25,7 @@
 .card.show-image {
     background-image: var(--bg-image); 
 }
+
 #whole {
     display: flex;
     flex-direction: row;

@@ -6,19 +6,25 @@
   <div class="row">
     <div class="col-md-6 offset-md-3">
       <ul class="list-group" id="game-list">
-        <p style="padding-top: 1em">{% trans "Pong:" %}</p>
+        <li class="list-group-item">{% trans "Pong:" %}</li>
         <li class="list-group-item">{% trans "Games Played:" %} {{ games_played_pong}}</li>
         <li class="list-group-item">{% trans "Games Won:" %} {{ games_won_pong }}</li>
         <li class="list-group-item">{% trans "Win Streak:" %} {{ pong_max_win_streak }}</li>
-        <p style="padding-top: 1em">{% trans "Memory:" %}</p>
+        <li class="list-group-item">{% trans "Memory:" %}</li>
         <li class="list-group-item">{% trans "Games Played:" %} {{games_played_memory}}</li>
         <li class="list-group-item">{% trans "Games Won:" %} {{games_won_memory}}</li>
         <li class="list-group-item">{% trans "Win Streak:" %} {{memory_max_win_streak}}</li>
       </ul>
-      <div class="btn-group mb-3" role="group">
-        <button id="filter-pong" class="btn btn-primary">Pong Stats</button>
-        <button id="filter-memory" class="btn btn-primary">Memory Stats</button>
-        <button id="filter-all" class="btn btn-primary">All</button>
+      <div class="row justify-content-center mb-3">
+        <div class="col-auto">
+          <button id="filter-pong" class="btn btn-primary">Pong Stats</button>
+        </div>
+        <div class="col-auto">
+          <button id="filter-memory" class="btn btn-primary">Memory Stats</button>
+        </div>
+        <div class="col-auto">
+          <button id="filter-all" class="btn btn-primary">All</button>
+        </div>
       </div>
       <ul class="list-group" id="game-list">
         <li class="list-group-item active">Historic:</li>
@@ -44,154 +50,187 @@
         </li>
         {% endfor %}
       </ul>
-      <nav aria-label="Pagination">
-        <ul class="pagination justify-content-center">
-          <li class="page-item">
-            <button id="prev-page" class="btn btn-primary">Previous</button>
-          </li>
-          <li class="page-item">
-            <button id="next-page" class="btn btn-primary">Next</button>
-          </li>
-        </ul>
-      </nav>
-      <div class="text-center">
-        <button id="graphs-button" class="btn btn-success">Graphs</button>
+      <div class="row justify-content-center">
+        <div class="col-auto">
+          <nav aria-label="Pagination">
+            <ul class="pagination">
+              <li class="page-item">
+                <button id="prev-page" class="btn btn-primary">Previous</button>
+              </li>
+              <li class="page-item">
+                <button id="next-page" class="btn btn-primary">Next</button>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <div class="col-auto">
+          <button id="graphs-button" class="btn btn-success">Graphs</button>
+        </div>
+        <canvas id="gamesChart" width="800" height="600"></canvas>
       </div>
-      <canvas id="gamesChart" width="400" height="200"></canvas> <!-- Canvas for chart -->
     </div>
   </div>
-</div>
-<script>
 
-  function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-      const cookies = document.cookie.split(';');
-      for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        // Does this cookie string begin with the name we want?
-        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
-      }
-    }
-    return cookieValue;
-  }
-  const csrfToken = getCookie('csrftoken');
+  <script>
 
-  document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM fully loaded and parsed");
-    const gameItems = document.querySelectorAll('.game-item');
-    let currentPage = 0;
-    const itemsPerPage = 5;
-    let type = undefined;
-
-    function showPage(page, type) {
-      for (let i = 0; i < gameItems.length; i++) {
-        if (i >= page * itemsPerPage && i < (page + 1) * itemsPerPage && (type === undefined || gameItems[i].innerText.includes(type))) {
-          gameItems[i].style.display = 'block';
-        } else {
-          gameItems[i].style.display = 'none';
-        }
-      }
-    }
-
-    document.getElementById('next-page').addEventListener('click', function () {
-      if ((currentPage + 1) * itemsPerPage < gameItems.length) {
-        currentPage++;
-        showPage(currentPage, type);
-      }
-    });
-
-    document.getElementById('prev-page').addEventListener('click', function () {
-      if (currentPage > 0) {
-        currentPage--;
-        showPage(currentPage, type);
-      }
-    });
-
-    document.getElementById('filter-pong').addEventListener('click', function () {
-      currentPage = 0;
-      type = 'Pong';
-      showPage(currentPage, type);
-    });
-
-    document.getElementById('filter-memory').addEventListener('click', function () {
-      currentPage = 0;
-      type = 'Memory';
-      showPage(currentPage, type);
-    });
-
-    document.getElementById('filter-all').addEventListener('click', function () {
-      currentPage = 0;
-      type = undefined;
-      showPage(currentPage, type);
-    });
-
-    fetch('/get_user_statistics/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': csrfToken
-      }
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Data received from server:', data); // Debugging statement
-        // Process the data and generate the chart
-        generateGamesPlayedChart(data);
-      })
-      .catch(error => {
-        console.error('Error fetching games data:', error);
-      });
-
-    function generateGamesPlayedChart(data) {
-      console.log('Structure of a single game object:', data.games_data[0]); // Debugging statement
-
-      const canvas = document.getElementById('gamesChart');
-      const ctx = canvas.getContext('2d');
-
-      // Extract relevant data for the chart
-      const dates = data.map(game => game.game_date);
-      const gamesPlayed = data.map(game => game.games_played);
-
-      // Draw chart
-      new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: dates,
-          datasets: [{
-            label: 'Games Played',
-            data: gamesPlayed,
-            borderColor: 'blue',
-            backgroundColor: 'rgba(0, 0, 255, 0.2)',
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: {
-              title: {
-                display: true,
-                text: 'Date'
-              }
-            },
-            y: {
-              title: {
-                display: true,
-                text: 'Number of Games Played'
-              }
-            }
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
           }
         }
-      });
+      }
+      return cookieValue;
     }
-    showPage(currentPage, type);
-  });
-</script>
-{% endblock %}
-{% block footer %}
-{# Leave the footer block empty to exclude the footer #}
-{% endblock %}
+    const csrfToken = getCookie('csrftoken');
+
+    document.addEventListener("DOMContentLoaded", function () {
+      console.log("DOM fully loaded and parsed");
+      const gameItems = document.querySelectorAll('.game-item');
+      let currentPage = 0;
+      const itemsPerPage = 5;
+      let type = undefined;
+
+      function showPage(page, type) {
+        for (let i = 0; i < gameItems.length; i++) {
+          if (i >= page * itemsPerPage && i < (page + 1) * itemsPerPage && (type === undefined || gameItems[i].innerText.includes(type))) {
+            gameItems[i].style.display = 'block';
+          } else {
+            gameItems[i].style.display = 'none';
+          }
+        }
+      }
+
+      document.getElementById('next-page').addEventListener('click', function () {
+        if ((currentPage + 1) * itemsPerPage < gameItems.length) {
+          currentPage++;
+          showPage(currentPage, type);
+        }
+      });
+
+      document.getElementById('prev-page').addEventListener('click', function () {
+        if (currentPage > 0) {
+          currentPage--;
+          showPage(currentPage, type);
+        }
+      });
+
+      document.getElementById('filter-pong').addEventListener('click', function () {
+        currentPage = 0;
+        type = 'Pong';
+        showPage(currentPage, type);
+      });
+
+      document.getElementById('filter-memory').addEventListener('click', function () {
+        currentPage = 0;
+        type = 'Memory';
+        showPage(currentPage, type);
+      });
+
+      document.getElementById('filter-all').addEventListener('click', function () {
+        currentPage = 0;
+        type = undefined;
+        showPage(currentPage, type);
+      });
+
+      document.getElementById('graphs-button').addEventListener('click', function () {
+        currentPage = 0;
+        type = undefined;
+        fetch('/get_user_statistics/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+          }
+        })
+          .then(response => response.json())
+          .then(data => {
+            // Process the data and generate the chart
+            generateGamesPlayedChart(data);
+          })
+          .catch(error => {
+            console.error('Error fetching games data:', error);
+          });
+      });
+
+      function generateGamesPlayedChart(data) {
+        const canvas = document.getElementById('gamesChart');
+        const ctx = canvas.getContext('2d');
+        if (type === 'Pong') {
+          data.games_data = data.games_data.filter(game => game.pong_game);
+        } else if (type === 'Memory') {
+          data.games_data = data.games_data.filter(game => game.memory_game);
+        }
+        else {
+          data.games_data = data.games_data;
+        }
+
+        canvas.width = 800; // Set canvas width
+        canvas.height = 400;
+
+        const timestamps = [];
+        const winLossRatios = [];
+
+        // Calculate win-loss ratio for each game
+        data.games_data.forEach(game => {
+          timestamps.push(game.game_date); // Assuming game_date contains timestamps
+          const isWinner = game.winner === data.user_statistics.username;
+          const winLossRatio = isWinner ? 1 : 0; // Win-loss ratio for each game
+          winLossRatios.push(winLossRatio);
+        });
+
+        // Calculate chart dimensions
+        const chartWidth = canvas.width; // Width of the chart area
+        const chartHeight = canvas.height - 200; // Height of the chart area
+
+        const chartTitle = 'Win-Loss Ratio Over Time'; // Your chart title
+        ctx.font = 'bold 16px Arial';
+        ctx.fillStyle = 'black';
+        ctx.textAlign = 'center';
+        ctx.fillText(chartTitle, canvasWidth / 2, 30);
+        // Draw x-axis labels (vertical)
+        ctx.font = '20px Arial';
+        ctx.fillStyle = 'black';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        const labelStep = Math.ceil(timestamps.length / 10); // Show 10 labels
+        timestamps.forEach((timestamp, index) => {
+          if (index % labelStep === 0) {
+            const x = 100 + (index / (timestamps.length - 1)) * chartWidth;
+            ctx.save(); // Save current state
+            ctx.translate(x, canvas.height - 40); // Move to label position
+            ctx.rotate(-Math.PI / 2); // Rotate text
+            ctx.fillText(timestamp, 0, 0); // Draw text
+            ctx.restore(); // Restore previous state
+          }
+        });
+
+        // Draw y-axis labels (0 and 1)
+        ctx.fillText('Loss', 50, canvas.height - 200); // Draw label 0
+        ctx.fillText('Win', 50, 100); // Draw label 1
+
+        // Draw line representing win-loss ratios
+        ctx.beginPath();
+        ctx.moveTo(100, 100 + (1 - winLossRatios[0]) * chartHeight);
+        ctx.strokeStyle = 'blue';
+        ctx.lineWidth = 2;
+        timestamps.forEach((timestamp, index) => {
+          const x = 100 + (index / (timestamps.length - 1)) * chartWidth;
+          const y = 100 + (1 - winLossRatios[index]) * chartHeight;
+          ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+      }
+      showPage(currentPage, type);
+    });
+  </script>
+  {% endblock %}
+  {% block footer %}
+  {# Leave the footer block empty to exclude the footer #}
+  {% endblock %}
