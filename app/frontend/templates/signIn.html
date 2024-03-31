@@ -28,7 +28,7 @@
       </form>
 
       <form id="authForm" action="https://api.intra.42.fr/oauth/authorize" method="GET">
-        <input type="hidden" name="redirect_uri" value="https://10.15.1.10:9999/callback"> 
+        <input type="hidden" name="redirect_uri" value="https://10.15.1.9:9999/callback"> 
 		    <input type="hidden" name="client_id" value={{ OAUTH_CLIENT_ID }}>
         {% comment %} <input type="hidden" name="redirect_uri" value="https://42pong.ddns.net:9999/callback"> {% endcomment %}
         <input type="hidden" name="response_type" value="code">

@@ -224,7 +224,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         if username.endswith("_Game"):
             username = username[:-5]
         from database.models import User
-        return User.objects.get(username=username)
+        return User.objects.get(display_name=username)
 
     @database_sync_to_async
     def close_room_pong(self, room_name):
