@@ -406,7 +406,7 @@ function settingsChoice() {
                 btn.classList.remove("selected");
             });
             button.classList.add("selected");
-            if (button.textContent === "{% trans 'Team mode: Dark blue background, white ball and skyblue paddles'  %}") {
+            if (button.textContent === "{% trans 'Team theme: Dark blue background, white ball and skyblue paddles'  %}") {
                 boardbackgroundColor = "#2f3542";
                 ballColor = "white";
                 paddleColor = "skyblue";
@@ -868,6 +868,20 @@ function launchGamePong() {
 
     if (paddleColor === "white") {
         var imageUrl = "{% static 'img/chinese_new_year.jpg' %}"
+        content.style.backgroundImage = 'url(' + imageUrl + ')';
+        content.style.backgroundSize = "cover";
+        content.style.backgroundPosition = "center";
+        content.style.backgroundRepeat = "repeat";
+    }
+    if (paddleColor === "skyblue") {
+        var imageUrl = "{% static 'img/team_mode.png' %}"
+        content.style.backgroundImage = 'url(' + imageUrl + ')';
+        content.style.backgroundSize = "cover";
+        content.style.backgroundPosition = "center";
+        content.style.backgroundRepeat = "repeat";
+    }
+    if (paddleColor === "gray") {
+        var imageUrl = "{% static 'img/dalmatians.png' %}"
         content.style.backgroundImage = 'url(' + imageUrl + ')';
         content.style.backgroundSize = "cover";
         content.style.backgroundPosition = "center";
