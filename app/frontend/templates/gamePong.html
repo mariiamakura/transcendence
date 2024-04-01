@@ -99,7 +99,7 @@ function remoteOrLocal() {
     var main = document.getElementById('content');
     main.innerHTML += '<div id="choice"><p style="padding-top: 2em;">{% trans "Which type of game do you wanna play" %}? </p></div>';
     var buttonRemote = document.createElement("button");
-    var buttonLocal = document.createElement("button"); 
+    var buttonLocal = document.createElement("button");
     buttonLocal.textContent = "{% trans 'Play local Game' %}";
     buttonRemote.textContent = "{% trans 'Play remote Game' %}";
     buttonLocal.classList.add("styled-button")
@@ -125,7 +125,7 @@ function decideHost() {
     var main = document.getElementById('content');
     main.innerHTML += '<div id="choice"><p style="padding-top: 2em;">{% trans "Which type of game do you wanna play" %} ?</p></div>';
     var buttonHost = document.createElement("button");
-    var buttonClient= document.createElement("button"); 
+    var buttonClient = document.createElement("button");
     buttonHost.textContent = "{% trans 'Create New Game' %}";
     buttonClient.textContent = "{% trans 'Join Existing Game' %}";
     buttonHost.classList.add("styled-button")
@@ -195,7 +195,6 @@ function TwoOrTournament() {
 
     var main = document.getElementById('content');
     main.innerHTML += '<div id="choice"><p style="padding-top: 2em;">{% trans " Do you want to play a 1vs1 game or a tournament ? "  %}</p></div>';
-    
     var button1vs1 = document.createElement("button");
     var buttonTournament = document.createElement("button");
     buttonTournament.textContent = "{% trans 'Play tournament' %}";
@@ -227,16 +226,16 @@ function numPlayers() {
     buttonFour.textContent += players;
     buttonFour.classList.add("styled-button");
     document.getElementById('choice').appendChild(buttonFour);
-       var buttonEight = document.createElement("button");
-        var buttonSixteen= document.createElement("button");
-        buttonEight.textContent = "8 ";
-        buttonEight.textContent += players;
-        buttonSixteen.textContent = "16 ";
-        buttonSixteen.textContent += players;
-      buttonEight.classList.add("styled-button");
-        buttonSixteen.classList.add("styled-button");
-        document.getElementById('choice').appendChild(buttonEight);
-        document.getElementById('choice').appendChild(buttonSixteen);
+    var buttonEight = document.createElement("button");
+    var buttonSixteen = document.createElement("button");
+    buttonEight.textContent = "8 ";
+    buttonEight.textContent += players;
+    buttonSixteen.textContent = "16 ";
+    buttonSixteen.textContent += players;
+    buttonEight.classList.add("styled-button");
+    buttonSixteen.classList.add("styled-button");
+    document.getElementById('choice').appendChild(buttonEight);
+    document.getElementById('choice').appendChild(buttonSixteen);
 
     return new Promise(function (resolve) {
         buttonFour.addEventListener("click", function () {
@@ -352,7 +351,7 @@ function settingsChoice() {
         choiceDiv.appendChild(toggleContainer);
 
         // Event listener for the toggle bar to save the velocity chosen
-        toggleButton.addEventListener("input", function() {
+        toggleButton.addEventListener("input", function () {
             switch (parseInt(toggleButton.value)) {
                 case 0:
                     velocity = 1;
@@ -367,47 +366,47 @@ function settingsChoice() {
         });
     }
 
-       // Choose theme 
-        var colorSection = document.createElement("div");
-        colorSection.innerHTML += '<p style="padding-top: 2em;">{% trans ' Which theme do you want for your game: '  %}</p>';
-        choiceDiv.appendChild(colorSection);
+    // Choose theme 
+    var colorSection = document.createElement("div");
+    colorSection.innerHTML += '<p style="padding-top: 2em;">{% trans ' Which theme do you want for your game: '  %}</p>';
+    choiceDiv.appendChild(colorSection);
 
-        // Create color buttons container
-        var colorButtonsContainer = document.createElement("div");
-        colorButtonsContainer.classList.add("color-buttons-container");
+    // Create color buttons container
+    var colorButtonsContainer = document.createElement("div");
+    colorButtonsContainer.classList.add("color-buttons-container");
 
-        // Create color buttons
-        var colors = ["{% trans 'Team Theme: Dark blue background, white ball and skyblue paddles'  %}", "{% trans 'Chinese New Year: Red background, golden ball and white paddles'  %}", "{% trans 'Dirty dalmatians: Black background, white ball, gray paddles'  %}"];
-        colors.forEach(function(color) {
-            var colorButton = document.createElement("button");
-            colorButton.textContent = color;
-            colorButton.classList.add("styled-button");
-            colorButtonsContainer.appendChild(colorButton);
-        });
+    // Create color buttons
+    var colors = ["{% trans 'Team Theme: Dark blue background, white ball and skyblue paddles'  %}", "{% trans 'Chinese New Year: Red background, golden ball and white paddles'  %}", "{% trans 'Dirty dalmatians: Black background, white ball, gray paddles'  %}"];
+    colors.forEach(function (color) {
+        var colorButton = document.createElement("button");
+        colorButton.textContent = color;
+        colorButton.classList.add("styled-button");
+        colorButtonsContainer.appendChild(colorButton);
+    });
 
-        choiceDiv.appendChild(colorButtonsContainer);   
-        var colorButtons = colorButtonsContainer.querySelectorAll("button");
-        colorButtons.forEach(function(button) {
-            button.addEventListener("click", function() {
-                colorButtons.forEach(function(btn) {
-                    btn.classList.remove("selected");
-                });
-                button.classList.add("selected");
-                if (button.textContent === "{% trans 'Team mode: Dark blue background, white ball and skyblue paddles'  %}") {
-                    boardbackgroundColor = "#2f3542";
-                    ballColor = "white";
-                    paddleColor = "skyblue";
-                } else if (button.textContent === "{% trans 'Chinese New Year: Red background, golden ball and white paddles'  %}") {
-                    boardbackgroundColor = "red";
-                    ballColor = "gold";
-                    paddleColor = "white";
-                } else if (button.textContent === "{% trans 'Dirty dalmatians: Black background, white ball, gray paddles'  %}") {
-                    boardbackgroundColor = "black";
-                    ballColor = "white";
-                    paddleColor = "gray";
-                }
+    choiceDiv.appendChild(colorButtonsContainer);
+    var colorButtons = colorButtonsContainer.querySelectorAll("button");
+    colorButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+            colorButtons.forEach(function (btn) {
+                btn.classList.remove("selected");
             });
+            button.classList.add("selected");
+            if (button.textContent === "{% trans 'Team mode: Dark blue background, white ball and skyblue paddles'  %}") {
+                boardbackgroundColor = "#2f3542";
+                ballColor = "white";
+                paddleColor = "skyblue";
+            } else if (button.textContent === "{% trans 'Chinese New Year: Red background, golden ball and white paddles'  %}") {
+                boardbackgroundColor = "red";
+                ballColor = "gold";
+                paddleColor = "white";
+            } else if (button.textContent === "{% trans 'Dirty dalmatians: Black background, white ball, gray paddles'  %}") {
+                boardbackgroundColor = "black";
+                ballColor = "white";
+                paddleColor = "gray";
+            }
         });
+    });
 
     // Add start button
     var startButton = document.createElement("button");
@@ -417,8 +416,8 @@ function settingsChoice() {
     // Append the choice div to main
     main.appendChild(choiceDiv);
     // Return a promise
-    return new Promise(function(resolve) {
-        startButton.addEventListener("click", function() {
+    return new Promise(function (resolve) {
+        startButton.addEventListener("click", function () {
             choiceDiv.remove();
             resolve(true);
         });
@@ -432,7 +431,7 @@ function startButtonTournament() {
     var main = document.getElementById('content');
     var choiceDiv = document.createElement("div");
     choiceDiv.id = "choice";
-    
+
     var welcomeParagraph = document.createElement("p");
     welcomeParagraph.textContent = "{% trans 'Welcome to the pong tournament'  %} !\n\n{% trans 'The rounds are the following'  %}:";
     choiceDiv.appendChild(welcomeParagraph);
@@ -470,11 +469,11 @@ function startButton() {
     var main = document.getElementById('content');
     main.innerHTML += '<h1>{% trans 'Instructions'  %}</h1>';
     if (remote === true)
-        main.innerHTML += '<p class="text-center" style="text-align: center; padding-top:5em;">{% trans 'You can control your paddle with W (up) and S(down) or with the Up arrow and Down Arrow.'  %}</p>';
-    else if (local === true)
-        main.innerHTML += '<p class="text-center" style="text-align: center; padding-top:5em;">' + namePlayer[firstPlayer]+ ' controls: W (up) and S (down)</p>' +
-                        '<p class="text-center" style="text-align: center; padding-top:1em;">' + namePlayer[secondPlayer] + ' controls: Up arrow (up) and Down arrow (down)</p>';
-    main.innerHTML += '<div id="choice"><p style="text-align: center; padding-top:5em;"> Ready to start ? <br><br>{% trans ' Go !'  %}</p></div>';
+        main.innerHTML += '<p class="text-center" style="text-align: center; padding-top:5em;">{% trans 'You can control your paddle with W(up) and S(down) or with the Up arrow and Down Arrow.'  %}</p>';
+else if (local === true)
+        main.innerHTML += '<p class="text-center" style="text-align: center; padding-top:5em;">' + namePlayer[firstPlayer] + ' controls: W (up) and S (down)</p>' +
+            '<p class="text-center" style="text-align: center; padding-top:1em;">' + namePlayer[secondPlayer] + ' controls: Up arrow (up) and Down arrow (down)</p>';
+    main.innerHTML += '<div id="choice"><p style="text-align: center; padding-top:5em;"> Ready to start ? <br><br>{% trans ' Go!'  %}</p></div>';
     var startButton = document.createElement("button");
     startButton.textContent = "Start !";
     startButton.classList.add("styled-button");
@@ -493,7 +492,7 @@ function startButton() {
 let gameRoomSocket = null;
 
 async function remoteHost() {
-    
+
     console.log("enters");
     var mainElement = document.getElementById('content');
     mainElement.innerHTML += '<p class="text-center" style="font-size: 1.5em;">{% trans 'Waiting for Players...'  %}</p>';
@@ -569,6 +568,8 @@ async function remoteHost() {
 // clientsocket
 let roomSocket = null;
 let scoreUpdate = false;
+let BALL_UPDATE_TIMEOUT = 1000;
+let intervalId;
 
 async function remoteClient() {
     let socket = new WebSocket(`wss://${window.location.host}/wss/socket-server/lobby/`);
@@ -604,6 +605,7 @@ async function remoteClient() {
     };
 
     function joinGameRoom(roomId) {
+        let lastBallUpdateReceivedTime = Date.now();
         socket.close(); // Close the WebSocket connection to the lobby
         // Open a new WebSocket connection for the selected room
         roomSocket = new WebSocket(`wss://${window.location.host}/wss/socket-server/${roomId}/`);
@@ -617,19 +619,24 @@ async function remoteClient() {
         roomSocket.onmessage = function (event) {
             const data = JSON.parse(event.data);
             if (data.action === 'game_countdown_pong')
+            {
+                BALL_UPDATE_TIMEOUT = 10000;
                 updateCountdownDisplay(data.message);
+            }
             if (data.action === 'start_game_pong') {
                 console.log('Game is starting...');
                 let countdownElement = document.getElementById('countdown');
                 if (countdownElement) {
                     countdownElement.remove();
                 }
+                BALL_UPDATE_TIMEOUT = 1000;
                 startTheGamePong();
             }
             if (data.action === 'update_ball_position_pong') {
                 newBall.x = data.ball_x;
                 newBall.y = data.ball_y;
-               // console.log("ball position received");
+                lastBallUpdateReceivedTime = Date.now();
+                // console.log("ball position received");
             }
             if (data.action === 'update_player_scores_pong') {
                 newPlayer1Score = data.player1;
@@ -638,6 +645,7 @@ async function remoteClient() {
             }
             if (data.action === 'game_ended_pong') {
                 scoreUpdate = data.scoreUpdate;
+                clearInterval(intervalId);
                 endGame(data.winner);
                 console.log("game ended");
             }
@@ -662,18 +670,31 @@ async function remoteClient() {
                 console.log('other player left the game');
                 if (scoreUpdate === false)
                     endGame(namePlayer[1]);
+                clearInterval(intervalId);
                 roomSocket.close();
             }
             if (data.type === 'notify_winner') {
                 console.log('The winner is:', data.winner);
             }
             roomSocket.onclose = function () {
-                roomSocket.send(JSON.stringify({ action: 'player_left' }));
+                // roomSocket.send(JSON.stringify({ action: 'player_left' }));
                 console.log("Game room connection closed.");
             };
         };
+        intervalId = setInterval(function () {
+            const currentTime = Date.now();
+            if (currentTime - lastBallUpdateReceivedTime > BALL_UPDATE_TIMEOUT) {
+                console.log('No ball updates received from the server.');
+                endGame(namePlayer[1]);
+                // roomSocket.send(JSON.stringify({ action: 'player_left' }));
+                roomSocket.close();
+                clearInterval(intervalId);
+
+            }
+        }, 1000);
     }
 }
+
 
 function startTheGamePong() {
     console.log('Game is starting...');
@@ -787,8 +808,8 @@ function initVariables() {
     // ball.radius = playerHeight / ballRadiusFactor;
     let maxDimension = Math.max(ball.width, ball.height);
 
-// Calculate the radius based on the maximum dimension and radius factor
-    ball.radius = (maxDimension * ballRadiusFactor) ;
+    // Calculate the radius based on the maximum dimension and radius factor
+    ball.radius = (maxDimension * ballRadiusFactor);
     player1.height = playerHeight;
     player2.height = playerHeight;
 }
@@ -799,6 +820,7 @@ let secondPlayer = 1;
 function launchGamePong() {
     console.log('Game is starting...');
     initVariables();
+    console.log("scores", player1Score, player2Score);
     var mainElement = document.getElementById('content');
     if (isHost && remote === true)
         namePlayer[0] = "{{ user.display_name }}";
@@ -811,15 +833,14 @@ function launchGamePong() {
         '</div>';
 
     document.body.style.overflow = 'padding-bottom : 5em';
-    if (paddleColor === "white")
-    {
+    if (paddleColor === "white") {
         var imageUrl = "{% static 'img/chinese_new_year.jpg' %}"
         // var image = new Image();
         // image.src = imageUrl;
         content.style.backgroundImage = 'url(' + imageUrl + ')';
         content.style.backgroundSize = "cover";
         content.style.backgroundPosition = "center";
-        content.style.backgroundRepeat = "repeat"; 
+        content.style.backgroundRepeat = "repeat";
     }
     board = document.getElementById('board');
     board.width = boardWidth;
@@ -922,7 +943,7 @@ function update() {
         ball.velocityY *= -1;
     }
     // checkCollision(ball.y, ball.x, ball.velocityX, ball.velocityY); 
-	checkCollision();
+    checkCollision();
     if (isHost && remote == true) {
         if (ball.x < 0) {
             player2Score++;
@@ -983,26 +1004,26 @@ function checkCollision() {
     // Reduce the effective collision height of the paddle to avoid visual collision
     let effectiveHeightReduction = 12; // Amount to reduce the paddle's effective collision area height by
 
-    if (nextX - ball.radius < player1.x + player1.width - 10 && 
-        nextX + ball.radius > player1.x - 10 && 
-        nextY + ball.radius > (player1.y + effectiveHeightReduction) && 
+    if (nextX - ball.radius < player1.x + player1.width - 10 &&
+        nextX + ball.radius > player1.x - 10 &&
+        nextY + ball.radius > (player1.y + effectiveHeightReduction) &&
         nextY - ball.radius < (player1.y + player1.height - effectiveHeightReduction)) {
         ball.velocityX = Math.abs(ball.velocityX);
         adjustBallSpeed(speed);
         ball.x = player1.x + player1.width + ball.radius - 10;
     }
 
-    if (nextX + ball.radius > player2.x - 10 && 
-        nextX - ball.radius < player2.x + player2.width - 10 && 
-        nextY + ball.radius > (player2.y + effectiveHeightReduction) && 
+    if (nextX + ball.radius > player2.x - 10 &&
+        nextX - ball.radius < player2.x + player2.width - 10 &&
+        nextY + ball.radius > (player2.y + effectiveHeightReduction) &&
         nextY - ball.radius < (player2.y + player2.height - effectiveHeightReduction)) {
         ball.velocityX = -Math.abs(ball.velocityX);
         adjustBallSpeed(speed);
         ball.x = player2.x - ball.radius - 10;
     }
 
-	if (nextY - ball.radius < (0 - ball.radius) || nextY + ball.radius > (boardHeight - ball.radius)) {
-        ball.velocityY = -ball.velocityY; 
+    if (nextY - ball.radius < (0 - ball.radius) || nextY + ball.radius > (boardHeight - ball.radius)) {
+        ball.velocityY = -ball.velocityY;
     }
 }
 
@@ -1212,7 +1233,7 @@ function endGame(winner) {
     let scoreWinner = player1Score > player2Score ? player1Score : player2Score;
     let scoreLoser = player1Score < player2Score ? player1Score : player2Score;
     let namePlayerPlaying = [player1.name, player2.name];
-    if (scoreUpdate === false && player1Score === scoreToDo || player2Score === scoreToDo)
+    if (scoreUpdate === false && (player1Score === scoreToDo || player2Score === scoreToDo) && scoreToDo !== 0) {
         updateGameResultPong(winner, namePlayerPlaying, scoreToDo, scoreWinner, scoreLoser, tournament, tournament_id);
     var mainElement = document.getElementById('content');
     mainElement.style.backgroundImage = 'none';
@@ -1377,6 +1398,6 @@ window.addEventListener('beforeunload', function (event) {
 
 </script>
 {% block footer %}
-    {# Leave the footer block empty to exclude the footer #}
+{# Leave the footer block empty to exclude the footer #}
 {% endblock %}
 {% endblock %}

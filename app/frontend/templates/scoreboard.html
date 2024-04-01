@@ -81,7 +81,6 @@
           const cookies = document.cookie.split(';');
           for (let i = 0; i < cookies.length; i++) {
             const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
             if (cookie.substring(0, name.length + 1) === (name + '=')) {
               cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
               break;
@@ -172,7 +171,6 @@
               const canvas = document.getElementById('gamesChart');
               const ctx = canvas.getContext('2d');
 
-              // Filter games based on type
               if (type === 'Pong') {
                 data.games_data = data.games_data.filter(game => game.pong_game);
               } else if (type === 'Memory') {
@@ -181,66 +179,58 @@
               else {
                 data.games_data = data.games_data;
               }
-              // Remove else block as it's unnecessary
 
-              canvas.width = 800; // Set canvas width
+              canvas.width = 800;
               canvas.height = 400;
 
               const timestamps = [];
               const winLossRatios = [];
 
-              // Calculate win-loss ratio for each game
               data.games_data.forEach(game => {
                 const gameDate = new Date(game.game_date);
 
-                // Extract the day and month parts
-                const day = gameDate.getDate(); // Returns the day of the month (1-31)
-                const month = gameDate.getMonth() + 1; // Returns the month (0-11), so add 1 to get 1-12 range
+                const day = gameDate.getDate(); 
+                const month = gameDate.getMonth() + 1; 
 
-                // Concatenate day and month into desired format (e.g., "DD/MM")
                 const formattedDate = `${day}/${month}`;
 
                 timestamps.push(formattedDate); const isWinner = game.winner === data.user_statistics.username;
-                const winLossRatio = isWinner ? 1 : 0; // Win-loss ratio for each game
+                const winLossRatio = isWinner ? 1 : 0; 
                 winLossRatios.push(winLossRatio);
               });
 
-              // Calculate chart dimensions
-              const chartWidth = canvas.width; // Width of the chart area
-              const chartHeight = canvas.height - 200; // Height of the chart area
-              ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear previous content
+              const chartWidth = canvas.width;
+              const chartHeight = canvas.height - 200;
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-              const chartTitle = 'Win-Loss Ratio Over Time'; // Your chart title
+              const chartTitle = 'Win-Loss Ratio Over Time'; 
               ctx.font = 'bold 16px Arial';
               ctx.fillStyle = 'black';
               ctx.textAlign = 'center';
               ctx.fillText(chartTitle, canvas.width / 2, 30);
 
-              // Draw x-axis labels (vertical)
               ctx.font = '20px Arial';
               ctx.fillStyle = 'black';
               ctx.textAlign = 'center';
               ctx.textBaseline = 'middle';
-              const labelStep = Math.ceil(timestamps.length / 10); // Show 10 labels
+              const labelStep = Math.ceil(timestamps.length / 10);
               timestamps.forEach((timestamp, index) => {
                 const x = 100 + (index / (timestamps.length - 1)) * (chartWidth - 150);
-                const y = canvas.height - 20; // Adjust vertical position here
+                const y = canvas.height - 20;
                 if (index % labelStep === 0 || index === timestamps.length - 1) {
                   ctx.fillText(timestamp, x, y);
                 }
               });
 
-              // Draw y-axis labels (0 and 1)
               ctx.fillText('Loss', 50, canvas.height - 100); // Draw label 0
               ctx.fillText('Win', 50, 100); // Draw label 1
 
-              // Draw line representing win-loss ratios
               ctx.beginPath();
               ctx.moveTo(100, 100 + (1 - winLossRatios[0]) * chartHeight);
               ctx.strokeStyle = 'blue';
               ctx.lineWidth = 2;
               timestamps.forEach((timestamp, index) => {
-                const x = 100 + (index * (chartWidth - 150) / (timestamps.length - 1)); // Adjust horizontal spacing here              const y = 100 + (1 - winLossRatios[index]) * chartHeight;
+                const x = 100 + (index * (chartWidth - 150) / (timestamps.length - 1));
                 const y = 100 + (1 - winLossRatios[index]) * chartHeight;
                 ctx.lineTo(x, y);
               });
@@ -250,7 +240,6 @@
               console.error('Error fetching games data:', error);
             });
         }
-
         showPage(currentPage, type);
       });
     </script>

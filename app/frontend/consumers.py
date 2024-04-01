@@ -163,11 +163,13 @@ class GameConsumer(AsyncWebsocketConsumer):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         logger.debug(f"Room name in connect: {self.room_name}")
         self.room_group_name = f'game_{self.room_name}'
+        self.heartbeat_task = None
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
         )
         await self.accept()
+        self.start_heartbeat()
 
     async def disconnect(self, close_code):
         logger.debug("Enters disconnect")
@@ -212,6 +214,9 @@ class GameConsumer(AsyncWebsocketConsumer):
                     logger.debug("room closing Memory ")
                     del GameRoomManagerMemory.rooms[self.room_name]
 
+        if self.heartbeat_task:
+            self.heartbeat_task.cancel()
+
         # await self.disconnect(close_code=None)
 
     @database_sync_to_async
@@ -224,7 +229,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         if username.endswith("_Game"):
             username = username[:-5]
         from database.models import User
-        return User.objects.get(username=username)
+        return User.objects.get(display_name=username)
 
     @database_sync_to_async
     def close_room_pong(self, room_name):
@@ -238,6 +243,17 @@ class GameConsumer(AsyncWebsocketConsumer):
         # Logic to close the Memory room
         if room_name in GameRoomManagerMemory.rooms:
             del GameRoomManagerMemory.rooms[room_name]
+
+    async def send_heartbeat(self):
+        await self.send(text_data=json.dumps({'action': 'heartbeat'}))
+
+    def start_heartbeat(self):
+        async def heartbeat():
+            while True:
+                await self.send_heartbeat()
+                await asyncio.sleep(5)
+
+        self.heartbeat_task = asyncio.create_task(heartbeat())
 
     async def receive(self, text_data):
         data = json.loads(text_data)
