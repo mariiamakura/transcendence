@@ -34,7 +34,7 @@ let scoreUpdate = false;
 
 function TwoOrTournament() {
     var main = document.getElementById('content');
-    main.innerHTML += '<div id="choice"><p style="padding-top: 5em;">{% trans " Do you want to play a 1vs1 game or a tournament ? "  %}</p></div>';
+    main.innerHTML += '<div id="choice"><p style="padding-top: 5em;">{% trans " Do you want to play a 1vs1 game or a tournament? "  %}</p></div>';
     var button1vs1 = document.createElement("button");
     var buttonTournament = document.createElement("button"); 
     buttonTournament.textContent = "{% trans 'Play tournament'  %}";
@@ -111,6 +111,11 @@ function decideHost() {
 
 function choiceSet() {
     var main = document.getElementById('content');
+    var nameFirstPlayer = document.getElementById('name_first_player');
+    if (nameFirstPlayer !== null) {
+        nameFirstPlayer.remove();
+    }
+    // document.getElementById('choice').innerHTML = "";
     var div = document.createElement("div");
     div.id = "choice";
     
@@ -149,7 +154,6 @@ function choiceSet() {
 function choiceCards() {
     var main = document.getElementById('content');
     // main.innerHTML = "";
-
     var div = document.createElement("div");
     div.id = "choice";
     main.appendChild(div);
@@ -209,14 +213,14 @@ function numPlayers() {
 	main.innerHTML += '<div id="choice"><p style="padding-top: 5em; display: flex; " >{% trans ' How many players do you want to be? '  %}</p></div>';
 	var buttonFour = document.createElement("button");
     let players = "{% trans 'players' %}"
-	buttonFour.textContent = "4" + players;
+	buttonFour.textContent = "4 " + players;
 	buttonFour.classList.add("styled-button");
 	document.getElementById('choice').appendChild(buttonFour);
 	if (tournament) {
 		var buttonEight = document.createElement("button");
 		var buttonSixteen= document.createElement("button");
-		buttonEight.textContent = "8" + players;
-		buttonSixteen.textContent = "16" + players;
+		buttonEight.textContent = "8 " + players;
+		buttonSixteen.textContent = "16 " + players;
 		buttonEight.classList.add("styled-button");
 		buttonSixteen.classList.add("styled-button");
 		document.getElementById('choice').appendChild(buttonEight);
@@ -259,7 +263,7 @@ async function getNamePlayer() {
     try {
         const response = await fetch('/get_display_name/');
         const data = await response.json();
-        main.innerHTML += `<p style="padding-top: 2em; display: flex; align-items:center; justify-content:center;">{% trans 'First player is'  %}: ${data.display_name}</p>`;
+        main.innerHTML += `<p id="name_first_player" style="padding-top: 2em; display: flex; align-items:center; justify-content:center;">{% trans 'First player is'  %}: ${data.display_name}</p>`;
         namePlayer.push(data.display_name);
 
         for (let i = 2; i <= numberPlayers; i++) {
@@ -323,11 +327,11 @@ function startButtonTournament() {
     var readyParagraph = document.createElement("p");
     readyParagraph.style.textAlign = "center";
     readyParagraph.style.paddingTop = "1em";
-    readyParagraph.textContent = "Ready to start?\n\nLet's go !";
+    readyParagraph.textContent = "Ready to start? Go!";
     choiceDiv.appendChild(readyParagraph);
     
     var startButton = document.createElement("button");
-    startButton.textContent = "Start !";
+    startButton.textContent = "{% trans 'Start!' %}";
     startButton.classList.add("styled-button");
     choiceDiv.appendChild(startButton);
     main.appendChild(choiceDiv);
@@ -348,14 +352,14 @@ function startButton() {
     main.appendChild(div);
 
     var question = document.createElement("p");
-    question.textContent = "{% trans 'Ready to start?  Go!'  %}";
+    question.textContent = "Ready to start? Go!";
     question.style.display = "flex";
     div.appendChild(question);
 
 	var startButton = document.createElement("button");
-	startButton.textContent = "{% trans 'Start !' %}";
+	startButton.textContent = "{% trans 'Start!' %}";
 	startButton.classList.add("styled-button");
-	document.getElementById('choice').appendChild(startButton);
+	div.appendChild(startButton);
 	return new Promise (function (resolve) {
 		startButton.addEventListener("click", function() {
 			startGame = true;
@@ -521,20 +525,20 @@ async function remoteHost() {
                 }
                 if (data.action === 'game_ended_memory') {
                     scoreUpdate = data.scoreUpdate;
-                    endGameMemory(data.winner);
+                    endGameMemory(data.winner, "normal");
                 }
                 if (data.action === 'player_left') {
                     // console.log(data.message);
                     // console.log(data.who + ' left the game');
                     if (scoreUpdate === false)
-                        endGameMemory(namePlayer[0]);
+                        endGameMemory(namePlayer[0], "disconnected");
                     gameRoomSocket.close();
                 }
             }
             gameRoomSocket.onclose = function() {
                 // gameRoomSocket.send(JSON.stringify({ action: 'player_left' }));
                 if (scoreUpdate === false)
-                    endGameMemory(namePlayer[0]);
+                    endGameMemory(namePlayer[0], "disconnected");
                 console.log("Game room Memory in onclose function: connection closed.");
             };
         }
@@ -612,7 +616,7 @@ async function remoteClient() {
             if (countdownElement) {
                 countdownElement.remove();
             }
-            startHeartbeat();
+            // startHeartbeat();
         }
         if (data.action === 'card_info') {
             var cards_infoG = data.cards;
@@ -642,7 +646,7 @@ async function remoteClient() {
             scorePlayer2 = data.score2;
         }
         if (data.action === 'game_ended_memory')
-            endGameMemory(data.winner);
+            endGameMemory(data.winner, "normal");
 
         if (data.type === 'notify_winner')
         console.log('The winner is:', data.winner);
@@ -650,23 +654,25 @@ async function remoteClient() {
         if (data.action === 'player_left') {
             console.log('other player left the game');
             if (scoreUpdate === false)
-            endGameMemory(namePlayer[1]);
+                endGameMemory(namePlayer[1], "disconnected");
             roomSocket.close();
-            }
-            function startHeartbeat() {
-                intervalId = setInterval(function() {
-                    if (socket.readyState === WebSocket.OPEN) {
-                        socket.send(JSON.stringify({ action: 'heartbeat' }));
-                    } else {
-                        endGameMemory(namePlayer[1]);
-                        clearInterval(intervalId);
-                    }
-                    }, 1000);
-                }
+        }
+            // function startHeartbeat() {
+            //     intervalId = setInterval(function() {
+            //         if (socket.readyState === WebSocket.OPEN) {
+            //             console.log("heartbeat");
+            //             socket.send(JSON.stringify({ action: 'heartbeat' }));
+            //         } else {
+            //             console.log("disconnection by heartbeat");
+            //             endGameMemory(namePlayer[1], "disconnected");
+            //             clearInterval(intervalId);
+            //         }
+            //         }, 5000);
+            //     }
             roomSocket.onclose = function() {
-            roomSocket.send(JSON.stringify({ action: 'player_left' }));
-            // endGameMemory(namePlayer[1]);
-            console.log("Game room connection closed.");
+                roomSocket.send(JSON.stringify({ action: 'player_left' }));
+                // endGameMemory(namePlayer[1]);
+                console.log("Game room connection closed.");
             };
         };
     }
@@ -901,7 +907,7 @@ function playTime() {
                         else if (remote === true)
                             roomSocket.send(JSON.stringify({action: 'game_ended_memory', winner: scorePlayer1 > scorePlayer2 ? namePlayer[firstPlayer] : namePlayer[secondPlayer], scoreUpdate: true}));
                         else if (local === true)
-                            endGameMemory(scorePlayer1 > scorePlayer2 ? namePlayer[firstPlayer] : namePlayer[secondPlayer]);
+                            endGameMemory(scorePlayer1 > scorePlayer2 ? namePlayer[firstPlayer] : namePlayer[secondPlayer], "normal");
                     }
                 }
             }
@@ -917,7 +923,7 @@ function updateGameResultMemory(winner, namePlayer, chosenSet, numberOfCards, sc
     if (chosenSet === 1)
         setName = 'Nature';
     else
-    setName = 'Robot';
+        setName = 'Robot';
     fetch('/update_game_result_memory/', {
         method: 'POST',
         headers: {
@@ -1003,20 +1009,31 @@ function reinitializeGame()
     setAlreadyUsed.length = 0;
     cardInfo.length = 0;
 }
-function endGameMemory(winner)
+
+function endGameMemory(winner, type)
 {
     console.log("And the winner is ..." + winner);
-    // if (scorePlayer1 === scorePlayer2)
-    //     winner = "Exaequo";
     let scoreWinner = scorePlayer1 > scorePlayer2 ? scorePlayer1 : scorePlayer2;
     let scoreLoser = scorePlayer1 < scorePlayer2 ? scorePlayer1 : scorePlayer2;
     console.log("scoreUpdate : " + scoreUpdate)
-    if (scoreUpdate === false && scorePlayer1 + scorePlayer2 === gameSettings.numberOfCards / 2 && gameSettings.numberOfCards >= 14)
-        updateGameResultMemory(winner, namePlayer, gameSettings.chosenSet, gameSettings.numberOfCards, scoreWinner, scoreLoser, tournament, tournament_id);
     var mainElement = document.getElementById('content');
-    mainElement.innerHTML = ''; // Remove all inner HTML content  
+    mainElement.innerHTML = ''; // Remove all inner HTML content
+    let namePlayerTournament = [namePlayer[firstPlayer], namePlayer[secondPlayer]];
+    console.log("namePlayerTOurnament are" + namePlayerTournament);
+    if (tournament === true)
+        updateGameResultMemory(winner, namePlayerTournament, gameSettings.chosenSet, gameSettings.numberOfCards, scoreWinner, scoreLoser, tournament, tournament_id);
+    else if (scoreUpdate === false && scorePlayer1 + scorePlayer2 === gameSettings.numberOfCards / 2 && gameSettings.numberOfCards >= 14 && type === "normal")
+        updateGameResultMemory(winner, namePlayer, gameSettings.chosenSet, gameSettings.numberOfCards, scoreWinner, scoreLoser, tournament, tournament_id);
+    else if (type === "disconnected" && scoreUpdate === false)
+    {
+    mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
+        '<p style="text-align: center; font-size:2em;"> The other player disconnected. You won but the scoreboard will not be updated. </p>' +
+        '<p><img src="{% static 'img/gif_robot.gif' %}" alt="Victory logo" style="width: 50vh; height: 50vh;"></p>' + 
+        '</div>';
+        return;
+    }
     let getUserDisplay = "{{ user.display_name }}";
-    if (winner === getUserDisplay) {
+    if (winner === getUserDisplay && tournament === false) {
         mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
         '<p style="text-align: center; font-size:4em;"> You won! </p>' +
         '<p><img src="{% static 'img/gif_robot.gif' %}" alt="Victory logo" style="width: 50vh; height: 50vh;"></p>' + 
@@ -1036,6 +1053,7 @@ function endGameMemory(winner)
         var startAgain = document.createElement("button");
         startAgain.textContent = "Start again with the same players";
         startAgain.classList.add("styled-button")
+        scoreUpdate = false;
         document.getElementById('endGame').appendChild(startAgain);
         startAgain.addEventListener("click", function() {
             launchGameMemory(cards_info);
@@ -1050,6 +1068,7 @@ function endGameMemory(winner)
     }
     if (tournament === true && firstPlayer < namePlayer.length - 1)
     {
+        scoreUpdate = false;
         firstPlayer++;
         secondPlayer++;
         mainElement.innerHTML += '<div id="nextRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
@@ -1063,6 +1082,7 @@ function endGameMemory(winner)
     }
     else if (tournament === true && namePlayer.length > 2 && namePlayer.length === (numberPlayers / 2))
     {
+        scoreUpdate = false;
         firstPlayer = 0;
         secondPlayer = 1;
         mainElement.innerHTML += '<div id="SecondRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
@@ -1086,6 +1106,7 @@ function endGameMemory(winner)
     }
     else if (tournament === true && namePlayer.length > 3 && namePlayer.length === (numberPlayers / 4))
     {
+        scoreUpdate = false;
         firstPlayer = 0;
         secondPlayer = 1;
         mainElement.innerHTML += '<div id="ThirdRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
@@ -1108,6 +1129,7 @@ function endGameMemory(winner)
         });
     }
     else if (tournament === true && namePlayer.length === 2 ) {
+        scoreUpdate = false;
         firstPlayer = 0;
         secondPlayer = 1;
         mainElement.innerHTML += '<div id="Finale" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
@@ -1122,6 +1144,7 @@ function endGameMemory(winner)
     }
     else if (tournament === true && namePlayer.length === 1) {
         console.log("End of the tournament");
+        scoreUpdate = false;
         updateEndTournamentMemory(tournament_id, winner);
         firstPlayer = 0;
         secondPlayer = 0;
@@ -1129,13 +1152,6 @@ function endGameMemory(winner)
         '<p style="text-align: center; font-size:4em;">End of the Tournament! </p>' +
         '<p style="text-align: center; font-size:2em;">' + winner + ' won the tournament!</p>' +
         '</div>';
-        var startAgain = document.createElement("button");
-        startAgain.textContent = "Start again";
-        startAgain.classList.add("styled-button")
-        document.getElementById('endGame').appendChild(startAgain);
-        startAgain.addEventListener("click", function() {
-            launchGameMemory(cards_info);
-        });
     }
 }
 

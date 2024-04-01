@@ -210,7 +210,7 @@ msgid "Error:"
 msgstr "Помилка:"
 
 #: frontend/templates/gameMemory.html:293
-msgid "Welcome to the memory tournament !"
+msgid "Welcome to the memory tournament!"
 msgstr "Ласкаво просимо до турніру памяті!"
 
 #: frontend/templates/gameMemory.html:293
@@ -218,16 +218,16 @@ msgid "The rounds are the following:"
 msgstr "Раунди наступні:"
 
 #: frontend/templates/gameMemory.html:326
-msgid " Ready to start ? "
+msgid " Ready to start? "
 msgstr " Готові до старту ? "
 
 #: frontend/templates/gameMemory.html:326 frontend/templates/gamePong.html:475
-msgid " Go !"
-msgstr " Почати !"
+msgid " Go!"
+msgstr " Почати!"
 
 #: frontend/templates/gameMemory.html:328
-msgid "Start !"
-msgstr "Почати !"
+msgid "Start!"
+msgstr "Почати!"
 
 #: frontend/templates/gameMemory.html:371
 msgid "Memory game"

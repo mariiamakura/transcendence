@@ -123,7 +123,7 @@ msgid "Memory"
 msgstr "Mémoire"
 
 #: frontend/templates/gameMemory.html:45 frontend/templates/gamePong.html:195
-msgid " Do you want to play a 1vs1 game or a tournament ? "
+msgid " Do you want to play a 1vs1 game or a tournament? "
 msgstr "Voulez-vous jouer à un jeu 1 contre 1 ou à un tournoi ?"
 
 #: frontend/templates/gameMemory.html:48 frontend/templates/gamePong.html:199
@@ -135,8 +135,8 @@ msgid "Play 1vs1"
 msgstr "Jouer 1 contre 1"
 
 #: frontend/templates/gameMemory.html:70 frontend/templates/gameMemory.html:345
-msgid " Which type of game do you wanna play ? "
-msgstr "Quel type de jeu voulez-vous jouer"
+msgid " Which type of game do you wanna play? "
+msgstr "A quel type de jeu voulez-vous jouer ?"
 
 #: frontend/templates/gameMemory.html:73 frontend/templates/gamePong.html:101
 msgid "Play local Game"
@@ -176,7 +176,7 @@ msgstr "Combien de cartes voulez-vous :"
 
 #: frontend/templates/gameMemory.html:190
 msgid " How many players do you want to be?"
-msgstr "Combien de joueurs souhaitez-vous être"
+msgstr "Combien de joueurs souhaitez-vous être ?"
 
 #: frontend/templates/gameMemory.html:192 frontend/templates/gamePong.html:223
 msgid "players"
@@ -203,7 +203,7 @@ msgid "Error:"
 msgstr "Erreur :"
 
 #: frontend/templates/gameMemory.html:293
-msgid "Welcome to the memory tournament !"
+msgid "Welcome to the memory tournament!"
 msgstr "Bienvenue au tournoi de mémoire !"
 
 #: frontend/templates/gameMemory.html:293
@@ -211,16 +211,16 @@ msgid "The rounds are the following:"
 msgstr "Les rounds sont les suivants :"
 
 #: frontend/templates/gameMemory.html:326
-msgid " Ready to start ? "
-msgstr " Prêt à commencer ? "
+msgid " Ready to start? "
+msgstr " Prêt ? "
 
 #: frontend/templates/gameMemory.html:326 frontend/templates/gamePong.html:475
-msgid " Go !"
+msgid " Go!"
 msgstr " Allez !"
 
 #: frontend/templates/gameMemory.html:328
-msgid "Start !"
-msgstr "Commencer !"
+msgid "Start!"
+msgstr "On y va !"
 
 #: frontend/templates/gameMemory.html:371
 #| msgid "Memory"
@@ -240,15 +240,15 @@ msgid "No active games - try later"
 msgstr "Aucun jeu en cours - Essayez plus tard"
 
 #: frontend/templates/gameMemory.html:955
-msgid " It is a tie ! "
+msgid " It is a tie! "
 msgstr "C'est une égalité !"
 
 #: frontend/templates/gameMemory.html:995
-msgid "Second Round ! "
+msgid "Second Round! "
 msgstr "Deuxième tour !"
 
 #: frontend/templates/gameMemory.html:1018
-msgid "Third Round ! "
+msgid "Third Round! "
 msgstr "Troisième tour !"
 
 #: frontend/templates/gamePong.html:47 frontend/templates/index.html:47
@@ -621,4 +621,4 @@ msgid "Team Theme: Dark blue background, white ball and skyblue paddles"
 msgstr "Thème de l'équipe : fond bleu foncé, balle blanche et palettes bleu ciel"
 
 msgid "Ready to start? Go!"
-msgstr "Prêt à démarrer ? Allez !"
+msgstr "Prêt ? C'est parti !"

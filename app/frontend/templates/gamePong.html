@@ -59,7 +59,6 @@ async function showGamePong() {
     boardbackgroundColor = "#2f3542";
     ballColor = "white";
     paddleColor = "skyblue";
-    // check if all the variables are reinitialized
     if (await remoteOrLocal()) {
         if (await decideHost()) {
             isHost = true;
@@ -146,50 +145,64 @@ function decideHost() {
 
 function scoreChoice() {
     var main = document.getElementById('content');
-    main.innerHTML += `<div id="choice"><p class="text-center" style="padding-top: 5em; display: flex; " >{% trans ' Choose how many points wins: '  %}</p></div>`;
+    var nameFirstPlayer = document.getElementById('name_first_player');
+    if (nameFirstPlayer !== null) {
+        nameFirstPlayer.remove();
+    }
+    var choiceDiv = document.createElement("div");
+    choiceDiv.id = "choice";
+    choiceDiv.innerHTML = '<p class="text-center" style="padding-top: 5em; display: flex; " > Chose how many points wins: </p>';
+    
     if (tournament === false) {
         var unlimited = document.createElement("button");
         unlimited.textContent = "Unlimited";
         unlimited.classList.add("styled-button");
-        document.getElementById('choice').appendChild(unlimited);
+        choiceDiv.appendChild(unlimited);
     }
+    
     var scoreTwelve = document.createElement("button");
     scoreTwelve.textContent = "12";
     scoreTwelve.classList.add("styled-button");
-    document.getElementById('choice').appendChild(scoreTwelve);
+    choiceDiv.appendChild(scoreTwelve);
+    
     var scoreEighteen = document.createElement("button");
     scoreEighteen.textContent = "18";
     scoreEighteen.classList.add("styled-button");
-    document.getElementById('choice').appendChild(scoreEighteen);
+    choiceDiv.appendChild(scoreEighteen);
+    
     var scoreTwentyFour = document.createElement("button");
     scoreTwentyFour.textContent = "24";
     scoreTwentyFour.classList.add("styled-button");
-    document.getElementById('choice').appendChild(scoreTwentyFour);
+    choiceDiv.appendChild(scoreTwentyFour);
+
+    main.appendChild(choiceDiv);
+
     return new Promise(function (resolve) {
         if (tournament === false) {
             unlimited.addEventListener("click", function () {
                 resolve(true);
                 scoreToDo = 10000;
-                document.getElementById('choice').remove();
+                choiceDiv.remove();
             });
         }
         scoreTwelve.addEventListener("click", function () {
             resolve(true);
-            scoreToDo = 12; // debugging
-            document.getElementById('choice').remove();
+            scoreToDo = 12;
+            choiceDiv.remove();
         });
         scoreEighteen.addEventListener("click", function () {
             resolve(true);
             scoreToDo = 18;
-            document.getElementById('choice').remove();
+            choiceDiv.remove();
         });
         scoreTwentyFour.addEventListener("click", function () {
             resolve(true);
             scoreToDo = 24;
-            document.getElementById('choice').remove();
+            choiceDiv.remove();
         });
     });
 }
+
 
 function TwoOrTournament() {
 
@@ -263,7 +276,7 @@ async function getNamePlayer() {
     try {
         const response = await fetch('/get_display_name/');
         const data = await response.json();
-        main.innerHTML += `<p style="padding-top: 2em; display: flex; align-items:center; justify-content:center;">{% trans 'First player is'  %}: ${data.display_name}</p>`;
+        main.innerHTML += `<p id="name_first_player" style="padding-top: 2em; display: flex; align-items:center; justify-content:center;">{% trans 'First player is'  %}: ${data.display_name}</p>`;
         namePlayer.push(data.display_name);
 
         for (let i = 2; i <= numberPlayers; i++) {
@@ -307,9 +320,12 @@ async function getNamePlayer() {
 function settingsChoice() {
     var main = document.getElementById('content');
 
-    // Create the choice div
+    // Create the choice div 
+    // document.getElementById('choice').innerHTML = '';
+    
     var choiceDiv = document.createElement("div");
     choiceDiv.id = "choice";
+    main.appendChild(choiceDiv);
 
     if (isHost || local === true) {
         // Choose difficulty section
@@ -386,13 +402,14 @@ function settingsChoice() {
 
     choiceDiv.appendChild(colorButtonsContainer);
     var colorButtons = colorButtonsContainer.querySelectorAll("button");
+    
     colorButtons.forEach(function (button) {
         button.addEventListener("click", function () {
             colorButtons.forEach(function (btn) {
                 btn.classList.remove("selected");
             });
             button.classList.add("selected");
-            if (button.textContent === "{% trans 'Team mode: Dark blue background, white ball and skyblue paddles'  %}") {
+            if (button.textContent === "{% trans 'Team theme: Dark blue background, white ball and skyblue paddles'  %}") {
                 boardbackgroundColor = "#2f3542";
                 ballColor = "white";
                 paddleColor = "skyblue";
@@ -467,25 +484,40 @@ function startButtonTournament() {
 
 function startButton() {
     var main = document.getElementById('content');
-    main.innerHTML += '<h1>{% trans 'Instructions'  %}</h1>';
-    if (remote === true)
-        main.innerHTML += '<p class="text-center" style="text-align: center; padding-top:5em;">{% trans 'You can control your paddle with W(up) and S(down) or with the Up arrow and Down Arrow.'  %}</p>';
-else if (local === true)
-        main.innerHTML += '<p class="text-center" style="text-align: center; padding-top:5em;">' + namePlayer[firstPlayer] + ' controls: W (up) and S (down)</p>' +
+    var choiceDiv = document.createElement("div");
+    choiceDiv.id = "choice";
+    
+    // Add Instructions
+    main.innerHTML += '<h1>{% trans 'Instructions' %}</h1>';
+    
+    // Add Control Instructions
+    if (remote === true) {
+        choiceDiv.innerHTML += '<p class="text-center" style="text-align: center; justify-content:center; padding-top:5em;">{% trans 'You can control your paddle with W(up) and S(down) or with the Up arrow and Down Arrow.' %}</p>';
+    } else if (local === true) {
+        choiceDiv.innerHTML += '<p class="text-center" style="text-align: center; justify-content:center; padding-top:5em;">' + namePlayer[firstPlayer] + ' controls: W (up) and S (down)</p>' +
             '<p class="text-center" style="text-align: center; padding-top:1em;">' + namePlayer[secondPlayer] + ' controls: Up arrow (up) and Down arrow (down)</p>';
-    main.innerHTML += '<div id="choice"><p style="text-align: center; padding-top:5em;"> Ready to start ? <br><br>{% trans ' Go!'  %}</p></div>';
+    }
+    
+    // Add Start Button
+    choiceDiv.innerHTML += '<p style="text-align: center; padding-top:5em;">{% trans 'Ready to start?' %} <br><br>{% trans ' Go!' %}</p>';
     var startButton = document.createElement("button");
     startButton.textContent = "Start !";
     startButton.classList.add("styled-button");
-    document.getElementById('choice').appendChild(startButton);
+    choiceDiv.appendChild(startButton);
+    
+    // Append the choiceDiv to the main element
+    main.appendChild(choiceDiv);
+
+    // Return a promise for asynchronous handling
     return new Promise(function (resolve) {
         startButton.addEventListener("click", function () {
             startGame = true;
-            document.getElementById('choice').remove();
+            choiceDiv.remove();
             resolve(true);
         });
     });
 }
+
 
 
 // hostsocket
@@ -550,7 +582,7 @@ async function remoteHost() {
                     // console.log(data.message);
                     // console.log(data.who + ' left the game');
                     if (scoreUpdate === false)
-                        endGame(namePlayer[0]);
+                        endGame(namePlayer[0], "disconnected");
                     gameRoomSocket.close();
                 }
             }
@@ -646,7 +678,7 @@ async function remoteClient() {
             if (data.action === 'game_ended_pong') {
                 scoreUpdate = data.scoreUpdate;
                 clearInterval(intervalId);
-                endGame(data.winner);
+                endGame(data.winner, "normal");
                 console.log("game ended");
             }
             if (data.action === 'update_player_position') {
@@ -669,7 +701,7 @@ async function remoteClient() {
             if (data.action === 'player_left') {
                 console.log('other player left the game');
                 if (scoreUpdate === false)
-                    endGame(namePlayer[1]);
+                    endGame(namePlayer[1], "disconnected");
                 clearInterval(intervalId);
                 roomSocket.close();
             }
@@ -685,7 +717,7 @@ async function remoteClient() {
             const currentTime = Date.now();
             if (currentTime - lastBallUpdateReceivedTime > BALL_UPDATE_TIMEOUT) {
                 console.log('No ball updates received from the server.');
-                endGame(namePlayer[1]);
+                endGame(namePlayer[1], "disconnected");
                 // roomSocket.send(JSON.stringify({ action: 'player_left' }));
                 roomSocket.close();
                 clearInterval(intervalId);
@@ -832,11 +864,27 @@ function launchGamePong() {
         '<p class="name_player">' + namePlayer[secondPlayer] + '</p>' +
         '</div>';
 
+    document.getElementsByClassName("name_player")[0].style.color = paddleColor;
+    document.getElementsByClassName("name_player")[1].style.color = paddleColor;
     document.body.style.overflow = 'padding-bottom : 5em';
+    document.body.style.overflow = 'padding-top : 5em';
+
     if (paddleColor === "white") {
         var imageUrl = "{% static 'img/chinese_new_year.jpg' %}"
-        // var image = new Image();
-        // image.src = imageUrl;
+        content.style.backgroundImage = 'url(' + imageUrl + ')';
+        content.style.backgroundSize = "cover";
+        content.style.backgroundPosition = "center";
+        content.style.backgroundRepeat = "repeat";
+    }
+    if (paddleColor === "skyblue") {
+        var imageUrl = "{% static 'img/team_mode.png' %}"
+        content.style.backgroundImage = 'url(' + imageUrl + ')';
+        content.style.backgroundSize = "cover";
+        content.style.backgroundPosition = "center";
+        content.style.backgroundRepeat = "repeat";
+    }
+    if (paddleColor === "gray") {
+        var imageUrl = "{% static 'img/dalmatians.png' %}"
         content.style.backgroundImage = 'url(' + imageUrl + ')';
         content.style.backgroundSize = "cover";
         content.style.backgroundPosition = "center";
@@ -848,16 +896,14 @@ function launchGamePong() {
     board.style.backgroundColor = boardbackgroundColor;
     board.style.borderTopColor = paddleColor;
     board.style.borderBottomColor = paddleColor;
-    context = board.getContext('2d'); // 2d rendering context
+    context = board.getContext('2d');
 
-    // Draw players
     player1.y = board.height / 2 - playerHeight / 2;
     player2.x = board.width - playerWidth - 10;
     player2.y = board.height / 2 - playerHeight / 2;
     player1.name = namePlayer[firstPlayer];
     player2.name = namePlayer[secondPlayer];
 
-    //set ball
     ball.x = board.width / 2;
     ball.y = board.height / 2;
     // context.fillStyle = "skyblue";
@@ -948,7 +994,7 @@ function update() {
         if (ball.x < 0) {
             player2Score++;
             if (player2Score >= scoreToDo) {
-                endGame(player2.name);
+                endGame(player2.name, "normal");
                 gameRoomSocket.send(JSON.stringify({ action: 'game_ended_pong', winner: player2.name, scoreUpdate: true }));
             }
             else
@@ -957,7 +1003,7 @@ function update() {
         else if (ball.x + ball.width > board.width) {
             player1Score++;
             if (player1Score >= scoreToDo) {
-                endGame(player1.name);
+                endGame(player1.name, "normal");
                 gameRoomSocket.send(JSON.stringify({ action: 'game_ended_pong', winner: player1.name, scoreUpdate: true }));
             }
             else
@@ -974,14 +1020,14 @@ function update() {
         if (ball.x < 0) {
             player2Score++;
             if (player2Score >= scoreToDo)
-                endGame(player2.name);
+                endGame(player2.name, "normal");
             else
                 resetGame(1);
         }
         else if (ball.x + ball.width > board.width) {
             player1Score++;
             if (player1Score >= scoreToDo)
-                endGame(player1.name);
+                endGame(player1.name, "normal");
             else
                 resetGame(-1);
         }
@@ -1227,20 +1273,29 @@ function updateStartTournamentPong(namePlayer) {
         });
 }
 
-function endGame(winner) {
+function endGame(winner, type) {
     gameEnded = true;
     console.log(winner + " won!");
     let scoreWinner = player1Score > player2Score ? player1Score : player2Score;
     let scoreLoser = player1Score < player2Score ? player1Score : player2Score;
     let namePlayerPlaying = [player1.name, player2.name];
-    if (scoreUpdate === false && (player1Score === scoreToDo || player2Score === scoreToDo) && scoreToDo !== 0) {
-        updateGameResultPong(winner, namePlayerPlaying, scoreToDo, scoreWinner, scoreLoser, tournament, tournament_id);
     var mainElement = document.getElementById('content');
     mainElement.style.backgroundImage = 'none';
     mainElement.style.backgroundColor = 'white';
     mainElement.innerHTML = '';
+    if (tournament === true || (scoreUpdate === false && (player1Score === scoreToDo || player2Score === scoreToDo) && scoreToDo !== 0 && type === "normal"))
+        updateGameResultPong(winner, namePlayerPlaying, scoreToDo, scoreWinner, scoreLoser, tournament, tournament_id);
+    else if (type === "disconnected")
+    {
+        mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
+        '<p style="text-align: center; font-size:2em;"> The other player disconnected. You won but the scoreboard will not be updated. </p>' +
+        '<iframe src="https://giphy.com/embed/OScDfyJIQaXe" width="480" height="480" frameborder="0" class="giphy-embed" allowfullscreen></iframe>' +
+        '<p><a href="https://giphy.com/gifs/rabbids-dance-cute-OScDfyJIQaXe"></a></p>' +
+        '</div>';
+        return;
+    }
     let getUserDisplay = "{{ user.display_name }}";
-    if (winner === getUserDisplay) {
+    if (winner === getUserDisplay && tournament === false) {
         mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
             '<p style="text-align: center; font-size:4em;">Well done! </p>' +
             '<p style="text-align: center; font-size:2em;"> You won! <br>' +
@@ -1248,9 +1303,17 @@ function endGame(winner) {
             '<p><a href="https://giphy.com/gifs/rabbids-dance-cute-OScDfyJIQaXe"></a></p>' +
             '</div>';
     }
-    else {
+    else if (tournament === false) 
+    {
         mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
             '<p style="text-align: center; font-size:4em;">Game Over! </p>' +
+            '<p style="text-align: center; font-size:2em;">' + winner + ' won! <br>' +
+            '<iframe src="https://giphy.com/embed/OScDfyJIQaXe" width="480" height="480" frameborder="0" class="giphy-embed" allowfullscreen></iframe>' +
+            '<p><a href="https://giphy.com/gifs/rabbids-dance-cute-OScDfyJIQaXe"></a></p>' +
+            '</div>';
+    }
+    else {
+        mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
             '<p style="text-align: center; font-size:2em;">' + winner + ' won! <br>' +
             '<iframe src="https://giphy.com/embed/OScDfyJIQaXe" width="480" height="480" frameborder="0" class="giphy-embed" allowfullscreen></iframe>' +
             '<p><a href="https://giphy.com/gifs/rabbids-dance-cute-OScDfyJIQaXe"></a></p>' +
@@ -1274,6 +1337,7 @@ function endGame(winner) {
             namePlayer.splice(firstPlayer, 1);
     }
     if (tournament === true && firstPlayer < namePlayer.length - 1) {
+        scoreUpdate = false;
         firstPlayer++;
         secondPlayer++;
         mainElement.innerHTML += '<div id="nextRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
@@ -1288,6 +1352,7 @@ function endGame(winner) {
         });
     }
     else if (tournament === true && namePlayer.length > 2 && namePlayer.length === (numberPlayers / 2)) {
+        scoreUpdate = false;
         firstPlayer = 0;
         secondPlayer = 1;
         mainElement.innerHTML += '<div id="SecondRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
@@ -1312,6 +1377,7 @@ function endGame(winner) {
         });
     }
     else if (tournament === true && namePlayer.length > 3 && namePlayer.length === (numberPlayers / 4)) {
+        scoreUpdate = false;
         firstPlayer = 0;
         secondPlayer = 1;
         mainElement.innerHTML += '<div id="ThirdRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
@@ -1336,6 +1402,7 @@ function endGame(winner) {
         });
     }
     else if (tournament === true && namePlayer.length === 2) {
+        scoreUpdate = false;
         firstPlayer = 0;
         secondPlayer = 1;
         mainElement.innerHTML += '<div id="Finale" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
@@ -1350,6 +1417,7 @@ function endGame(winner) {
         });
     }
     else if (tournament === true && namePlayer.length === 1) {
+        scoreUpdate = false;
         console.log("end of the tournament");
         console.log("tournament_id: " + tournament_id);
         updateEndTournamentPong(tournament_id, winner);
@@ -1387,8 +1455,6 @@ function closeRoom() {
         roomClosed = true;
     }
 }
-
-
 window.addEventListener('beforeunload', function (event) {
     if (!roomClosed) {
         closeRoom();

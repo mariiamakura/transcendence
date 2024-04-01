@@ -150,21 +150,23 @@ def update_game_result_pong(request):
                     participants.append(user)
                 else:
                     user = User.objects.create_user(username=username, display_name=display_name, email=email)
+                    user.save()
                     participants.append(user)
 
         winner_user = None
         winner = User.objects.filter(display_name=data.get('winner')).first()
-        if winner:
+        if winner is not None:
             winner_user = winner
         else:
             username = data.get('winner') + '_guest'
             display_name = data.get('winner') + '_guest'
             email = data.get('winner') + '@guest.com'
             user = User.objects.filter(display_name=display_name).first()
-            if user:
+            if user is not None:
                 winner_user = user
             else:
                 winner_user = User.objects.create_user(username=username, display_name=display_name, email=email)
+                winner_user.save()
 
         tournamentObj = None
         is_tournament_bool = data.get('is_tournament')
@@ -245,6 +247,7 @@ def end_tournament(request):
                 winner_user = winner
             else:
                 winner_user = User.objects.create_user(username=username, display_name=display_name, email=email)
+                winner_user.save()
 
         if tournament_id:
             # If tournament ID is provided, retrieve the tournament object
@@ -278,6 +281,7 @@ def update_game_result_memory(request):
                     participants.append(user)
                 else:
                     user = User.objects.create_user(username=username, display_name=display_name, email=email)
+                    user.save()
 
         tournamentObj = None
         is_tournament = data.get('tournament')
@@ -476,6 +480,7 @@ def add_users(request):
             if not User.objects.filter(email=email).exists():
                 if not User.objects.filter(display_name=display_name).exists():
                     User.objects.create_user(**user_data)
+                    User.save()
 
 
 def home(request):
@@ -601,7 +606,6 @@ def callback(request):
                 return (response)
             else:
                 user = User.objects.create_user(username=username, email=email, password=password1, avatar_url=avatar_url, name=name, surname=surename, display_name=display_name)
-
                 user = authenticate(username=username, password=password1)
                 if user is not None:
                     login(request, user)

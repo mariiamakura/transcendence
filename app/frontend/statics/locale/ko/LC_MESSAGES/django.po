@@ -209,7 +209,7 @@ msgid "Error:"
 msgstr "오류:"
 
 #: frontend/templates/gameMemory.html:293
-msgid "Welcome to the memory tournament !"
+msgid "Welcome to the memory tournament!"
 msgstr "메모리 토너먼트에 오신 것을 환영합니다!"
 
 #: frontend/templates/gameMemory.html:293
@@ -217,15 +217,15 @@ msgid "The rounds are the following:"
 msgstr "라운드는 다음과 같습니다:"
 
 #: frontend/templates/gameMemory.html:326
-msgid " Ready to start ? "
+msgid " Ready to start? "
 msgstr "시작 준비가 되었나요?"
 
 #: frontend/templates/gameMemory.html:326 frontend/templates/gamePong.html:475
-msgid " Go !"
+msgid " Go!"
 msgstr "출발!"
 
 #: frontend/templates/gameMemory.html:328
-msgid "Start !"
+msgid "Start!"
 msgstr "시작!"
 
 #: frontend/templates/gameMemory.html:371
@@ -245,15 +245,15 @@ msgid "No active games - try later"
 msgstr "활성 게임이 없습니다 - 나중에 다시 시도하세요."
 
 #: frontend/templates/gameMemory.html:955
-msgid " It is a tie ! "
+msgid " It is a tie! "
 msgstr "비김!"
 
 #: frontend/templates/gameMemory.html:995
-msgid "Second Round ! "
+msgid "Second Round! "
 msgstr "두 번째 라운드!"
 
 #: frontend/templates/gameMemory.html:1018
-msgid "Third Round ! "
+msgid "Third Round! "
 msgstr "세 번째 라운드!"
 
 #: frontend/templates/gamePong.html:47 frontend/templates/index.html:47
