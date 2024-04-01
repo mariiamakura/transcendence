@@ -69,10 +69,11 @@ class KeepAliveConsumer(AsyncWebsocketConsumer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.user = None
-        self.last_alive_time = datetime.now()
-        self.alive_timeout = 10  # seconds
-        self.check_interval = 1  # seconds
+        # self.last_alive_time = datetime.now()
+        self.alive_timeout = 30  # seconds
+        self.check_interval = 5  # seconds
         self.keep_alive_task = None
+        self.flag = False
 
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
@@ -82,32 +83,27 @@ class KeepAliveConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
-        await self.set_user_online(True)
         await self.accept()
-        self.keep_alive_task = asyncio.create_task(self.check_alive())
+        await self.set_user_online(True)
+        # if self.keep_alive_task and not self.keep_alive_task.done():
+        #     self.keep_alive_task.cancel()
+        # await self.set_user_online(False)
+        self.last_alive_time = datetime.now()
+        # self.check_alive()
+        if not self.flag:
+            self.keep_alive_task = asyncio.create_task(self.check_alive())
 
     async def disconnect(self, close_code):
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'action': 'player_left',
-                'channel_name': self.channel_name
-            }
-        )
-        # await self.channel_layer.group_discard(
-        #     self.room_group_name,
-        #     self.channel_name
-        # )
+        logger.debug(f"WebSocket disconnect invoked for user: {self.user}, close_code: {close_code}")
         # await self.set_user_online(False)
-        # Check if the disconnecting user is the host of a room and close the room if so
-        # if self.user == GameRoomManagerPong.rooms[self.room_name]["host"]:
-        #     await self.close_room_pong(self.room_name)
-        # elif self.user == GameRoomManagerPong.rooms[self.room_name]["guest"]:
-        #     await self.close_room_pong(self.room_name)
-        # elif self.user == GameRoomManagerMemory.rooms[self.room_name]["host"]:
-        #     await self.close_room_memory(self.room_name)
-        # elif self.user == GameRoomManagerMemory.rooms[self.room_name]["guest"]:
-        #     await self.close_room_memory(self.room_name)
+        try:
+            # Cancel the task
+            self.keep_alive_task.cancel()
+            logger.debug(f"****************trying to cancel task************* {self.user}")
+        except Exception as e:
+            logger.error(f"Error cancelling keep_alive_task: {e}")
+        # self.keep_alive_task = None
+        await super().disconnect(close_code)
 
     @database_sync_to_async
     def close_room_pong(self, room_name):
@@ -124,9 +120,11 @@ class KeepAliveConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         data = json.loads(text_data)
         action = data.get('action')
+        # code = data.get('code')
 
         if action == 'alive':
             self.last_alive_time = datetime.now()
+            logger.debug(f"received function update: { self.last_alive_time}")
             await asyncio.sleep(1)
             await self.send(text_data=json.dumps({'action': 'keep_alive'}))
 
@@ -136,14 +134,21 @@ class KeepAliveConsumer(AsyncWebsocketConsumer):
         }))
 
     async def check_alive(self):
+        self.flag = True
         while True:
             await asyncio.sleep(self.check_interval)
+            logger.debug(f"SECONDS DIFFERECE: { (datetime.now() - self.last_alive_time).total_seconds() } for {self.room_name}")
             if (datetime.now() - self.last_alive_time).total_seconds() > self.alive_timeout:
-                if self.keep_alive_task:
-                    self.keep_alive_task.cancel()
-                    await self.set_user_online(False)
-                await self.close()
+                logger.debug(f"Keep-alive timeout reached for user: {self.user}")
+                await self.set_user_online(False)
+                self.flag = False
+                self.keep_alive_task.cancel()  # Cancel the task
+                await super().disconnect()
+                # await self.close()
                 break
+            else:
+                await self.set_user_online(True)
+                
 
     @database_sync_to_async
     def get_user(self, username):
