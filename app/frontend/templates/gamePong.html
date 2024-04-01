@@ -144,50 +144,59 @@ function decideHost() {
     });
 }
 
-function scoreChoice() {
+async function scoreChoice() {
     var main = document.getElementById('content');
-    main.innerHTML += `<div id="choice"><p class="text-center" style="padding-top: 5em; display: flex; " >{% trans ' Choose how many points wins: '  %}</p></div>`;
+    document.getElementById('name_first_player').innerHTML = '';
+    var choiceDiv = document.createElement("div");
+    choiceDiv.id = "choice";
+    main.appendChild(choiceDiv);
+    var question = document.createElement("p");
+    question.textContent = "{% trans ' Choose how many points wins: ' %}";
+    question.classList.add("text-center");
+    question.style.paddingTop = "5em";
+    question.style.display = "flex";
+    choiceDiv.appendChild(question);
+    
     if (tournament === false) {
         var unlimited = document.createElement("button");
         unlimited.textContent = "Unlimited";
         unlimited.classList.add("styled-button");
-        document.getElementById('choice').appendChild(unlimited);
+        choiceDiv.appendChild(unlimited);
+        unlimited.addEventListener("click", function () {
+            scoreToDo = 10000;
+            document.getElementById('choice').remove();
+            resolve(true);
+        });
     }
+    
     var scoreTwelve = document.createElement("button");
     scoreTwelve.textContent = "12";
     scoreTwelve.classList.add("styled-button");
-    document.getElementById('choice').appendChild(scoreTwelve);
+    choiceDiv.appendChild(scoreTwelve);
+    scoreTwelve.addEventListener("click", function () {
+        scoreToDo = 12; // debugging
+        document.getElementById('choice').remove();
+        resolve(true);
+    });
+    
     var scoreEighteen = document.createElement("button");
     scoreEighteen.textContent = "18";
     scoreEighteen.classList.add("styled-button");
-    document.getElementById('choice').appendChild(scoreEighteen);
+    choiceDiv.appendChild(scoreEighteen);
+    scoreEighteen.addEventListener("click", function () {
+        scoreToDo = 18;
+        document.getElementById('choice').remove();
+        resolve(true);
+    });
+    
     var scoreTwentyFour = document.createElement("button");
     scoreTwentyFour.textContent = "24";
     scoreTwentyFour.classList.add("styled-button");
-    document.getElementById('choice').appendChild(scoreTwentyFour);
-    return new Promise(function (resolve) {
-        if (tournament === false) {
-            unlimited.addEventListener("click", function () {
-                resolve(true);
-                scoreToDo = 10000;
-                document.getElementById('choice').remove();
-            });
-        }
-        scoreTwelve.addEventListener("click", function () {
-            resolve(true);
-            scoreToDo = 12; // debugging
-            document.getElementById('choice').remove();
-        });
-        scoreEighteen.addEventListener("click", function () {
-            resolve(true);
-            scoreToDo = 18;
-            document.getElementById('choice').remove();
-        });
-        scoreTwentyFour.addEventListener("click", function () {
-            resolve(true);
-            scoreToDo = 24;
-            document.getElementById('choice').remove();
-        });
+    choiceDiv.appendChild(scoreTwentyFour);
+    scoreTwentyFour.addEventListener("click", function () {
+        scoreToDo = 24;
+        document.getElementById('choice').remove();
+        resolve(true);
     });
 }
 
@@ -263,7 +272,7 @@ async function getNamePlayer() {
     try {
         const response = await fetch('/get_display_name/');
         const data = await response.json();
-        main.innerHTML += `<p style="padding-top: 2em; display: flex; align-items:center; justify-content:center;">{% trans 'First player is'  %}: ${data.display_name}</p>`;
+        main.innerHTML += `<p id="name_first_player" style="padding-top: 2em; display: flex; align-items:center; justify-content:center;">{% trans 'First player is'  %}: ${data.display_name}</p>`;
         namePlayer.push(data.display_name);
 
         for (let i = 2; i <= numberPlayers; i++) {
@@ -304,10 +313,13 @@ async function getNamePlayer() {
     return namePlayer;
 }
 
-function settingsChoice() {
+async function settingsChoice() {
     var main = document.getElementById('content');
 
-    // Create the choice div
+    // Create the choice div 
+    document.getElementById('choice').innerHTML = '';
+    main.appendChild(choiceDiv);
+
     var choiceDiv = document.createElement("div");
     choiceDiv.id = "choice";
 
@@ -835,6 +847,8 @@ function launchGamePong() {
     document.getElementsByClassName("name_player")[0].style.color = paddleColor;
     document.getElementsByClassName("name_player")[1].style.color = paddleColor;
     document.body.style.overflow = 'padding-bottom : 5em';
+    document.body.style.overflow = 'padding-top : 5em';
+
     if (paddleColor === "white") {
         var imageUrl = "{% static 'img/chinese_new_year.jpg' %}"
         content.style.backgroundImage = 'url(' + imageUrl + ')';
@@ -848,22 +862,14 @@ function launchGamePong() {
     board.style.backgroundColor = boardbackgroundColor;
     board.style.borderTopColor = paddleColor;
     board.style.borderBottomColor = paddleColor;
-    board.style.margin = "auto";
-    board.style.position = "absolute";
-    board.style.top = 0;
-    board.style.bottom = 0;
-    board.style.left = 0;
-    board.style.right = 0;
-    context = board.getContext('2d'); // 2d rendering context
+    context = board.getContext('2d');
 
-    // Draw players
     player1.y = board.height / 2 - playerHeight / 2;
     player2.x = board.width - playerWidth - 10;
     player2.y = board.height / 2 - playerHeight / 2;
     player1.name = namePlayer[firstPlayer];
     player2.name = namePlayer[secondPlayer];
 
-    //set ball
     ball.x = board.width / 2;
     ball.y = board.height / 2;
     // context.fillStyle = "skyblue";
