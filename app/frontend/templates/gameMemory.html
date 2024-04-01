@@ -1011,7 +1011,7 @@ function endGameMemory(winner)
     let scoreWinner = scorePlayer1 > scorePlayer2 ? scorePlayer1 : scorePlayer2;
     let scoreLoser = scorePlayer1 < scorePlayer2 ? scorePlayer1 : scorePlayer2;
     console.log("scoreUpdate : " + scoreUpdate)
-    if (scoreUpdate === false && scorePlayer1 + scorePlayer2 === gameSettings.numberOfCards / 2)
+    if (scoreUpdate === false && scorePlayer1 + scorePlayer2 === gameSettings.numberOfCards / 2 && gameSettings.numberOfCards >= 14)
         updateGameResultMemory(winner, namePlayer, gameSettings.chosenSet, gameSettings.numberOfCards, scoreWinner, scoreLoser, tournament, tournament_id);
     var mainElement = document.getElementById('content');
     mainElement.innerHTML = ''; // Remove all inner HTML content  

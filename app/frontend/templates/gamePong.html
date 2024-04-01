@@ -1234,7 +1234,7 @@ function endGame(winner) {
     let scoreWinner = player1Score > player2Score ? player1Score : player2Score;
     let scoreLoser = player1Score < player2Score ? player1Score : player2Score;
     let namePlayerPlaying = [player1.name, player2.name];
-    if (scoreUpdate === false && player1Score === scoreToDo || player2Score === scoreToDo)
+    if (scoreUpdate === false && (player1Score === scoreToDo || player2Score === scoreToDo) && scoreToDo !== 0) {
         updateGameResultPong(winner, namePlayerPlaying, scoreToDo, scoreWinner, scoreLoser, tournament, tournament_id);
     var mainElement = document.getElementById('content');
     mainElement.style.backgroundImage = 'none';
