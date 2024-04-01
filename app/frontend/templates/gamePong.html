@@ -469,11 +469,11 @@ function startButton() {
     var main = document.getElementById('content');
     main.innerHTML += '<h1>{% trans 'Instructions'  %}</h1>';
     if (remote === true)
-        main.innerHTML += '<p class="text-center" style="text-align: center; padding-top:5em;">{% trans 'You can control your paddle with W(up) and S(down) or with the Up arrow and Down Arrow.'  %}</p>';
+        main.innerHTML += '<p class="text-center" style="text-align: center; justify-content:center; padding-top:5em;">{% trans 'You can control your paddle with W(up) and S(down) or with the Up arrow and Down Arrow.'  %}</p>';
 else if (local === true)
-        main.innerHTML += '<p class="text-center" style="text-align: center; padding-top:5em;">' + namePlayer[firstPlayer] + ' controls: W (up) and S (down)</p>' +
+        main.innerHTML += '<p class="text-center" style="text-align: center; justify-content:center; padding-top:5em;">' + namePlayer[firstPlayer] + ' controls: W (up) and S (down)</p>' +
             '<p class="text-center" style="text-align: center; padding-top:1em;">' + namePlayer[secondPlayer] + ' controls: Up arrow (up) and Down arrow (down)</p>';
-    main.innerHTML += '<div id="choice"><p style="text-align: center; padding-top:5em;"> Ready to start ? <br><br>{% trans ' Go!'  %}</p></div>';
+    main.innerHTML += '<div id="choice"><p style="text-align: center; padding-top:5em;"> {% trans 'Ready to start?' %}  <br><br>{% trans ' Go!'  %}</p></div>';
     var startButton = document.createElement("button");
     startButton.textContent = "Start !";
     startButton.classList.add("styled-button");
@@ -832,11 +832,11 @@ function launchGamePong() {
         '<p class="name_player">' + namePlayer[secondPlayer] + '</p>' +
         '</div>';
 
+    document.getElementsByClassName("name_player")[0].style.color = paddleColor;
+    document.getElementsByClassName("name_player")[1].style.color = paddleColor;
     document.body.style.overflow = 'padding-bottom : 5em';
     if (paddleColor === "white") {
         var imageUrl = "{% static 'img/chinese_new_year.jpg' %}"
-        // var image = new Image();
-        // image.src = imageUrl;
         content.style.backgroundImage = 'url(' + imageUrl + ')';
         content.style.backgroundSize = "cover";
         content.style.backgroundPosition = "center";
@@ -848,6 +848,12 @@ function launchGamePong() {
     board.style.backgroundColor = boardbackgroundColor;
     board.style.borderTopColor = paddleColor;
     board.style.borderBottomColor = paddleColor;
+    board.style.margin = "auto";
+    board.style.position = "absolute";
+    board.style.top = 0;
+    board.style.bottom = 0;
+    board.style.left = 0;
+    board.style.right = 0;
     context = board.getContext('2d'); // 2d rendering context
 
     // Draw players

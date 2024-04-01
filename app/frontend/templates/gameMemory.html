@@ -34,7 +34,7 @@ let scoreUpdate = false;
 
 function TwoOrTournament() {
     var main = document.getElementById('content');
-    main.innerHTML += '<div id="choice"><p style="padding-top: 5em;">{% trans " Do you want to play a 1vs1 game or a tournament ? "  %}</p></div>';
+    main.innerHTML += '<div id="choice"><p style="padding-top: 5em;">{% trans " Do you want to play a 1vs1 game or a tournament? "  %}</p></div>';
     var button1vs1 = document.createElement("button");
     var buttonTournament = document.createElement("button"); 
     buttonTournament.textContent = "{% trans 'Play tournament'  %}";
@@ -209,14 +209,14 @@ function numPlayers() {
 	main.innerHTML += '<div id="choice"><p style="padding-top: 5em; display: flex; " >{% trans ' How many players do you want to be? '  %}</p></div>';
 	var buttonFour = document.createElement("button");
     let players = "{% trans 'players' %}"
-	buttonFour.textContent = "4" + players;
+	buttonFour.textContent = "4 " + players;
 	buttonFour.classList.add("styled-button");
 	document.getElementById('choice').appendChild(buttonFour);
 	if (tournament) {
 		var buttonEight = document.createElement("button");
 		var buttonSixteen= document.createElement("button");
-		buttonEight.textContent = "8" + players;
-		buttonSixteen.textContent = "16" + players;
+		buttonEight.textContent = "8 " + players;
+		buttonSixteen.textContent = "16 " + players;
 		buttonEight.classList.add("styled-button");
 		buttonSixteen.classList.add("styled-button");
 		document.getElementById('choice').appendChild(buttonEight);
@@ -323,11 +323,11 @@ function startButtonTournament() {
     var readyParagraph = document.createElement("p");
     readyParagraph.style.textAlign = "center";
     readyParagraph.style.paddingTop = "1em";
-    readyParagraph.textContent = "Ready to start?\n\nLet's go !";
+    readyParagraph.textContent = "{% trans 'Ready to start?' %}\n\n{% trans 'Go!' %}";
     choiceDiv.appendChild(readyParagraph);
     
     var startButton = document.createElement("button");
-    startButton.textContent = "Start !";
+    startButton.textContent = "{% trans 'Start!' %}";
     startButton.classList.add("styled-button");
     choiceDiv.appendChild(startButton);
     main.appendChild(choiceDiv);
@@ -348,12 +348,12 @@ function startButton() {
     main.appendChild(div);
 
     var question = document.createElement("p");
-    question.textContent = "{% trans 'Ready to start?  Go!'  %}";
+    question.textContent = "{% trans 'Ready to start?%} \n\n {% trans 'Go!'  %}";
     question.style.display = "flex";
     div.appendChild(question);
 
 	var startButton = document.createElement("button");
-	startButton.textContent = "{% trans 'Start !' %}";
+	startButton.textContent = "{% trans 'Start!' %}";
 	startButton.classList.add("styled-button");
 	document.getElementById('choice').appendChild(startButton);
 	return new Promise (function (resolve) {
