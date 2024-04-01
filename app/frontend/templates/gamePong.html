@@ -145,7 +145,10 @@ function decideHost() {
 
 function scoreChoice() {
     var main = document.getElementById('content');
-    document.getElementById('name_first_player').remove();
+    var nameFirstPlayer = document.getElementById('name_first_player');
+    if (nameFirstPlayer !== null) {
+        nameFirstPlayer.remove();
+    }
     var choiceDiv = document.createElement("div");
     choiceDiv.id = "choice";
     choiceDiv.innerHTML = '<p class="text-center" style="padding-top: 5em; display: flex; " > Chose how many points wins: </p>';
@@ -1300,9 +1303,17 @@ function endGame(winner, type) {
             '<p><a href="https://giphy.com/gifs/rabbids-dance-cute-OScDfyJIQaXe"></a></p>' +
             '</div>';
     }
-    else {
+    else if (tournament === false) 
+    {
         mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
             '<p style="text-align: center; font-size:4em;">Game Over! </p>' +
+            '<p style="text-align: center; font-size:2em;">' + winner + ' won! <br>' +
+            '<iframe src="https://giphy.com/embed/OScDfyJIQaXe" width="480" height="480" frameborder="0" class="giphy-embed" allowfullscreen></iframe>' +
+            '<p><a href="https://giphy.com/gifs/rabbids-dance-cute-OScDfyJIQaXe"></a></p>' +
+            '</div>';
+    }
+    else {
+        mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
             '<p style="text-align: center; font-size:2em;">' + winner + ' won! <br>' +
             '<iframe src="https://giphy.com/embed/OScDfyJIQaXe" width="480" height="480" frameborder="0" class="giphy-embed" allowfullscreen></iframe>' +
             '<p><a href="https://giphy.com/gifs/rabbids-dance-cute-OScDfyJIQaXe"></a></p>' +
@@ -1326,6 +1337,7 @@ function endGame(winner, type) {
             namePlayer.splice(firstPlayer, 1);
     }
     if (tournament === true && firstPlayer < namePlayer.length - 1) {
+        scoreUpdate = false;
         firstPlayer++;
         secondPlayer++;
         mainElement.innerHTML += '<div id="nextRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
@@ -1340,6 +1352,7 @@ function endGame(winner, type) {
         });
     }
     else if (tournament === true && namePlayer.length > 2 && namePlayer.length === (numberPlayers / 2)) {
+        scoreUpdate = false;
         firstPlayer = 0;
         secondPlayer = 1;
         mainElement.innerHTML += '<div id="SecondRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
@@ -1364,6 +1377,7 @@ function endGame(winner, type) {
         });
     }
     else if (tournament === true && namePlayer.length > 3 && namePlayer.length === (numberPlayers / 4)) {
+        scoreUpdate = false;
         firstPlayer = 0;
         secondPlayer = 1;
         mainElement.innerHTML += '<div id="ThirdRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
@@ -1388,6 +1402,7 @@ function endGame(winner, type) {
         });
     }
     else if (tournament === true && namePlayer.length === 2) {
+        scoreUpdate = false;
         firstPlayer = 0;
         secondPlayer = 1;
         mainElement.innerHTML += '<div id="Finale" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
@@ -1402,6 +1417,7 @@ function endGame(winner, type) {
         });
     }
     else if (tournament === true && namePlayer.length === 1) {
+        scoreUpdate = false;
         console.log("end of the tournament");
         console.log("tournament_id: " + tournament_id);
         updateEndTournamentPong(tournament_id, winner);

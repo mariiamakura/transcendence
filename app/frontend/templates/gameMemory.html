@@ -111,9 +111,11 @@ function decideHost() {
 
 function choiceSet() {
     var main = document.getElementById('content');
-    document.getElementById('name_first_player').innerHTML = "";
-
-    document.getElementById('choice').innerHTML = "";
+    var nameFirstPlayer = document.getElementById('name_first_player');
+    if (nameFirstPlayer !== null) {
+        nameFirstPlayer.remove();
+    }
+    // document.getElementById('choice').innerHTML = "";
     var div = document.createElement("div");
     div.id = "choice";
     
@@ -614,7 +616,7 @@ async function remoteClient() {
             if (countdownElement) {
                 countdownElement.remove();
             }
-            startHeartbeat();
+            // startHeartbeat();
         }
         if (data.action === 'card_info') {
             var cards_infoG = data.cards;
@@ -652,23 +654,25 @@ async function remoteClient() {
         if (data.action === 'player_left') {
             console.log('other player left the game');
             if (scoreUpdate === false)
-            endGameMemory(namePlayer[1], "disconnected");
+                endGameMemory(namePlayer[1], "disconnected");
             roomSocket.close();
-            }
-            function startHeartbeat() {
-                intervalId = setInterval(function() {
-                    if (socket.readyState === WebSocket.OPEN) {
-                        socket.send(JSON.stringify({ action: 'heartbeat' }));
-                    } else {
-                        endGameMemory(namePlayer[1], "disconnected");
-                        clearInterval(intervalId);
-                    }
-                    }, 1000);
-                }
+        }
+            // function startHeartbeat() {
+            //     intervalId = setInterval(function() {
+            //         if (socket.readyState === WebSocket.OPEN) {
+            //             console.log("heartbeat");
+            //             socket.send(JSON.stringify({ action: 'heartbeat' }));
+            //         } else {
+            //             console.log("disconnection by heartbeat");
+            //             endGameMemory(namePlayer[1], "disconnected");
+            //             clearInterval(intervalId);
+            //         }
+            //         }, 5000);
+            //     }
             roomSocket.onclose = function() {
-            roomSocket.send(JSON.stringify({ action: 'player_left' }));
-            // endGameMemory(namePlayer[1]);
-            console.log("Game room connection closed.");
+                roomSocket.send(JSON.stringify({ action: 'player_left' }));
+                // endGameMemory(namePlayer[1]);
+                console.log("Game room connection closed.");
             };
         };
     }
@@ -1004,14 +1008,11 @@ function reinitializeGame()
     cardTurnedArrayId.length = 0;
     setAlreadyUsed.length = 0;
     cardInfo.length = 0;
-    scoreUpdate = false;
 }
 
 function endGameMemory(winner, type)
 {
     console.log("And the winner is ..." + winner);
-    // if (scorePlayer1 === scorePlayer2)
-    //     winner = "Exaequo";
     let scoreWinner = scorePlayer1 > scorePlayer2 ? scorePlayer1 : scorePlayer2;
     let scoreLoser = scorePlayer1 < scorePlayer2 ? scorePlayer1 : scorePlayer2;
     console.log("scoreUpdate : " + scoreUpdate)
@@ -1023,7 +1024,7 @@ function endGameMemory(winner, type)
         updateGameResultMemory(winner, namePlayerTournament, gameSettings.chosenSet, gameSettings.numberOfCards, scoreWinner, scoreLoser, tournament, tournament_id);
     else if (scoreUpdate === false && scorePlayer1 + scorePlayer2 === gameSettings.numberOfCards / 2 && gameSettings.numberOfCards >= 14 && type === "normal")
         updateGameResultMemory(winner, namePlayer, gameSettings.chosenSet, gameSettings.numberOfCards, scoreWinner, scoreLoser, tournament, tournament_id);
-    else if (type === "disconnected")
+    else if (type === "disconnected" && scoreUpdate === false)
     {
     mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
         '<p style="text-align: center; font-size:2em;"> The other player disconnected. You won but the scoreboard will not be updated. </p>' +
@@ -1052,6 +1053,7 @@ function endGameMemory(winner, type)
         var startAgain = document.createElement("button");
         startAgain.textContent = "Start again with the same players";
         startAgain.classList.add("styled-button")
+        scoreUpdate = false;
         document.getElementById('endGame').appendChild(startAgain);
         startAgain.addEventListener("click", function() {
             launchGameMemory(cards_info);
@@ -1066,6 +1068,7 @@ function endGameMemory(winner, type)
     }
     if (tournament === true && firstPlayer < namePlayer.length - 1)
     {
+        scoreUpdate = false;
         firstPlayer++;
         secondPlayer++;
         mainElement.innerHTML += '<div id="nextRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
@@ -1079,6 +1082,7 @@ function endGameMemory(winner, type)
     }
     else if (tournament === true && namePlayer.length > 2 && namePlayer.length === (numberPlayers / 2))
     {
+        scoreUpdate = false;
         firstPlayer = 0;
         secondPlayer = 1;
         mainElement.innerHTML += '<div id="SecondRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
@@ -1102,6 +1106,7 @@ function endGameMemory(winner, type)
     }
     else if (tournament === true && namePlayer.length > 3 && namePlayer.length === (numberPlayers / 4))
     {
+        scoreUpdate = false;
         firstPlayer = 0;
         secondPlayer = 1;
         mainElement.innerHTML += '<div id="ThirdRound" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
@@ -1124,6 +1129,7 @@ function endGameMemory(winner, type)
         });
     }
     else if (tournament === true && namePlayer.length === 2 ) {
+        scoreUpdate = false;
         firstPlayer = 0;
         secondPlayer = 1;
         mainElement.innerHTML += '<div id="Finale" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
@@ -1138,6 +1144,7 @@ function endGameMemory(winner, type)
     }
     else if (tournament === true && namePlayer.length === 1) {
         console.log("End of the tournament");
+        scoreUpdate = false;
         updateEndTournamentMemory(tournament_id, winner);
         firstPlayer = 0;
         secondPlayer = 0;
