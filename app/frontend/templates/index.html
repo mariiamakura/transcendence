@@ -165,24 +165,48 @@
 
     ksocket.onopen = function () {
         console.log("[open] Connection established");
-        ksocket.send(JSON.stringify({
-            'action': 'alive'
-        }));
+        setInterval(() => {
+			if (ksocket.readyState === WebSocket.OPEN) {
+				console.log('sending Keep alive');
+				ksocket.send(JSON.stringify({'action': 'alive'}));
+			}
+		}, 1000);
     };
 
     ksocket.onmessage = function (event) {
         const data = JSON.parse(event.data);
         if (data.action === 'keep_alive') {
-            console.log('Keep alive');
+			console.log('receiving keepalive');
             ksocket.send(JSON.stringify({
 
                 'action': 'alive'
             }));
-
         }
+		
     };
     ksocket.onclose = function () {
     };
+
+	window.addEventListener('beforeunload', function (event) {
+		// Attempt to send a disconnection message
+		if (ksocket.readyState === WebSocket.OPEN) {
+			ksocket.send(JSON.stringify({'action': 'disconnecting', 'code': 1000}));
+			
+		}
+		
+		// Close the socket
+		{% comment %} ksocket.close(); {% endcomment %}
+	});
+
+	
+	window.addEventListener('unload', function (event) {
+		// Ensure the socket is closed if not already done
+		if (ksocket.readyState !== WebSocket.CLOSED) {
+			ksocket.close();
+
+		}
+		return'';
+	});
     
 </script>
 {% endif %}
