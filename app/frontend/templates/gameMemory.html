@@ -111,6 +111,9 @@ function decideHost() {
 
 function choiceSet() {
     var main = document.getElementById('content');
+    document.getElementById('name_first_player').innerHTML = "";
+
+    document.getElementById('choice').innerHTML = "";
     var div = document.createElement("div");
     div.id = "choice";
     
@@ -149,7 +152,6 @@ function choiceSet() {
 function choiceCards() {
     var main = document.getElementById('content');
     // main.innerHTML = "";
-
     var div = document.createElement("div");
     div.id = "choice";
     main.appendChild(div);
@@ -259,7 +261,7 @@ async function getNamePlayer() {
     try {
         const response = await fetch('/get_display_name/');
         const data = await response.json();
-        main.innerHTML += `<p style="padding-top: 2em; display: flex; align-items:center; justify-content:center;">{% trans 'First player is'  %}: ${data.display_name}</p>`;
+        main.innerHTML += `<p id="name_first_player" style="padding-top: 2em; display: flex; align-items:center; justify-content:center;">{% trans 'First player is'  %}: ${data.display_name}</p>`;
         namePlayer.push(data.display_name);
 
         for (let i = 2; i <= numberPlayers; i++) {
@@ -355,7 +357,7 @@ function startButton() {
 	var startButton = document.createElement("button");
 	startButton.textContent = "{% trans 'Start!' %}";
 	startButton.classList.add("styled-button");
-	document.getElementById('choice').appendChild(startButton);
+	div.appendChild(startButton);
 	return new Promise (function (resolve) {
 		startButton.addEventListener("click", function() {
 			startGame = true;

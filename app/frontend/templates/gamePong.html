@@ -59,7 +59,6 @@ async function showGamePong() {
     boardbackgroundColor = "#2f3542";
     ballColor = "white";
     paddleColor = "skyblue";
-    // check if all the variables are reinitialized
     if (await remoteOrLocal()) {
         if (await decideHost()) {
             isHost = true;
@@ -146,55 +145,58 @@ function decideHost() {
 
 function scoreChoice() {
     var main = document.getElementById('content');
-    document.getElementById('name_first_player').innerHTML = '';
-    // var choiceDiv = document.createElement("div");
-    // choiceDiv.id = "choice";
-    // choiceDiv.innerHTML = '';
-    document.getElementById('choice').innerHTML = '';   
-    // main.appendChild(choiceDiv);
-    var question = document.createElement("p");
-    question.textContent = "{% trans ' Choose how many points wins: ' %}";
-    question.classList.add("text-center");
-    question.style.paddingTop = "5em";
-    question.style.display = "flex";
-    document.getElementById('choice').appendChild(question);
+    document.getElementById('name_first_player').remove();
+    var choiceDiv = document.createElement("div");
+    choiceDiv.id = "choice";
+    choiceDiv.innerHTML = '<p class="text-center" style="padding-top: 5em; display: flex; " > Chose how many points wins: </p>';
     
     if (tournament === false) {
         var unlimited = document.createElement("button");
         unlimited.textContent = "Unlimited";
         unlimited.classList.add("styled-button");
-        document.getElementById('choice').appendChild(unlimited);
-        unlimited.addEventListener("click", function () {
-            scoreToDo = 10000;
-            document.getElementById('choice').remove();
-        });
+        choiceDiv.appendChild(unlimited);
     }
     
     var scoreTwelve = document.createElement("button");
     scoreTwelve.textContent = "12";
     scoreTwelve.classList.add("styled-button");
-    document.getElementById('choice').appendChild(scoreTwelve);
-    scoreTwelve.addEventListener("click", function () {
-        scoreToDo = 12; // debugging
-        document.getElementById('choice').remove();
-    });
+    choiceDiv.appendChild(scoreTwelve);
     
     var scoreEighteen = document.createElement("button");
     scoreEighteen.textContent = "18";
     scoreEighteen.classList.add("styled-button");
-    document.getElementById('choice').appendChild(scoreEighteen);
-    scoreEighteen.addEventListener("click", function () {
-        scoreToDo = 18;
-        document.getElementById('choice').remove();
-    });
+    choiceDiv.appendChild(scoreEighteen);
     
     var scoreTwentyFour = document.createElement("button");
     scoreTwentyFour.textContent = "24";
     scoreTwentyFour.classList.add("styled-button");
-    document.getElementById('choice').appendChild(scoreTwentyFour);
-    scoreTwentyFour.addEventListener("click", function () {
-        scoreToDo = 24;
-        document.getElementById('choice').remove();
+    choiceDiv.appendChild(scoreTwentyFour);
+
+    main.appendChild(choiceDiv);
+
+    return new Promise(function (resolve) {
+        if (tournament === false) {
+            unlimited.addEventListener("click", function () {
+                resolve(true);
+                scoreToDo = 10000;
+                choiceDiv.remove();
+            });
+        }
+        scoreTwelve.addEventListener("click", function () {
+            resolve(true);
+            scoreToDo = 12;
+            choiceDiv.remove();
+        });
+        scoreEighteen.addEventListener("click", function () {
+            resolve(true);
+            scoreToDo = 18;
+            choiceDiv.remove();
+        });
+        scoreTwentyFour.addEventListener("click", function () {
+            resolve(true);
+            scoreToDo = 24;
+            choiceDiv.remove();
+        });
     });
 }
 
@@ -316,7 +318,7 @@ function settingsChoice() {
     var main = document.getElementById('content');
 
     // Create the choice div 
-    document.getElementById('choice').innerHTML = '';
+    // document.getElementById('choice').innerHTML = '';
     
     var choiceDiv = document.createElement("div");
     choiceDiv.id = "choice";
@@ -479,25 +481,40 @@ function startButtonTournament() {
 
 function startButton() {
     var main = document.getElementById('content');
-    main.innerHTML += '<h1>{% trans 'Instructions'  %}</h1>';
-    if (remote === true)
-        main.innerHTML += '<p class="text-center" style="text-align: center; justify-content:center; padding-top:5em;">{% trans 'You can control your paddle with W(up) and S(down) or with the Up arrow and Down Arrow.'  %}</p>';
-    else if (local === true)
-        main.innerHTML += '<p class="text-center" style="text-align: center; justify-content:center; padding-top:5em;">' + namePlayer[firstPlayer] + ' controls: W (up) and S (down)</p>' +
+    var choiceDiv = document.createElement("div");
+    choiceDiv.id = "choice";
+    
+    // Add Instructions
+    main.innerHTML += '<h1>{% trans 'Instructions' %}</h1>';
+    
+    // Add Control Instructions
+    if (remote === true) {
+        choiceDiv.innerHTML += '<p class="text-center" style="text-align: center; justify-content:center; padding-top:5em;">{% trans 'You can control your paddle with W(up) and S(down) or with the Up arrow and Down Arrow.' %}</p>';
+    } else if (local === true) {
+        choiceDiv.innerHTML += '<p class="text-center" style="text-align: center; justify-content:center; padding-top:5em;">' + namePlayer[firstPlayer] + ' controls: W (up) and S (down)</p>' +
             '<p class="text-center" style="text-align: center; padding-top:1em;">' + namePlayer[secondPlayer] + ' controls: Up arrow (up) and Down arrow (down)</p>';
-    main.innerHTML += '<div id="choice"><p style="text-align: center; padding-top:5em;"> {% trans 'Ready to start?' %}  <br><br>{% trans ' Go!'  %}</p></div>';
+    }
+    
+    // Add Start Button
+    choiceDiv.innerHTML += '<p style="text-align: center; padding-top:5em;">{% trans 'Ready to start?' %} <br><br>{% trans ' Go!' %}</p>';
     var startButton = document.createElement("button");
     startButton.textContent = "Start !";
     startButton.classList.add("styled-button");
-    document.getElementById('choice').appendChild(startButton);
+    choiceDiv.appendChild(startButton);
+    
+    // Append the choiceDiv to the main element
+    main.appendChild(choiceDiv);
+
+    // Return a promise for asynchronous handling
     return new Promise(function (resolve) {
         startButton.addEventListener("click", function () {
             startGame = true;
-            document.getElementById('choice').remove();
+            choiceDiv.remove();
             resolve(true);
         });
     });
 }
+
 
 
 // hostsocket
