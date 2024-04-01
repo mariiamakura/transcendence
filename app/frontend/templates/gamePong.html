@@ -144,61 +144,60 @@ function decideHost() {
     });
 }
 
-async function scoreChoice() {
+function scoreChoice() {
     var main = document.getElementById('content');
     document.getElementById('name_first_player').innerHTML = '';
-    var choiceDiv = document.createElement("div");
-    choiceDiv.id = "choice";
-    main.appendChild(choiceDiv);
+    // var choiceDiv = document.createElement("div");
+    // choiceDiv.id = "choice";
+    // choiceDiv.innerHTML = '';
+    document.getElementById('choice').innerHTML = '';   
+    // main.appendChild(choiceDiv);
     var question = document.createElement("p");
     question.textContent = "{% trans ' Choose how many points wins: ' %}";
     question.classList.add("text-center");
     question.style.paddingTop = "5em";
     question.style.display = "flex";
-    choiceDiv.appendChild(question);
+    document.getElementById('choice').appendChild(question);
     
     if (tournament === false) {
         var unlimited = document.createElement("button");
         unlimited.textContent = "Unlimited";
         unlimited.classList.add("styled-button");
-        choiceDiv.appendChild(unlimited);
+        document.getElementById('choice').appendChild(unlimited);
         unlimited.addEventListener("click", function () {
             scoreToDo = 10000;
             document.getElementById('choice').remove();
-            resolve(true);
         });
     }
     
     var scoreTwelve = document.createElement("button");
     scoreTwelve.textContent = "12";
     scoreTwelve.classList.add("styled-button");
-    choiceDiv.appendChild(scoreTwelve);
+    document.getElementById('choice').appendChild(scoreTwelve);
     scoreTwelve.addEventListener("click", function () {
         scoreToDo = 12; // debugging
         document.getElementById('choice').remove();
-        resolve(true);
     });
     
     var scoreEighteen = document.createElement("button");
     scoreEighteen.textContent = "18";
     scoreEighteen.classList.add("styled-button");
-    choiceDiv.appendChild(scoreEighteen);
+    document.getElementById('choice').appendChild(scoreEighteen);
     scoreEighteen.addEventListener("click", function () {
         scoreToDo = 18;
         document.getElementById('choice').remove();
-        resolve(true);
     });
     
     var scoreTwentyFour = document.createElement("button");
     scoreTwentyFour.textContent = "24";
     scoreTwentyFour.classList.add("styled-button");
-    choiceDiv.appendChild(scoreTwentyFour);
+    document.getElementById('choice').appendChild(scoreTwentyFour);
     scoreTwentyFour.addEventListener("click", function () {
         scoreToDo = 24;
         document.getElementById('choice').remove();
-        resolve(true);
     });
 }
+
 
 function TwoOrTournament() {
 
@@ -313,15 +312,15 @@ async function getNamePlayer() {
     return namePlayer;
 }
 
-async function settingsChoice() {
+function settingsChoice() {
     var main = document.getElementById('content');
 
     // Create the choice div 
     document.getElementById('choice').innerHTML = '';
-    main.appendChild(choiceDiv);
-
+    
     var choiceDiv = document.createElement("div");
     choiceDiv.id = "choice";
+    main.appendChild(choiceDiv);
 
     if (isHost || local === true) {
         // Choose difficulty section
@@ -398,6 +397,7 @@ async function settingsChoice() {
 
     choiceDiv.appendChild(colorButtonsContainer);
     var colorButtons = colorButtonsContainer.querySelectorAll("button");
+    
     colorButtons.forEach(function (button) {
         button.addEventListener("click", function () {
             colorButtons.forEach(function (btn) {
@@ -482,7 +482,7 @@ function startButton() {
     main.innerHTML += '<h1>{% trans 'Instructions'  %}</h1>';
     if (remote === true)
         main.innerHTML += '<p class="text-center" style="text-align: center; justify-content:center; padding-top:5em;">{% trans 'You can control your paddle with W(up) and S(down) or with the Up arrow and Down Arrow.'  %}</p>';
-else if (local === true)
+    else if (local === true)
         main.innerHTML += '<p class="text-center" style="text-align: center; justify-content:center; padding-top:5em;">' + namePlayer[firstPlayer] + ' controls: W (up) and S (down)</p>' +
             '<p class="text-center" style="text-align: center; padding-top:1em;">' + namePlayer[secondPlayer] + ' controls: Up arrow (up) and Down arrow (down)</p>';
     main.innerHTML += '<div id="choice"><p style="text-align: center; padding-top:5em;"> {% trans 'Ready to start?' %}  <br><br>{% trans ' Go!'  %}</p></div>';
