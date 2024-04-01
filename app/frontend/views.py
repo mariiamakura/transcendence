@@ -160,7 +160,7 @@ def update_game_result_pong(request):
             username = data.get('winner') + '_guest'
             display_name = data.get('winner') + '_guest'
             email = data.get('winner') + '@guest.com'
-            user = User.objects.filter(display_name=display_name).first()
+            user = User.objects.filter(display_name=data.get('winner')).first()
             if user:
                 winner_user = user
             else:
