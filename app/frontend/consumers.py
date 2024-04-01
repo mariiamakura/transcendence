@@ -69,10 +69,11 @@ class KeepAliveConsumer(AsyncWebsocketConsumer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.user = None
-        self.last_alive_time = datetime.now()
+        # self.last_alive_time = datetime.now()
         self.alive_timeout = 30  # seconds
         self.check_interval = 5  # seconds
         self.keep_alive_task = None
+        self.flag = False
 
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
@@ -84,16 +85,24 @@ class KeepAliveConsumer(AsyncWebsocketConsumer):
         )
         await self.accept()
         await self.set_user_online(True)
-        if self.keep_alive_task:
-            self.keep_alive_task.kill()
-            # await self.set_user_online(False)
+        # if self.keep_alive_task and not self.keep_alive_task.done():
+        #     self.keep_alive_task.cancel()
+        # await self.set_user_online(False)
         self.last_alive_time = datetime.now()
-        self.check_alive()
-        # self.keep_alive_task = asyncio.create_task(self.check_alive())
+        # self.check_alive()
+        if not self.flag:
+            self.keep_alive_task = asyncio.create_task(self.check_alive())
 
     async def disconnect(self, close_code):
         logger.debug(f"WebSocket disconnect invoked for user: {self.user}, close_code: {close_code}")
         # await self.set_user_online(False)
+        try:
+            # Cancel the task
+            self.keep_alive_task.cancel()
+            logger.debug(f"****************trying to cancel task************* {self.user}")
+        except Exception as e:
+            logger.error(f"Error cancelling keep_alive_task: {e}")
+        # self.keep_alive_task = None
         await super().disconnect(close_code)
 
     @database_sync_to_async
@@ -115,6 +124,7 @@ class KeepAliveConsumer(AsyncWebsocketConsumer):
 
         if action == 'alive':
             self.last_alive_time = datetime.now()
+            logger.debug(f"received function update: { self.last_alive_time}")
             await asyncio.sleep(1)
             await self.send(text_data=json.dumps({'action': 'keep_alive'}))
 
@@ -124,13 +134,17 @@ class KeepAliveConsumer(AsyncWebsocketConsumer):
         }))
 
     async def check_alive(self):
+        self.flag = True
         while True:
             await asyncio.sleep(self.check_interval)
+            logger.debug(f"SECONDS DIFFERECE: { (datetime.now() - self.last_alive_time).total_seconds() } for {self.room_name}")
             if (datetime.now() - self.last_alive_time).total_seconds() > self.alive_timeout:
                 logger.debug(f"Keep-alive timeout reached for user: {self.user}")
-                if self.user:
-                    await self.set_user_online(False)
-                await self.close()
+                await self.set_user_online(False)
+                self.flag = False
+                self.keep_alive_task.cancel()  # Cancel the task
+                await super().disconnect()
+                # await self.close()
                 break
 
     @database_sync_to_async
