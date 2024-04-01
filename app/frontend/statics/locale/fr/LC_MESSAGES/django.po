@@ -92,9 +92,6 @@ msgstr "Prénom"
 msgid "Enter your Firstame"
 msgstr "Entrez votre prénom"
 
-#: frontend/templates/editProfile.html:19
-msgid "Surname"
-msgstr "Nom de famille"
 
 #: frontend/templates/editProfile.html:20
 msgid "Enter your Surname"
@@ -130,18 +127,14 @@ msgid " Do you want to play a 1vs1 game or a tournament ? "
 msgstr "Voulez-vous jouer à un jeu 1 contre 1 ou à un tournoi ?"
 
 #: frontend/templates/gameMemory.html:48 frontend/templates/gamePong.html:199
-#, fuzzy
-#| msgid "Pong - The ultimate tournament"
 msgid "Play tournament"
-msgstr "Pong - Le tournoi ultime"
+msgstr "Lancer un tournoi"
 
 #: frontend/templates/gameMemory.html:49 frontend/templates/gamePong.html:200
 msgid "Play 1vs1"
 msgstr "Jouer 1 contre 1"
 
 #: frontend/templates/gameMemory.html:70 frontend/templates/gameMemory.html:345
-#, fuzzy
-#| msgid "Which type of game do you wanna play"
 msgid " Which type of game do you wanna play ? "
 msgstr "Quel type de jeu voulez-vous jouer"
 
@@ -166,10 +159,8 @@ msgid "Join Existing Game"
 msgstr "Rejoindre un jeu existant"
 
 #: frontend/templates/gameMemory.html:122
-#, fuzzy
-#| msgid "Which type of game do you wanna play"
-msgid " Which set do you want to play with ? "
-msgstr "Quel type de jeu voulez-vous jouer"
+msgid "Which set do you want to play with?"
+msgstr "Avec quel jeu de carte voulez-vous jouer ?"
 
 #: frontend/templates/gameMemory.html:124
 msgid "Nature (easy)"
@@ -180,15 +171,11 @@ msgid "Robot (hard)"
 msgstr "Robot (difficile)"
 
 #: frontend/templates/gameMemory.html:147
-#, fuzzy
-#| msgid "How many players do you want to be"
 msgid " How many cards do you want to play with: "
-msgstr "Combien de joueurs souhaitez-vous être"
+msgstr "Combien de cartes voulez-vous :"
 
 #: frontend/templates/gameMemory.html:190
-#, fuzzy
-#| msgid "How many players do you want to be"
-msgid " How many players do you want to be ? "
+msgid " How many players do you want to be?"
 msgstr "Combien de joueurs souhaitez-vous être"
 
 #: frontend/templates/gameMemory.html:192 frontend/templates/gamePong.html:223
@@ -196,10 +183,8 @@ msgid "players"
 msgstr "joueurs"
 
 #: frontend/templates/gameMemory.html:243 frontend/templates/gamePong.html:265
-#, fuzzy
-#| msgid "players"
 msgid "First player is"
-msgstr "joueurs"
+msgstr "Le premier joueur est"
 
 #: frontend/templates/gameMemory.html:249 frontend/templates/gamePong.html:271
 msgid " Name of player "
@@ -238,10 +223,9 @@ msgid "Start !"
 msgstr "Commencer !"
 
 #: frontend/templates/gameMemory.html:371
-#, fuzzy
 #| msgid "Memory"
 msgid "Memory game"
-msgstr "Mémoire"
+msgstr "Jeu de mémoire"
 
 #: frontend/templates/gameMemory.html:422
 msgid "Nature"
@@ -281,10 +265,8 @@ msgid " Choose the difficulty: "
 msgstr "Choisissez la difficulté :"
 
 #: frontend/templates/gamePong.html:370
-#, fuzzy
-#| msgid "Which type of game do you wanna play"
 msgid " Which theme do you want for your game: "
-msgstr "Quel type de jeu voulez-vous jouer"
+msgstr "Quel thème voulez-vous r"
 
 #: frontend/templates/gamePong.html:378 frontend/templates/gamePong.html:394
 msgid "Team mode: Dark blue background, white ball and skyblue paddles"
@@ -329,6 +311,7 @@ msgstr " Vous jouerez avec W (haut) et S (bas) "
 #: frontend/templates/gamePong.html:683
 msgid " You will play with the Up arrow(up) and Down arrow(down) "
 msgstr " Vous jouerez avec les flèches Haut (haut) et Bas (bas) "
+
 #: frontend/templates/home.html:14
 msgid "Welcome"
 msgstr "Bienvenue"
@@ -356,6 +339,9 @@ msgstr "Connexion avec 42"
 #: frontend/templates/index.html:8
 msgid "Pong - The ultimate tournament"
 msgstr "Pong - Le tournoi ultime"
+
+msgid "tournament"
+msgstr "tournoi"
 
 #: frontend/templates/index.html:22
 msgid "42 Pong"
@@ -478,9 +464,7 @@ msgid "Type"
 msgstr "typ"
 
 #: frontend/templates/scoreboard.html:28
-#, fuzzy
-#| msgid "Surname"
-msgid "Tournament"
+msgid "Surname"
 msgstr "Nom de famille"
 
 #: frontend/templates/scoreboard.html:30
@@ -488,20 +472,12 @@ msgid "1vs1"
 msgstr "1 contre 1"
 
 #: frontend/templates/scoreboard.html:32
-#, fuzzy
-#| msgid "players"
 msgid "Players"
 msgstr "joueurs"
 
 #: frontend/templates/scoreboard.html:36
 msgid "Winner"
 msgstr "Gagnant"
-
-#: frontend/templates/scoreboard.html:36
-#, fuzzy
-#| msgid "Scoreboard"
-msgid "Score"
-msgstr "Classement"
 
 #: frontend/templates/scoreboard.html:41
 msgid "Previous"
@@ -541,10 +517,8 @@ msgid "Offline"
 msgstr "Hors ligne"
 
 #: frontend/templates/showFriends.html:66
-#, fuzzy
-#| msgid "Friendlist"
 msgid "Add Friend"
-msgstr "Liste d'amis"
+msgstr "Ajouter un ami"
 
 #: frontend/templates/signIn.html:18 frontend/templates/signUp.html:18
 msgid "Intraname"
@@ -630,3 +604,21 @@ msgstr "Impossible de joindre l'API. Veuillez réessayer."
 
 #~ msgid "Passwords do not match"
 #~ msgstr "Les mots de passe ne correspondent pas"
+
+msgid "Which type of game do you wanna play?"
+msgstr "Quel type de jeu voulez-vous jouer ?"
+
+msgid "Name of player"
+msgstr "Nom du joueur"
+
+msgid "Easy"
+msgstr "Facile"
+
+msgid "Hard"
+msgstr "Difficile"
+
+msgid "Team Theme: Dark blue background, white ball and skyblue paddles"
+msgstr "Thème de l'équipe : fond bleu foncé, balle blanche et palettes bleu ciel"
+
+msgid "Ready to start? Go!"
+msgstr "Prêt à démarrer ? Allez !"

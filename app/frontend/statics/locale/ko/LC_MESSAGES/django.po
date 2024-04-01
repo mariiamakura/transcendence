@@ -130,20 +130,19 @@ msgid " Do you want to play a 1vs1 game or a tournament ? "
 msgstr "1대1 게임이나 토너먼트를 하시겠습니까?"
 
 #: frontend/templates/gameMemory.html:48 frontend/templates/gamePong.html:199
-#, fuzzy
-#| msgid "Pong - The ultimate tournament"
-msgid "Play tournament"
+msgid "Pong - The ultimate tournament"
 msgstr "퐁 - 궁극의 토너먼트"
+
+msgid "Play tournament"
+msgstr "토너먼트 참가하기"
 
 #: frontend/templates/gameMemory.html:49 frontend/templates/gamePong.html:200
 msgid "Play 1vs1"
 msgstr "1대1 플레이"
 
 #: frontend/templates/gameMemory.html:70 frontend/templates/gameMemory.html:345
-#, fuzzy
-#| msgid "Which type of game do you wanna play"
 msgid " Which type of game do you wanna play ? "
-msgstr "어떤 종류의 게임을 하시겠습니까"
+msgstr "어떤 종류의 게임을 하시겠습니까?"
 
 #: frontend/templates/gameMemory.html:73 frontend/templates/gamePong.html:101
 msgid "Play local Game"
@@ -166,8 +165,6 @@ msgid "Join Existing Game"
 msgstr "기존 게임에 참가하기"
 
 #: frontend/templates/gameMemory.html:122
-#, fuzzy
-#| msgid "Which type of game do you wanna play"
 msgid " Which set do you want to play with ? "
 msgstr "어떤 종류의 게임을 하시겠습니까"
 
@@ -180,15 +177,11 @@ msgid "Robot (hard)"
 msgstr "로봇 (어려움)"
 
 #: frontend/templates/gameMemory.html:147
-#, fuzzy
-#| msgid "How many players do you want to be"
 msgid " How many cards do you want to play with: "
-msgstr "플레이어 수를 선택하세요"
+msgstr "몇 장의 카드로 하시겠습니까:"
 
 #: frontend/templates/gameMemory.html:190
-#, fuzzy
-#| msgid "How many players do you want to be"
-msgid " How many players do you want to be ? "
+msgid "How many players do you want to be"
 msgstr "플레이어 수를 선택하세요"
 
 #: frontend/templates/gameMemory.html:192 frontend/templates/gamePong.html:223
@@ -196,9 +189,7 @@ msgid "players"
 msgstr "플레이어"
 
 #: frontend/templates/gameMemory.html:243 frontend/templates/gamePong.html:265
-#, fuzzy
-#| msgid "players"
-msgid "First player is"
+msgid "첫 번째 플레이어는"
 msgstr "플레이어"
 
 #: frontend/templates/gameMemory.html:249 frontend/templates/gamePong.html:271
@@ -238,10 +229,8 @@ msgid "Start !"
 msgstr "시작!"
 
 #: frontend/templates/gameMemory.html:371
-#, fuzzy
-#| msgid "Memory"
 msgid "Memory game"
-msgstr "기억력"
+msgstr "기억력 게임"
 
 #: frontend/templates/gameMemory.html:422
 msgid "Nature"
@@ -274,17 +263,15 @@ msgstr "퐁"
 
 #: frontend/templates/gamePong.html:147
 msgid " Choose how many points wins: "
-msgstr "몇 점으로 이기시겠습니까:"
+msgstr "몇 점으로 이기시겠습니까: "
 
 #: frontend/templates/gamePong.html:316
 msgid " Choose the difficulty: "
 msgstr "난이도 선택:"
 
 #: frontend/templates/gamePong.html:370
-#, fuzzy
-#| msgid "Which type of game do you wanna play"
 msgid " Which theme do you want for your game: "
-msgstr "어떤 종류의 게임을 하시겠습니까"
+msgstr "게임에 어떤 테마를 원하시나요: "
 
 #: frontend/templates/gamePong.html:378 frontend/templates/gamePong.html:394
 msgid "Team mode: Dark blue background, white ball and skyblue paddles"
@@ -353,10 +340,6 @@ msgstr "계속하려면 로그인 또는 가입하세요..."
 #: frontend/templates/home.html:54 frontend/templates/signIn.html:42
 msgid "SignIn with 42"
 msgstr "42로 로그인"
-
-#: frontend/templates/index.html:8
-msgid "Pong - The ultimate tournament"
-msgstr "퐁 - 궁극의 토너먼트"
 
 #: frontend/templates/index.html:22
 msgid "42 Pong"
@@ -443,10 +426,8 @@ msgid "Lastname:"
 msgstr "성:"
 
 #: frontend/templates/profile.html:35
-#, fuzzy
-#| msgid "Language"
 msgid "Language:"
-msgstr "언어"
+msgstr "언어:"
 
 #: frontend/templates/profile.html:43
 msgid "Edit Profile"
@@ -480,19 +461,11 @@ msgstr "역사적인:"
 msgid "Type"
 msgstr "유형"
 
-#: frontend/templates/scoreboard.html:28
-#, fuzzy
-#| msgid "Surname"
-msgid "Tournament"
-msgstr "성"
-
 #: frontend/templates/scoreboard.html:30
 msgid "1vs1"
 msgstr "1대1"
 
 #: frontend/templates/scoreboard.html:32
-#, fuzzy
-#| msgid "players"
 msgid "Players"
 msgstr "플레이어"
 
@@ -501,10 +474,8 @@ msgid "Winner"
 msgstr "승자"
 
 #: frontend/templates/scoreboard.html:36
-#, fuzzy
-#| msgid "Scoreboard"
 msgid "Score"
-msgstr "점수표"
+msgstr "점수"
 
 #: frontend/templates/scoreboard.html:41
 msgid "Previous"
@@ -544,10 +515,8 @@ msgid "Offline"
 msgstr "오프라인"
 
 #: frontend/templates/showFriends.html:66
-#, fuzzy
-#| msgid "Friendlist"
 msgid "Add Friend"
-msgstr "친구 목록"
+msgstr "친구 추가"
 
 #: frontend/templates/signIn.html:18 frontend/templates/signUp.html:18
 msgid "Intraname"
@@ -633,3 +602,25 @@ msgstr "API에 접근할 수 없습니다. 다시 시도하세요."
 
 #~ msgid "Passwords do not match"
 #~ msgstr "비밀번호가 일치하지 않습니다"
+
+
+msgid "Which type of game do you wanna play?"
+msgstr "어떤 종류의 게임을 하고 싶으세요?"
+
+msgid "First player is"
+msgstr "첫 번째 플레이어는"
+
+msgid "Name of player "
+msgstr "플레이어의 이름 "
+
+msgid "Easy"
+msgstr "쉬움"
+
+msgid "Hard"
+msgstr "어려움"
+
+msgid "Team Theme: Dark blue background, white ball and skyblue paddles"
+msgstr "팀 테마: 짙은 파란색 배경, 흰 공 및 하늘색 패들"
+
+msgid "Ready to start?  Go!"
+msgstr "시작 준비가 되었나요? 출발!"

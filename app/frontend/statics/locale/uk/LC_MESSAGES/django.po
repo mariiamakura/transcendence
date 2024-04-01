@@ -81,19 +81,19 @@ msgstr "Редагувати профіль:"
 
 #: frontend/templates/editProfile.html:11
 msgid "Display Name"
-msgstr "Відображуване ім'я"
+msgstr "Відображуване імя"
 
 #: frontend/templates/editProfile.html:12
 msgid "Enter your Display Name"
-msgstr "Введіть ваше відображуване ім'я"
+msgstr "Введіть ваше відображуване імя"
 
 #: frontend/templates/editProfile.html:15
 msgid "Firstname"
-msgstr "Ім'я"
+msgstr "Імя"
 
 #: frontend/templates/editProfile.html:16
 msgid "Enter your Firstame"
-msgstr "Введіть ваше ім'я"
+msgstr "Введіть ваше імя"
 
 #: frontend/templates/editProfile.html:19
 msgid "Surname"
@@ -121,20 +121,18 @@ msgstr "Зберегти профіль"
 
 #: frontend/templates/gameMemory.html:8
 msgid "Memoryyyyyyyy"
-msgstr "Пам'ять"
+msgstr "Память"
 
 #: frontend/templates/gameMemory.html:14 frontend/templates/index.html:48
 #: frontend/templates/scoreboard.html:24
 msgid "Memory"
-msgstr "Пам'ять"
+msgstr "Память"
 
 #: frontend/templates/gameMemory.html:45 frontend/templates/gamePong.html:195
-msgid " Do you want to play a 1vs1 game or a tournament ? "
+msgid " Do you want to play a 1vs1 game or a tournament?"
 msgstr "Чи хочете ви грати в гру 1 на 1 або турнір?"
 
 #: frontend/templates/gameMemory.html:48 frontend/templates/gamePong.html:199
-#, fuzzy
-#| msgid "Pong - The ultimate tournament"
 msgid "Play tournament"
 msgstr "Понг - останній турнір"
 
@@ -143,9 +141,7 @@ msgid "Play 1vs1"
 msgstr "Грати 1 на 1"
 
 #: frontend/templates/gameMemory.html:70 frontend/templates/gameMemory.html:345
-#, fuzzy
-#| msgid "Which type of game do you wanna play"
-msgid " Which type of game do you wanna play ? "
+msgid " Which type of game do you wanna play?"
 msgstr "Який тип гри ви хочете грати"
 
 #: frontend/templates/gameMemory.html:73 frontend/templates/gamePong.html:101
@@ -169,9 +165,7 @@ msgid "Join Existing Game"
 msgstr "Приєднатися до існуючої гри"
 
 #: frontend/templates/gameMemory.html:122
-#, fuzzy
-#| msgid "Which type of game do you wanna play"
-msgid " Which set do you want to play with ? "
+msgid " Which set do you want to play with?"
 msgstr "Який тип гри ви хочете грати"
 
 #: frontend/templates/gameMemory.html:124
@@ -183,15 +177,12 @@ msgid "Robot (hard)"
 msgstr "Робот (важко)"
 
 #: frontend/templates/gameMemory.html:147
-#, fuzzy
-#| msgid "How many players do you want to be"
-msgid " How many cards do you want to play with: "
+msgid "How many cards do you want to play with: "
 msgstr "Скільки гравців ви хочете бути"
 
 #: frontend/templates/gameMemory.html:190
-#, fuzzy
-#| msgid "How many players do you want to be"
-msgid " How many players do you want to be ? "
+
+msgid " How many players do you want to be?"
 msgstr "Скільки гравців ви хочете бути"
 
 #: frontend/templates/gameMemory.html:192 frontend/templates/gamePong.html:223
@@ -199,14 +190,12 @@ msgid "players"
 msgstr "гравців"
 
 #: frontend/templates/gameMemory.html:243 frontend/templates/gamePong.html:265
-#, fuzzy
-#| msgid "players"
 msgid "First player is"
 msgstr "гравців"
 
 #: frontend/templates/gameMemory.html:249 frontend/templates/gamePong.html:271
 msgid " Name of player "
-msgstr "Ім'я гравця"
+msgstr "Імя гравця"
 
 #: frontend/templates/gameMemory.html:251 frontend/templates/gamePong.html:273
 msgid "Submit"
@@ -214,7 +203,7 @@ msgstr "Надіслати"
 
 #: frontend/templates/gameMemory.html:268 frontend/templates/gamePong.html:291
 msgid "Name already exists! Please choose a different name."
-msgstr "Таке ім'я вже існує! Будь ласка, виберіть інше ім'я."
+msgstr "Таке імя вже існує! Будь ласка, виберіть інше імя."
 
 #: frontend/templates/gameMemory.html:278
 msgid "Error:"
@@ -222,7 +211,7 @@ msgstr "Помилка:"
 
 #: frontend/templates/gameMemory.html:293
 msgid "Welcome to the memory tournament !"
-msgstr "Ласкаво просимо до турніру пам'яті!"
+msgstr "Ласкаво просимо до турніру памяті!"
 
 #: frontend/templates/gameMemory.html:293
 msgid "The rounds are the following:"
@@ -241,10 +230,8 @@ msgid "Start !"
 msgstr "Почати !"
 
 #: frontend/templates/gameMemory.html:371
-#, fuzzy
-#| msgid "Memory"
 msgid "Memory game"
-msgstr "Пам'ять"
+msgstr "Память"
 
 #: frontend/templates/gameMemory.html:422
 msgid "Nature"
@@ -284,8 +271,6 @@ msgid " Choose the difficulty: "
 msgstr "Виберіть складність:"
 
 #: frontend/templates/gamePong.html:370
-#, fuzzy
-#| msgid "Which type of game do you wanna play"
 msgid " Which theme do you want for your game: "
 msgstr "Який тип гри ви хочете грати"
 
@@ -394,7 +379,7 @@ msgid "Mariia Paraskun"
 msgstr "Марія Параскун"
 
 #: frontend/templates/index.html:97
-msgid "Seung Hwan Lee"
+msgid "Sung Hyan Lee"
 msgstr "Сун Хван Лі"
 
 #: frontend/templates/index.html:107
@@ -419,11 +404,11 @@ msgstr "Інформація про обліковий запис"
 
 #: frontend/templates/profile.html:24
 msgid "Intraname:"
-msgstr "Ім'я користувача:"
+msgstr "Імя користувача:"
 
 #: frontend/templates/profile.html:25
 msgid "Display Name:"
-msgstr "Показати ім'я:"
+msgstr "Показати імя:"
 
 #: frontend/templates/profile.html:26
 msgid "Email:"
@@ -439,7 +424,7 @@ msgstr "Особиста інформація"
 
 #: frontend/templates/profile.html:32
 msgid "Firstname:"
-msgstr "Ім'я:"
+msgstr "Імя:"
 
 #: frontend/templates/profile.html:33
 msgid "Lastname:"
@@ -472,7 +457,7 @@ msgstr "Серія перемог:"
 
 #: frontend/templates/scoreboard.html:13
 msgid "Memory:"
-msgstr "Пам'ять:"
+msgstr "Память:"
 
 #: frontend/templates/scoreboard.html:17
 msgid "Historic:"
@@ -483,7 +468,6 @@ msgid "Type"
 msgstr "Тип"
 
 #: frontend/templates/scoreboard.html:28
-#, fuzzy
 msgid "Tournament"
 msgstr "Турнір"
 
@@ -492,7 +476,6 @@ msgid "1vs1"
 msgstr "1 на 1"
 
 #: frontend/templates/scoreboard.html:32
-#, fuzzy
 msgid "Players"
 msgstr "гравців"
 
@@ -501,7 +484,6 @@ msgid "Winner"
 msgstr "Переможець"
 
 #: frontend/templates/scoreboard.html:36
-#, fuzzy
 msgid "Score"
 msgstr "Таблиця"
 
@@ -543,18 +525,16 @@ msgid "Offline"
 msgstr "Офлайн"
 
 #: frontend/templates/showFriends.html:66
-#, fuzzy
-#| msgid "Friendlist"
 msgid "Add Friend"
 msgstr "Список друзів"
 
 #: frontend/templates/signIn.html:18 frontend/templates/signUp.html:18
 msgid "Intraname"
-msgstr "Ім'я користувача"
+msgstr "Імя користувача"
 
 #: frontend/templates/signIn.html:19 frontend/templates/signUp.html:19
 msgid "Enter Intraname"
-msgstr "Введіть ім'я користувача"
+msgstr "Введіть імя користувача"
 
 #: frontend/templates/signIn.html:23 frontend/templates/signIn.html:24
 #: frontend/templates/signUp.html:22 frontend/templates/signUp.html:23
@@ -587,7 +567,7 @@ msgstr "Не вдалося створити користувача: корис�
 
 #: frontend/views.py:126
 msgid "Sign in failed. Please check your Intraname and password."
-msgstr "Не вдалося увійти. Будь ласка, перевірте своє ім'я користувача та пароль."
+msgstr "Не вдалося увійти. Будь ласка, перевірте своє імя користувача та пароль."
 
 #: frontend/views.py:369
 msgid "Logout successful"
@@ -619,7 +599,7 @@ msgstr "Не вдалося автентифікувати користувач�
 
 #: frontend/views.py:598
 msgid "Failed to reach API. Please try again."
-msgstr "Не вдалося з'єднатися з API. Будь ласка, спробуйте ще раз."
+msgstr "Не вдалося зєднатися з API. Будь ласка, спробуйте ще раз."
 
 #~ msgid "Games like back in the 80's"
 #~ msgstr "Ігри, схожі на ті, що були в 80-х роках"
@@ -628,7 +608,25 @@ msgstr "Не вдалося з'єднатися з API. Будь ласка, с�
 #~ msgstr "Інформація про користувача"
 
 #~ msgid "Username:"
-#~ msgstr "Ім'я користувача:"
+#~ msgstr "Імя користувача:"
 
 #~ msgid "Passwords do not match"
 #~ msgstr "Паролі не співпадають"
+
+msgid "Which type of game do you wanna play?"
+msgstr "Який тип гри ви хочете грати?"
+
+msgid "Name of player"
+msgstr "Ім'я гравця"
+
+msgid "Easy"
+msgstr "Легко"
+
+msgid "Hard"
+msgstr "Складно"
+
+msgid "Team Theme: Dark blue background, white ball and skyblue paddles"
+msgstr "Командна тема: темно-синій фон, біла куля та небесно-голубі ракетки"
+
+msgid "Ready to start? Go!"
+msgstr "Готові почати? Вперед!"

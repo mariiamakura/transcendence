@@ -34,7 +34,7 @@ let scoreUpdate = false;
 
 function TwoOrTournament() {
     var main = document.getElementById('content');
-    main.innerHTML += '<div id="choice"><p style="padding-top: 5em;">{% trans ' Do you want to play a 1vs1 game or a tournament? '  %}</p></div>';
+    main.innerHTML += '<div id="choice"><p style="padding-top: 5em;">{% trans " Do you want to play a 1vs1 game or a tournament ? "  %}</p></div>';
     var button1vs1 = document.createElement("button");
     var buttonTournament = document.createElement("button"); 
     buttonTournament.textContent = "{% trans 'Play tournament'  %}";
@@ -59,7 +59,7 @@ function TwoOrTournament() {
 
 function remoteOrLocal() {
     var main = document.getElementById('content');
-    main.innerHTML += '<div id="choice"><p style="padding-top: 5em;">Which type of game do you wanna play?</p></div>';
+    main.innerHTML += '<div id="choice"><p style="padding-top: 5em;">{% trans "Which type of game do you wanna play?" %}</p></div>';
     var buttonRemote = document.createElement("button");
     var buttonLocal = document.createElement("button"); 
     buttonLocal.textContent = "{% trans 'Play local Game'  %}";
@@ -265,9 +265,9 @@ async function getNamePlayer() {
         for (let i = 2; i <= numberPlayers; i++) {
             main.innerHTML += '<div id="choice">' +
                 '<form id="form' + i + '" style="display: flex; flex-direction: column; align-items: center;">' +
-                '<p style="padding-top: 5em; display: flex; align-items:center; justify-content:center;" > Name of player ' + i + ' : </p>' +
+                '<p style="padding-top: 5em; display: flex; align-items:center; justify-content:center;" > {% trans "Name of player " %}' + i + ' : </p>' +
                 '<input type="text" id="name' + i + '" required>' + 
-                '<button type="submit" class="styled-button" style="margin-top: 1em;">Submit</button>' +
+                '<button type="submit" class="styled-button" style="margin-top: 1em;">{% trans "Submit" %}</button>' +
                 '</form>' +
                 '</div>';
 
@@ -348,7 +348,7 @@ function startButton() {
     main.appendChild(div);
 
     var question = document.createElement("p");
-    question.textContent = "{% trans ' Ready to start? '  %}<br><br>{% trans ' Go!'  %}";
+    question.textContent = "{% trans 'Ready to start?  Go!'  %}";
     question.style.display = "flex";
     div.appendChild(question);
 
