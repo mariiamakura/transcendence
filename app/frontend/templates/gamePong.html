@@ -550,7 +550,7 @@ async function remoteHost() {
                     // console.log(data.message);
                     // console.log(data.who + ' left the game');
                     if (scoreUpdate === false)
-                        endGame(namePlayer[0]);
+                        endGame(namePlayer[0], "disconnected");
                     gameRoomSocket.close();
                 }
             }
@@ -646,7 +646,7 @@ async function remoteClient() {
             if (data.action === 'game_ended_pong') {
                 scoreUpdate = data.scoreUpdate;
                 clearInterval(intervalId);
-                endGame(data.winner);
+                endGame(data.winner, "normal");
                 console.log("game ended");
             }
             if (data.action === 'update_player_position') {
@@ -669,7 +669,7 @@ async function remoteClient() {
             if (data.action === 'player_left') {
                 console.log('other player left the game');
                 if (scoreUpdate === false)
-                    endGame(namePlayer[1]);
+                    endGame(namePlayer[1], "disconnected");
                 clearInterval(intervalId);
                 roomSocket.close();
             }
@@ -685,7 +685,7 @@ async function remoteClient() {
             const currentTime = Date.now();
             if (currentTime - lastBallUpdateReceivedTime > BALL_UPDATE_TIMEOUT) {
                 console.log('No ball updates received from the server.');
-                endGame(namePlayer[1]);
+                endGame(namePlayer[1], "disconnected");
                 // roomSocket.send(JSON.stringify({ action: 'player_left' }));
                 roomSocket.close();
                 clearInterval(intervalId);
@@ -948,7 +948,7 @@ function update() {
         if (ball.x < 0) {
             player2Score++;
             if (player2Score >= scoreToDo) {
-                endGame(player2.name);
+                endGame(player2.name, "normal");
                 gameRoomSocket.send(JSON.stringify({ action: 'game_ended_pong', winner: player2.name, scoreUpdate: true }));
             }
             else
@@ -957,7 +957,7 @@ function update() {
         else if (ball.x + ball.width > board.width) {
             player1Score++;
             if (player1Score >= scoreToDo) {
-                endGame(player1.name);
+                endGame(player1.name, "normal");
                 gameRoomSocket.send(JSON.stringify({ action: 'game_ended_pong', winner: player1.name, scoreUpdate: true }));
             }
             else
@@ -974,14 +974,14 @@ function update() {
         if (ball.x < 0) {
             player2Score++;
             if (player2Score >= scoreToDo)
-                endGame(player2.name);
+                endGame(player2.name, "normal");
             else
                 resetGame(1);
         }
         else if (ball.x + ball.width > board.width) {
             player1Score++;
             if (player1Score >= scoreToDo)
-                endGame(player1.name);
+                endGame(player1.name, "normal");
             else
                 resetGame(-1);
         }
@@ -1227,20 +1227,29 @@ function updateStartTournamentPong(namePlayer) {
         });
 }
 
-function endGame(winner) {
+function endGame(winner, type) {
     gameEnded = true;
     console.log(winner + " won!");
     let scoreWinner = player1Score > player2Score ? player1Score : player2Score;
     let scoreLoser = player1Score < player2Score ? player1Score : player2Score;
     let namePlayerPlaying = [player1.name, player2.name];
-    if (scoreUpdate === false && (player1Score === scoreToDo || player2Score === scoreToDo) && scoreToDo !== 0) {
-        updateGameResultPong(winner, namePlayerPlaying, scoreToDo, scoreWinner, scoreLoser, tournament, tournament_id);
     var mainElement = document.getElementById('content');
     mainElement.style.backgroundImage = 'none';
     mainElement.style.backgroundColor = 'white';
     mainElement.innerHTML = '';
+    if (tournament === true || (scoreUpdate === false && (player1Score === scoreToDo || player2Score === scoreToDo) && scoreToDo !== 0 && type === "normal"))
+        updateGameResultPong(winner, namePlayerPlaying, scoreToDo, scoreWinner, scoreLoser, tournament, tournament_id);
+    else if (type === "disconnected")
+    {
+        mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
+        '<p style="text-align: center; font-size:2em;"> The other player disconnected. You won but the scoreboard will not be updated. </p>' +
+        '<iframe src="https://giphy.com/embed/OScDfyJIQaXe" width="480" height="480" frameborder="0" class="giphy-embed" allowfullscreen></iframe>' +
+        '<p><a href="https://giphy.com/gifs/rabbids-dance-cute-OScDfyJIQaXe"></a></p>' +
+        '</div>';
+        return;
+    }
     let getUserDisplay = "{{ user.display_name }}";
-    if (winner === getUserDisplay) {
+    if (winner === getUserDisplay && tournament === false) {
         mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
             '<p style="text-align: center; font-size:4em;">Well done! </p>' +
             '<p style="text-align: center; font-size:2em;"> You won! <br>' +
@@ -1387,8 +1396,6 @@ function closeRoom() {
         roomClosed = true;
     }
 }
-
-
 window.addEventListener('beforeunload', function (event) {
     if (!roomClosed) {
         closeRoom();

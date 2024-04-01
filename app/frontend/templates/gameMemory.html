@@ -521,20 +521,20 @@ async function remoteHost() {
                 }
                 if (data.action === 'game_ended_memory') {
                     scoreUpdate = data.scoreUpdate;
-                    endGameMemory(data.winner);
+                    endGameMemory(data.winner, "normal");
                 }
                 if (data.action === 'player_left') {
                     // console.log(data.message);
                     // console.log(data.who + ' left the game');
                     if (scoreUpdate === false)
-                        endGameMemory(namePlayer[0]);
+                        endGameMemory(namePlayer[0], "disconnected");
                     gameRoomSocket.close();
                 }
             }
             gameRoomSocket.onclose = function() {
                 // gameRoomSocket.send(JSON.stringify({ action: 'player_left' }));
                 if (scoreUpdate === false)
-                    endGameMemory(namePlayer[0]);
+                    endGameMemory(namePlayer[0], "disconnected");
                 console.log("Game room Memory in onclose function: connection closed.");
             };
         }
@@ -642,7 +642,7 @@ async function remoteClient() {
             scorePlayer2 = data.score2;
         }
         if (data.action === 'game_ended_memory')
-            endGameMemory(data.winner);
+            endGameMemory(data.winner, "normal");
 
         if (data.type === 'notify_winner')
         console.log('The winner is:', data.winner);
@@ -650,7 +650,7 @@ async function remoteClient() {
         if (data.action === 'player_left') {
             console.log('other player left the game');
             if (scoreUpdate === false)
-            endGameMemory(namePlayer[1]);
+            endGameMemory(namePlayer[1], "disconnected");
             roomSocket.close();
             }
             function startHeartbeat() {
@@ -658,7 +658,7 @@ async function remoteClient() {
                     if (socket.readyState === WebSocket.OPEN) {
                         socket.send(JSON.stringify({ action: 'heartbeat' }));
                     } else {
-                        endGameMemory(namePlayer[1]);
+                        endGameMemory(namePlayer[1], "disconnected");
                         clearInterval(intervalId);
                     }
                     }, 1000);
@@ -901,7 +901,7 @@ function playTime() {
                         else if (remote === true)
                             roomSocket.send(JSON.stringify({action: 'game_ended_memory', winner: scorePlayer1 > scorePlayer2 ? namePlayer[firstPlayer] : namePlayer[secondPlayer], scoreUpdate: true}));
                         else if (local === true)
-                            endGameMemory(scorePlayer1 > scorePlayer2 ? namePlayer[firstPlayer] : namePlayer[secondPlayer]);
+                            endGameMemory(scorePlayer1 > scorePlayer2 ? namePlayer[firstPlayer] : namePlayer[secondPlayer], "normal");
                     }
                 }
             }
@@ -917,7 +917,7 @@ function updateGameResultMemory(winner, namePlayer, chosenSet, numberOfCards, sc
     if (chosenSet === 1)
         setName = 'Nature';
     else
-    setName = 'Robot';
+        setName = 'Robot';
     fetch('/update_game_result_memory/', {
         method: 'POST',
         headers: {
@@ -1002,8 +1002,9 @@ function reinitializeGame()
     cardTurnedArrayId.length = 0;
     setAlreadyUsed.length = 0;
     cardInfo.length = 0;
+    scoreUpdate = false;
 }
-function endGameMemory(winner)
+function endGameMemory(winner, type)
 {
     console.log("And the winner is ..." + winner);
     // if (scorePlayer1 === scorePlayer2)
@@ -1011,12 +1012,23 @@ function endGameMemory(winner)
     let scoreWinner = scorePlayer1 > scorePlayer2 ? scorePlayer1 : scorePlayer2;
     let scoreLoser = scorePlayer1 < scorePlayer2 ? scorePlayer1 : scorePlayer2;
     console.log("scoreUpdate : " + scoreUpdate)
-    if (scoreUpdate === false && scorePlayer1 + scorePlayer2 === gameSettings.numberOfCards / 2 && gameSettings.numberOfCards >= 14)
-        updateGameResultMemory(winner, namePlayer, gameSettings.chosenSet, gameSettings.numberOfCards, scoreWinner, scoreLoser, tournament, tournament_id);
     var mainElement = document.getElementById('content');
-    mainElement.innerHTML = ''; // Remove all inner HTML content  
+    mainElement.innerHTML = ''; // Remove all inner HTML content
+    let namePlayerTournament = [namePlayer[firstPlayer], namePlayer[secondPlayer]];
+    if (tournament === true)
+        updateGameResultMemory(winner, namePlayerTournament, gameSettings.chosenSet, gameSettings.numberOfCards, scoreWinner, scoreLoser, tournament, tournament_id);
+    else if (scoreUpdate === false && scorePlayer1 + scorePlayer2 === gameSettings.numberOfCards / 2 && gameSettings.numberOfCards >= 14 && type === "normal")
+        updateGameResultMemory(winner, namePlayer, gameSettings.chosenSet, gameSettings.numberOfCards, scoreWinner, scoreLoser, tournament, tournament_id);
+    else if (type === "disconnected")
+    {
+    mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
+        '<p style="text-align: center; font-size:2em;"> The other player disconnected. You won but the scoreboard will not be updated. </p>' +
+        '<p><img src="{% static 'img/gif_robot.gif' %}" alt="Victory logo" style="width: 50vh; height: 50vh;"></p>' + 
+        '</div>';
+        return;
+    }
     let getUserDisplay = "{{ user.display_name }}";
-    if (winner === getUserDisplay) {
+    if (winner === getUserDisplay && tournament === false) {
         mainElement.innerHTML = '<div id="endGame" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden;">' +
         '<p style="text-align: center; font-size:4em;"> You won! </p>' +
         '<p><img src="{% static 'img/gif_robot.gif' %}" alt="Victory logo" style="width: 50vh; height: 50vh;"></p>' + 
@@ -1129,13 +1141,6 @@ function endGameMemory(winner)
         '<p style="text-align: center; font-size:4em;">End of the Tournament! </p>' +
         '<p style="text-align: center; font-size:2em;">' + winner + ' won the tournament!</p>' +
         '</div>';
-        var startAgain = document.createElement("button");
-        startAgain.textContent = "Start again";
-        startAgain.classList.add("styled-button")
-        document.getElementById('endGame').appendChild(startAgain);
-        startAgain.addEventListener("click", function() {
-            launchGameMemory(cards_info);
-        });
     }
 }
 
