@@ -29,7 +29,7 @@ Grafana dashboards can be accessed at:
 
 ## Secrets and Environment Variables
 
-Environment variables and secrets are stored in a `.env` file. This approach is **only for educational purposes** and should not be used in production environments.
+Environment variables and secrets are stored in a `.env` file. This approach is **!only for educational purposes!** and should not be used in production environments.
 
 ## Games Included
 
