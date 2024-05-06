@@ -148,7 +148,6 @@ class KeepAliveConsumer(AsyncWebsocketConsumer):
                 break
             else:
                 await self.set_user_online(True)
-                
 
     @database_sync_to_async
     def get_user(self, username):
